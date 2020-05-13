@@ -216,7 +216,7 @@ Mocap::Result MocapImpl::send_odometry(const Mocap::Odometry& odometry)
         &message,
         autopilot_time_usec,
         static_cast<uint8_t>(odometry.frame_id),
-        static_cast<uint8_t>(MAV_FRAME_BODY_FRD),
+        static_cast<uint8_t>(MAV_FRAME_LOCAL_FRD), // TODO: is this correct?
         odometry.position_body.x_m,
         odometry.position_body.y_m,
         odometry.position_body.z_m,
