@@ -33,14 +33,18 @@ void WifiImpl::get_access_point_configuration_async(
 {
     void* message_cookie = nullptr; // TODO: Is this a way to get a random number?
     void* timeout_cookie = nullptr;
+    //bool
+    //enum with state (idle/waiting)
 
     _parent->register_mavlink_message_handler(
         MAVLINK_MSG_ID_WIFI_CONFIG_AP,
         [this, callback, &message_cookie, &timeout_cookie](
             const mavlink_message_t& mavlink_message) {
-            _parent->unregister_timeout_handler(&timeout_cookie);
-            _parent->unregister_mavlink_message_handler(
-                MAVLINK_MSG_ID_WIFI_CONFIG_AP, &message_cookie);
+            //_parent->unregister_timeout_handler(&timeout_cookie);
+            //_parent->unregister_mavlink_message_handler(
+                //MAVLINK_MSG_ID_WIFI_CONFIG_AP, &message_cookie);
+
+            LogErr() << "SPARTA - get received something";
 
             mavlink_wifi_config_ap_t mavlink_configuration;
             mavlink_msg_wifi_config_ap_decode(&mavlink_message, &mavlink_configuration);
@@ -59,11 +63,11 @@ void WifiImpl::get_access_point_configuration_async(
     command_request_message.target_component_id = MAV_COMP_ID_PATHPLANNER; // TODO this is hardcoded to the wifi module right now
 
     _parent->send_command_async(
-        command_request_message, nullptr); // TODO: can the command be refused?
+        command_request_message, nullptr); // TODO: can the command be refused? -> treat that result
     _parent->register_timeout_handler(
         [this, callback, &message_cookie]() {
-            _parent->unregister_mavlink_message_handler(
-                MAVLINK_MSG_ID_WIFI_CONFIG_AP, &message_cookie);
+            //_parent->unregister_mavlink_message_handler(
+                //MAVLINK_MSG_ID_WIFI_CONFIG_AP, &message_cookie);
             callback(Wifi::Result::Timeout, Wifi::AccessPointConfiguration{});
         },
         TIMEOUT_S,
@@ -136,13 +140,14 @@ void WifiImpl::set_access_point_configuration_async(
         MAVLINK_MSG_ID_WIFI_CONFIG_AP,
         [this, callback, &message_cookie, &timeout_cookie](
             const mavlink_message_t& mavlink_message) {
-            _parent->unregister_timeout_handler(&timeout_cookie);
-            _parent->unregister_mavlink_message_handler(
-                MAVLINK_MSG_ID_WIFI_CONFIG_AP, &message_cookie);
+            //_parent->unregister_timeout_handler(&timeout_cookie);
+            //_parent->unregister_mavlink_message_handler(
+                //MAVLINK_MSG_ID_WIFI_CONFIG_AP, &message_cookie);
 
             mavlink_wifi_config_ap_t mavlink_configuration;
             mavlink_msg_wifi_config_ap_decode(&mavlink_message, &mavlink_configuration);
 
+            LogErr() << "SPARTA - got message back";
             const auto result = extractResult(mavlink_configuration);
             _parent->call_user_callback([callback, result]() { callback(result); });
         },
@@ -175,15 +180,15 @@ void WifiImpl::set_access_point_configuration_async(
         irrelevant);
 
     if (!_parent->send_message(message)) {
-        _parent->unregister_mavlink_message_handler(MAVLINK_MSG_ID_WIFI_CONFIG_AP, &message_cookie);
-        _parent->call_user_callback([callback]() {
-            callback(Wifi::Result::Unknown);
-        }); // TODO: Is that really an unknown result?
+        //_parent->unregister_mavlink_message_handler(MAVLINK_MSG_ID_WIFI_CONFIG_AP, &message_cookie);
+        //_parent->call_user_callback([callback]() {
+            //callback(Wifi::Result::Unknown);
+        //}); // TODO: Is that really an unknown result?
     } else {
         _parent->register_timeout_handler(
             [this, callback, &message_cookie]() {
-                _parent->unregister_mavlink_message_handler(
-                    MAVLINK_MSG_ID_WIFI_CONFIG_AP, &message_cookie);
+                //_parent->unregister_mavlink_message_handler(
+                    //MAVLINK_MSG_ID_WIFI_CONFIG_AP, &message_cookie);
                 callback(Wifi::Result::Timeout);
             },
             TIMEOUT_S,
