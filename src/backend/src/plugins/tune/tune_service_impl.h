@@ -211,7 +211,7 @@ public:
             return grpc::Status::OK;
         }
 
-        auto result = _tune.play_tune(translateFromRpcDescription(request->description()));
+        auto result = _tune.play_tune(translateFromRpcTuneDescription(request->description()));
 
         if (response != nullptr) {
             fillResponseWithResult(response, result);

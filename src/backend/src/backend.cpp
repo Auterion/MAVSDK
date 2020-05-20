@@ -10,7 +10,9 @@ using namespace mavsdk::backend;
 
 class MavsdkBackend::Impl {
 public:
-    Impl() {}
+    Impl() {
+        _dc.set_configuration(mavsdk::Mavsdk::Configuration(1, 33));
+    }
     ~Impl() {}
 
     void connect(const std::string& connection_url)
