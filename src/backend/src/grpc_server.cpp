@@ -36,6 +36,7 @@ int GRPCServer::run()
     builder.RegisterService(&_shell_service);
     builder.RegisterService(&_telemetry_service);
     builder.RegisterService(&_tune_service);
+    builder.RegisterService(&_wifi_service);
 
     _server = builder.BuildAndStart();
 

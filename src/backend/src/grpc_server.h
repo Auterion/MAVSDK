@@ -40,6 +40,8 @@
 #include "telemetry/telemetry_service_impl.h"
 #include "plugins/tune/tune.h"
 #include "tune/tune_service_impl.h"
+#include "plugins/wifi/wifi.h"
+#include "wifi/wifi_service_impl.h"
 
 namespace mavsdk {
 namespace backend {
@@ -83,7 +85,9 @@ public:
         _telemetry(_dc.system()),
         _telemetry_service(_telemetry),
         _tune(_dc.system()),
-        _tune_service(_tune)
+        _tune_service(_tune),
+        _wifi(_dc.system()),
+        _wifi_service(_wifi)
     {}
 
     int run();
@@ -130,6 +134,8 @@ private:
     TelemetryServiceImpl<> _telemetry_service;
     Tune _tune;
     TuneServiceImpl<> _tune_service;
+    Wifi _wifi;
+    WifiServiceImpl<> _wifi_service;
 
     std::unique_ptr<grpc::Server> _server;
 
