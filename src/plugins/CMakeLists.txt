@@ -6,6 +6,7 @@ include_directories(
 add_subdirectory(action)
 add_subdirectory(calibration)
 add_subdirectory(camera)
+add_subdirectory(custom_action)
 add_subdirectory(failure)
 add_subdirectory(follow_me)
 add_subdirectory(ftp)
