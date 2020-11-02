@@ -38,6 +38,7 @@ add_executable(integration_tests_runner
     camera_format.cpp
     camera_test_helpers.cpp
     connection.cpp
+    custom_action.cpp
     follow_me.cpp
     geofence_inclusion.cpp
     gimbal.cpp
@@ -82,6 +83,7 @@ target_link_libraries(integration_tests_runner
     mavsdk
     mavsdk_telemetry
     mavsdk_action
+    mavsdk_custom_action
     mavsdk_mission
     mavsdk_mission_raw
     mavsdk_offboard
