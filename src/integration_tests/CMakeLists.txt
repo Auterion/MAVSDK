@@ -37,6 +37,7 @@ add_executable(integration_tests_runner
     camera_format.cpp
     camera_test_helpers.cpp
     camera_test_helpers.h
+    custom_action.cpp
     CMakeLists.txt
     follow_me.cpp
     geofence_inclusion.cpp
@@ -81,6 +82,7 @@ target_link_libraries(integration_tests_runner
     mavsdk
     mavsdk_telemetry
     mavsdk_action
+    mavsdk_custom_action
     mavsdk_mission
     mavsdk_mission_raw
     mavsdk_offboard
