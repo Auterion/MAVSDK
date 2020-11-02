@@ -21,6 +21,7 @@ add_executable(integration_tests_runner
     camera_test_helpers.cpp
     component_information.cpp
     connection.cpp
+    custom_action.cpp
     follow_me.cpp
     geofence_inclusion.cpp
     gimbal.cpp
