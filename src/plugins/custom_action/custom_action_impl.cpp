@@ -18,13 +18,50 @@ CustomActionImpl::~CustomActionImpl()
     _parent->unregister_plugin(this);
 }
 
-void CustomActionImpl::init() {}
+void CustomActionImpl::init()
+{
+    _parent->register_mavlink_command_handler(
+        MAV_CMD_WAYPOINT_USER_1,
+        std::bind(&CustomActionImpl::process_custom_action_command, this, std::placeholders::_1),
+        this);
+}
 
-void CustomActionImpl::deinit() {}
+void CustomActionImpl::deinit() {
+    _parent->unregister_all_mavlink_command_handlers(this);
+}
 
 void CustomActionImpl::enable() {}
 
 void CustomActionImpl::disable() {}
+
+void CustomActionImpl::process_custom_action_command(
+    const MavlinkCommandReceiver::CommandLong& command)
+{
+    CustomAction::ActionToExecute action_to_exec;
+    action_to_exec.action = command.command;
+
+    store_custom_action(action_to_exec);
+
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    if (_custom_action_command_subscription) {
+        auto callback = _custom_action_command_subscription;
+        auto arg1 = CustomAction::Result::Success;
+        auto arg2 = custom_action();
+        _parent->call_user_callback([callback, arg1, arg2]() { callback(arg1, arg2); });
+    }
+}
+
+void CustomActionImpl::store_custom_action(CustomAction::ActionToExecute action)
+{
+    std::lock_guard<std::mutex> lock(_custom_action_mutex);
+    _custom_action = action;
+}
+
+CustomAction::ActionToExecute CustomActionImpl::custom_action() const
+{
+    std::lock_guard<std::mutex> lock(_custom_action_mutex);
+    return _custom_action;
+}
 
 void CustomActionImpl::set_custom_action_async(const CustomAction::ResultCallback& callback) const
 {
@@ -53,18 +90,25 @@ CustomAction::Result CustomActionImpl::set_custom_action() const
     return fut.get();
 }
 
-// void CustomAction::subscribe_custom_action(CustomActionCallback callback)
-// {
-//     _impl->custom_action_async(callback);
-// }
-//
-//
-//
-//
+void CustomActionImpl::custom_action_async(CustomAction::CustomActionCallback callback)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    _custom_action_command_subscription = callback;
+}
+
 // CustomAction::ActionToExecute
-// CustomAction::custom_action() const
+// CustomActionImpl::custom_action()
 // {
-//     return _impl->custom_action();
+//     // std::lock_guard<std::mutex> lock(_custom_action_command_mutex);
+//     // return _custom_action_command;
+//
+//     auto prom = std::promise<CustomAction::ActionToExecute>();
+//     auto fut = prom.get_future();
+//
+//     custom_action_async([&prom](CustomAction::Result result, CustomAction::ActionToExecute
+//     action) { prom.set_value(action); });
+//
+//     return fut.get();
 // }
 
 CustomAction::Result

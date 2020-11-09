@@ -97,7 +97,6 @@ TEST_F(SitlTest, CustomAction)
 
     std::this_thread::sleep_for(std::chrono::seconds(5));
 
-
     // Change configuration back to default Ground Station
     Mavsdk::Configuration config_gcs(Mavsdk::Configuration::UsageType::GroundStation);
     mavsdk.set_configuration(config_gcs);

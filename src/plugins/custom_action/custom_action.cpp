@@ -31,16 +31,15 @@ CustomAction::Result CustomAction::set_custom_action() const
     return _impl->set_custom_action();
 }
 
-// void CustomAction::subscribe_custom_action(CustomActionCallback callback)
-// {
-//     _impl->custom_action_async(callback);
-// }
-//
-// CustomAction::ActionToExecute
-// CustomAction::custom_action() const
-// {
-//     return _impl->custom_action();
-// }
+void CustomAction::subscribe_custom_action(CustomActionCallback callback)
+{
+    _impl->custom_action_async(callback);
+}
+
+CustomAction::ActionToExecute CustomAction::custom_action() const
+{
+    return _impl->custom_action();
+}
 
 bool operator==(const CustomAction::ActionToExecute& lhs, const CustomAction::ActionToExecute& rhs)
 {
