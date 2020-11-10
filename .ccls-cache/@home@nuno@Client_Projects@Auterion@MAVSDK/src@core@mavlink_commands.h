@@ -3,14 +3,11 @@
 #include "mavlink_include.h"
 #include "locked_queue.h"
 #include "global_include.h"
-#include <cmath>
 #include <cstdint>
 #include <string>
 #include <functional>
 #include <mutex>
 #include <optional>
-#include <unordered_map>
-#include <variant>
 
 namespace mavsdk {
 
@@ -69,22 +66,19 @@ public:
     };
 
     struct CommandLong {
-        CommandLong() = delete;
-        explicit CommandLong(const SystemImpl& system_impl);
-
         uint8_t target_system_id{0};
         uint8_t target_component_id{0};
         uint16_t command{0};
         uint8_t confirmation = 0;
         struct Params {
-            float param1;
-            float param2;
-            float param3;
-            float param4;
-            float param5;
-            float param6;
-            float param7;
-        } params;
+            float param1 = NAN;
+            float param2 = NAN;
+            float param3 = NAN;
+            float param4 = NAN;
+            float param5 = NAN;
+            float param6 = NAN;
+            float param7 = NAN;
+        } params{};
 
         // TODO: rename to set_all
         static void set_as_reserved(Params& params, float reserved_value = NAN)
@@ -114,64 +108,25 @@ public:
     const MavlinkCommandSender& operator=(const MavlinkCommandSender&) = delete;
 
 private:
-    // The std::monostate is required to work around the fact that
-    // the default ctor of CommandLong and CommandInt is ill-defined.
-    using Command = std::variant<std::monostate, CommandLong, CommandInt>;
-
-    struct CommandIdentification {
-        uint32_t maybe_param1{0}; // only for commands where this matters
-        uint16_t command{0};
-        uint8_t target_system_id{0};
-        uint8_t target_component_id{0};
-
-        bool operator==(const CommandIdentification& other)
-        {
-            return maybe_param1 == other.maybe_param1 && command == other.command &&
-                   target_system_id == other.target_system_id &&
-                   target_component_id == other.target_component_id;
-        }
-
-        bool operator!=(const CommandIdentification& other) { return !(*this == other); }
-    };
-
     struct Work {
-        Command command;
-        CommandIdentification identification{};
+        int retries_to_do{3};
+        double timeout_s{0.5};
+        uint16_t mavlink_command{0};
+        bool already_sent{false};
+        mavlink_message_t mavlink_message{};
         CommandResultCallback callback{};
         dl_time_t time_started{};
-        void* timeout_cookie = nullptr;
-        double timeout_s{0.5};
-        int retries_to_do{3};
-        bool already_sent{false};
     };
 
-    template<typename CommandType>
-    CommandIdentification identification_from_command(const CommandType& command)
-    {
-        CommandIdentification identification{};
-
-        identification.command = command.command;
-        if (command.command == MAV_CMD_REQUEST_MESSAGE ||
-            command.command == MAV_CMD_SET_MESSAGE_INTERVAL) {
-            identification.maybe_param1 = static_cast<uint32_t>(std::lround(command.params.param1));
-        }
-        identification.target_system_id = command.target_system_id;
-        identification.target_component_id = command.target_component_id;
-
-        return identification;
-    }
-
     void receive_command_ack(mavlink_message_t message);
-    void receive_timeout(const CommandIdentification& identification);
+    void receive_timeout();
 
     void call_callback(const CommandResultCallback& callback, Result result, float progress);
-
-    mavlink_message_t create_mavlink_message(const Command& command);
 
     SystemImpl& _parent;
     LockedQueue<Work> _work_queue{};
 
-    bool _command_debugging{false};
+    void* _timeout_cookie = nullptr;
 };
 
 class MavlinkCommandReceiver {
