@@ -351,7 +351,25 @@ void MavlinkCommandReceiver::receive_command_int(const mavlink_message_t& messag
          it != _mavlink_command_int_handler_table.end();
          ++it) {
         if (it->cmd_id == command_int.command) {
-            it->callback(cmd);
+            MavlinkCommandReceiver::Result result = it->callback(cmd);
+
+            // LogDebug() << "Result: "
+            //            << std::to_string(static_cast<uint8_t>(result));
+
+            // Send ACK based on the result of the callback
+            mavlink_message_t command_ack;
+            mavlink_msg_command_ack_pack(
+                _parent.get_own_system_id(),
+                _parent.get_own_component_id(),
+                &command_ack,
+                command_int.command,
+                static_cast<uint8_t>(result),
+                0,
+                0,
+                0,
+                0);
+
+            _parent.send_message(command_ack);
         }
     }
 }
@@ -368,13 +386,31 @@ void MavlinkCommandReceiver::receive_command_long(const mavlink_message_t& messa
          it != _mavlink_command_long_handler_table.end();
          ++it) {
         if (it->cmd_id == command_long.command) {
-            it->callback(cmd);
+            MavlinkCommandReceiver::Result result = it->callback(cmd);
+
+            // LogDebug() << "Result: "
+            //            << std::to_string(static_cast<uint8_t>(result));
+
+            // Send ACK based on the result of the callback
+            mavlink_message_t command_ack;
+            mavlink_msg_command_ack_pack(
+                _parent.get_own_system_id(),
+                _parent.get_own_component_id(),
+                &command_ack,
+                command_long.command,
+                static_cast<uint8_t>(result),
+                0,
+                0,
+                0,
+                0);
+
+            _parent.send_message(command_ack);
         }
     }
 }
 
 void MavlinkCommandReceiver::register_mavlink_command_handler(
-    uint16_t cmd_id, mavlink_command_int_handler_t callback, const void* cookie)
+    uint16_t cmd_id, MavlinkCommandIntHandler callback, const void* cookie)
 {
     std::lock_guard<std::mutex> lock(_mavlink_command_handler_table_mutex);
 
@@ -383,7 +419,7 @@ void MavlinkCommandReceiver::register_mavlink_command_handler(
 }
 
 void MavlinkCommandReceiver::register_mavlink_command_handler(
-    uint16_t cmd_id, mavlink_command_long_handler_t callback, const void* cookie)
+    uint16_t cmd_id, MavlinkCommandLongHandler callback, const void* cookie)
 {
     std::lock_guard<std::mutex> lock(_mavlink_command_handler_table_mutex);
 
