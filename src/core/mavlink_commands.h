@@ -133,6 +133,18 @@ public:
     explicit MavlinkCommandReceiver(SystemImpl& system_impl);
     ~MavlinkCommandReceiver();
 
+    enum class Result {
+        Success = 0,
+        NoSystem,
+        ConnectionError,
+        Busy,
+        CommandDenied,
+        Unsupported,
+        Timeout,
+        InProgress,
+        UnknownError
+    };
+
     struct CommandInt {
         uint8_t target_system_id{0};
         uint8_t target_component_id{0};
@@ -200,13 +212,15 @@ public:
         }
     };
 
-    typedef std::function<void(const CommandInt&)> mavlink_command_int_handler_t;
-    typedef std::function<void(const CommandLong&)> mavlink_command_long_handler_t;
+    using MavlinkCommandIntHandler =
+        std::function<MavlinkCommandReceiver::Result(const CommandInt&)>;
+    using MavlinkCommandLongHandler =
+        std::function<MavlinkCommandReceiver::Result(const CommandLong&)>;
 
     void register_mavlink_command_handler(
-        uint16_t cmd_id, mavlink_command_int_handler_t callback, const void* cookie);
+        uint16_t cmd_id, MavlinkCommandIntHandler callback, const void* cookie);
     void register_mavlink_command_handler(
-        uint16_t cmd_id, mavlink_command_long_handler_t callback, const void* cookie);
+        uint16_t cmd_id, MavlinkCommandLongHandler callback, const void* cookie);
 
     void unregister_mavlink_command_handler(uint16_t cmd_id, const void* cookie);
     void unregister_all_mavlink_command_handlers(const void* cookie);
@@ -219,13 +233,13 @@ private:
 
     struct MAVLinkCommandIntHandlerTableEntry {
         uint16_t cmd_id;
-        mavlink_command_int_handler_t callback;
+        MavlinkCommandIntHandler callback;
         const void* cookie; // This is the identification to unregister.
     };
 
     struct MAVLinkCommandLongHandlerTableEntry {
         uint16_t cmd_id;
-        mavlink_command_long_handler_t callback;
+        MavlinkCommandLongHandler callback;
         const void* cookie; // This is the identification to unregister.
     };
 
