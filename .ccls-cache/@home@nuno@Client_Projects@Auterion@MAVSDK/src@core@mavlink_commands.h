@@ -116,8 +116,6 @@ private:
         mavlink_message_t mavlink_message{};
         CommandResultCallback callback{};
         dl_time_t time_started{};
-
-        explicit Work(double new_timeout_s) : timeout_s(new_timeout_s) {}
     };
 
     void receive_command_ack(mavlink_message_t message);
