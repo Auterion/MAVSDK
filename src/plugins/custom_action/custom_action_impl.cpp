@@ -20,13 +20,16 @@ CustomActionImpl::~CustomActionImpl()
 
 void CustomActionImpl::init()
 {
+    using namespace std::placeholders;
+
     _parent->register_mavlink_command_handler(
         MAV_CMD_WAYPOINT_USER_1,
-        std::bind(&CustomActionImpl::process_custom_action_command, this, std::placeholders::_1),
+        std::bind(&CustomActionImpl::process_custom_action_command, this, _1),
         this);
 }
 
-void CustomActionImpl::deinit() {
+void CustomActionImpl::deinit()
+{
     _parent->unregister_all_mavlink_command_handlers(this);
 }
 
@@ -34,21 +37,30 @@ void CustomActionImpl::enable() {}
 
 void CustomActionImpl::disable() {}
 
-void CustomActionImpl::process_custom_action_command(
-    const MavlinkCommandReceiver::CommandLong& command)
+MavlinkCommandReceiver::Result
+CustomActionImpl::process_custom_action_command(const MavlinkCommandReceiver::CommandLong& command)
 {
     CustomAction::ActionToExecute action_to_exec;
-    action_to_exec.action = command.command;
+    action_to_exec.action = command.params.param1;
 
     store_custom_action(action_to_exec);
 
     std::lock_guard<std::mutex> lock(_subscription_mutex);
     if (_custom_action_command_subscription) {
         auto callback = _custom_action_command_subscription;
-        auto arg1 = CustomAction::Result::Success;
+        auto arg1 = CustomAction::Result::Unknown;
         auto arg2 = custom_action();
-        _parent->call_user_callback([callback, arg1, arg2]() { callback(arg1, arg2); });
+
+        std::promise<CustomAction::Result> prom;
+        auto fut = prom.get_future();
+
+        _parent->call_user_callback([callback, arg1, arg2, &prom]() {
+            prom.set_value(callback(arg1, arg2));
+        });
+        return command_result_from_custom_action_result(fut.get());
     }
+
+    return MavlinkCommandReceiver::Result::UnknownError;
 }
 
 void CustomActionImpl::store_custom_action(CustomAction::ActionToExecute action)
@@ -96,21 +108,6 @@ void CustomActionImpl::custom_action_async(CustomAction::CustomActionCallback ca
     _custom_action_command_subscription = callback;
 }
 
-// CustomAction::ActionToExecute
-// CustomActionImpl::custom_action()
-// {
-//     // std::lock_guard<std::mutex> lock(_custom_action_command_mutex);
-//     // return _custom_action_command;
-//
-//     auto prom = std::promise<CustomAction::ActionToExecute>();
-//     auto fut = prom.get_future();
-//
-//     custom_action_async([&prom](CustomAction::Result result, CustomAction::ActionToExecute
-//     action) { prom.set_value(action); });
-//
-//     return fut.get();
-// }
-
 CustomAction::Result
 CustomActionImpl::custom_action_result_from_command_result(MavlinkCommandSender::Result result)
 {
@@ -125,6 +122,24 @@ CustomActionImpl::custom_action_result_from_command_result(MavlinkCommandSender:
         case MavlinkCommandSender::Result::CommandDenied:
         default:
             return CustomAction::Result::Error;
+    }
+}
+
+MavlinkCommandReceiver::Result
+CustomActionImpl::command_result_from_custom_action_result(CustomAction::Result result)
+{
+    switch (result) {
+        case CustomAction::Result::Unknown:
+        case CustomAction::Result::Error:
+            return MavlinkCommandReceiver::Result::UnknownError;
+        case CustomAction::Result::Success:
+            return MavlinkCommandReceiver::Result::Success;
+        case CustomAction::Result::Timeout:
+            return MavlinkCommandReceiver::Result::Timeout;
+        case CustomAction::Result::Unsupported:
+            return MavlinkCommandReceiver::Result::Unsupported;
+        default:
+            return MavlinkCommandReceiver::Result::UnknownError;
     }
 }
 

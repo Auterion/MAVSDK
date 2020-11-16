@@ -124,7 +124,7 @@ public:
      * @brief Callback type for subscribe_custom_action.
      */
 
-    using CustomActionCallback = std::function<void(CustomAction::Result, ActionToExecute)>;
+    using CustomActionCallback = std::function<Result(CustomAction::Result, ActionToExecute)>;
 
     /**
      * @brief Receive and process custom action command.

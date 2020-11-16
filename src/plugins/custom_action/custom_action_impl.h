@@ -17,7 +17,8 @@ public:
     void enable() override;
     void disable() override;
 
-    void process_custom_action_command(const MavlinkCommandReceiver::CommandLong& command);
+    MavlinkCommandReceiver::Result
+    process_custom_action_command(const MavlinkCommandReceiver::CommandLong& command);
 
     CustomAction::Result set_custom_action() const;
 
@@ -34,6 +35,9 @@ public:
 private:
     static CustomAction::Result
     custom_action_result_from_command_result(MavlinkCommandSender::Result result);
+
+    static MavlinkCommandReceiver::Result
+    command_result_from_custom_action_result(CustomAction::Result result);
 
     void store_custom_action(CustomAction::ActionToExecute action);
 

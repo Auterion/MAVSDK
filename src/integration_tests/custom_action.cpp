@@ -8,6 +8,10 @@
 #include <future>
 
 using namespace mavsdk;
+using namespace std::placeholders;
+
+static CustomAction::Result print_custom_action_info(CustomAction::Result, CustomAction::ActionToExecute action);
+static bool _received_custom_action = false;
 
 TEST_F(SitlTest, CustomAction)
 {
@@ -93,9 +97,11 @@ TEST_F(SitlTest, CustomAction)
     Mavsdk::Configuration config_cc(Mavsdk::Configuration::UsageType::CompanionComputer);
     mavsdk.set_configuration(config_cc);
 
-    // TODO: handle code to handle custom action
-
+    // Process custom_action
+    custom_action->subscribe_custom_action(std::bind(&print_custom_action_info, _1, _2));
     std::this_thread::sleep_for(std::chrono::seconds(5));
+    // For now just check if the action was received and set
+    EXPECT_TRUE(_received_custom_action);
 
     // Change configuration back to default Ground Station
     Mavsdk::Configuration config_gcs(Mavsdk::Configuration::UsageType::GroundStation);
@@ -136,4 +142,13 @@ TEST_F(SitlTest, CustomAction)
         });
         EXPECT_EQ(fut.wait_for(std::chrono::seconds(2)), std::future_status::ready);
     }
+}
+
+CustomAction::Result print_custom_action_info(CustomAction::Result, CustomAction::ActionToExecute action)
+{
+    LogInfo() << "Custom action to execute: " << action.action;
+
+    _received_custom_action = true;
+
+    return CustomAction::Result::Success;
 }
