@@ -10,8 +10,8 @@
 using namespace mavsdk;
 using namespace std::placeholders;
 
-static CustomAction::Result print_custom_action_info(CustomAction::Result, CustomAction::ActionToExecute action);
 static bool _received_custom_action = false;
+static CustomAction::Result process_custom_action(CustomAction::ActionToExecute action);
 
 TEST_F(SitlTest, CustomAction)
 {
@@ -93,19 +93,40 @@ TEST_F(SitlTest, CustomAction)
         EXPECT_EQ(fut.wait_for(std::chrono::seconds(2)), std::future_status::ready);
     }
 
-    // Change configuration so the instance is treated as a Companion Computer
-    Mavsdk::Configuration config_cc(Mavsdk::Configuration::UsageType::CompanionComputer);
-    mavsdk.set_configuration(config_cc);
+    {
+        // Change configuration so the instance is treated as a Companion Computer
+        Mavsdk::Configuration config_cc(Mavsdk::Configuration::UsageType::CompanionComputer);
+        mavsdk.set_configuration(config_cc);
 
-    // Process custom_action
-    custom_action->subscribe_custom_action(std::bind(&print_custom_action_info, _1, _2));
-    std::this_thread::sleep_for(std::chrono::seconds(5));
-    // For now just check if the action was received and set
-    EXPECT_TRUE(_received_custom_action);
+        std::promise<CustomAction::ActionToExecute> prom;
+        std::future<CustomAction::ActionToExecute> fut = prom.get_future();
 
-    // Change configuration back to default Ground Station
-    Mavsdk::Configuration config_gcs(Mavsdk::Configuration::UsageType::GroundStation);
-    mavsdk.set_configuration(config_gcs);
+        // Process custom_action
+        custom_action->subscribe_custom_action(
+            [&prom](CustomAction::ActionToExecute action_to_exec) {
+                prom.set_value(action_to_exec);
+                _received_custom_action = true;
+            });
+
+        CustomAction::ActionToExecute action_executed = fut.get();
+
+        CustomAction::Result result = process_custom_action(action_executed);
+        LogInfo() << "Custom action executed: " << action_executed.id;
+
+        // Send response with the result
+        custom_action->respond_custom_action_async(
+            action_executed, result, [](CustomAction::Result new_result, CustomAction::ActionToExecute action_exec) {
+                // Do something with the error
+            });
+
+        std::this_thread::sleep_for(std::chrono::seconds(5));
+        // For now just check if the action was received and set
+        EXPECT_TRUE(_received_custom_action);
+
+        // Change configuration back to default Ground Station
+        Mavsdk::Configuration config_gcs(Mavsdk::Configuration::UsageType::GroundStation);
+        mavsdk.set_configuration(config_gcs);
+    }
 
     {
         LogInfo() << "Landing";
@@ -144,11 +165,9 @@ TEST_F(SitlTest, CustomAction)
     }
 }
 
-CustomAction::Result print_custom_action_info(CustomAction::Result, CustomAction::ActionToExecute action)
+CustomAction::Result process_custom_action(CustomAction::ActionToExecute action)
 {
-    LogInfo() << "Custom action to execute: " << action.action;
-
-    _received_custom_action = true;
+    LogInfo() << "Custom action to execute: " << action.id;
 
     return CustomAction::Result::Success;
 }
