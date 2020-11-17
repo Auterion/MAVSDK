@@ -41,16 +41,29 @@ CustomAction::ActionToExecute CustomAction::custom_action() const
     return _impl->custom_action();
 }
 
+void CustomAction::respond_custom_action_async(
+    ActionToExecute action, Result result, const RespondCustomActionCallback callback)
+{
+    _impl->respond_custom_action_async(action, result, callback);
+}
+
+std::pair<CustomAction::Result, CustomAction::ActionToExecute>
+CustomAction::respond_custom_action(ActionToExecute action, Result result) const
+{
+    return _impl->respond_custom_action(action, result);
+}
+
 bool operator==(const CustomAction::ActionToExecute& lhs, const CustomAction::ActionToExecute& rhs)
 {
-    return (rhs.action == lhs.action);
+    return (rhs.id == lhs.id) && (rhs.timeout == lhs.timeout);
 }
 
 std::ostream& operator<<(std::ostream& str, CustomAction::ActionToExecute const& action_to_execute)
 {
     str << std::setprecision(15);
     str << "action_to_execute:" << '\n' << "{\n";
-    str << "    action: " << action_to_execute.action << '\n';
+    str << "    id: " << action_to_execute.id << '\n';
+    str << "    timeout: " << action_to_execute.timeout << '\n';
     str << '}';
     return str;
 }
