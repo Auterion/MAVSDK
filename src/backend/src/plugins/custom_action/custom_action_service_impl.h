@@ -43,7 +43,9 @@ public:
         std::unique_ptr<rpc::custom_action::ActionToExecute> rpc_obj(
             new rpc::custom_action::ActionToExecute());
 
-        rpc_obj->set_action(action_to_execute.action);
+        rpc_obj->set_id(action_to_execute.id);
+
+        rpc_obj->set_timeout(action_to_execute.timeout);
 
         return rpc_obj;
     }
@@ -53,7 +55,9 @@ public:
     {
         mavsdk::CustomAction::ActionToExecute obj;
 
-        obj.action = action_to_execute.action();
+        obj.id = action_to_execute.id();
+
+        obj.timeout = action_to_execute.timeout();
 
         return obj;
     }
@@ -127,20 +131,11 @@ public:
 
         _custom_action.subscribe_custom_action(
             [this, &writer, &stream_closed_promise, is_finished, &subscribe_mutex](
-                mavsdk::CustomAction::Result result,
                 const mavsdk::CustomAction::ActionToExecute custom_action) {
                 rpc::custom_action::CustomActionResponse rpc_response;
 
                 rpc_response.set_allocated_action(
                     translateToRpcActionToExecute(custom_action).release());
-
-                auto rpc_result = translateToRpcResult(result);
-                auto* rpc_custom_action_result = new rpc::custom_action::CustomActionResult();
-                rpc_custom_action_result->set_result(rpc_result);
-                std::stringstream ss;
-                ss << result;
-                rpc_custom_action_result->set_result_str(ss.str());
-                rpc_response.set_allocated_custom_action_result(rpc_custom_action_result);
 
                 std::unique_lock<std::mutex> lock(subscribe_mutex);
                 if (!*is_finished && !writer->Write(rpc_response)) {
@@ -154,6 +149,28 @@ public:
             });
 
         stream_closed_future.wait();
+        return grpc::Status::OK;
+    }
+
+    grpc::Status RespondCustomAction(
+        grpc::ServerContext* /* context */,
+        const rpc::custom_action::RespondCustomActionRequest* request,
+        rpc::custom_action::RespondCustomActionResponse* response) override
+    {
+        if (request == nullptr) {
+            LogWarn() << "RespondCustomAction sent with a null request! Ignoring...";
+            return grpc::Status::OK;
+        }
+
+        auto result = _custom_action.respond_custom_action(
+            translateFromRpcAction(request->action()), translateFromRpcResult(request->result()));
+
+        if (response != nullptr) {
+            fillResponseWithResult(response, result.first);
+
+            response->set_allocated_action(translateToRpcActionToExecute(result.second).release());
+        }
+
         return grpc::Status::OK;
     }
 
