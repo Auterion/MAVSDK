@@ -31,6 +31,14 @@ class SubscribeCustomActionRequestDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<SubscribeCustomActionRequest> _instance;
 } _SubscribeCustomActionRequest_default_instance_;
+class SubscribeCustomActionResponseDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<SubscribeCustomActionResponse> _instance;
+} _SubscribeCustomActionResponse_default_instance_;
+class RespondCustomActionRequestDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<RespondCustomActionRequest> _instance;
+} _RespondCustomActionRequest_default_instance_;
 class CustomActionResponseDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<CustomActionResponse> _instance;
@@ -73,8 +81,8 @@ static void InitDefaultsscc_info_CustomActionResponse_custom_5faction_2fcustom_5
 
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<2> scc_info_CustomActionResponse_custom_5faction_2fcustom_5faction_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 2, 0, InitDefaultsscc_info_CustomActionResponse_custom_5faction_2fcustom_5faction_2eproto}, {
-      &scc_info_CustomActionResult_custom_5faction_2fcustom_5faction_2eproto.base,
-      &scc_info_ActionToExecute_custom_5faction_2fcustom_5faction_2eproto.base,}};
+      &scc_info_ActionToExecute_custom_5faction_2fcustom_5faction_2eproto.base,
+      &scc_info_CustomActionResult_custom_5faction_2fcustom_5faction_2eproto.base,}};
 
 static void InitDefaultsscc_info_CustomActionResult_custom_5faction_2fcustom_5faction_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -89,6 +97,22 @@ static void InitDefaultsscc_info_CustomActionResult_custom_5faction_2fcustom_5fa
 
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_CustomActionResult_custom_5faction_2fcustom_5faction_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_CustomActionResult_custom_5faction_2fcustom_5faction_2eproto}, {}};
+
+static void InitDefaultsscc_info_RespondCustomActionRequest_custom_5faction_2fcustom_5faction_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::mavsdk::rpc::custom_action::_RespondCustomActionRequest_default_instance_;
+    new (ptr) ::mavsdk::rpc::custom_action::RespondCustomActionRequest();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::mavsdk::rpc::custom_action::RespondCustomActionRequest::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<2> scc_info_RespondCustomActionRequest_custom_5faction_2fcustom_5faction_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 2, 0, InitDefaultsscc_info_RespondCustomActionRequest_custom_5faction_2fcustom_5faction_2eproto}, {
+      &scc_info_ActionToExecute_custom_5faction_2fcustom_5faction_2eproto.base,
+      &scc_info_CustomActionResult_custom_5faction_2fcustom_5faction_2eproto.base,}};
 
 static void InitDefaultsscc_info_SetCustomActionRequest_custom_5faction_2fcustom_5faction_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -133,7 +157,22 @@ static void InitDefaultsscc_info_SubscribeCustomActionRequest_custom_5faction_2f
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_SubscribeCustomActionRequest_custom_5faction_2fcustom_5faction_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_SubscribeCustomActionRequest_custom_5faction_2fcustom_5faction_2eproto}, {}};
 
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_custom_5faction_2fcustom_5faction_2eproto[6];
+static void InitDefaultsscc_info_SubscribeCustomActionResponse_custom_5faction_2fcustom_5faction_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::mavsdk::rpc::custom_action::_SubscribeCustomActionResponse_default_instance_;
+    new (ptr) ::mavsdk::rpc::custom_action::SubscribeCustomActionResponse();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::mavsdk::rpc::custom_action::SubscribeCustomActionResponse::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_SubscribeCustomActionResponse_custom_5faction_2fcustom_5faction_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_SubscribeCustomActionResponse_custom_5faction_2fcustom_5faction_2eproto}, {
+      &scc_info_ActionToExecute_custom_5faction_2fcustom_5faction_2eproto.base,}};
+
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_custom_5faction_2fcustom_5faction_2eproto[8];
 static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_custom_5faction_2fcustom_5faction_2eproto[1];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_custom_5faction_2fcustom_5faction_2eproto = nullptr;
 
@@ -155,18 +194,32 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_custom_5faction_2fcustom_5fact
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::custom_action::SubscribeCustomActionResponse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::custom_action::SubscribeCustomActionResponse, action_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::custom_action::RespondCustomActionRequest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::custom_action::RespondCustomActionRequest, action_),
+  PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::custom_action::RespondCustomActionRequest, result_),
+  ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::custom_action::CustomActionResponse, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::custom_action::CustomActionResponse, custom_action_result_),
   PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::custom_action::CustomActionResponse, action_),
+  PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::custom_action::CustomActionResponse, result_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::custom_action::ActionToExecute, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::custom_action::ActionToExecute, action_),
+  PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::custom_action::ActionToExecute, id_),
+  PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::custom_action::ActionToExecute, timeout_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::custom_action::CustomActionResult, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -179,15 +232,19 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 0, -1, sizeof(::mavsdk::rpc::custom_action::SetCustomActionRequest)},
   { 5, -1, sizeof(::mavsdk::rpc::custom_action::SetCustomActionResponse)},
   { 11, -1, sizeof(::mavsdk::rpc::custom_action::SubscribeCustomActionRequest)},
-  { 16, -1, sizeof(::mavsdk::rpc::custom_action::CustomActionResponse)},
-  { 23, -1, sizeof(::mavsdk::rpc::custom_action::ActionToExecute)},
-  { 29, -1, sizeof(::mavsdk::rpc::custom_action::CustomActionResult)},
+  { 16, -1, sizeof(::mavsdk::rpc::custom_action::SubscribeCustomActionResponse)},
+  { 22, -1, sizeof(::mavsdk::rpc::custom_action::RespondCustomActionRequest)},
+  { 29, -1, sizeof(::mavsdk::rpc::custom_action::CustomActionResponse)},
+  { 36, -1, sizeof(::mavsdk::rpc::custom_action::ActionToExecute)},
+  { 43, -1, sizeof(::mavsdk::rpc::custom_action::CustomActionResult)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::mavsdk::rpc::custom_action::_SetCustomActionRequest_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::mavsdk::rpc::custom_action::_SetCustomActionResponse_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::mavsdk::rpc::custom_action::_SubscribeCustomActionRequest_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::mavsdk::rpc::custom_action::_SubscribeCustomActionResponse_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::mavsdk::rpc::custom_action::_RespondCustomActionRequest_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::mavsdk::rpc::custom_action::_CustomActionResponse_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::mavsdk::rpc::custom_action::_ActionToExecute_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::mavsdk::rpc::custom_action::_CustomActionResult_default_instance_),
@@ -199,44 +256,55 @@ const char descriptor_table_protodef_custom_5faction_2fcustom_5faction_2eproto[]
   "Request\"e\n\027SetCustomActionResponse\022J\n\024cu"
   "stom_action_result\030\001 \001(\0132,.mavsdk.rpc.cu"
   "stom_action.CustomActionResult\"\036\n\034Subscr"
-  "ibeCustomActionRequest\"\235\001\n\024CustomActionR"
-  "esponse\022J\n\024custom_action_result\030\001 \001(\0132,."
-  "mavsdk.rpc.custom_action.CustomActionRes"
-  "ult\0229\n\006action\030\002 \001(\0132).mavsdk.rpc.custom_"
-  "action.ActionToExecute\"!\n\017ActionToExecut"
-  "e\022\016\n\006action\030\001 \001(\005\"\335\001\n\022CustomActionResult"
-  "\022C\n\006result\030\001 \001(\01623.mavsdk.rpc.custom_act"
-  "ion.CustomActionResult.Result\022\022\n\nresult_"
-  "str\030\002 \001(\t\"n\n\006Result\022\022\n\016RESULT_UNKNOWN\020\000\022"
-  "\022\n\016RESULT_SUCCESS\020\001\022\020\n\014RESULT_ERROR\020\002\022\022\n"
-  "\016RESULT_TIMEOUT\020\003\022\026\n\022RESULT_UNSUPPORTED\020"
-  "\0042\225\002\n\023CustomActionService\022x\n\017SetCustomAc"
-  "tion\0220.mavsdk.rpc.custom_action.SetCusto"
-  "mActionRequest\0321.mavsdk.rpc.custom_actio"
-  "n.SetCustomActionResponse\"\000\022\203\001\n\025Subscrib"
-  "eCustomAction\0226.mavsdk.rpc.custom_action"
-  ".SubscribeCustomActionRequest\032..mavsdk.r"
-  "pc.custom_action.CustomActionResponse\"\0000"
-  "\001B,\n\027io.mavsdk.custom_actionB\021CustomActi"
-  "onProtob\006proto3"
+  "ibeCustomActionRequest\"Z\n\035SubscribeCusto"
+  "mActionResponse\0229\n\006action\030\001 \001(\0132).mavsdk"
+  ".rpc.custom_action.ActionToExecute\"\225\001\n\032R"
+  "espondCustomActionRequest\0229\n\006action\030\001 \001("
+  "\0132).mavsdk.rpc.custom_action.ActionToExe"
+  "cute\022<\n\006result\030\002 \001(\0132,.mavsdk.rpc.custom"
+  "_action.CustomActionResult\"\217\001\n\024CustomAct"
+  "ionResponse\0229\n\006action\030\001 \001(\0132).mavsdk.rpc"
+  ".custom_action.ActionToExecute\022<\n\006result"
+  "\030\002 \001(\0132,.mavsdk.rpc.custom_action.Custom"
+  "ActionResult\".\n\017ActionToExecute\022\n\n\002id\030\001 "
+  "\001(\005\022\017\n\007timeout\030\002 \001(\005\"\335\001\n\022CustomActionRes"
+  "ult\022C\n\006result\030\001 \001(\01623.mavsdk.rpc.custom_"
+  "action.CustomActionResult.Result\022\022\n\nresu"
+  "lt_str\030\002 \001(\t\"n\n\006Result\022\022\n\016RESULT_UNKNOWN"
+  "\020\000\022\022\n\016RESULT_SUCCESS\020\001\022\020\n\014RESULT_ERROR\020\002"
+  "\022\022\n\016RESULT_TIMEOUT\020\003\022\026\n\022RESULT_UNSUPPORT"
+  "ED\020\0042\235\003\n\023CustomActionService\022x\n\017SetCusto"
+  "mAction\0220.mavsdk.rpc.custom_action.SetCu"
+  "stomActionRequest\0321.mavsdk.rpc.custom_ac"
+  "tion.SetCustomActionResponse\"\000\022\214\001\n\025Subsc"
+  "ribeCustomAction\0226.mavsdk.rpc.custom_act"
+  "ion.SubscribeCustomActionRequest\0327.mavsd"
+  "k.rpc.custom_action.SubscribeCustomActio"
+  "nResponse\"\0000\001\022}\n\023RespondCustomAction\0224.m"
+  "avsdk.rpc.custom_action.RespondCustomAct"
+  "ionRequest\032..mavsdk.rpc.custom_action.Cu"
+  "stomActionResponse\"\000B,\n\027io.mavsdk.custom"
+  "_actionB\021CustomActionProtob\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_custom_5faction_2fcustom_5faction_2eproto_deps[1] = {
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_custom_5faction_2fcustom_5faction_2eproto_sccs[6] = {
+static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_custom_5faction_2fcustom_5faction_2eproto_sccs[8] = {
   &scc_info_ActionToExecute_custom_5faction_2fcustom_5faction_2eproto.base,
   &scc_info_CustomActionResponse_custom_5faction_2fcustom_5faction_2eproto.base,
   &scc_info_CustomActionResult_custom_5faction_2fcustom_5faction_2eproto.base,
+  &scc_info_RespondCustomActionRequest_custom_5faction_2fcustom_5faction_2eproto.base,
   &scc_info_SetCustomActionRequest_custom_5faction_2fcustom_5faction_2eproto.base,
   &scc_info_SetCustomActionResponse_custom_5faction_2fcustom_5faction_2eproto.base,
   &scc_info_SubscribeCustomActionRequest_custom_5faction_2fcustom_5faction_2eproto.base,
+  &scc_info_SubscribeCustomActionResponse_custom_5faction_2fcustom_5faction_2eproto.base,
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_custom_5faction_2fcustom_5faction_2eproto_once;
 static bool descriptor_table_custom_5faction_2fcustom_5faction_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_custom_5faction_2fcustom_5faction_2eproto = {
-  &descriptor_table_custom_5faction_2fcustom_5faction_2eproto_initialized, descriptor_table_protodef_custom_5faction_2fcustom_5faction_2eproto, "custom_action/custom_action.proto", 975,
-  &descriptor_table_custom_5faction_2fcustom_5faction_2eproto_once, descriptor_table_custom_5faction_2fcustom_5faction_2eproto_sccs, descriptor_table_custom_5faction_2fcustom_5faction_2eproto_deps, 6, 0,
+  &descriptor_table_custom_5faction_2fcustom_5faction_2eproto_initialized, descriptor_table_protodef_custom_5faction_2fcustom_5faction_2eproto, "custom_action/custom_action.proto", 1354,
+  &descriptor_table_custom_5faction_2fcustom_5faction_2eproto_once, descriptor_table_custom_5faction_2fcustom_5faction_2eproto_sccs, descriptor_table_custom_5faction_2fcustom_5faction_2eproto_deps, 8, 0,
   schemas, file_default_instances, TableStruct_custom_5faction_2fcustom_5faction_2eproto::offsets,
-  file_level_metadata_custom_5faction_2fcustom_5faction_2eproto, 6, file_level_enum_descriptors_custom_5faction_2fcustom_5faction_2eproto, file_level_service_descriptors_custom_5faction_2fcustom_5faction_2eproto,
+  file_level_metadata_custom_5faction_2fcustom_5faction_2eproto, 8, file_level_enum_descriptors_custom_5faction_2fcustom_5faction_2eproto, file_level_service_descriptors_custom_5faction_2fcustom_5faction_2eproto,
 };
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -786,25 +854,478 @@ void SubscribeCustomActionRequest::InternalSwap(SubscribeCustomActionRequest* ot
 
 // ===================================================================
 
-void CustomActionResponse::InitAsDefaultInstance() {
-  ::mavsdk::rpc::custom_action::_CustomActionResponse_default_instance_._instance.get_mutable()->custom_action_result_ = const_cast< ::mavsdk::rpc::custom_action::CustomActionResult*>(
+void SubscribeCustomActionResponse::InitAsDefaultInstance() {
+  ::mavsdk::rpc::custom_action::_SubscribeCustomActionResponse_default_instance_._instance.get_mutable()->action_ = const_cast< ::mavsdk::rpc::custom_action::ActionToExecute*>(
+      ::mavsdk::rpc::custom_action::ActionToExecute::internal_default_instance());
+}
+class SubscribeCustomActionResponse::_Internal {
+ public:
+  static const ::mavsdk::rpc::custom_action::ActionToExecute& action(const SubscribeCustomActionResponse* msg);
+};
+
+const ::mavsdk::rpc::custom_action::ActionToExecute&
+SubscribeCustomActionResponse::_Internal::action(const SubscribeCustomActionResponse* msg) {
+  return *msg->action_;
+}
+SubscribeCustomActionResponse::SubscribeCustomActionResponse()
+  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:mavsdk.rpc.custom_action.SubscribeCustomActionResponse)
+}
+SubscribeCustomActionResponse::SubscribeCustomActionResponse(const SubscribeCustomActionResponse& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _internal_metadata_(nullptr) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  if (from._internal_has_action()) {
+    action_ = new ::mavsdk::rpc::custom_action::ActionToExecute(*from.action_);
+  } else {
+    action_ = nullptr;
+  }
+  // @@protoc_insertion_point(copy_constructor:mavsdk.rpc.custom_action.SubscribeCustomActionResponse)
+}
+
+void SubscribeCustomActionResponse::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_SubscribeCustomActionResponse_custom_5faction_2fcustom_5faction_2eproto.base);
+  action_ = nullptr;
+}
+
+SubscribeCustomActionResponse::~SubscribeCustomActionResponse() {
+  // @@protoc_insertion_point(destructor:mavsdk.rpc.custom_action.SubscribeCustomActionResponse)
+  SharedDtor();
+}
+
+void SubscribeCustomActionResponse::SharedDtor() {
+  if (this != internal_default_instance()) delete action_;
+}
+
+void SubscribeCustomActionResponse::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const SubscribeCustomActionResponse& SubscribeCustomActionResponse::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_SubscribeCustomActionResponse_custom_5faction_2fcustom_5faction_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void SubscribeCustomActionResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:mavsdk.rpc.custom_action.SubscribeCustomActionResponse)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  if (GetArenaNoVirtual() == nullptr && action_ != nullptr) {
+    delete action_;
+  }
+  action_ = nullptr;
+  _internal_metadata_.Clear();
+}
+
+const char* SubscribeCustomActionResponse::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // .mavsdk.rpc.custom_action.ActionToExecute action = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          ptr = ctx->ParseMessage(_internal_mutable_action(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* SubscribeCustomActionResponse::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:mavsdk.rpc.custom_action.SubscribeCustomActionResponse)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // .mavsdk.rpc.custom_action.ActionToExecute action = 1;
+  if (this->has_action()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        1, _Internal::action(this), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:mavsdk.rpc.custom_action.SubscribeCustomActionResponse)
+  return target;
+}
+
+size_t SubscribeCustomActionResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:mavsdk.rpc.custom_action.SubscribeCustomActionResponse)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // .mavsdk.rpc.custom_action.ActionToExecute action = 1;
+  if (this->has_action()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *action_);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void SubscribeCustomActionResponse::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:mavsdk.rpc.custom_action.SubscribeCustomActionResponse)
+  GOOGLE_DCHECK_NE(&from, this);
+  const SubscribeCustomActionResponse* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<SubscribeCustomActionResponse>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:mavsdk.rpc.custom_action.SubscribeCustomActionResponse)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:mavsdk.rpc.custom_action.SubscribeCustomActionResponse)
+    MergeFrom(*source);
+  }
+}
+
+void SubscribeCustomActionResponse::MergeFrom(const SubscribeCustomActionResponse& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:mavsdk.rpc.custom_action.SubscribeCustomActionResponse)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.has_action()) {
+    _internal_mutable_action()->::mavsdk::rpc::custom_action::ActionToExecute::MergeFrom(from._internal_action());
+  }
+}
+
+void SubscribeCustomActionResponse::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:mavsdk.rpc.custom_action.SubscribeCustomActionResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void SubscribeCustomActionResponse::CopyFrom(const SubscribeCustomActionResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:mavsdk.rpc.custom_action.SubscribeCustomActionResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool SubscribeCustomActionResponse::IsInitialized() const {
+  return true;
+}
+
+void SubscribeCustomActionResponse::InternalSwap(SubscribeCustomActionResponse* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(action_, other->action_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata SubscribeCustomActionResponse::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
+// ===================================================================
+
+void RespondCustomActionRequest::InitAsDefaultInstance() {
+  ::mavsdk::rpc::custom_action::_RespondCustomActionRequest_default_instance_._instance.get_mutable()->action_ = const_cast< ::mavsdk::rpc::custom_action::ActionToExecute*>(
+      ::mavsdk::rpc::custom_action::ActionToExecute::internal_default_instance());
+  ::mavsdk::rpc::custom_action::_RespondCustomActionRequest_default_instance_._instance.get_mutable()->result_ = const_cast< ::mavsdk::rpc::custom_action::CustomActionResult*>(
       ::mavsdk::rpc::custom_action::CustomActionResult::internal_default_instance());
+}
+class RespondCustomActionRequest::_Internal {
+ public:
+  static const ::mavsdk::rpc::custom_action::ActionToExecute& action(const RespondCustomActionRequest* msg);
+  static const ::mavsdk::rpc::custom_action::CustomActionResult& result(const RespondCustomActionRequest* msg);
+};
+
+const ::mavsdk::rpc::custom_action::ActionToExecute&
+RespondCustomActionRequest::_Internal::action(const RespondCustomActionRequest* msg) {
+  return *msg->action_;
+}
+const ::mavsdk::rpc::custom_action::CustomActionResult&
+RespondCustomActionRequest::_Internal::result(const RespondCustomActionRequest* msg) {
+  return *msg->result_;
+}
+RespondCustomActionRequest::RespondCustomActionRequest()
+  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:mavsdk.rpc.custom_action.RespondCustomActionRequest)
+}
+RespondCustomActionRequest::RespondCustomActionRequest(const RespondCustomActionRequest& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _internal_metadata_(nullptr) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  if (from._internal_has_action()) {
+    action_ = new ::mavsdk::rpc::custom_action::ActionToExecute(*from.action_);
+  } else {
+    action_ = nullptr;
+  }
+  if (from._internal_has_result()) {
+    result_ = new ::mavsdk::rpc::custom_action::CustomActionResult(*from.result_);
+  } else {
+    result_ = nullptr;
+  }
+  // @@protoc_insertion_point(copy_constructor:mavsdk.rpc.custom_action.RespondCustomActionRequest)
+}
+
+void RespondCustomActionRequest::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_RespondCustomActionRequest_custom_5faction_2fcustom_5faction_2eproto.base);
+  ::memset(&action_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&result_) -
+      reinterpret_cast<char*>(&action_)) + sizeof(result_));
+}
+
+RespondCustomActionRequest::~RespondCustomActionRequest() {
+  // @@protoc_insertion_point(destructor:mavsdk.rpc.custom_action.RespondCustomActionRequest)
+  SharedDtor();
+}
+
+void RespondCustomActionRequest::SharedDtor() {
+  if (this != internal_default_instance()) delete action_;
+  if (this != internal_default_instance()) delete result_;
+}
+
+void RespondCustomActionRequest::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const RespondCustomActionRequest& RespondCustomActionRequest::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_RespondCustomActionRequest_custom_5faction_2fcustom_5faction_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void RespondCustomActionRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:mavsdk.rpc.custom_action.RespondCustomActionRequest)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  if (GetArenaNoVirtual() == nullptr && action_ != nullptr) {
+    delete action_;
+  }
+  action_ = nullptr;
+  if (GetArenaNoVirtual() == nullptr && result_ != nullptr) {
+    delete result_;
+  }
+  result_ = nullptr;
+  _internal_metadata_.Clear();
+}
+
+const char* RespondCustomActionRequest::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // .mavsdk.rpc.custom_action.ActionToExecute action = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          ptr = ctx->ParseMessage(_internal_mutable_action(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // .mavsdk.rpc.custom_action.CustomActionResult result = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+          ptr = ctx->ParseMessage(_internal_mutable_result(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* RespondCustomActionRequest::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:mavsdk.rpc.custom_action.RespondCustomActionRequest)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // .mavsdk.rpc.custom_action.ActionToExecute action = 1;
+  if (this->has_action()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        1, _Internal::action(this), target, stream);
+  }
+
+  // .mavsdk.rpc.custom_action.CustomActionResult result = 2;
+  if (this->has_result()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        2, _Internal::result(this), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:mavsdk.rpc.custom_action.RespondCustomActionRequest)
+  return target;
+}
+
+size_t RespondCustomActionRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:mavsdk.rpc.custom_action.RespondCustomActionRequest)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // .mavsdk.rpc.custom_action.ActionToExecute action = 1;
+  if (this->has_action()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *action_);
+  }
+
+  // .mavsdk.rpc.custom_action.CustomActionResult result = 2;
+  if (this->has_result()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *result_);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void RespondCustomActionRequest::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:mavsdk.rpc.custom_action.RespondCustomActionRequest)
+  GOOGLE_DCHECK_NE(&from, this);
+  const RespondCustomActionRequest* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<RespondCustomActionRequest>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:mavsdk.rpc.custom_action.RespondCustomActionRequest)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:mavsdk.rpc.custom_action.RespondCustomActionRequest)
+    MergeFrom(*source);
+  }
+}
+
+void RespondCustomActionRequest::MergeFrom(const RespondCustomActionRequest& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:mavsdk.rpc.custom_action.RespondCustomActionRequest)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.has_action()) {
+    _internal_mutable_action()->::mavsdk::rpc::custom_action::ActionToExecute::MergeFrom(from._internal_action());
+  }
+  if (from.has_result()) {
+    _internal_mutable_result()->::mavsdk::rpc::custom_action::CustomActionResult::MergeFrom(from._internal_result());
+  }
+}
+
+void RespondCustomActionRequest::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:mavsdk.rpc.custom_action.RespondCustomActionRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void RespondCustomActionRequest::CopyFrom(const RespondCustomActionRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:mavsdk.rpc.custom_action.RespondCustomActionRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RespondCustomActionRequest::IsInitialized() const {
+  return true;
+}
+
+void RespondCustomActionRequest::InternalSwap(RespondCustomActionRequest* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(action_, other->action_);
+  swap(result_, other->result_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata RespondCustomActionRequest::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
+// ===================================================================
+
+void CustomActionResponse::InitAsDefaultInstance() {
   ::mavsdk::rpc::custom_action::_CustomActionResponse_default_instance_._instance.get_mutable()->action_ = const_cast< ::mavsdk::rpc::custom_action::ActionToExecute*>(
       ::mavsdk::rpc::custom_action::ActionToExecute::internal_default_instance());
+  ::mavsdk::rpc::custom_action::_CustomActionResponse_default_instance_._instance.get_mutable()->result_ = const_cast< ::mavsdk::rpc::custom_action::CustomActionResult*>(
+      ::mavsdk::rpc::custom_action::CustomActionResult::internal_default_instance());
 }
 class CustomActionResponse::_Internal {
  public:
-  static const ::mavsdk::rpc::custom_action::CustomActionResult& custom_action_result(const CustomActionResponse* msg);
   static const ::mavsdk::rpc::custom_action::ActionToExecute& action(const CustomActionResponse* msg);
+  static const ::mavsdk::rpc::custom_action::CustomActionResult& result(const CustomActionResponse* msg);
 };
 
-const ::mavsdk::rpc::custom_action::CustomActionResult&
-CustomActionResponse::_Internal::custom_action_result(const CustomActionResponse* msg) {
-  return *msg->custom_action_result_;
-}
 const ::mavsdk::rpc::custom_action::ActionToExecute&
 CustomActionResponse::_Internal::action(const CustomActionResponse* msg) {
   return *msg->action_;
+}
+const ::mavsdk::rpc::custom_action::CustomActionResult&
+CustomActionResponse::_Internal::result(const CustomActionResponse* msg) {
+  return *msg->result_;
 }
 CustomActionResponse::CustomActionResponse()
   : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
@@ -815,24 +1336,24 @@ CustomActionResponse::CustomActionResponse(const CustomActionResponse& from)
   : ::PROTOBUF_NAMESPACE_ID::Message(),
       _internal_metadata_(nullptr) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  if (from._internal_has_custom_action_result()) {
-    custom_action_result_ = new ::mavsdk::rpc::custom_action::CustomActionResult(*from.custom_action_result_);
-  } else {
-    custom_action_result_ = nullptr;
-  }
   if (from._internal_has_action()) {
     action_ = new ::mavsdk::rpc::custom_action::ActionToExecute(*from.action_);
   } else {
     action_ = nullptr;
+  }
+  if (from._internal_has_result()) {
+    result_ = new ::mavsdk::rpc::custom_action::CustomActionResult(*from.result_);
+  } else {
+    result_ = nullptr;
   }
   // @@protoc_insertion_point(copy_constructor:mavsdk.rpc.custom_action.CustomActionResponse)
 }
 
 void CustomActionResponse::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_CustomActionResponse_custom_5faction_2fcustom_5faction_2eproto.base);
-  ::memset(&custom_action_result_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&action_) -
-      reinterpret_cast<char*>(&custom_action_result_)) + sizeof(action_));
+  ::memset(&action_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&result_) -
+      reinterpret_cast<char*>(&action_)) + sizeof(result_));
 }
 
 CustomActionResponse::~CustomActionResponse() {
@@ -841,8 +1362,8 @@ CustomActionResponse::~CustomActionResponse() {
 }
 
 void CustomActionResponse::SharedDtor() {
-  if (this != internal_default_instance()) delete custom_action_result_;
   if (this != internal_default_instance()) delete action_;
+  if (this != internal_default_instance()) delete result_;
 }
 
 void CustomActionResponse::SetCachedSize(int size) const {
@@ -860,14 +1381,14 @@ void CustomActionResponse::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  if (GetArenaNoVirtual() == nullptr && custom_action_result_ != nullptr) {
-    delete custom_action_result_;
-  }
-  custom_action_result_ = nullptr;
   if (GetArenaNoVirtual() == nullptr && action_ != nullptr) {
     delete action_;
   }
   action_ = nullptr;
+  if (GetArenaNoVirtual() == nullptr && result_ != nullptr) {
+    delete result_;
+  }
+  result_ = nullptr;
   _internal_metadata_.Clear();
 }
 
@@ -878,17 +1399,17 @@ const char* CustomActionResponse::_InternalParse(const char* ptr, ::PROTOBUF_NAM
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // .mavsdk.rpc.custom_action.CustomActionResult custom_action_result = 1;
+      // .mavsdk.rpc.custom_action.ActionToExecute action = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
-          ptr = ctx->ParseMessage(_internal_mutable_custom_action_result(), ptr);
+          ptr = ctx->ParseMessage(_internal_mutable_action(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // .mavsdk.rpc.custom_action.ActionToExecute action = 2;
+      // .mavsdk.rpc.custom_action.CustomActionResult result = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
-          ptr = ctx->ParseMessage(_internal_mutable_action(), ptr);
+          ptr = ctx->ParseMessage(_internal_mutable_result(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -918,20 +1439,20 @@ failure:
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .mavsdk.rpc.custom_action.CustomActionResult custom_action_result = 1;
-  if (this->has_custom_action_result()) {
-    target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(
-        1, _Internal::custom_action_result(this), target, stream);
-  }
-
-  // .mavsdk.rpc.custom_action.ActionToExecute action = 2;
+  // .mavsdk.rpc.custom_action.ActionToExecute action = 1;
   if (this->has_action()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        2, _Internal::action(this), target, stream);
+        1, _Internal::action(this), target, stream);
+  }
+
+  // .mavsdk.rpc.custom_action.CustomActionResult result = 2;
+  if (this->has_result()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        2, _Internal::result(this), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -950,18 +1471,18 @@ size_t CustomActionResponse::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // .mavsdk.rpc.custom_action.CustomActionResult custom_action_result = 1;
-  if (this->has_custom_action_result()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *custom_action_result_);
-  }
-
-  // .mavsdk.rpc.custom_action.ActionToExecute action = 2;
+  // .mavsdk.rpc.custom_action.ActionToExecute action = 1;
   if (this->has_action()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *action_);
+  }
+
+  // .mavsdk.rpc.custom_action.CustomActionResult result = 2;
+  if (this->has_result()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *result_);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -995,11 +1516,11 @@ void CustomActionResponse::MergeFrom(const CustomActionResponse& from) {
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from.has_custom_action_result()) {
-    _internal_mutable_custom_action_result()->::mavsdk::rpc::custom_action::CustomActionResult::MergeFrom(from._internal_custom_action_result());
-  }
   if (from.has_action()) {
     _internal_mutable_action()->::mavsdk::rpc::custom_action::ActionToExecute::MergeFrom(from._internal_action());
+  }
+  if (from.has_result()) {
+    _internal_mutable_result()->::mavsdk::rpc::custom_action::CustomActionResult::MergeFrom(from._internal_result());
   }
 }
 
@@ -1024,8 +1545,8 @@ bool CustomActionResponse::IsInitialized() const {
 void CustomActionResponse::InternalSwap(CustomActionResponse* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(custom_action_result_, other->custom_action_result_);
   swap(action_, other->action_);
+  swap(result_, other->result_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata CustomActionResponse::GetMetadata() const {
@@ -1050,12 +1571,16 @@ ActionToExecute::ActionToExecute(const ActionToExecute& from)
   : ::PROTOBUF_NAMESPACE_ID::Message(),
       _internal_metadata_(nullptr) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  action_ = from.action_;
+  ::memcpy(&id_, &from.id_,
+    static_cast<size_t>(reinterpret_cast<char*>(&timeout_) -
+    reinterpret_cast<char*>(&id_)) + sizeof(timeout_));
   // @@protoc_insertion_point(copy_constructor:mavsdk.rpc.custom_action.ActionToExecute)
 }
 
 void ActionToExecute::SharedCtor() {
-  action_ = 0;
+  ::memset(&id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&timeout_) -
+      reinterpret_cast<char*>(&id_)) + sizeof(timeout_));
 }
 
 ActionToExecute::~ActionToExecute() {
@@ -1081,7 +1606,9 @@ void ActionToExecute::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  action_ = 0;
+  ::memset(&id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&timeout_) -
+      reinterpret_cast<char*>(&id_)) + sizeof(timeout_));
   _internal_metadata_.Clear();
 }
 
@@ -1092,10 +1619,17 @@ const char* ActionToExecute::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPAC
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // int32 action = 1;
+      // int32 id = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
-          action_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int32 timeout = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
+          timeout_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -1125,10 +1659,16 @@ failure:
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // int32 action = 1;
-  if (this->action() != 0) {
+  // int32 id = 1;
+  if (this->id() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_action(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_id(), target);
+  }
+
+  // int32 timeout = 2;
+  if (this->timeout() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_timeout(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -1147,11 +1687,18 @@ size_t ActionToExecute::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // int32 action = 1;
-  if (this->action() != 0) {
+  // int32 id = 1;
+  if (this->id() != 0) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_action());
+        this->_internal_id());
+  }
+
+  // int32 timeout = 2;
+  if (this->timeout() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_timeout());
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -1185,8 +1732,11 @@ void ActionToExecute::MergeFrom(const ActionToExecute& from) {
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from.action() != 0) {
-    _internal_set_action(from._internal_action());
+  if (from.id() != 0) {
+    _internal_set_id(from._internal_id());
+  }
+  if (from.timeout() != 0) {
+    _internal_set_timeout(from._internal_timeout());
   }
 }
 
@@ -1211,7 +1761,8 @@ bool ActionToExecute::IsInitialized() const {
 void ActionToExecute::InternalSwap(ActionToExecute* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  swap(action_, other->action_);
+  swap(id_, other->id_);
+  swap(timeout_, other->timeout_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata ActionToExecute::GetMetadata() const {
@@ -1459,6 +2010,12 @@ template<> PROTOBUF_NOINLINE ::mavsdk::rpc::custom_action::SetCustomActionRespon
 }
 template<> PROTOBUF_NOINLINE ::mavsdk::rpc::custom_action::SubscribeCustomActionRequest* Arena::CreateMaybeMessage< ::mavsdk::rpc::custom_action::SubscribeCustomActionRequest >(Arena* arena) {
   return Arena::CreateInternal< ::mavsdk::rpc::custom_action::SubscribeCustomActionRequest >(arena);
+}
+template<> PROTOBUF_NOINLINE ::mavsdk::rpc::custom_action::SubscribeCustomActionResponse* Arena::CreateMaybeMessage< ::mavsdk::rpc::custom_action::SubscribeCustomActionResponse >(Arena* arena) {
+  return Arena::CreateInternal< ::mavsdk::rpc::custom_action::SubscribeCustomActionResponse >(arena);
+}
+template<> PROTOBUF_NOINLINE ::mavsdk::rpc::custom_action::RespondCustomActionRequest* Arena::CreateMaybeMessage< ::mavsdk::rpc::custom_action::RespondCustomActionRequest >(Arena* arena) {
+  return Arena::CreateInternal< ::mavsdk::rpc::custom_action::RespondCustomActionRequest >(arena);
 }
 template<> PROTOBUF_NOINLINE ::mavsdk::rpc::custom_action::CustomActionResponse* Arena::CreateMaybeMessage< ::mavsdk::rpc::custom_action::CustomActionResponse >(Arena* arena) {
   return Arena::CreateInternal< ::mavsdk::rpc::custom_action::CustomActionResponse >(arena);
