@@ -155,7 +155,7 @@ const char descriptor_table_protodef_tune_2ftune_2eproto[] PROTOBUF_SECTION_VARI
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_tune_2ftune_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_tune_2ftune_2eproto = {
-  false, false, 1231, descriptor_table_protodef_tune_2ftune_2eproto, "tune/tune.proto", 
+  false, false, 1231, descriptor_table_protodef_tune_2ftune_2eproto, "tune/tune.proto",
   &descriptor_table_tune_2ftune_2eproto_once, nullptr, 0, 4,
   schemas, file_default_instances, TableStruct_tune_2ftune_2eproto::offsets,
   file_level_metadata_tune_2ftune_2eproto, file_level_enum_descriptors_tune_2ftune_2eproto, file_level_service_descriptors_tune_2ftune_2eproto,
@@ -880,7 +880,7 @@ TuneResult::TuneResult(const TuneResult& from)
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   result_str_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (!from._internal_result_str().empty()) {
-    result_str_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_result_str(), 
+    result_str_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_result_str(),
       GetArenaForAllocation());
   }
   result_ = from.result_;
