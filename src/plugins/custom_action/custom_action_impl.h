@@ -20,13 +20,18 @@ public:
     MavlinkCommandReceiver::Result
     process_custom_action_command(const MavlinkCommandReceiver::CommandLong& command);
 
+    std::pair<CustomAction::Result, CustomAction::ActionToExecute> respond_custom_action(CustomAction::ActionToExecute action, CustomAction::Result result) const;
+
+    void
+    respond_custom_action_async(CustomAction::ActionToExecute action, CustomAction::Result result, const CustomAction::RespondCustomActionCallback& callback) const;
+
     CustomAction::Result set_custom_action() const;
 
     void set_custom_action_async(const CustomAction::ResultCallback& callback) const;
 
-    void custom_action_async(CustomAction::CustomActionCallback callback);
-
     CustomAction::ActionToExecute custom_action() const;
+
+    void custom_action_async(CustomAction::CustomActionCallback callback);
 
     void command_result_callback(
         MavlinkCommandSender::Result command_result,
