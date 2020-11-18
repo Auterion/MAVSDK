@@ -105,12 +105,13 @@ enum CustomActionResult_Result : int {
   CustomActionResult_Result_RESULT_ERROR = 2,
   CustomActionResult_Result_RESULT_TIMEOUT = 3,
   CustomActionResult_Result_RESULT_UNSUPPORTED = 4,
+  CustomActionResult_Result_RESULT_IN_PROGRESS = 5,
   CustomActionResult_Result_CustomActionResult_Result_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
   CustomActionResult_Result_CustomActionResult_Result_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
 };
 bool CustomActionResult_Result_IsValid(int value);
 constexpr CustomActionResult_Result CustomActionResult_Result_Result_MIN = CustomActionResult_Result_RESULT_UNKNOWN;
-constexpr CustomActionResult_Result CustomActionResult_Result_Result_MAX = CustomActionResult_Result_RESULT_UNSUPPORTED;
+constexpr CustomActionResult_Result CustomActionResult_Result_Result_MAX = CustomActionResult_Result_RESULT_IN_PROGRESS;
 constexpr int CustomActionResult_Result_Result_ARRAYSIZE = CustomActionResult_Result_Result_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* CustomActionResult_Result_descriptor();
@@ -884,25 +885,9 @@ class CustomActionResponse :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kActionFieldNumber = 1,
-    kResultFieldNumber = 2,
+    kResultFieldNumber = 1,
   };
-  // .mavsdk.rpc.custom_action.ActionToExecute action = 1;
-  bool has_action() const;
-  private:
-  bool _internal_has_action() const;
-  public:
-  void clear_action();
-  const ::mavsdk::rpc::custom_action::ActionToExecute& action() const;
-  ::mavsdk::rpc::custom_action::ActionToExecute* release_action();
-  ::mavsdk::rpc::custom_action::ActionToExecute* mutable_action();
-  void set_allocated_action(::mavsdk::rpc::custom_action::ActionToExecute* action);
-  private:
-  const ::mavsdk::rpc::custom_action::ActionToExecute& _internal_action() const;
-  ::mavsdk::rpc::custom_action::ActionToExecute* _internal_mutable_action();
-  public:
-
-  // .mavsdk.rpc.custom_action.CustomActionResult result = 2;
+  // .mavsdk.rpc.custom_action.CustomActionResult result = 1;
   bool has_result() const;
   private:
   bool _internal_has_result() const;
@@ -922,7 +907,6 @@ class CustomActionResponse :
   class _Internal;
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
-  ::mavsdk::rpc::custom_action::ActionToExecute* action_;
   ::mavsdk::rpc::custom_action::CustomActionResult* result_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_custom_5faction_2fcustom_5faction_2eproto;
@@ -1037,6 +1021,7 @@ class ActionToExecute :
   enum : int {
     kIdFieldNumber = 1,
     kTimeoutFieldNumber = 2,
+    kProgressFieldNumber = 3,
   };
   // int32 id = 1;
   void clear_id();
@@ -1056,6 +1041,15 @@ class ActionToExecute :
   void _internal_set_timeout(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
+  // int32 progress = 3;
+  void clear_progress();
+  ::PROTOBUF_NAMESPACE_ID::int32 progress() const;
+  void set_progress(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_progress() const;
+  void _internal_set_progress(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
   // @@protoc_insertion_point(class_scope:mavsdk.rpc.custom_action.ActionToExecute)
  private:
   class _Internal;
@@ -1063,6 +1057,7 @@ class ActionToExecute :
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
   ::PROTOBUF_NAMESPACE_ID::int32 id_;
   ::PROTOBUF_NAMESPACE_ID::int32 timeout_;
+  ::PROTOBUF_NAMESPACE_ID::int32 progress_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_custom_5faction_2fcustom_5faction_2eproto;
 };
@@ -1182,6 +1177,8 @@ class CustomActionResult :
     CustomActionResult_Result_RESULT_TIMEOUT;
   static constexpr Result RESULT_UNSUPPORTED =
     CustomActionResult_Result_RESULT_UNSUPPORTED;
+  static constexpr Result RESULT_IN_PROGRESS =
+    CustomActionResult_Result_RESULT_IN_PROGRESS;
   static inline bool Result_IsValid(int value) {
     return CustomActionResult_Result_IsValid(value);
   }
@@ -1519,67 +1516,7 @@ inline void RespondCustomActionRequest::set_allocated_result(::mavsdk::rpc::cust
 
 // CustomActionResponse
 
-// .mavsdk.rpc.custom_action.ActionToExecute action = 1;
-inline bool CustomActionResponse::_internal_has_action() const {
-  return this != internal_default_instance() && action_ != nullptr;
-}
-inline bool CustomActionResponse::has_action() const {
-  return _internal_has_action();
-}
-inline void CustomActionResponse::clear_action() {
-  if (GetArenaNoVirtual() == nullptr && action_ != nullptr) {
-    delete action_;
-  }
-  action_ = nullptr;
-}
-inline const ::mavsdk::rpc::custom_action::ActionToExecute& CustomActionResponse::_internal_action() const {
-  const ::mavsdk::rpc::custom_action::ActionToExecute* p = action_;
-  return p != nullptr ? *p : *reinterpret_cast<const ::mavsdk::rpc::custom_action::ActionToExecute*>(
-      &::mavsdk::rpc::custom_action::_ActionToExecute_default_instance_);
-}
-inline const ::mavsdk::rpc::custom_action::ActionToExecute& CustomActionResponse::action() const {
-  // @@protoc_insertion_point(field_get:mavsdk.rpc.custom_action.CustomActionResponse.action)
-  return _internal_action();
-}
-inline ::mavsdk::rpc::custom_action::ActionToExecute* CustomActionResponse::release_action() {
-  // @@protoc_insertion_point(field_release:mavsdk.rpc.custom_action.CustomActionResponse.action)
-  
-  ::mavsdk::rpc::custom_action::ActionToExecute* temp = action_;
-  action_ = nullptr;
-  return temp;
-}
-inline ::mavsdk::rpc::custom_action::ActionToExecute* CustomActionResponse::_internal_mutable_action() {
-  
-  if (action_ == nullptr) {
-    auto* p = CreateMaybeMessage<::mavsdk::rpc::custom_action::ActionToExecute>(GetArenaNoVirtual());
-    action_ = p;
-  }
-  return action_;
-}
-inline ::mavsdk::rpc::custom_action::ActionToExecute* CustomActionResponse::mutable_action() {
-  // @@protoc_insertion_point(field_mutable:mavsdk.rpc.custom_action.CustomActionResponse.action)
-  return _internal_mutable_action();
-}
-inline void CustomActionResponse::set_allocated_action(::mavsdk::rpc::custom_action::ActionToExecute* action) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
-  if (message_arena == nullptr) {
-    delete action_;
-  }
-  if (action) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
-    if (message_arena != submessage_arena) {
-      action = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, action, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  action_ = action;
-  // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.custom_action.CustomActionResponse.action)
-}
-
-// .mavsdk.rpc.custom_action.CustomActionResult result = 2;
+// .mavsdk.rpc.custom_action.CustomActionResult result = 1;
 inline bool CustomActionResponse::_internal_has_result() const {
   return this != internal_default_instance() && result_ != nullptr;
 }
@@ -1681,6 +1618,26 @@ inline void ActionToExecute::_internal_set_timeout(::PROTOBUF_NAMESPACE_ID::int3
 inline void ActionToExecute::set_timeout(::PROTOBUF_NAMESPACE_ID::int32 value) {
   _internal_set_timeout(value);
   // @@protoc_insertion_point(field_set:mavsdk.rpc.custom_action.ActionToExecute.timeout)
+}
+
+// int32 progress = 3;
+inline void ActionToExecute::clear_progress() {
+  progress_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 ActionToExecute::_internal_progress() const {
+  return progress_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 ActionToExecute::progress() const {
+  // @@protoc_insertion_point(field_get:mavsdk.rpc.custom_action.ActionToExecute.progress)
+  return _internal_progress();
+}
+inline void ActionToExecute::_internal_set_progress(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  progress_ = value;
+}
+inline void ActionToExecute::set_progress(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_progress(value);
+  // @@protoc_insertion_point(field_set:mavsdk.rpc.custom_action.ActionToExecute.progress)
 }
 
 // -------------------------------------------------------------------
