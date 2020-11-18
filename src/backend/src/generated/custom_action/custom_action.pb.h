@@ -235,11 +235,30 @@ class SetCustomActionRequest :
 
   // accessors -------------------------------------------------------
 
+  enum : int {
+    kActionFieldNumber = 1,
+  };
+  // .mavsdk.rpc.custom_action.ActionToExecute action = 1;
+  bool has_action() const;
+  private:
+  bool _internal_has_action() const;
+  public:
+  void clear_action();
+  const ::mavsdk::rpc::custom_action::ActionToExecute& action() const;
+  ::mavsdk::rpc::custom_action::ActionToExecute* release_action();
+  ::mavsdk::rpc::custom_action::ActionToExecute* mutable_action();
+  void set_allocated_action(::mavsdk::rpc::custom_action::ActionToExecute* action);
+  private:
+  const ::mavsdk::rpc::custom_action::ActionToExecute& _internal_action() const;
+  ::mavsdk::rpc::custom_action::ActionToExecute* _internal_mutable_action();
+  public:
+
   // @@protoc_insertion_point(class_scope:mavsdk.rpc.custom_action.SetCustomActionRequest)
  private:
   class _Internal;
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::mavsdk::rpc::custom_action::ActionToExecute* action_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_custom_5faction_2fcustom_5faction_2eproto;
 };
@@ -1255,6 +1274,66 @@ class CustomActionResult :
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
 // SetCustomActionRequest
+
+// .mavsdk.rpc.custom_action.ActionToExecute action = 1;
+inline bool SetCustomActionRequest::_internal_has_action() const {
+  return this != internal_default_instance() && action_ != nullptr;
+}
+inline bool SetCustomActionRequest::has_action() const {
+  return _internal_has_action();
+}
+inline void SetCustomActionRequest::clear_action() {
+  if (GetArenaNoVirtual() == nullptr && action_ != nullptr) {
+    delete action_;
+  }
+  action_ = nullptr;
+}
+inline const ::mavsdk::rpc::custom_action::ActionToExecute& SetCustomActionRequest::_internal_action() const {
+  const ::mavsdk::rpc::custom_action::ActionToExecute* p = action_;
+  return p != nullptr ? *p : *reinterpret_cast<const ::mavsdk::rpc::custom_action::ActionToExecute*>(
+      &::mavsdk::rpc::custom_action::_ActionToExecute_default_instance_);
+}
+inline const ::mavsdk::rpc::custom_action::ActionToExecute& SetCustomActionRequest::action() const {
+  // @@protoc_insertion_point(field_get:mavsdk.rpc.custom_action.SetCustomActionRequest.action)
+  return _internal_action();
+}
+inline ::mavsdk::rpc::custom_action::ActionToExecute* SetCustomActionRequest::release_action() {
+  // @@protoc_insertion_point(field_release:mavsdk.rpc.custom_action.SetCustomActionRequest.action)
+  
+  ::mavsdk::rpc::custom_action::ActionToExecute* temp = action_;
+  action_ = nullptr;
+  return temp;
+}
+inline ::mavsdk::rpc::custom_action::ActionToExecute* SetCustomActionRequest::_internal_mutable_action() {
+  
+  if (action_ == nullptr) {
+    auto* p = CreateMaybeMessage<::mavsdk::rpc::custom_action::ActionToExecute>(GetArenaNoVirtual());
+    action_ = p;
+  }
+  return action_;
+}
+inline ::mavsdk::rpc::custom_action::ActionToExecute* SetCustomActionRequest::mutable_action() {
+  // @@protoc_insertion_point(field_mutable:mavsdk.rpc.custom_action.SetCustomActionRequest.action)
+  return _internal_mutable_action();
+}
+inline void SetCustomActionRequest::set_allocated_action(::mavsdk::rpc::custom_action::ActionToExecute* action) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == nullptr) {
+    delete action_;
+  }
+  if (action) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    if (message_arena != submessage_arena) {
+      action = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, action, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  action_ = action;
+  // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.custom_action.SetCustomActionRequest.action)
+}
 
 // -------------------------------------------------------------------
 
