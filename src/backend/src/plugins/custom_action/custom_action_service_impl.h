@@ -47,6 +47,8 @@ public:
 
         rpc_obj->set_timeout(action_to_execute.timeout);
 
+        rpc_obj->set_progress(action_to_execute.progress);
+
         return rpc_obj;
     }
 
@@ -58,6 +60,8 @@ public:
         obj.id = action_to_execute.id();
 
         obj.timeout = action_to_execute.timeout();
+
+        obj.progress = action_to_execute.progress();
 
         return obj;
     }
@@ -79,6 +83,8 @@ public:
                 return rpc::custom_action::CustomActionResult_Result_RESULT_TIMEOUT;
             case mavsdk::CustomAction::Result::Unsupported:
                 return rpc::custom_action::CustomActionResult_Result_RESULT_UNSUPPORTED;
+            case mavsdk::CustomAction::Result::InProgress:
+                return rpc::custom_action::CustomActionResult_Result_RESULT_IN_PROGRESS;
         }
     }
 
@@ -99,6 +105,8 @@ public:
                 return mavsdk::CustomAction::Result::Timeout;
             case rpc::custom_action::CustomActionResult_Result_RESULT_UNSUPPORTED:
                 return mavsdk::CustomAction::Result::Unsupported;
+            case rpc::custom_action::CustomActionResult_Result_RESULT_IN_PROGRESS:
+                return mavsdk::CustomAction::Result::InProgress;
         }
     }
 
@@ -163,12 +171,11 @@ public:
         }
 
         auto result = _custom_action.respond_custom_action(
-            translateFromRpcAction(request->action()), translateFromRpcResult(request->result()));
+            translateFromRpcActionToExecute(request->action()),
+            translateFromRpcCustomActionResult(request->result()));
 
         if (response != nullptr) {
-            fillResponseWithResult(response, result.first);
-
-            response->set_allocated_action(translateToRpcActionToExecute(result.second).release());
+            fillResponseWithResult(response, result);
         }
 
         return grpc::Status::OK;

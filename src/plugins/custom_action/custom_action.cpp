@@ -42,12 +42,12 @@ CustomAction::ActionToExecute CustomAction::custom_action() const
 }
 
 void CustomAction::respond_custom_action_async(
-    ActionToExecute action, Result result, const RespondCustomActionCallback callback)
+    ActionToExecute action, Result result, const ResultCallback callback)
 {
     _impl->respond_custom_action_async(action, result, callback);
 }
 
-std::pair<CustomAction::Result, CustomAction::ActionToExecute>
+CustomAction::Result
 CustomAction::respond_custom_action(ActionToExecute action, Result result) const
 {
     return _impl->respond_custom_action(action, result);
@@ -55,7 +55,7 @@ CustomAction::respond_custom_action(ActionToExecute action, Result result) const
 
 bool operator==(const CustomAction::ActionToExecute& lhs, const CustomAction::ActionToExecute& rhs)
 {
-    return (rhs.id == lhs.id) && (rhs.timeout == lhs.timeout);
+    return (rhs.id == lhs.id) && (rhs.timeout == lhs.timeout) && (rhs.progress == lhs.progress);
 }
 
 std::ostream& operator<<(std::ostream& str, CustomAction::ActionToExecute const& action_to_execute)
@@ -64,6 +64,7 @@ std::ostream& operator<<(std::ostream& str, CustomAction::ActionToExecute const&
     str << "action_to_execute:" << '\n' << "{\n";
     str << "    id: " << action_to_execute.id << '\n';
     str << "    timeout: " << action_to_execute.timeout << '\n';
+    str << "    progress: " << action_to_execute.progress << '\n';
     str << '}';
     return str;
 }
@@ -81,6 +82,8 @@ std::ostream& operator<<(std::ostream& str, CustomAction::Result const& result)
             return str << "Timeout";
         case CustomAction::Result::Unsupported:
             return str << "Unsupported";
+        case CustomAction::Result::InProgress:
+            return str << "In Progress";
         default:
             return str << "Unknown";
     }
