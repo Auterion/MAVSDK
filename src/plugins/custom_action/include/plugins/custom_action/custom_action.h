@@ -62,8 +62,9 @@ public:
      * @brief
      */
     struct ActionToExecute {
-        int32_t id{}; /**< @brief */
-        int32_t timeout{}; /**< @brief */
+        int32_t id{}; /**< @brief ID of the action */
+        int32_t timeout{}; /**< @brief Action timeout / max execution time */
+        int32_t progress{}; /**< @brief Action progress */
     };
 
     /**
@@ -91,6 +92,7 @@ public:
         Error, /**< @brief Error occurred sending the command. */
         Timeout, /**< @brief Command timed out. */
         Unsupported, /**< @brief Functionality not supported. */
+        InProgress, /**< @brief Command in progress. */
     };
 
     /**
@@ -140,19 +142,12 @@ public:
     ActionToExecute custom_action() const;
 
     /**
-     * @brief Callback type for respond_custom_action_async.
-     */
-    using RespondCustomActionCallback = std::function<void(Result, ActionToExecute)>;
-
-    /**
      * @brief Respond to the custom action command after completion.
      *
      * This function is non-blocking. See 'respond_custom_action' for the blocking counterpart.
      */
     void respond_custom_action_async(
-        ActionToExecute action,
-        Result result,
-        const RespondCustomActionCallback callback);
+        ActionToExecute action, Result result, const ResultCallback callback);
 
     /**
      * @brief Respond to the custom action command after completion.
@@ -162,8 +157,7 @@ public:
      *
      * @return Result of request.
      */
-    std::pair<Result, CustomAction::ActionToExecute>
-    respond_custom_action(ActionToExecute action, Result result) const;
+    Result respond_custom_action(ActionToExecute action, Result result) const;
 
     /**
      * @brief Copy constructor.
