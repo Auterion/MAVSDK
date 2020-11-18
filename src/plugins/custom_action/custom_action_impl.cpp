@@ -23,7 +23,7 @@ void CustomActionImpl::init()
     using namespace std::placeholders;
 
     _parent->register_mavlink_command_handler(
-        MAV_CMD_WAYPOINT_USER_1,
+        MAV_CMD_WAYPOINT_USER_1, // MAV_CMD_CUSTOM_ACTION,
         std::bind(&CustomActionImpl::process_custom_action_command, this, _1),
         this);
 }
@@ -46,6 +46,8 @@ CustomActionImpl::process_custom_action_command(const MavlinkCommandReceiver::Co
 
     store_custom_action(action_to_exec);
 
+    bool result = false;
+
     std::lock_guard<std::mutex> lock(_subscription_mutex);
     if (_custom_action_command_subscription) {
         auto callback = _custom_action_command_subscription;
@@ -53,10 +55,24 @@ CustomActionImpl::process_custom_action_command(const MavlinkCommandReceiver::Co
 
         _parent->call_user_callback([callback, arg1]() { callback(arg1); });
 
-        // return command_result_from_custom_action_result(fut.get());
+        // Send first ACK marking the command as being in progress
+        mavlink_message_t command_ack;
+        mavlink_msg_command_ack_pack(
+            _parent->get_own_system_id(),
+            _parent->get_own_component_id(),
+            &command_ack,
+            MAV_CMD_WAYPOINT_USER_1,
+            MAV_RESULT_IN_PROGRESS,
+            0,
+            action_to_exec.id, // Use the action ID in param4 to identify the action/process
+            0,
+            0);
+
+        result = _parent->send_message(command_ack);
     }
 
-    return MavlinkCommandReceiver::Result::Success;
+    return result ? MavlinkCommandReceiver::Result::Success :
+                    MavlinkCommandReceiver::Result::UnknownError;
 }
 
 void CustomActionImpl::store_custom_action(CustomAction::ActionToExecute action)
@@ -66,34 +82,43 @@ void CustomActionImpl::store_custom_action(CustomAction::ActionToExecute action)
 }
 
 void CustomActionImpl::respond_custom_action_async(
-    CustomAction::ActionToExecute action, CustomAction::Result result, const CustomAction::RespondCustomActionCallback& callback) const
+    CustomAction::ActionToExecute action,
+    CustomAction::Result result,
+    const CustomAction::ResultCallback& callback) const
 {
-    // MavlinkCommandSender::CommandLong command{};
-    //
-    // // command.command = MAV_CMD_CUSTOM_ACTION;
-    // command.command = MAV_CMD_WAYPOINT_USER_1;
-    // command.params.param1 = 0; // Action ID
-    // command.params.param2 = 0; // Action execution control
-    // command.params.param3 = 10; // Action timeout
-    // command.target_component_id = _parent->get_autopilot_id();
-    //
-    // _parent->send_command_async(
-    //     command, [this, callback](MavlinkCommandSender::Result result, float) {
-    //         command_result_callback(result, callback);
-    //     });
+    // Send ACKs based on the action status
+    mavlink_message_t command_ack;
+    mavlink_msg_command_ack_pack(
+        _parent->get_own_system_id(),
+        _parent->get_own_component_id(),
+        &command_ack,
+        MAV_CMD_WAYPOINT_USER_1,
+        mavlink_command_result_from_custom_action_result(result),
+        action.progress, // Set the command progress when applicable
+        action.id, // Use the action ID in param4 to identify the action/process
+        0,
+        0);
+
+    const CustomAction::Result action_result = _parent->send_message(command_ack) ?
+                                                   CustomAction::Result::Success :
+                                                   CustomAction::Result::Error;
+
+    if (callback) {
+        auto temp_callback = callback;
+        _parent->call_user_callback(
+            [temp_callback, action_result]() { temp_callback(action_result); });
+    }
 }
 
-std::pair<CustomAction::Result, CustomAction::ActionToExecute>
-CustomActionImpl::respond_custom_action(CustomAction::ActionToExecute action, CustomAction::Result result) const
+CustomAction::Result CustomActionImpl::respond_custom_action(
+    CustomAction::ActionToExecute action, CustomAction::Result result) const
 {
-    auto prom = std::promise<std::pair<CustomAction::Result, CustomAction::ActionToExecute>>();
+    auto prom = std::promise<CustomAction::Result>();
     auto fut = prom.get_future();
 
-    respond_custom_action_async(action, result,
-        [&prom](CustomAction::Result result, CustomAction::ActionToExecute action) {
-            prom.set_value(
-                std::pair<CustomAction::Result, CustomAction::ActionToExecute>(result, action));
-        });
+    respond_custom_action_async(action, result, [&prom](CustomAction::Result action_result) {
+        prom.set_value(action_result);
+    });
 
     return fut.get();
 }
@@ -154,21 +179,22 @@ CustomActionImpl::custom_action_result_from_command_result(MavlinkCommandSender:
     }
 }
 
-MavlinkCommandReceiver::Result
-CustomActionImpl::command_result_from_custom_action_result(CustomAction::Result result)
+MAV_RESULT
+CustomActionImpl::mavlink_command_result_from_custom_action_result(CustomAction::Result result)
 {
     switch (result) {
         case CustomAction::Result::Unknown:
         case CustomAction::Result::Error:
-            return MavlinkCommandReceiver::Result::UnknownError;
-        case CustomAction::Result::Success:
-            return MavlinkCommandReceiver::Result::Success;
         case CustomAction::Result::Timeout:
-            return MavlinkCommandReceiver::Result::Timeout;
+            return MAV_RESULT_FAILED;
+        case CustomAction::Result::Success:
+            return MAV_RESULT_ACCEPTED;
         case CustomAction::Result::Unsupported:
-            return MavlinkCommandReceiver::Result::Unsupported;
+            return MAV_RESULT_UNSUPPORTED;
+        case CustomAction::Result::InProgress:
+            return MAV_RESULT_IN_PROGRESS;
         default:
-            return MavlinkCommandReceiver::Result::UnknownError;
+            return MAV_RESULT_FAILED;
     }
 }
 
