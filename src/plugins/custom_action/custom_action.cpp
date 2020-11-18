@@ -21,14 +21,14 @@ CustomAction::CustomAction(std::shared_ptr<System> system) :
 
 CustomAction::~CustomAction() {}
 
-void CustomAction::set_custom_action_async(const ResultCallback callback)
+void CustomAction::set_custom_action_async(ActionToExecute action, const ResultCallback callback)
 {
-    _impl->set_custom_action_async(callback);
+    _impl->set_custom_action_async(action, callback);
 }
 
-CustomAction::Result CustomAction::set_custom_action() const
+CustomAction::Result CustomAction::set_custom_action(ActionToExecute action) const
 {
-    return _impl->set_custom_action();
+    return _impl->set_custom_action(action);
 }
 
 void CustomAction::subscribe_custom_action(CustomActionCallback callback)
