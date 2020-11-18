@@ -88,10 +88,17 @@ TEST_F(SitlTest, CustomAction)
         LogInfo() << "Sending custom action";
         std::promise<void> prom;
         std::future<void> fut = prom.get_future();
-        custom_action->set_custom_action_async([&prom](CustomAction::Result result) {
-            EXPECT_EQ(result, CustomAction::Result::Success);
-            prom.set_value();
-        });
+
+        // Process custom action 0
+        CustomAction::ActionToExecute action_to_execute{};
+        action_to_execute.id = 0;
+        action_to_execute.timeout = 10;
+
+        custom_action->set_custom_action_async(
+            action_to_execute, [&prom](CustomAction::Result result) {
+                EXPECT_EQ(result, CustomAction::Result::Success);
+                prom.set_value();
+            });
         EXPECT_EQ(fut.wait_for(std::chrono::seconds(2)), std::future_status::ready);
     }
 
