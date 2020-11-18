@@ -129,15 +129,16 @@ CustomAction::ActionToExecute CustomActionImpl::custom_action() const
     return _custom_action;
 }
 
-void CustomActionImpl::set_custom_action_async(const CustomAction::ResultCallback& callback) const
+void CustomActionImpl::set_custom_action_async(
+    CustomAction::ActionToExecute& action, const CustomAction::ResultCallback& callback) const
 {
     MavlinkCommandSender::CommandLong command{};
 
     // command.command = MAV_CMD_CUSTOM_ACTION;
     command.command = MAV_CMD_WAYPOINT_USER_1;
-    command.params.param1 = 0; // Action ID
-    command.params.param2 = 0; // Action execution control
-    command.params.param3 = 10; // Action timeout
+    command.params.param1 = action.id; // Action ID
+    command.params.param2 = 0; // Action execution control (N/A)
+    command.params.param3 = action.timeout; // Action timeout
     command.target_component_id = _parent->get_autopilot_id();
 
     _parent->send_command_async(
@@ -146,12 +147,14 @@ void CustomActionImpl::set_custom_action_async(const CustomAction::ResultCallbac
         });
 }
 
-CustomAction::Result CustomActionImpl::set_custom_action() const
+CustomAction::Result
+CustomActionImpl::set_custom_action(CustomAction::ActionToExecute& action) const
 {
     auto prom = std::promise<CustomAction::Result>();
     auto fut = prom.get_future();
 
-    set_custom_action_async([&prom](CustomAction::Result result) { prom.set_value(result); });
+    set_custom_action_async(
+        action, [&prom](CustomAction::Result result) { prom.set_value(result); });
 
     return fut.get();
 }

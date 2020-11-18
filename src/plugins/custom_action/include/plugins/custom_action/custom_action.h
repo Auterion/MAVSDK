@@ -112,7 +112,7 @@ public:
      *
      * This function is non-blocking. See 'set_custom_action' for the blocking counterpart.
      */
-    void set_custom_action_async(const ResultCallback callback);
+    void set_custom_action_async(ActionToExecute action, const ResultCallback callback);
 
     /**
      * @brief Send custom action command to the system.
@@ -121,7 +121,7 @@ public:
      *
      * @return Result of request.
      */
-    Result set_custom_action() const;
+    Result set_custom_action(ActionToExecute action) const;
 
     /**
      * @brief Callback type for subscribe_custom_action.

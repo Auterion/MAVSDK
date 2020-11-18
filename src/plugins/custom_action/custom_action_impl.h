@@ -28,9 +28,10 @@ public:
         CustomAction::Result result,
         const CustomAction::ResultCallback& callback) const;
 
-    CustomAction::Result set_custom_action() const;
+    CustomAction::Result set_custom_action(CustomAction::ActionToExecute& action) const;
 
-    void set_custom_action_async(const CustomAction::ResultCallback& callback) const;
+    void set_custom_action_async(
+        CustomAction::ActionToExecute& action, const CustomAction::ResultCallback& callback) const;
 
     CustomAction::ActionToExecute custom_action() const;
 

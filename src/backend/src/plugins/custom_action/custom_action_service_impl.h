@@ -112,10 +112,16 @@ public:
 
     grpc::Status SetCustomAction(
         grpc::ServerContext* /* context */,
-        const rpc::custom_action::SetCustomActionRequest* /* request */,
+        const rpc::custom_action::SetCustomActionRequest* request,
         rpc::custom_action::SetCustomActionResponse* response) override
     {
-        auto result = _custom_action.set_custom_action();
+        if (request == nullptr) {
+            LogWarn() << "SetCustomAction sent with a null request! Ignoring...";
+            return grpc::Status::OK;
+        }
+
+        auto result =
+            _custom_action.set_custom_action(translateFromRpcActionToExecute(request->action()));
 
         if (response != nullptr) {
             fillResponseWithResult(response, result);
