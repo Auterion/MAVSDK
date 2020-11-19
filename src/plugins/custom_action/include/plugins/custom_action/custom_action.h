@@ -84,6 +84,107 @@ public:
     operator<<(std::ostream& str, CustomAction::ActionToExecute const& action_to_execute);
 
     /**
+     * @brief
+     */
+    struct Command {
+        /**
+         * @brief Command type enumeration
+         */
+        enum class Type {
+            Long, /**< @brief Command long. */
+            Int, /**< @brief Command int. */
+        };
+
+        /**
+         * @brief Stream operator to print information about a `CustomAction::Type`.
+         *
+         * @return A reference to the stream.
+         */
+        friend std::ostream& operator<<(std::ostream& str, CustomAction::Command::Type const& type);
+
+        Type type{}; /**< @brief Type enum value */
+        int32_t target_system_id{}; /**< @brief Target system ID */
+        int32_t target_component_id{}; /**< @brief Target component ID. Should match the MAV_COMP */
+        int32_t command{}; /**< @brief Command to send to target system and component. Should match
+                              the MAV_CMD */
+        float param1{}; /**< @brief Command parameter 1 */
+        float param2{}; /**< @brief Command parameter 2 */
+        float param3{}; /**< @brief Command parameter 3 */
+        float param4{}; /**< @brief Command parameter 3 */
+        float param5{}; /**< @brief Command parameter 5 */
+        float param6{}; /**< @brief Command parameter 6 */
+        float param7{}; /**< @brief Command parameter 7 */
+    };
+
+    /**
+     * @brief Equal operator to compare two `CustomAction::Command` objects.
+     *
+     * @return `true` if items are equal.
+     */
+    friend bool operator==(const CustomAction::Command& lhs, const CustomAction::Command& rhs);
+
+    /**
+     * @brief Stream operator to print information about a `CustomAction::Command`.
+     *
+     * @return A reference to the stream.
+     */
+    friend std::ostream& operator<<(std::ostream& str, CustomAction::Command const& command);
+
+    /**
+     * @brief
+     */
+    struct Stage {
+        Command command{}; /**< @brief Command to run in the stage (if applicable) */
+        std::string run_script{}; /**< @brief Script to run in that stage (if applicable). Should
+                                     contain the full path. */
+        int32_t timestamp_start{}; /**< @brief Timestamp in usec when to start the stage */
+        int32_t timestamp_stop{}; /**< @brief Timestamp in usec when the stage should stop */
+    };
+
+    /**
+     * @brief Equal operator to compare two `CustomAction::Stage` objects.
+     *
+     * @return `true` if items are equal.
+     */
+    friend bool operator==(const CustomAction::Stage& lhs, const CustomAction::Stage& rhs);
+
+    /**
+     * @brief Stream operator to print information about a `CustomAction::Stage`.
+     *
+     * @return A reference to the stream.
+     */
+    friend std::ostream& operator<<(std::ostream& str, CustomAction::Stage const& stage);
+
+    /**
+     * @brief
+     */
+    struct ActionMetadata {
+        int32_t id{}; /**< @brief ID of the action */
+        std::string name{}; /**< @brief Name of the action */
+        std::string description{}; /**< @brief Description of the action */
+        std::string run_general_script{}; /**< @brief Script to run for this specific action. Runs
+                                             instead of the stages. */
+        std::vector<Stage>
+            stages{}; /**< @brief Timestamped ordered stages. Runs instead of the general script. */
+    };
+
+    /**
+     * @brief Equal operator to compare two `CustomAction::ActionMetadata` objects.
+     *
+     * @return `true` if items are equal.
+     */
+    friend bool
+    operator==(const CustomAction::ActionMetadata& lhs, const CustomAction::ActionMetadata& rhs);
+
+    /**
+     * @brief Stream operator to print information about a `CustomAction::ActionMetadata`.
+     *
+     * @return A reference to the stream.
+     */
+    friend std::ostream&
+    operator<<(std::ostream& str, CustomAction::ActionMetadata const& action_metadata);
+
+    /**
      * @brief Possible results returned for action requests.
      */
     enum class Result {
@@ -158,6 +259,30 @@ public:
      * @return Result of request.
      */
     Result respond_custom_action(ActionToExecute action, Result result) const;
+
+    /**
+     * @brief Callback type for custom_action_metadata_async.
+     */
+    using CustomActionMetadataCallback = std::function<void(ActionMetadata)>;
+
+    /**
+     * @brief Request custom action metadata.
+     *
+     * This function is non-blocking. See 'custom_action_metadata' for the blocking counterpart.
+     */
+    void custom_action_metadata_async(
+        ActionToExecute action, std::string file, const CustomActionMetadataCallback callback);
+
+    /**
+     * @brief Request custom action metadata.
+     *
+     * This function is blocking. See 'custom_action_metadata_async' for the non-blocking
+     * counterpart.
+     *
+     * @return Result of request.
+     */
+    CustomAction::ActionMetadata
+    custom_action_metadata(ActionToExecute action, std::string file) const;
 
     /**
      * @brief Copy constructor.
