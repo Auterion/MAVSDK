@@ -81,6 +81,19 @@ void CustomActionImpl::store_custom_action(CustomAction::ActionToExecute action)
     _custom_action = action;
 }
 
+CustomAction::Result CustomActionImpl::respond_custom_action(
+    CustomAction::ActionToExecute action, CustomAction::Result result) const
+{
+    auto prom = std::promise<CustomAction::Result>();
+    auto fut = prom.get_future();
+
+    respond_custom_action_async(action, result, [&prom](CustomAction::Result action_result) {
+        prom.set_value(action_result);
+    });
+
+    return fut.get();
+}
+
 void CustomActionImpl::respond_custom_action_async(
     CustomAction::ActionToExecute action,
     CustomAction::Result result,
@@ -110,23 +123,28 @@ void CustomActionImpl::respond_custom_action_async(
     }
 }
 
-CustomAction::Result CustomActionImpl::respond_custom_action(
-    CustomAction::ActionToExecute action, CustomAction::Result result) const
-{
-    auto prom = std::promise<CustomAction::Result>();
-    auto fut = prom.get_future();
-
-    respond_custom_action_async(action, result, [&prom](CustomAction::Result action_result) {
-        prom.set_value(action_result);
-    });
-
-    return fut.get();
-}
-
 CustomAction::ActionToExecute CustomActionImpl::custom_action() const
 {
     std::lock_guard<std::mutex> lock(_custom_action_mutex);
     return _custom_action;
+}
+
+void CustomActionImpl::custom_action_async(CustomAction::CustomActionCallback callback)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    _custom_action_command_subscription = callback;
+}
+
+CustomAction::Result
+CustomActionImpl::set_custom_action(CustomAction::ActionToExecute& action) const
+{
+    auto prom = std::promise<CustomAction::Result>();
+    auto fut = prom.get_future();
+
+    set_custom_action_async(
+        action, [&prom](CustomAction::Result result) { prom.set_value(result); });
+
+    return fut.get();
 }
 
 void CustomActionImpl::set_custom_action_async(
@@ -147,22 +165,27 @@ void CustomActionImpl::set_custom_action_async(
         });
 }
 
-CustomAction::Result
-CustomActionImpl::set_custom_action(CustomAction::ActionToExecute& action) const
+CustomAction::ActionMetadata CustomActionImpl::custom_action_metadata(
+    CustomAction::ActionToExecute& action, std::string& file) const
 {
-    auto prom = std::promise<CustomAction::Result>();
+    auto prom = std::promise<CustomAction::ActionMetadata>();
     auto fut = prom.get_future();
 
-    set_custom_action_async(
-        action, [&prom](CustomAction::Result result) { prom.set_value(result); });
+    custom_action_metadata_async(
+        action, file, [&prom](CustomAction::ActionMetadata metadata) { prom.set_value(metadata); });
 
     return fut.get();
 }
 
-void CustomActionImpl::custom_action_async(CustomAction::CustomActionCallback callback)
+void CustomActionImpl::custom_action_metadata_async(
+    CustomAction::ActionToExecute& action,
+    std::string& file,
+    const CustomAction::CustomActionMetadataCallback& callback) const
 {
-    std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _custom_action_command_subscription = callback;
+    // TODO: add jsoncpp file parsing and build a response with the timed action sequence
+    UNUSED(action);
+    UNUSED(file);
+    UNUSED(callback);
 }
 
 CustomAction::Result

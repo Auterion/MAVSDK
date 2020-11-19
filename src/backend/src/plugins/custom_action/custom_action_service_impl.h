@@ -66,6 +66,168 @@ public:
         return obj;
     }
 
+    static rpc::custom_action::Command::Type
+    translateToRpcType(const mavsdk::CustomAction::Command::Type& type)
+    {
+        switch (type) {
+            default:
+                LogErr() << "Unknown type enum value: " << static_cast<int>(type);
+            // FALLTHROUGH
+            case mavsdk::CustomAction::Command::Type::Long:
+                return rpc::custom_action::Command_Type_TYPE_LONG;
+            case mavsdk::CustomAction::Command::Type::Int:
+                return rpc::custom_action::Command_Type_TYPE_INT;
+        }
+    }
+
+    static mavsdk::CustomAction::Command::Type
+    translateFromRpcType(const rpc::custom_action::Command::Type type)
+    {
+        switch (type) {
+            default:
+                LogErr() << "Unknown type enum value: " << static_cast<int>(type);
+            // FALLTHROUGH
+            case rpc::custom_action::Command_Type_TYPE_LONG:
+                return mavsdk::CustomAction::Command::Type::Long;
+            case rpc::custom_action::Command_Type_TYPE_INT:
+                return mavsdk::CustomAction::Command::Type::Int;
+        }
+    }
+
+    static std::unique_ptr<rpc::custom_action::Command>
+    translateToRpcCommand(const mavsdk::CustomAction::Command& command)
+    {
+        std::unique_ptr<rpc::custom_action::Command> rpc_obj(new rpc::custom_action::Command());
+
+        rpc_obj->set_type(translateToRpcType(command.type));
+
+        rpc_obj->set_target_system_id(command.target_system_id);
+
+        rpc_obj->set_target_component_id(command.target_component_id);
+
+        rpc_obj->set_command(command.command);
+
+        rpc_obj->set_param1(command.param1);
+
+        rpc_obj->set_param2(command.param2);
+
+        rpc_obj->set_param3(command.param3);
+
+        rpc_obj->set_param4(command.param4);
+
+        rpc_obj->set_param5(command.param5);
+
+        rpc_obj->set_param6(command.param6);
+
+        rpc_obj->set_param7(command.param7);
+
+        return rpc_obj;
+    }
+
+    static mavsdk::CustomAction::Command
+    translateFromRpcCommand(const rpc::custom_action::Command& command)
+    {
+        mavsdk::CustomAction::Command obj;
+
+        obj.type = translateFromRpcType(command.type());
+
+        obj.target_system_id = command.target_system_id();
+
+        obj.target_component_id = command.target_component_id();
+
+        obj.command = command.command();
+
+        obj.param1 = command.param1();
+
+        obj.param2 = command.param2();
+
+        obj.param3 = command.param3();
+
+        obj.param4 = command.param4();
+
+        obj.param5 = command.param5();
+
+        obj.param6 = command.param6();
+
+        obj.param7 = command.param7();
+
+        return obj;
+    }
+
+    static std::unique_ptr<rpc::custom_action::Stage>
+    translateToRpcStage(const mavsdk::CustomAction::Stage& stage)
+    {
+        std::unique_ptr<rpc::custom_action::Stage> rpc_obj(new rpc::custom_action::Stage());
+
+        rpc_obj->set_allocated_command(translateToRpcCommand(stage.command).release());
+
+        rpc_obj->set_run_script(stage.run_script);
+
+        rpc_obj->set_timestamp_start(stage.timestamp_start);
+
+        rpc_obj->set_timestamp_stop(stage.timestamp_stop);
+
+        return rpc_obj;
+    }
+
+    static mavsdk::CustomAction::Stage translateFromRpcStage(const rpc::custom_action::Stage& stage)
+    {
+        mavsdk::CustomAction::Stage obj;
+
+        obj.command = translateFromRpcCommand(stage.command());
+
+        obj.run_script = stage.run_script();
+
+        obj.timestamp_start = stage.timestamp_start();
+
+        obj.timestamp_stop = stage.timestamp_stop();
+
+        return obj;
+    }
+
+    static std::unique_ptr<rpc::custom_action::ActionMetadata>
+    translateToRpcActionMetadata(const mavsdk::CustomAction::ActionMetadata& action_metadata)
+    {
+        std::unique_ptr<rpc::custom_action::ActionMetadata> rpc_obj(
+            new rpc::custom_action::ActionMetadata());
+
+        rpc_obj->set_id(action_metadata.id);
+
+        rpc_obj->set_name(action_metadata.name);
+
+        rpc_obj->set_description(action_metadata.description);
+
+        rpc_obj->set_run_general_script(action_metadata.run_general_script);
+
+        for (const auto& elem : action_metadata.stages) {
+            auto* ptr = rpc_obj->add_stages();
+            ptr->CopyFrom(*translateToRpcStage(elem).release());
+        }
+
+        return rpc_obj;
+    }
+
+    static mavsdk::CustomAction::ActionMetadata
+    translateFromRpcActionMetadata(const rpc::custom_action::ActionMetadata& action_metadata)
+    {
+        mavsdk::CustomAction::ActionMetadata obj;
+
+        obj.id = action_metadata.id();
+
+        obj.name = action_metadata.name();
+
+        obj.description = action_metadata.description();
+
+        obj.run_general_script = action_metadata.run_general_script();
+
+        for (const auto& elem : action_metadata.stages()) {
+            obj.stages.push_back(
+                translateFromRpcStage(static_cast<mavsdk::rpc::custom_action::Stage>(elem)));
+        }
+
+        return obj;
+    }
+
     static rpc::custom_action::CustomActionResult::Result
     translateToRpcResult(const mavsdk::CustomAction::Result& result)
     {
@@ -182,6 +344,26 @@ public:
 
         if (response != nullptr) {
             fillResponseWithResult(response, result);
+        }
+
+        return grpc::Status::OK;
+    }
+
+    grpc::Status CustomActionMetadata(
+        grpc::ServerContext* /* context */,
+        const rpc::custom_action::CustomActionMetadataRequest* request,
+        rpc::custom_action::CustomActionMetadataResponse* response) override
+    {
+        if (request == nullptr) {
+            LogWarn() << "CustomActionMetadata sent with a null request! Ignoring...";
+            return grpc::Status::OK;
+        }
+
+        auto result = _custom_action.custom_action_metadata(
+            translateFromRpcAction(request->action()), request->file());
+
+        if (response != nullptr) {
+            response->set_allocated_action_config(translateToRpcActionMetadata(result).release());
         }
 
         return grpc::Status::OK;
