@@ -37,6 +37,14 @@ public:
 
     void custom_action_async(CustomAction::CustomActionCallback callback);
 
+    CustomAction::ActionMetadata
+    custom_action_metadata(CustomAction::ActionToExecute& action, std::string& file) const;
+
+    void custom_action_metadata_async(
+        CustomAction::ActionToExecute& action,
+        std::string& file,
+        const CustomAction::CustomActionMetadataCallback& callback) const;
+
     void command_result_callback(
         MavlinkCommandSender::Result command_result,
         const CustomAction::ResultCallback& callback) const;
