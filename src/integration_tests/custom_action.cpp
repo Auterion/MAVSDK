@@ -11,9 +11,14 @@ using namespace mavsdk;
 using namespace std::placeholders;
 
 static bool _received_custom_action = false;
-static int _action_progress = 0;
-static CustomAction::Result
-process_custom_action(std::shared_ptr<System> system, CustomAction::ActionToExecute action);
+static std::atomic<int> _action_progress;
+static std::atomic<CustomAction::Result> _action_result;
+
+static void send_progress_status(std::shared_ptr<CustomAction> custom_action);
+static void process_custom_action(
+    std::shared_ptr<System> system,
+    CustomAction::ActionToExecute action,
+    std::shared_ptr<CustomAction> custom_action);
 
 TEST_F(SitlTest, CustomAction)
 {
@@ -89,7 +94,7 @@ TEST_F(SitlTest, CustomAction)
         std::promise<void> prom;
         std::future<void> fut = prom.get_future();
 
-        // Process custom action 0
+        // Send command to start custom action 0
         CustomAction::ActionToExecute action_to_execute{};
         action_to_execute.id = 0;
         action_to_execute.timeout = 10;
@@ -103,45 +108,40 @@ TEST_F(SitlTest, CustomAction)
     }
 
     {
-        LogInfo() << "Processing custom action";
+        LogInfo() << "Process custom action";
 
         // Change configuration so the instance is treated as a Companion Computer
         Mavsdk::Configuration config_cc(Mavsdk::Configuration::UsageType::CompanionComputer);
         mavsdk.set_configuration(config_cc);
 
+        // Get the custom action to process
         std::promise<CustomAction::ActionToExecute> prom;
         std::future<CustomAction::ActionToExecute> fut = prom.get_future();
-
-        // Process custom_action
         custom_action->subscribe_custom_action(
             [&prom](CustomAction::ActionToExecute action_to_exec) {
                 prom.set_value(action_to_exec);
                 _received_custom_action = true;
                 EXPECT_TRUE(_received_custom_action);
             });
-
         CustomAction::ActionToExecute action_exec = fut.get();
-        std::future<CustomAction::Result> fut2 =
-            std::async(process_custom_action, system, action_exec);
-        CustomAction::Result action_result = fut2.get();
-        LogInfo() << "Custom action #" << action_exec.id << " executed";
 
-        std::promise<void> prom2;
-        std::future<void> fut3 = prom2.get_future();
+        // Start the progress status report thread
+        std::thread status_th(send_progress_status, custom_action);
 
-        action_exec.progress = _action_progress;
-        // Send response with the result
-        custom_action->respond_custom_action_async(
-            action_exec, action_result, [&prom2](CustomAction::Result result) {
-                EXPECT_EQ(result, CustomAction::Result::Success);
-                prom2.set_value();
-            });
+        // Process the custom action
+        process_custom_action(system, action_exec, custom_action);
 
-        std::this_thread::sleep_for(std::chrono::seconds(5));
+        LogInfo() << "Custom action #" << action_exec.id << " executed!";
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        // Used to stop the status report thread
+        _action_result.store(CustomAction::Result::Unknown, std::memory_order_relaxed);
+        status_th.join();
 
         // Change configuration back to default Ground Station
         Mavsdk::Configuration config_gcs(Mavsdk::Configuration::UsageType::GroundStation);
         mavsdk.set_configuration(config_gcs);
+
+        std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 
     {
@@ -181,13 +181,57 @@ TEST_F(SitlTest, CustomAction)
     }
 }
 
-CustomAction::Result
-process_custom_action(std::shared_ptr<System> system, CustomAction::ActionToExecute action)
+void send_progress_status(std::shared_ptr<CustomAction> custom_action)
 {
-    LogInfo() << "Custom action #" << action.id << " to be executed";
+    do {
+        CustomAction::ActionToExecute action_exec{};
+        action_exec.progress = _action_progress.load();
+        auto action_result = _action_result.load();
 
-    // TODO: add action parsing and execution
-    _action_progress = 100;
+        std::promise<void> prom;
+        std::future<void> fut = prom.get_future();
 
-    return CustomAction::Result::InProgress;
+        // Send response with the result
+        custom_action->respond_custom_action_async(
+            action_exec, action_result, [&prom](CustomAction::Result result) {
+                EXPECT_EQ(result, CustomAction::Result::Success);
+                prom.set_value();
+            });
+
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+    } while (_action_result.load() != CustomAction::Result::Unknown);
+}
+
+void process_custom_action(
+    std::shared_ptr<System> system,
+    CustomAction::ActionToExecute action,
+    std::shared_ptr<CustomAction> custom_action)
+{
+    LogInfo() << "Custom action #" << action.id << " being executed";
+
+    // TODO: add action stage parsing and execution
+    UNUSED(system);
+    UNUSED(custom_action);
+
+    // Start
+    _action_result.store(CustomAction::Result::InProgress, std::memory_order_relaxed);
+    _action_progress.store(0.0, std::memory_order_relaxed);
+    LogInfo() << "Custom action #" << action.id << " current progress: " << _action_progress.load()
+              << "%";
+
+    // First stage
+    std::this_thread::sleep_for(std::chrono::seconds(3));
+
+    _action_progress.store(50.0, std::memory_order_relaxed);
+    LogInfo() << "Custom action #" << action.id << " current progress: " << _action_progress.load()
+              << "%";
+
+    // Second stage
+    std::this_thread::sleep_for(std::chrono::seconds(3));
+
+    // End
+    _action_progress.store(100.0, std::memory_order_relaxed);
+    _action_result.store(CustomAction::Result::Success, std::memory_order_relaxed);
+    LogInfo() << "Custom action #" << action.id << " current progress: " << _action_progress.load()
+              << "%";
 }
