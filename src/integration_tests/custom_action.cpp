@@ -214,34 +214,45 @@ void process_custom_action(
     std::future<CustomAction::ActionMetadata> fut = prom.get_future();
     custom_action->custom_action_metadata_async(
         action,
-        "../test_data/custom_action.json",
+        "src/integration_tests/test_data/custom_action.json",
         [&prom](CustomAction::Result result, CustomAction::ActionMetadata action_metadata) {
             prom.set_value(action_metadata);
             EXPECT_EQ(result, CustomAction::Result::Success);
         });
     CustomAction::ActionMetadata action_metadata = fut.get();
 
-    UNUSED(system);
+    EXPECT_EQ(action_metadata.id, 0);
+    EXPECT_EQ(action_metadata.name, "Integration test action");
+    EXPECT_EQ(action_metadata.description, "Example action to use on the integration test, mimicking the Go To Action test");
+    LogInfo() << "Custom action #" << action_metadata.id << " is: \"" << action_metadata.name;
 
     // Start
     _action_result.store(CustomAction::Result::InProgress, std::memory_order_relaxed);
     _action_progress.store(0.0, std::memory_order_relaxed);
-    LogInfo() << "Custom action #" << action.id << " current progress: " << _action_progress.load()
+    LogInfo() << "Custom action #" << action_metadata.id << " current progress: " << _action_progress.load()
               << "%";
 
     // First stage
-    std::this_thread::sleep_for(std::chrono::seconds(3));
+    EXPECT_EQ(
+        custom_action->execute_custom_action_stage(action_metadata.stages[0]),
+        CustomAction::Result::Success);
+    std::this_thread::sleep_for(std::chrono::seconds(10));
 
     _action_progress.store(50.0, std::memory_order_relaxed);
-    LogInfo() << "Custom action #" << action.id << " current progress: " << _action_progress.load()
+    LogInfo() << "Custom action #" << action_metadata.id << " current progress: " << _action_progress.load()
               << "%";
 
     // Second stage
-    std::this_thread::sleep_for(std::chrono::seconds(3));
+    EXPECT_EQ(
+        custom_action->execute_custom_action_stage(action_metadata.stages[1]),
+        CustomAction::Result::Success);
+    std::this_thread::sleep_for(std::chrono::seconds(10));
 
     // End
     _action_progress.store(100.0, std::memory_order_relaxed);
     _action_result.store(CustomAction::Result::Success, std::memory_order_relaxed);
-    LogInfo() << "Custom action #" << action.id << " current progress: " << _action_progress.load()
+    LogInfo() << "Custom action #" << action_metadata.id << " current progress: " << _action_progress.load()
               << "%";
+
+    UNUSED(system);
 }
