@@ -155,8 +155,13 @@ const char descriptor_table_protodef_tune_2ftune_2eproto[] PROTOBUF_SECTION_VARI
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_tune_2ftune_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_tune_2ftune_2eproto = {
+<<<<<<< HEAD
   false, false, 1208, descriptor_table_protodef_tune_2ftune_2eproto, "tune/tune.proto",
   &descriptor_table_tune_2ftune_2eproto_once, nullptr, 0, 4,
+=======
+  false, false, descriptor_table_protodef_tune_2ftune_2eproto, "tune/tune.proto", 1208,
+  &descriptor_table_tune_2ftune_2eproto_once, descriptor_table_tune_2ftune_2eproto_sccs, descriptor_table_tune_2ftune_2eproto_deps, 4, 0,
+>>>>>>> update custom action generated code
   schemas, file_default_instances, TableStruct_tune_2ftune_2eproto::offsets,
   file_level_metadata_tune_2ftune_2eproto, file_level_enum_descriptors_tune_2ftune_2eproto, file_level_service_descriptors_tune_2ftune_2eproto,
 };
