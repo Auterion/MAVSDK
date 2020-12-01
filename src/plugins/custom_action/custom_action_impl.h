@@ -2,6 +2,7 @@
 
 #include "plugins/custom_action/custom_action.h"
 #include "plugin_impl_base.h"
+#include <json/json.h>
 
 namespace mavsdk {
 
@@ -37,12 +38,12 @@ public:
 
     void custom_action_async(CustomAction::CustomActionCallback callback);
 
-    CustomAction::ActionMetadata
+    std::pair<CustomAction::Result, CustomAction::ActionMetadata>
     custom_action_metadata(CustomAction::ActionToExecute& action, std::string& file) const;
 
     void custom_action_metadata_async(
         CustomAction::ActionToExecute& action,
-        std::string& file,
+        const std::string& file,
         const CustomAction::CustomActionMetadataCallback& callback) const;
 
     void command_result_callback(
