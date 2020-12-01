@@ -256,13 +256,27 @@ void CustomActionImpl::custom_action_metadata_async(
                     cmd.target_system_id = stage_id["cmd"]["target_system"].asInt();
                     cmd.target_component_id = stage_id["cmd"]["target_system"].asInt();
                     cmd.command = stage_id["cmd"]["command"].asInt();
-                    cmd.param1 = stage_id["cmd"]["param1"].asFloat();
-                    cmd.param2 = stage_id["cmd"]["param2"].asFloat();
-                    cmd.param3 = stage_id["cmd"]["param3"].asFloat();
-                    cmd.param4 = stage_id["cmd"]["param4"].asFloat();
-                    cmd.param5 = stage_id["cmd"]["param5"].asFloat();
-                    cmd.param6 = stage_id["cmd"]["param6"].asFloat();
-                    cmd.param7 = stage_id["cmd"]["param7"].asFloat();
+                    cmd.param1 = stage_id["cmd"]["param7"] != Json::Value::null ?
+                                     stage_id["cmd"]["param1"].asFloat() :
+                                     NAN;
+                    cmd.param2 = stage_id["cmd"]["param7"] != Json::Value::null ?
+                                     stage_id["cmd"]["param2"].asFloat() :
+                                     NAN;
+                    cmd.param3 = stage_id["cmd"]["param7"] != Json::Value::null ?
+                                     stage_id["cmd"]["param3"].asFloat() :
+                                     NAN;
+                    cmd.param4 = stage_id["cmd"]["param7"] != Json::Value::null ?
+                                     stage_id["cmd"]["param4"].asFloat() :
+                                     NAN;
+                    cmd.param5 = stage_id["cmd"]["param7"] != Json::Value::null ?
+                                     stage_id["cmd"]["param5"].asFloat() :
+                                     NAN;
+                    cmd.param6 = stage_id["cmd"]["param7"] != Json::Value::null ?
+                                     stage_id["cmd"]["param6"].asFloat() :
+                                     NAN;
+                    cmd.param7 = stage_id["cmd"]["param7"] != Json::Value::null ?
+                                     stage_id["cmd"]["param7"].asFloat() :
+                                     NAN;
 
                     stage.command = cmd;
                 }
@@ -270,8 +284,12 @@ void CustomActionImpl::custom_action_metadata_async(
                 // The timestamps are optional, as the execution control ideally should
                 // be done by the client. But, if set, they can be included in a state
                 // machine on the client code
-                stage.timestamp_start = stage_id["timestamp_start"].asFloat();
-                stage.timestamp_stop = stage_id["timestamp_stop"].asFloat();
+                stage.timestamp_start = stage_id["timestamp_start"] != Json::Value::null ?
+                                            stage_id["timestamp_start"].asFloat() :
+                                            NAN;
+                stage.timestamp_stop = stage_id["timestamp_stop"] != Json::Value::null ?
+                                           stage_id["timestamp_stop"].asFloat() :
+                                           NAN;
 
                 action_metadata.stages.push_back(stage);
             }

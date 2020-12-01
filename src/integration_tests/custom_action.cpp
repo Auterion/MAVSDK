@@ -223,14 +223,16 @@ void process_custom_action(
 
     EXPECT_EQ(action_metadata.id, 0);
     EXPECT_EQ(action_metadata.name, "Integration test action");
-    EXPECT_EQ(action_metadata.description, "Example action to use on the integration test, mimicking the Go To Action test");
+    EXPECT_EQ(
+        action_metadata.description,
+        "Example action to use on the integration test, mimicking the Go To Action test");
     LogInfo() << "Custom action #" << action_metadata.id << " is: \"" << action_metadata.name;
 
     // Start
     _action_result.store(CustomAction::Result::InProgress, std::memory_order_relaxed);
     _action_progress.store(0.0, std::memory_order_relaxed);
-    LogInfo() << "Custom action #" << action_metadata.id << " current progress: " << _action_progress.load()
-              << "%";
+    LogInfo() << "Custom action #" << action_metadata.id
+              << " current progress: " << _action_progress.load() << "%";
 
     // First stage
     EXPECT_EQ(
@@ -239,8 +241,8 @@ void process_custom_action(
     std::this_thread::sleep_for(std::chrono::seconds(10));
 
     _action_progress.store(50.0, std::memory_order_relaxed);
-    LogInfo() << "Custom action #" << action_metadata.id << " current progress: " << _action_progress.load()
-              << "%";
+    LogInfo() << "Custom action #" << action_metadata.id
+              << " current progress: " << _action_progress.load() << "%";
 
     // Second stage
     EXPECT_EQ(
@@ -251,8 +253,8 @@ void process_custom_action(
     // End
     _action_progress.store(100.0, std::memory_order_relaxed);
     _action_result.store(CustomAction::Result::Success, std::memory_order_relaxed);
-    LogInfo() << "Custom action #" << action_metadata.id << " current progress: " << _action_progress.load()
-              << "%";
+    LogInfo() << "Custom action #" << action_metadata.id
+              << " current progress: " << _action_progress.load() << "%";
 
     UNUSED(system);
 }
