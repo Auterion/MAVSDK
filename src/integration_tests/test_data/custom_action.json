@@ -12,14 +12,14 @@
                                         "param1": 0.0,
                                         "param2": 0.0,
                                         "param3": 0.0,
-                                        "param4": 0.0,
+                                        "param4": null,
                                         "param5": 47.398000,
                                         "param6": 8.545592,
-                                        "param7": 0.0
+                                        "param7": null
                                 },
                                 "run_script": "",
-                                "timestamp_start": 0.0,
-                                "timestamp_stop": 10.0
+                                "timestamp_start": null,
+                                "timestamp_stop": null
                         },
                         {
                                 "cmd": {
@@ -30,14 +30,14 @@
                                         "param1": 0.0,
                                         "param2": 0.0,
                                         "param3": 0.0,
-                                        "param4": 0.0,
+                                        "param4": null,
                                         "param5": 47.3977233,
                                         "param6": 8.545592,
-                                        "param7": 0.0
+                                        "param7": null
                                 },
                                 "run_script": "",
-                                "timestamp_start": 10.0,
-                                "timestamp_stop": 20.0
+                                "timestamp_start": null,
+                                "timestamp_stop": null
                         }
                 ]
         }
