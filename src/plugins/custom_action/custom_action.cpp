@@ -57,15 +57,15 @@ CustomAction::respond_custom_action(ActionToExecute action, Result result) const
 }
 
 void CustomAction::custom_action_metadata_async(
-    ActionToExecute action, std::string file, const CustomActionMetadataCallback callback)
+    ActionToExecute action, std::string file_path, const CustomActionMetadataCallback callback)
 {
-    _impl->custom_action_metadata_async(action, file, callback);
+    _impl->custom_action_metadata_async(action, file_path, callback);
 }
 
-CustomAction::ActionMetadata
-CustomAction::custom_action_metadata(ActionToExecute action, std::string file) const
+std::pair<CustomAction::Result, CustomAction::ActionMetadata>
+CustomAction::custom_action_metadata(ActionToExecute action, std::string file_path) const
 {
-    return _impl->custom_action_metadata(action, file);
+    return _impl->custom_action_metadata(action, file_path);
 }
 
 bool operator==(const CustomAction::ActionToExecute& lhs, const CustomAction::ActionToExecute& rhs)

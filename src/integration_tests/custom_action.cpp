@@ -209,9 +209,19 @@ void process_custom_action(
 {
     LogInfo() << "Custom action #" << action.id << " being executed";
 
-    // TODO: add action stage parsing and execution
+    // Get the custom action metadata
+    std::promise<CustomAction::ActionMetadata> prom;
+    std::future<CustomAction::ActionMetadata> fut = prom.get_future();
+    custom_action->custom_action_metadata_async(
+        action,
+        "../test_data/custom_action.json",
+        [&prom](CustomAction::Result result, CustomAction::ActionMetadata action_metadata) {
+            prom.set_value(action_metadata);
+            EXPECT_EQ(result, CustomAction::Result::Success);
+        });
+    CustomAction::ActionMetadata action_metadata = fut.get();
+
     UNUSED(system);
-    UNUSED(custom_action);
 
     // Start
     _action_result.store(CustomAction::Result::InProgress, std::memory_order_relaxed);

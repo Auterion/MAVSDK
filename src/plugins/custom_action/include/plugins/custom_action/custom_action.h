@@ -263,7 +263,7 @@ public:
     /**
      * @brief Callback type for custom_action_metadata_async.
      */
-    using CustomActionMetadataCallback = std::function<void(ActionMetadata)>;
+    using CustomActionMetadataCallback = std::function<void(Result, ActionMetadata)>;
 
     /**
      * @brief Request custom action metadata.
@@ -271,7 +271,7 @@ public:
      * This function is non-blocking. See 'custom_action_metadata' for the blocking counterpart.
      */
     void custom_action_metadata_async(
-        ActionToExecute action, std::string file, const CustomActionMetadataCallback callback);
+        ActionToExecute action, std::string file_path, const CustomActionMetadataCallback callback);
 
     /**
      * @brief Request custom action metadata.
@@ -281,8 +281,8 @@ public:
      *
      * @return Result of request.
      */
-    CustomAction::ActionMetadata
-    custom_action_metadata(ActionToExecute action, std::string file) const;
+    std::pair<Result, CustomAction::ActionMetadata>
+    custom_action_metadata(ActionToExecute action, std::string file_path) const;
 
     /**
      * @brief Copy constructor.

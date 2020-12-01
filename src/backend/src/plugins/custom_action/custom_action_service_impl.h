@@ -360,10 +360,13 @@ public:
         }
 
         auto result = _custom_action.custom_action_metadata(
-            translateFromRpcAction(request->action()), request->file());
+            translateFromRpcAction(request->action()), request->file_path());
 
         if (response != nullptr) {
-            response->set_allocated_action_config(translateToRpcActionMetadata(result).release());
+            fillResponseWithResult(response, result.first);
+
+            response->set_allocated_action_config(
+                translateToRpcActionMetadata(result.second).release());
         }
 
         return grpc::Status::OK;
