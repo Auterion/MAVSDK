@@ -68,6 +68,16 @@ CustomAction::custom_action_metadata(ActionToExecute action, std::string file_pa
     return _impl->custom_action_metadata(action, file_path);
 }
 
+void CustomAction::execute_custom_action_stage_async(Stage stage, const ResultCallback callback)
+{
+    _impl->execute_custom_action_stage_async(stage, callback);
+}
+
+CustomAction::Result CustomAction::execute_custom_action_stage(Stage stage) const
+{
+    return _impl->execute_custom_action_stage(stage);
+}
+
 bool operator==(const CustomAction::ActionToExecute& lhs, const CustomAction::ActionToExecute& rhs)
 {
     return (rhs.id == lhs.id) && (rhs.timeout == lhs.timeout) && (rhs.progress == lhs.progress);

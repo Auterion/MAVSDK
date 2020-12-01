@@ -188,8 +188,6 @@ void CustomActionImpl::custom_action_metadata_async(
     const std::string& file,
     const CustomAction::CustomActionMetadataCallback& callback) const
 {
-    UNUSED(action);
-
     CustomAction::ActionMetadata action_metadata{};
     CustomAction::Result parsing_result = CustomAction::Result::Unknown;
 
@@ -218,8 +216,69 @@ void CustomActionImpl::custom_action_metadata_async(
         parsing_result = CustomAction::Result::Error;
     }
 
-    LogInfo() << "action " << action.id << ": " << root["action"];
-    parsing_result = CustomAction::Result::Success;
+    // Get the metadata specific to that action
+    std::stringstream action_id;
+    action_id << "action_" << action.id;
+    auto action_root = root[action_id.str()];
+
+    action_metadata.id = action.id;
+    action_metadata.name = action_root["name"].asString();
+    action_metadata.description = action_root["description"].asString();
+
+    // If the action triggers a global script, pass it instead to the client
+    if (action_root["run_general_script"].asString() != "") {
+        action_metadata.run_general_script = action_root["run_general_script"].asString();
+        parsing_result = CustomAction::Result::Success;
+    } else {
+        // Get the action stages
+        if (action_root["stages"].size() > 0) {
+            for (Json::Value::ArrayIndex i = 0; i != action_root["stages"].size(); i++) {
+                auto stage_id = action_root["stages"][i];
+                CustomAction::Stage stage{};
+
+                parsing_result = CustomAction::Result::Success;
+
+                // If it is to run a script, pass the script to the client side
+                if (stage_id["run_script"].asString() != "") {
+                    stage.run_script = stage_id["run_script"].asString();
+
+                } else { // Else, pass the command to the client side
+                    CustomAction::Command cmd{};
+                    if (stage_id["cmd"]["type"].asString() == "LONG") {
+                        cmd.type = CustomAction::Command::Type::Long;
+                    } else if (stage_id["cmd"]["type"].asString() == "INT") {
+                        cmd.type = CustomAction::Command::Type::Int;
+                    } else {
+                        LogErr() << "Invalid command type. Valid ones are \"INT\" and \"LONG\"";
+                        parsing_result = CustomAction::Result::Error;
+                    }
+
+                    cmd.target_system_id = stage_id["cmd"]["target_system"].asInt();
+                    cmd.target_component_id = stage_id["cmd"]["target_system"].asInt();
+                    cmd.command = stage_id["cmd"]["command"].asInt();
+                    cmd.param1 = stage_id["cmd"]["param1"].asFloat();
+                    cmd.param2 = stage_id["cmd"]["param2"].asFloat();
+                    cmd.param3 = stage_id["cmd"]["param3"].asFloat();
+                    cmd.param4 = stage_id["cmd"]["param4"].asFloat();
+                    cmd.param5 = stage_id["cmd"]["param5"].asFloat();
+                    cmd.param6 = stage_id["cmd"]["param6"].asFloat();
+                    cmd.param7 = stage_id["cmd"]["param7"].asFloat();
+
+                    stage.command = cmd;
+                }
+
+                // The timestamps are optional, as the execution control ideally should
+                // be done by the client. But, if set, they can be included in a state
+                // machine on the client code
+                stage.timestamp_start = stage_id["timestamp_start"].asFloat();
+                stage.timestamp_stop = stage_id["timestamp_stop"].asFloat();
+
+                action_metadata.stages.push_back(stage);
+            }
+        } else {
+            parsing_result = CustomAction::Result::Error;
+        }
+    }
 
     result.first = parsing_result;
     result.second = action_metadata;
@@ -229,6 +288,84 @@ void CustomActionImpl::custom_action_metadata_async(
         _parent->call_user_callback(
             [temp_callback, result]() { temp_callback(result.first, result.second); });
     }
+}
+
+CustomAction::Result CustomActionImpl::execute_custom_action_stage(CustomAction::Stage& stage) const
+{
+    auto prom = std::promise<CustomAction::Result>();
+    auto fut = prom.get_future();
+
+    execute_custom_action_stage_async(
+        stage, [&prom](CustomAction::Result result) { prom.set_value(result); });
+
+    return fut.get();
+}
+
+void CustomActionImpl::execute_custom_action_stage_async(
+    CustomAction::Stage& stage, const CustomAction::ResultCallback& callback) const
+{
+    // Process script
+    if (stage.run_script != "") {
+        CustomAction::Result result =
+            custom_action_result_from_script_result(exec_command(stage.run_script));
+
+        if (callback) {
+            auto temp_callback = callback;
+            _parent->call_user_callback([temp_callback, result]() { temp_callback(result); });
+        }
+        // Process command
+    } else {
+        if (stage.command.type == CustomAction::Command::Type::Long) { // LONG
+            MavlinkCommandSender::CommandLong command{};
+            command.target_system_id = stage.command.target_system_id;
+            command.target_component_id = stage.command.target_component_id;
+            command.command = stage.command.command;
+            command.params.param1 = stage.command.param1;
+            command.params.param2 = stage.command.param2;
+            command.params.param3 = stage.command.param3;
+            command.params.param4 = stage.command.param4;
+            command.params.param5 = stage.command.param5;
+            command.params.param6 = stage.command.param6;
+            command.params.param7 = stage.command.param7;
+
+            // Send command to the target system and component IDs
+            _parent->send_command_async(
+                command, [this, callback](MavlinkCommandSender::Result cmd_result, float) {
+                    command_result_callback(cmd_result, callback);
+                });
+        } else if (stage.command.type == CustomAction::Command::Type::Int) { // INT
+            MavlinkCommandSender::CommandInt command{};
+            command.target_system_id = stage.command.target_system_id;
+            command.target_component_id = stage.command.target_component_id;
+            command.command = stage.command.command;
+            command.params.param1 = stage.command.param1;
+            command.params.param2 = stage.command.param2;
+            command.params.param3 = stage.command.param3;
+            command.params.param4 = stage.command.param4;
+            command.params.x = stage.command.param5;
+            command.params.y = stage.command.param6;
+            command.params.z = stage.command.param7;
+
+            // Send command to the target system and component IDs
+            _parent->send_command_async(
+                command, [this, callback](MavlinkCommandSender::Result cmd_result, float) {
+                    command_result_callback(cmd_result, callback);
+                });
+        }
+    }
+}
+
+int CustomActionImpl::exec_command(const std::string& cmd_str)
+{
+    const char* cmd = cmd_str.c_str();
+
+    if (system(NULL)) {
+        puts("Ok");
+    } else {
+        return -1;
+    }
+
+    return system(cmd);
 }
 
 CustomAction::Result
@@ -264,6 +401,17 @@ CustomActionImpl::mavlink_command_result_from_custom_action_result(CustomAction:
             return MAV_RESULT_IN_PROGRESS;
         default:
             return MAV_RESULT_FAILED;
+    }
+}
+
+CustomAction::Result CustomActionImpl::custom_action_result_from_script_result(int result)
+{
+    switch (result) {
+        case 0:
+            return CustomAction::Result::Success;
+        case -1:
+        default:
+            return CustomAction::Result::Error;
     }
 }
 

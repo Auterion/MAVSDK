@@ -243,7 +243,7 @@ public:
     ActionToExecute custom_action() const;
 
     /**
-     * @brief Respond to the custom action command after completion.
+     * @brief Respond to the custom action command with progress.
      *
      * This function is non-blocking. See 'respond_custom_action' for the blocking counterpart.
      */
@@ -251,7 +251,7 @@ public:
         ActionToExecute action, Result result, const ResultCallback callback);
 
     /**
-     * @brief Respond to the custom action command after completion.
+     * @brief Respond to the custom action command with progress.
      *
      * This function is blocking. See 'respond_custom_action_async' for the non-blocking
      * counterpart.
@@ -283,6 +283,24 @@ public:
      */
     std::pair<Result, CustomAction::ActionMetadata>
     custom_action_metadata(ActionToExecute action, std::string file_path) const;
+
+    /**
+     * @brief Execute custom action stage.
+     *
+     * This function is non-blocking. See 'execute_custom_action_stage' for the blocking
+     * counterpart.
+     */
+    void execute_custom_action_stage_async(Stage stage, const ResultCallback callback);
+
+    /**
+     * @brief Execute custom action stage.
+     *
+     * This function is blocking. See 'execute_custom_action_stage_async' for the non-blocking
+     * counterpart.
+     *
+     * @return Result of request.
+     */
+    Result execute_custom_action_stage(Stage stage) const;
 
     /**
      * @brief Copy constructor.

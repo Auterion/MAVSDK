@@ -370,6 +370,26 @@ public:
         return grpc::Status::OK;
     }
 
+    grpc::Status ExecuteCustomActionStage(
+        grpc::ServerContext* /* context */,
+        const rpc::custom_action::ExecuteCustomActionStageRequest* request,
+        rpc::custom_action::ExecuteCustomActionStageResponse* response) override
+    {
+        if (request == nullptr) {
+            LogWarn() << "ExecuteCustomActionStage sent with a null request! Ignoring...";
+            return grpc::Status::OK;
+        }
+
+        auto result =
+            _custom_action.execute_custom_action_stage(translateFromRpcStage(request->stage()));
+
+        if (response != nullptr) {
+            fillResponseWithResult(response, result);
+        }
+
+        return grpc::Status::OK;
+    }
+
     void stop()
     {
         _stopped.store(true);

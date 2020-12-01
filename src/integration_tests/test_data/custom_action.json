@@ -1,20 +1,20 @@
 {
-        "action": {
+        "action_0": {
                 "name": "Integration test action",
-                "description": "Example action to use on the integration test",
+                "description": "Example action to use on the integration test, mimicking the Go To Action test",
                 "run_general_script": "",
                 "stages": [{
                                 "cmd": {
-                                        "type": "LONG",
-                                        "target_system": "",
-                                        "target_component": "",
-                                        "command": "",
+                                        "type": "INT",
+                                        "target_system": 0,
+                                        "target_component": 0,
+                                        "command": 192,
                                         "param1": 0.0,
                                         "param2": 0.0,
                                         "param3": 0.0,
                                         "param4": 0.0,
-                                        "param5": 0.0,
-                                        "param6": 0.0,
+                                        "param5": 47.398000,
+                                        "param6": 8.545592,
                                         "param7": 0.0
                                 },
                                 "run_script": "",
@@ -24,15 +24,15 @@
                         {
                                 "cmd": {
                                         "type": "LONG",
-                                        "target_system": "",
-                                        "target_component": "",
-                                        "command": "",
+                                        "target_system": 0,
+                                        "target_component": 0,
+                                        "command": 0,
                                         "param1": 0.0,
                                         "param2": 0.0,
                                         "param3": 0.0,
                                         "param4": 0.0,
-                                        "param5": 0.0,
-                                        "param6": 0.0,
+                                        "param5": 47.3977233,
+                                        "param6": 8.545592,
                                         "param7": 0.0
                                 },
                                 "run_script": "",
