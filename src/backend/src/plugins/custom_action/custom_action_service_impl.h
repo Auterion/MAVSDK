@@ -40,8 +40,7 @@ public:
     static std::unique_ptr<rpc::custom_action::ActionToExecute>
     translateToRpcActionToExecute(const mavsdk::CustomAction::ActionToExecute& action_to_execute)
     {
-        std::unique_ptr<rpc::custom_action::ActionToExecute> rpc_obj(
-            new rpc::custom_action::ActionToExecute());
+        auto rpc_obj = std::make_unique<rpc::custom_action::ActionToExecute>();
 
         rpc_obj->set_id(action_to_execute.id);
 
@@ -97,7 +96,7 @@ public:
     static std::unique_ptr<rpc::custom_action::Command>
     translateToRpcCommand(const mavsdk::CustomAction::Command& command)
     {
-        std::unique_ptr<rpc::custom_action::Command> rpc_obj(new rpc::custom_action::Command());
+        auto rpc_obj = std::make_unique<rpc::custom_action::Command>();
 
         rpc_obj->set_type(translateToRpcType(command.type));
 
@@ -157,7 +156,7 @@ public:
     static std::unique_ptr<rpc::custom_action::Stage>
     translateToRpcStage(const mavsdk::CustomAction::Stage& stage)
     {
-        std::unique_ptr<rpc::custom_action::Stage> rpc_obj(new rpc::custom_action::Stage());
+        auto rpc_obj = std::make_unique<rpc::custom_action::Stage>();
 
         rpc_obj->set_allocated_command(translateToRpcCommand(stage.command).release());
 
@@ -188,8 +187,7 @@ public:
     static std::unique_ptr<rpc::custom_action::ActionMetadata>
     translateToRpcActionMetadata(const mavsdk::CustomAction::ActionMetadata& action_metadata)
     {
-        std::unique_ptr<rpc::custom_action::ActionMetadata> rpc_obj(
-            new rpc::custom_action::ActionMetadata());
+        auto rpc_obj = std::make_unique<rpc::custom_action::ActionMetadata>();
 
         rpc_obj->set_id(action_metadata.id);
 

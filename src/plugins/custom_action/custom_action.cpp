@@ -45,13 +45,13 @@ CustomAction::ActionToExecute CustomAction::custom_action() const
 }
 
 void CustomAction::respond_custom_action_async(
-    ActionToExecute action, Result result, const ResultCallback callback)
+    ActionToExecute action, CustomActionResult result, const ResultCallback callback)
 {
     _impl->respond_custom_action_async(action, result, callback);
 }
 
 CustomAction::Result
-CustomAction::respond_custom_action(ActionToExecute action, Result result) const
+CustomAction::respond_custom_action(ActionToExecute action, CustomActionResult result) const
 {
     return _impl->respond_custom_action(action, result);
 }
