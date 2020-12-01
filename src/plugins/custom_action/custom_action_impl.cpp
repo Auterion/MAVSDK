@@ -1,6 +1,8 @@
 #include "custom_action_impl.h"
 #include "mavsdk_impl.h"
 
+#include <fstream>
+
 namespace mavsdk {
 
 CustomActionImpl::CustomActionImpl(System& system) : PluginImplBase(system)
@@ -165,27 +167,68 @@ void CustomActionImpl::set_custom_action_async(
         });
 }
 
-CustomAction::ActionMetadata CustomActionImpl::custom_action_metadata(
+std::pair<CustomAction::Result, CustomAction::ActionMetadata>
+CustomActionImpl::custom_action_metadata(
     CustomAction::ActionToExecute& action, std::string& file) const
 {
-    auto prom = std::promise<CustomAction::ActionMetadata>();
+    auto prom = std::promise<std::pair<CustomAction::Result, CustomAction::ActionMetadata>>();
     auto fut = prom.get_future();
 
     custom_action_metadata_async(
-        action, file, [&prom](CustomAction::ActionMetadata metadata) { prom.set_value(metadata); });
+        action, file, [&prom](CustomAction::Result result, CustomAction::ActionMetadata metadata) {
+            prom.set_value(
+                std::pair<CustomAction::Result, CustomAction::ActionMetadata>(result, metadata));
+        });
 
     return fut.get();
 }
 
 void CustomActionImpl::custom_action_metadata_async(
     CustomAction::ActionToExecute& action,
-    std::string& file,
+    const std::string& file,
     const CustomAction::CustomActionMetadataCallback& callback) const
 {
-    // TODO: add jsoncpp file parsing and build a response with the timed action sequence
     UNUSED(action);
-    UNUSED(file);
-    UNUSED(callback);
+
+    CustomAction::ActionMetadata action_metadata{};
+    CustomAction::Result parsing_result = CustomAction::Result::Unknown;
+
+    auto result = std::pair<CustomAction::Result, CustomAction::ActionMetadata>(
+        CustomAction::Result::Unknown, action_metadata);
+
+    std::ifstream metadata_file(file);
+    if (!metadata_file) {
+        LogErr() << "Unable to open JSON file: " << file;
+        parsing_result = CustomAction::Result::Error;
+    }
+
+    std::stringstream ss;
+    ss << metadata_file.rdbuf();
+    metadata_file.close();
+    const auto raw_json = ss.str();
+
+    Json::CharReaderBuilder builder;
+    const std::unique_ptr<Json::CharReader> reader(builder.newCharReader());
+    Json::Value root;
+    JSONCPP_STRING err;
+    const bool ok =
+        reader->parse(raw_json.c_str(), raw_json.c_str() + raw_json.length(), &root, &err);
+    if (!ok) {
+        LogErr() << "Parse error: " << err;
+        parsing_result = CustomAction::Result::Error;
+    }
+
+    LogInfo() << "action " << action.id << ": " << root["action"];
+    parsing_result = CustomAction::Result::Success;
+
+    result.first = parsing_result;
+    result.second = action_metadata;
+
+    if (callback) {
+        auto temp_callback = callback;
+        _parent->call_user_callback(
+            [temp_callback, result]() { temp_callback(result.first, result.second); });
+    }
 }
 
 CustomAction::Result
