@@ -1083,23 +1083,23 @@ class CustomActionMetadataRequest :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kFileFieldNumber = 2,
+    kFilePathFieldNumber = 2,
     kActionFieldNumber = 1,
   };
-  // string file = 2;
-  void clear_file();
-  const std::string& file() const;
-  void set_file(const std::string& value);
-  void set_file(std::string&& value);
-  void set_file(const char* value);
-  void set_file(const char* value, size_t size);
-  std::string* mutable_file();
-  std::string* release_file();
-  void set_allocated_file(std::string* file);
+  // string file_path = 2;
+  void clear_file_path();
+  const std::string& file_path() const;
+  void set_file_path(const std::string& value);
+  void set_file_path(std::string&& value);
+  void set_file_path(const char* value);
+  void set_file_path(const char* value, size_t size);
+  std::string* mutable_file_path();
+  std::string* release_file_path();
+  void set_allocated_file_path(std::string* file_path);
   private:
-  const std::string& _internal_file() const;
-  void _internal_set_file(const std::string& value);
-  std::string* _internal_mutable_file();
+  const std::string& _internal_file_path() const;
+  void _internal_set_file_path(const std::string& value);
+  std::string* _internal_mutable_file_path();
   public:
 
   // .mavsdk.rpc.custom_action.ActionToExecute action = 1;
@@ -1122,7 +1122,7 @@ class CustomActionMetadataRequest :
   class _Internal;
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr file_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr file_path_;
   ::mavsdk::rpc::custom_action::ActionToExecute* action_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_custom_5faction_2fcustom_5faction_2eproto;
@@ -1236,6 +1236,7 @@ class CustomActionMetadataResponse :
 
   enum : int {
     kActionConfigFieldNumber = 1,
+    kResultFieldNumber = 2,
   };
   // .mavsdk.rpc.custom_action.ActionMetadata action_config = 1;
   bool has_action_config() const;
@@ -1252,12 +1253,28 @@ class CustomActionMetadataResponse :
   ::mavsdk::rpc::custom_action::ActionMetadata* _internal_mutable_action_config();
   public:
 
+  // .mavsdk.rpc.custom_action.CustomActionResult result = 2;
+  bool has_result() const;
+  private:
+  bool _internal_has_result() const;
+  public:
+  void clear_result();
+  const ::mavsdk::rpc::custom_action::CustomActionResult& result() const;
+  ::mavsdk::rpc::custom_action::CustomActionResult* release_result();
+  ::mavsdk::rpc::custom_action::CustomActionResult* mutable_result();
+  void set_allocated_result(::mavsdk::rpc::custom_action::CustomActionResult* result);
+  private:
+  const ::mavsdk::rpc::custom_action::CustomActionResult& _internal_result() const;
+  ::mavsdk::rpc::custom_action::CustomActionResult* _internal_mutable_result();
+  public:
+
   // @@protoc_insertion_point(class_scope:mavsdk.rpc.custom_action.CustomActionMetadataResponse)
  private:
   class _Internal;
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
   ::mavsdk::rpc::custom_action::ActionMetadata* action_config_;
+  ::mavsdk::rpc::custom_action::CustomActionResult* result_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_custom_5faction_2fcustom_5faction_2eproto;
 };
@@ -2694,64 +2711,64 @@ inline void CustomActionMetadataRequest::set_allocated_action(::mavsdk::rpc::cus
   // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.custom_action.CustomActionMetadataRequest.action)
 }
 
-// string file = 2;
-inline void CustomActionMetadataRequest::clear_file() {
-  file_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+// string file_path = 2;
+inline void CustomActionMetadataRequest::clear_file_path() {
+  file_path_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline const std::string& CustomActionMetadataRequest::file() const {
-  // @@protoc_insertion_point(field_get:mavsdk.rpc.custom_action.CustomActionMetadataRequest.file)
-  return _internal_file();
+inline const std::string& CustomActionMetadataRequest::file_path() const {
+  // @@protoc_insertion_point(field_get:mavsdk.rpc.custom_action.CustomActionMetadataRequest.file_path)
+  return _internal_file_path();
 }
-inline void CustomActionMetadataRequest::set_file(const std::string& value) {
-  _internal_set_file(value);
-  // @@protoc_insertion_point(field_set:mavsdk.rpc.custom_action.CustomActionMetadataRequest.file)
+inline void CustomActionMetadataRequest::set_file_path(const std::string& value) {
+  _internal_set_file_path(value);
+  // @@protoc_insertion_point(field_set:mavsdk.rpc.custom_action.CustomActionMetadataRequest.file_path)
 }
-inline std::string* CustomActionMetadataRequest::mutable_file() {
-  // @@protoc_insertion_point(field_mutable:mavsdk.rpc.custom_action.CustomActionMetadataRequest.file)
-  return _internal_mutable_file();
+inline std::string* CustomActionMetadataRequest::mutable_file_path() {
+  // @@protoc_insertion_point(field_mutable:mavsdk.rpc.custom_action.CustomActionMetadataRequest.file_path)
+  return _internal_mutable_file_path();
 }
-inline const std::string& CustomActionMetadataRequest::_internal_file() const {
-  return file_.GetNoArena();
+inline const std::string& CustomActionMetadataRequest::_internal_file_path() const {
+  return file_path_.GetNoArena();
 }
-inline void CustomActionMetadataRequest::_internal_set_file(const std::string& value) {
+inline void CustomActionMetadataRequest::_internal_set_file_path(const std::string& value) {
   
-  file_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  file_path_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
 }
-inline void CustomActionMetadataRequest::set_file(std::string&& value) {
+inline void CustomActionMetadataRequest::set_file_path(std::string&& value) {
   
-  file_.SetNoArena(
+  file_path_.SetNoArena(
     &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:mavsdk.rpc.custom_action.CustomActionMetadataRequest.file)
+  // @@protoc_insertion_point(field_set_rvalue:mavsdk.rpc.custom_action.CustomActionMetadataRequest.file_path)
 }
-inline void CustomActionMetadataRequest::set_file(const char* value) {
+inline void CustomActionMetadataRequest::set_file_path(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
   
-  file_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:mavsdk.rpc.custom_action.CustomActionMetadataRequest.file)
+  file_path_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:mavsdk.rpc.custom_action.CustomActionMetadataRequest.file_path)
 }
-inline void CustomActionMetadataRequest::set_file(const char* value, size_t size) {
+inline void CustomActionMetadataRequest::set_file_path(const char* value, size_t size) {
   
-  file_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+  file_path_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:mavsdk.rpc.custom_action.CustomActionMetadataRequest.file)
+  // @@protoc_insertion_point(field_set_pointer:mavsdk.rpc.custom_action.CustomActionMetadataRequest.file_path)
 }
-inline std::string* CustomActionMetadataRequest::_internal_mutable_file() {
+inline std::string* CustomActionMetadataRequest::_internal_mutable_file_path() {
   
-  return file_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  return file_path_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline std::string* CustomActionMetadataRequest::release_file() {
-  // @@protoc_insertion_point(field_release:mavsdk.rpc.custom_action.CustomActionMetadataRequest.file)
+inline std::string* CustomActionMetadataRequest::release_file_path() {
+  // @@protoc_insertion_point(field_release:mavsdk.rpc.custom_action.CustomActionMetadataRequest.file_path)
   
-  return file_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  return file_path_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline void CustomActionMetadataRequest::set_allocated_file(std::string* file) {
-  if (file != nullptr) {
+inline void CustomActionMetadataRequest::set_allocated_file_path(std::string* file_path) {
+  if (file_path != nullptr) {
     
   } else {
     
   }
-  file_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), file);
-  // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.custom_action.CustomActionMetadataRequest.file)
+  file_path_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), file_path);
+  // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.custom_action.CustomActionMetadataRequest.file_path)
 }
 
 // -------------------------------------------------------------------
@@ -2816,6 +2833,66 @@ inline void CustomActionMetadataResponse::set_allocated_action_config(::mavsdk::
   }
   action_config_ = action_config;
   // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.custom_action.CustomActionMetadataResponse.action_config)
+}
+
+// .mavsdk.rpc.custom_action.CustomActionResult result = 2;
+inline bool CustomActionMetadataResponse::_internal_has_result() const {
+  return this != internal_default_instance() && result_ != nullptr;
+}
+inline bool CustomActionMetadataResponse::has_result() const {
+  return _internal_has_result();
+}
+inline void CustomActionMetadataResponse::clear_result() {
+  if (GetArenaNoVirtual() == nullptr && result_ != nullptr) {
+    delete result_;
+  }
+  result_ = nullptr;
+}
+inline const ::mavsdk::rpc::custom_action::CustomActionResult& CustomActionMetadataResponse::_internal_result() const {
+  const ::mavsdk::rpc::custom_action::CustomActionResult* p = result_;
+  return p != nullptr ? *p : *reinterpret_cast<const ::mavsdk::rpc::custom_action::CustomActionResult*>(
+      &::mavsdk::rpc::custom_action::_CustomActionResult_default_instance_);
+}
+inline const ::mavsdk::rpc::custom_action::CustomActionResult& CustomActionMetadataResponse::result() const {
+  // @@protoc_insertion_point(field_get:mavsdk.rpc.custom_action.CustomActionMetadataResponse.result)
+  return _internal_result();
+}
+inline ::mavsdk::rpc::custom_action::CustomActionResult* CustomActionMetadataResponse::release_result() {
+  // @@protoc_insertion_point(field_release:mavsdk.rpc.custom_action.CustomActionMetadataResponse.result)
+  
+  ::mavsdk::rpc::custom_action::CustomActionResult* temp = result_;
+  result_ = nullptr;
+  return temp;
+}
+inline ::mavsdk::rpc::custom_action::CustomActionResult* CustomActionMetadataResponse::_internal_mutable_result() {
+  
+  if (result_ == nullptr) {
+    auto* p = CreateMaybeMessage<::mavsdk::rpc::custom_action::CustomActionResult>(GetArenaNoVirtual());
+    result_ = p;
+  }
+  return result_;
+}
+inline ::mavsdk::rpc::custom_action::CustomActionResult* CustomActionMetadataResponse::mutable_result() {
+  // @@protoc_insertion_point(field_mutable:mavsdk.rpc.custom_action.CustomActionMetadataResponse.result)
+  return _internal_mutable_result();
+}
+inline void CustomActionMetadataResponse::set_allocated_result(::mavsdk::rpc::custom_action::CustomActionResult* result) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == nullptr) {
+    delete result_;
+  }
+  if (result) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    if (message_arena != submessage_arena) {
+      result = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, result, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  result_ = result;
+  // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.custom_action.CustomActionMetadataResponse.result)
 }
 
 // -------------------------------------------------------------------
