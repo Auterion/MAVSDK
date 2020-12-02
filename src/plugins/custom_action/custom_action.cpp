@@ -80,7 +80,9 @@ CustomAction::Result CustomAction::execute_custom_action_stage(Stage stage) cons
 
 bool operator==(const CustomAction::ActionToExecute& lhs, const CustomAction::ActionToExecute& rhs)
 {
-    return (rhs.id == lhs.id) && (rhs.timeout == lhs.timeout) && (rhs.progress == lhs.progress);
+    return (rhs.id == lhs.id) &&
+           ((std::isnan(rhs.timeout) && std::isnan(lhs.timeout)) || rhs.timeout == lhs.timeout) &&
+           ((std::isnan(rhs.progress) && std::isnan(lhs.progress)) || rhs.progress == lhs.progress);
 }
 
 std::ostream& operator<<(std::ostream& str, CustomAction::ActionToExecute const& action_to_execute)
@@ -108,14 +110,16 @@ std::ostream& operator<<(std::ostream& str, CustomAction::Command::Type const& t
 bool operator==(const CustomAction::Command& lhs, const CustomAction::Command& rhs)
 {
     return (rhs.type == lhs.type) && (rhs.target_system_id == lhs.target_system_id) &&
-           (rhs.target_component_id == lhs.target_component_id) && (rhs.command == lhs.command) &&
+           (rhs.target_component_id == lhs.target_component_id) && (rhs.frame == lhs.frame) &&
+           (rhs.command == lhs.command) &&
            ((std::isnan(rhs.param1) && std::isnan(lhs.param1)) || rhs.param1 == lhs.param1) &&
            ((std::isnan(rhs.param2) && std::isnan(lhs.param2)) || rhs.param2 == lhs.param2) &&
            ((std::isnan(rhs.param3) && std::isnan(lhs.param3)) || rhs.param3 == lhs.param3) &&
            ((std::isnan(rhs.param4) && std::isnan(lhs.param4)) || rhs.param4 == lhs.param4) &&
            ((std::isnan(rhs.param5) && std::isnan(lhs.param5)) || rhs.param5 == lhs.param5) &&
            ((std::isnan(rhs.param6) && std::isnan(lhs.param6)) || rhs.param6 == lhs.param6) &&
-           ((std::isnan(rhs.param7) && std::isnan(lhs.param7)) || rhs.param7 == lhs.param7);
+           ((std::isnan(rhs.param7) && std::isnan(lhs.param7)) || rhs.param7 == lhs.param7) &&
+           (rhs.is_local == lhs.is_local);
 }
 
 std::ostream& operator<<(std::ostream& str, CustomAction::Command const& command)
@@ -125,6 +129,7 @@ std::ostream& operator<<(std::ostream& str, CustomAction::Command const& command
     str << "    type: " << command.type << '\n';
     str << "    target_system_id: " << command.target_system_id << '\n';
     str << "    target_component_id: " << command.target_component_id << '\n';
+    str << "    frame: " << command.frame << '\n';
     str << "    command: " << command.command << '\n';
     str << "    param1: " << command.param1 << '\n';
     str << "    param2: " << command.param2 << '\n';
@@ -133,6 +138,7 @@ std::ostream& operator<<(std::ostream& str, CustomAction::Command const& command
     str << "    param5: " << command.param5 << '\n';
     str << "    param6: " << command.param6 << '\n';
     str << "    param7: " << command.param7 << '\n';
+    str << "    is_local: " << command.is_local << '\n';
     str << '}';
     return str;
 }
@@ -140,8 +146,10 @@ std::ostream& operator<<(std::ostream& str, CustomAction::Command const& command
 bool operator==(const CustomAction::Stage& lhs, const CustomAction::Stage& rhs)
 {
     return (rhs.command == lhs.command) && (rhs.run_script == lhs.run_script) &&
-           (rhs.timestamp_start == lhs.timestamp_start) &&
-           (rhs.timestamp_stop == lhs.timestamp_stop);
+           ((std::isnan(rhs.timestamp_start) && std::isnan(lhs.timestamp_start)) ||
+            rhs.timestamp_start == lhs.timestamp_start) &&
+           ((std::isnan(rhs.timestamp_stop) && std::isnan(lhs.timestamp_stop)) ||
+            rhs.timestamp_stop == lhs.timestamp_stop);
 }
 
 std::ostream& operator<<(std::ostream& str, CustomAction::Stage const& stage)
