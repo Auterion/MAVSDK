@@ -1792,35 +1792,35 @@ class ActionToExecute PROTOBUF_FINAL :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kIdFieldNumber = 1,
     kTimeoutFieldNumber = 2,
     kProgressFieldNumber = 3,
+    kIdFieldNumber = 1,
   };
-  // int32 id = 1;
-  void clear_id();
-  ::PROTOBUF_NAMESPACE_ID::int32 id() const;
-  void set_id(::PROTOBUF_NAMESPACE_ID::int32 value);
-  private:
-  ::PROTOBUF_NAMESPACE_ID::int32 _internal_id() const;
-  void _internal_set_id(::PROTOBUF_NAMESPACE_ID::int32 value);
-  public:
-
-  // int32 timeout = 2;
+  // double timeout = 2;
   void clear_timeout();
-  ::PROTOBUF_NAMESPACE_ID::int32 timeout() const;
-  void set_timeout(::PROTOBUF_NAMESPACE_ID::int32 value);
+  double timeout() const;
+  void set_timeout(double value);
   private:
-  ::PROTOBUF_NAMESPACE_ID::int32 _internal_timeout() const;
-  void _internal_set_timeout(::PROTOBUF_NAMESPACE_ID::int32 value);
+  double _internal_timeout() const;
+  void _internal_set_timeout(double value);
   public:
 
-  // int32 progress = 3;
+  // double progress = 3;
   void clear_progress();
-  ::PROTOBUF_NAMESPACE_ID::int32 progress() const;
-  void set_progress(::PROTOBUF_NAMESPACE_ID::int32 value);
+  double progress() const;
+  void set_progress(double value);
   private:
-  ::PROTOBUF_NAMESPACE_ID::int32 _internal_progress() const;
-  void _internal_set_progress(::PROTOBUF_NAMESPACE_ID::int32 value);
+  double _internal_progress() const;
+  void _internal_set_progress(double value);
+  public:
+
+  // uint32 id = 1;
+  void clear_id();
+  ::PROTOBUF_NAMESPACE_ID::uint32 id() const;
+  void set_id(::PROTOBUF_NAMESPACE_ID::uint32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::uint32 _internal_id() const;
+  void _internal_set_id(::PROTOBUF_NAMESPACE_ID::uint32 value);
   public:
 
   // @@protoc_insertion_point(class_scope:mavsdk.rpc.custom_action.ActionToExecute)
@@ -1830,9 +1830,9 @@ class ActionToExecute PROTOBUF_FINAL :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::int32 id_;
-  ::PROTOBUF_NAMESPACE_ID::int32 timeout_;
-  ::PROTOBUF_NAMESPACE_ID::int32 progress_;
+  double timeout_;
+  double progress_;
+  ::PROTOBUF_NAMESPACE_ID::uint32 id_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_custom_5faction_2fcustom_5faction_2eproto;
 };
@@ -1984,14 +1984,16 @@ class Command PROTOBUF_FINAL :
     kTypeFieldNumber = 1,
     kTargetSystemIdFieldNumber = 2,
     kTargetComponentIdFieldNumber = 3,
-    kCommandFieldNumber = 4,
-    kParam1FieldNumber = 5,
-    kParam2FieldNumber = 6,
-    kParam3FieldNumber = 7,
-    kParam4FieldNumber = 8,
-    kParam5FieldNumber = 9,
-    kParam6FieldNumber = 10,
-    kParam7FieldNumber = 11,
+    kFrameFieldNumber = 4,
+    kParam1FieldNumber = 6,
+    kParam2FieldNumber = 7,
+    kParam3FieldNumber = 8,
+    kParam4FieldNumber = 9,
+    kCommandFieldNumber = 5,
+    kIsLocalFieldNumber = 13,
+    kParam5FieldNumber = 10,
+    kParam6FieldNumber = 11,
+    kParam7FieldNumber = 12,
   };
   // .mavsdk.rpc.custom_action.Command.Type type = 1;
   void clear_type();
@@ -2002,94 +2004,112 @@ class Command PROTOBUF_FINAL :
   void _internal_set_type(::mavsdk::rpc::custom_action::Command_Type value);
   public:
 
-  // int32 target_system_id = 2;
+  // uint32 target_system_id = 2;
   void clear_target_system_id();
-  ::PROTOBUF_NAMESPACE_ID::int32 target_system_id() const;
-  void set_target_system_id(::PROTOBUF_NAMESPACE_ID::int32 value);
+  ::PROTOBUF_NAMESPACE_ID::uint32 target_system_id() const;
+  void set_target_system_id(::PROTOBUF_NAMESPACE_ID::uint32 value);
   private:
-  ::PROTOBUF_NAMESPACE_ID::int32 _internal_target_system_id() const;
-  void _internal_set_target_system_id(::PROTOBUF_NAMESPACE_ID::int32 value);
+  ::PROTOBUF_NAMESPACE_ID::uint32 _internal_target_system_id() const;
+  void _internal_set_target_system_id(::PROTOBUF_NAMESPACE_ID::uint32 value);
   public:
 
-  // int32 target_component_id = 3;
+  // uint32 target_component_id = 3;
   void clear_target_component_id();
-  ::PROTOBUF_NAMESPACE_ID::int32 target_component_id() const;
-  void set_target_component_id(::PROTOBUF_NAMESPACE_ID::int32 value);
+  ::PROTOBUF_NAMESPACE_ID::uint32 target_component_id() const;
+  void set_target_component_id(::PROTOBUF_NAMESPACE_ID::uint32 value);
   private:
-  ::PROTOBUF_NAMESPACE_ID::int32 _internal_target_component_id() const;
-  void _internal_set_target_component_id(::PROTOBUF_NAMESPACE_ID::int32 value);
+  ::PROTOBUF_NAMESPACE_ID::uint32 _internal_target_component_id() const;
+  void _internal_set_target_component_id(::PROTOBUF_NAMESPACE_ID::uint32 value);
   public:
 
-  // int32 command = 4;
-  void clear_command();
-  ::PROTOBUF_NAMESPACE_ID::int32 command() const;
-  void set_command(::PROTOBUF_NAMESPACE_ID::int32 value);
+  // uint32 frame = 4;
+  void clear_frame();
+  ::PROTOBUF_NAMESPACE_ID::uint32 frame() const;
+  void set_frame(::PROTOBUF_NAMESPACE_ID::uint32 value);
   private:
-  ::PROTOBUF_NAMESPACE_ID::int32 _internal_command() const;
-  void _internal_set_command(::PROTOBUF_NAMESPACE_ID::int32 value);
+  ::PROTOBUF_NAMESPACE_ID::uint32 _internal_frame() const;
+  void _internal_set_frame(::PROTOBUF_NAMESPACE_ID::uint32 value);
   public:
 
-  // float param1 = 5;
+  // double param1 = 6;
   void clear_param1();
-  float param1() const;
-  void set_param1(float value);
+  double param1() const;
+  void set_param1(double value);
   private:
-  float _internal_param1() const;
-  void _internal_set_param1(float value);
+  double _internal_param1() const;
+  void _internal_set_param1(double value);
   public:
 
-  // float param2 = 6;
+  // double param2 = 7;
   void clear_param2();
-  float param2() const;
-  void set_param2(float value);
+  double param2() const;
+  void set_param2(double value);
   private:
-  float _internal_param2() const;
-  void _internal_set_param2(float value);
+  double _internal_param2() const;
+  void _internal_set_param2(double value);
   public:
 
-  // float param3 = 7;
+  // double param3 = 8;
   void clear_param3();
-  float param3() const;
-  void set_param3(float value);
+  double param3() const;
+  void set_param3(double value);
   private:
-  float _internal_param3() const;
-  void _internal_set_param3(float value);
+  double _internal_param3() const;
+  void _internal_set_param3(double value);
   public:
 
-  // float param4 = 8;
+  // double param4 = 9;
   void clear_param4();
-  float param4() const;
-  void set_param4(float value);
+  double param4() const;
+  void set_param4(double value);
   private:
-  float _internal_param4() const;
-  void _internal_set_param4(float value);
+  double _internal_param4() const;
+  void _internal_set_param4(double value);
   public:
 
-  // float param5 = 9;
+  // uint32 command = 5;
+  void clear_command();
+  ::PROTOBUF_NAMESPACE_ID::uint32 command() const;
+  void set_command(::PROTOBUF_NAMESPACE_ID::uint32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::uint32 _internal_command() const;
+  void _internal_set_command(::PROTOBUF_NAMESPACE_ID::uint32 value);
+  public:
+
+  // bool is_local = 13;
+  void clear_is_local();
+  bool is_local() const;
+  void set_is_local(bool value);
+  private:
+  bool _internal_is_local() const;
+  void _internal_set_is_local(bool value);
+  public:
+
+  // double param5 = 10;
   void clear_param5();
-  float param5() const;
-  void set_param5(float value);
+  double param5() const;
+  void set_param5(double value);
   private:
-  float _internal_param5() const;
-  void _internal_set_param5(float value);
+  double _internal_param5() const;
+  void _internal_set_param5(double value);
   public:
 
-  // float param6 = 10;
+  // double param6 = 11;
   void clear_param6();
-  float param6() const;
-  void set_param6(float value);
+  double param6() const;
+  void set_param6(double value);
   private:
-  float _internal_param6() const;
-  void _internal_set_param6(float value);
+  double _internal_param6() const;
+  void _internal_set_param6(double value);
   public:
 
-  // float param7 = 11;
+  // double param7 = 12;
   void clear_param7();
-  float param7() const;
-  void set_param7(float value);
+  double param7() const;
+  void set_param7(double value);
   private:
-  float _internal_param7() const;
-  void _internal_set_param7(float value);
+  double _internal_param7() const;
+  void _internal_set_param7(double value);
   public:
 
   // @@protoc_insertion_point(class_scope:mavsdk.rpc.custom_action.Command)
@@ -2100,16 +2120,18 @@ class Command PROTOBUF_FINAL :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   int type_;
-  ::PROTOBUF_NAMESPACE_ID::int32 target_system_id_;
-  ::PROTOBUF_NAMESPACE_ID::int32 target_component_id_;
-  ::PROTOBUF_NAMESPACE_ID::int32 command_;
-  float param1_;
-  float param2_;
-  float param3_;
-  float param4_;
-  float param5_;
-  float param6_;
-  float param7_;
+  ::PROTOBUF_NAMESPACE_ID::uint32 target_system_id_;
+  ::PROTOBUF_NAMESPACE_ID::uint32 target_component_id_;
+  ::PROTOBUF_NAMESPACE_ID::uint32 frame_;
+  double param1_;
+  double param2_;
+  double param3_;
+  double param4_;
+  ::PROTOBUF_NAMESPACE_ID::uint32 command_;
+  bool is_local_;
+  double param5_;
+  double param6_;
+  double param7_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_custom_5faction_2fcustom_5faction_2eproto;
 };
@@ -2267,22 +2289,22 @@ class Stage PROTOBUF_FINAL :
       ::mavsdk::rpc::custom_action::Command* command);
   ::mavsdk::rpc::custom_action::Command* unsafe_arena_release_command();
 
-  // int32 timestamp_start = 3;
+  // double timestamp_start = 3;
   void clear_timestamp_start();
-  ::PROTOBUF_NAMESPACE_ID::int32 timestamp_start() const;
-  void set_timestamp_start(::PROTOBUF_NAMESPACE_ID::int32 value);
+  double timestamp_start() const;
+  void set_timestamp_start(double value);
   private:
-  ::PROTOBUF_NAMESPACE_ID::int32 _internal_timestamp_start() const;
-  void _internal_set_timestamp_start(::PROTOBUF_NAMESPACE_ID::int32 value);
+  double _internal_timestamp_start() const;
+  void _internal_set_timestamp_start(double value);
   public:
 
-  // int32 timestamp_stop = 4;
+  // double timestamp_stop = 4;
   void clear_timestamp_stop();
-  ::PROTOBUF_NAMESPACE_ID::int32 timestamp_stop() const;
-  void set_timestamp_stop(::PROTOBUF_NAMESPACE_ID::int32 value);
+  double timestamp_stop() const;
+  void set_timestamp_stop(double value);
   private:
-  ::PROTOBUF_NAMESPACE_ID::int32 _internal_timestamp_stop() const;
-  void _internal_set_timestamp_stop(::PROTOBUF_NAMESPACE_ID::int32 value);
+  double _internal_timestamp_stop() const;
+  void _internal_set_timestamp_stop(double value);
   public:
 
   // @@protoc_insertion_point(class_scope:mavsdk.rpc.custom_action.Stage)
@@ -2294,8 +2316,8 @@ class Stage PROTOBUF_FINAL :
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr run_script_;
   ::mavsdk::rpc::custom_action::Command* command_;
-  ::PROTOBUF_NAMESPACE_ID::int32 timestamp_start_;
-  ::PROTOBUF_NAMESPACE_ID::int32 timestamp_stop_;
+  double timestamp_start_;
+  double timestamp_stop_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_custom_5faction_2fcustom_5faction_2eproto;
 };
@@ -2486,13 +2508,13 @@ class ActionMetadata PROTOBUF_FINAL :
   std::string* _internal_mutable_run_general_script();
   public:
 
-  // int32 id = 1;
+  // uint32 id = 1;
   void clear_id();
-  ::PROTOBUF_NAMESPACE_ID::int32 id() const;
-  void set_id(::PROTOBUF_NAMESPACE_ID::int32 value);
+  ::PROTOBUF_NAMESPACE_ID::uint32 id() const;
+  void set_id(::PROTOBUF_NAMESPACE_ID::uint32 value);
   private:
-  ::PROTOBUF_NAMESPACE_ID::int32 _internal_id() const;
-  void _internal_set_id(::PROTOBUF_NAMESPACE_ID::int32 value);
+  ::PROTOBUF_NAMESPACE_ID::uint32 _internal_id() const;
+  void _internal_set_id(::PROTOBUF_NAMESPACE_ID::uint32 value);
   public:
 
   // @@protoc_insertion_point(class_scope:mavsdk.rpc.custom_action.ActionMetadata)
@@ -2506,7 +2528,7 @@ class ActionMetadata PROTOBUF_FINAL :
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr description_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr run_general_script_;
-  ::PROTOBUF_NAMESPACE_ID::int32 id_;
+  ::PROTOBUF_NAMESPACE_ID::uint32 id_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_custom_5faction_2fcustom_5faction_2eproto;
 };
@@ -3729,62 +3751,62 @@ inline void ExecuteCustomActionStageResponse::set_allocated_result(::mavsdk::rpc
 
 // ActionToExecute
 
-// int32 id = 1;
+// uint32 id = 1;
 inline void ActionToExecute::clear_id() {
-  id_ = 0;
+  id_ = 0u;
 }
-inline ::PROTOBUF_NAMESPACE_ID::int32 ActionToExecute::_internal_id() const {
+inline ::PROTOBUF_NAMESPACE_ID::uint32 ActionToExecute::_internal_id() const {
   return id_;
 }
-inline ::PROTOBUF_NAMESPACE_ID::int32 ActionToExecute::id() const {
+inline ::PROTOBUF_NAMESPACE_ID::uint32 ActionToExecute::id() const {
   // @@protoc_insertion_point(field_get:mavsdk.rpc.custom_action.ActionToExecute.id)
   return _internal_id();
 }
-inline void ActionToExecute::_internal_set_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void ActionToExecute::_internal_set_id(::PROTOBUF_NAMESPACE_ID::uint32 value) {
   
   id_ = value;
 }
-inline void ActionToExecute::set_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void ActionToExecute::set_id(::PROTOBUF_NAMESPACE_ID::uint32 value) {
   _internal_set_id(value);
   // @@protoc_insertion_point(field_set:mavsdk.rpc.custom_action.ActionToExecute.id)
 }
 
-// int32 timeout = 2;
+// double timeout = 2;
 inline void ActionToExecute::clear_timeout() {
   timeout_ = 0;
 }
-inline ::PROTOBUF_NAMESPACE_ID::int32 ActionToExecute::_internal_timeout() const {
+inline double ActionToExecute::_internal_timeout() const {
   return timeout_;
 }
-inline ::PROTOBUF_NAMESPACE_ID::int32 ActionToExecute::timeout() const {
+inline double ActionToExecute::timeout() const {
   // @@protoc_insertion_point(field_get:mavsdk.rpc.custom_action.ActionToExecute.timeout)
   return _internal_timeout();
 }
-inline void ActionToExecute::_internal_set_timeout(::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void ActionToExecute::_internal_set_timeout(double value) {
   
   timeout_ = value;
 }
-inline void ActionToExecute::set_timeout(::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void ActionToExecute::set_timeout(double value) {
   _internal_set_timeout(value);
   // @@protoc_insertion_point(field_set:mavsdk.rpc.custom_action.ActionToExecute.timeout)
 }
 
-// int32 progress = 3;
+// double progress = 3;
 inline void ActionToExecute::clear_progress() {
   progress_ = 0;
 }
-inline ::PROTOBUF_NAMESPACE_ID::int32 ActionToExecute::_internal_progress() const {
+inline double ActionToExecute::_internal_progress() const {
   return progress_;
 }
-inline ::PROTOBUF_NAMESPACE_ID::int32 ActionToExecute::progress() const {
+inline double ActionToExecute::progress() const {
   // @@protoc_insertion_point(field_get:mavsdk.rpc.custom_action.ActionToExecute.progress)
   return _internal_progress();
 }
-inline void ActionToExecute::_internal_set_progress(::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void ActionToExecute::_internal_set_progress(double value) {
   
   progress_ = value;
 }
-inline void ActionToExecute::set_progress(::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void ActionToExecute::set_progress(double value) {
   _internal_set_progress(value);
   // @@protoc_insertion_point(field_set:mavsdk.rpc.custom_action.ActionToExecute.progress)
 }
@@ -3813,204 +3835,244 @@ inline void Command::set_type(::mavsdk::rpc::custom_action::Command_Type value) 
   // @@protoc_insertion_point(field_set:mavsdk.rpc.custom_action.Command.type)
 }
 
-// int32 target_system_id = 2;
+// uint32 target_system_id = 2;
 inline void Command::clear_target_system_id() {
-  target_system_id_ = 0;
+  target_system_id_ = 0u;
 }
-inline ::PROTOBUF_NAMESPACE_ID::int32 Command::_internal_target_system_id() const {
+inline ::PROTOBUF_NAMESPACE_ID::uint32 Command::_internal_target_system_id() const {
   return target_system_id_;
 }
-inline ::PROTOBUF_NAMESPACE_ID::int32 Command::target_system_id() const {
+inline ::PROTOBUF_NAMESPACE_ID::uint32 Command::target_system_id() const {
   // @@protoc_insertion_point(field_get:mavsdk.rpc.custom_action.Command.target_system_id)
   return _internal_target_system_id();
 }
-inline void Command::_internal_set_target_system_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void Command::_internal_set_target_system_id(::PROTOBUF_NAMESPACE_ID::uint32 value) {
   
   target_system_id_ = value;
 }
-inline void Command::set_target_system_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void Command::set_target_system_id(::PROTOBUF_NAMESPACE_ID::uint32 value) {
   _internal_set_target_system_id(value);
   // @@protoc_insertion_point(field_set:mavsdk.rpc.custom_action.Command.target_system_id)
 }
 
-// int32 target_component_id = 3;
+// uint32 target_component_id = 3;
 inline void Command::clear_target_component_id() {
-  target_component_id_ = 0;
+  target_component_id_ = 0u;
 }
-inline ::PROTOBUF_NAMESPACE_ID::int32 Command::_internal_target_component_id() const {
+inline ::PROTOBUF_NAMESPACE_ID::uint32 Command::_internal_target_component_id() const {
   return target_component_id_;
 }
-inline ::PROTOBUF_NAMESPACE_ID::int32 Command::target_component_id() const {
+inline ::PROTOBUF_NAMESPACE_ID::uint32 Command::target_component_id() const {
   // @@protoc_insertion_point(field_get:mavsdk.rpc.custom_action.Command.target_component_id)
   return _internal_target_component_id();
 }
-inline void Command::_internal_set_target_component_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void Command::_internal_set_target_component_id(::PROTOBUF_NAMESPACE_ID::uint32 value) {
   
   target_component_id_ = value;
 }
-inline void Command::set_target_component_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void Command::set_target_component_id(::PROTOBUF_NAMESPACE_ID::uint32 value) {
   _internal_set_target_component_id(value);
   // @@protoc_insertion_point(field_set:mavsdk.rpc.custom_action.Command.target_component_id)
 }
 
-// int32 command = 4;
-inline void Command::clear_command() {
-  command_ = 0;
+// uint32 frame = 4;
+inline void Command::clear_frame() {
+  frame_ = 0u;
 }
-inline ::PROTOBUF_NAMESPACE_ID::int32 Command::_internal_command() const {
+inline ::PROTOBUF_NAMESPACE_ID::uint32 Command::_internal_frame() const {
+  return frame_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint32 Command::frame() const {
+  // @@protoc_insertion_point(field_get:mavsdk.rpc.custom_action.Command.frame)
+  return _internal_frame();
+}
+inline void Command::_internal_set_frame(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+  
+  frame_ = value;
+}
+inline void Command::set_frame(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+  _internal_set_frame(value);
+  // @@protoc_insertion_point(field_set:mavsdk.rpc.custom_action.Command.frame)
+}
+
+// uint32 command = 5;
+inline void Command::clear_command() {
+  command_ = 0u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint32 Command::_internal_command() const {
   return command_;
 }
-inline ::PROTOBUF_NAMESPACE_ID::int32 Command::command() const {
+inline ::PROTOBUF_NAMESPACE_ID::uint32 Command::command() const {
   // @@protoc_insertion_point(field_get:mavsdk.rpc.custom_action.Command.command)
   return _internal_command();
 }
-inline void Command::_internal_set_command(::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void Command::_internal_set_command(::PROTOBUF_NAMESPACE_ID::uint32 value) {
   
   command_ = value;
 }
-inline void Command::set_command(::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void Command::set_command(::PROTOBUF_NAMESPACE_ID::uint32 value) {
   _internal_set_command(value);
   // @@protoc_insertion_point(field_set:mavsdk.rpc.custom_action.Command.command)
 }
 
-// float param1 = 5;
+// double param1 = 6;
 inline void Command::clear_param1() {
   param1_ = 0;
 }
-inline float Command::_internal_param1() const {
+inline double Command::_internal_param1() const {
   return param1_;
 }
-inline float Command::param1() const {
+inline double Command::param1() const {
   // @@protoc_insertion_point(field_get:mavsdk.rpc.custom_action.Command.param1)
   return _internal_param1();
 }
-inline void Command::_internal_set_param1(float value) {
+inline void Command::_internal_set_param1(double value) {
   
   param1_ = value;
 }
-inline void Command::set_param1(float value) {
+inline void Command::set_param1(double value) {
   _internal_set_param1(value);
   // @@protoc_insertion_point(field_set:mavsdk.rpc.custom_action.Command.param1)
 }
 
-// float param2 = 6;
+// double param2 = 7;
 inline void Command::clear_param2() {
   param2_ = 0;
 }
-inline float Command::_internal_param2() const {
+inline double Command::_internal_param2() const {
   return param2_;
 }
-inline float Command::param2() const {
+inline double Command::param2() const {
   // @@protoc_insertion_point(field_get:mavsdk.rpc.custom_action.Command.param2)
   return _internal_param2();
 }
-inline void Command::_internal_set_param2(float value) {
+inline void Command::_internal_set_param2(double value) {
   
   param2_ = value;
 }
-inline void Command::set_param2(float value) {
+inline void Command::set_param2(double value) {
   _internal_set_param2(value);
   // @@protoc_insertion_point(field_set:mavsdk.rpc.custom_action.Command.param2)
 }
 
-// float param3 = 7;
+// double param3 = 8;
 inline void Command::clear_param3() {
   param3_ = 0;
 }
-inline float Command::_internal_param3() const {
+inline double Command::_internal_param3() const {
   return param3_;
 }
-inline float Command::param3() const {
+inline double Command::param3() const {
   // @@protoc_insertion_point(field_get:mavsdk.rpc.custom_action.Command.param3)
   return _internal_param3();
 }
-inline void Command::_internal_set_param3(float value) {
+inline void Command::_internal_set_param3(double value) {
   
   param3_ = value;
 }
-inline void Command::set_param3(float value) {
+inline void Command::set_param3(double value) {
   _internal_set_param3(value);
   // @@protoc_insertion_point(field_set:mavsdk.rpc.custom_action.Command.param3)
 }
 
-// float param4 = 8;
+// double param4 = 9;
 inline void Command::clear_param4() {
   param4_ = 0;
 }
-inline float Command::_internal_param4() const {
+inline double Command::_internal_param4() const {
   return param4_;
 }
-inline float Command::param4() const {
+inline double Command::param4() const {
   // @@protoc_insertion_point(field_get:mavsdk.rpc.custom_action.Command.param4)
   return _internal_param4();
 }
-inline void Command::_internal_set_param4(float value) {
+inline void Command::_internal_set_param4(double value) {
   
   param4_ = value;
 }
-inline void Command::set_param4(float value) {
+inline void Command::set_param4(double value) {
   _internal_set_param4(value);
   // @@protoc_insertion_point(field_set:mavsdk.rpc.custom_action.Command.param4)
 }
 
-// float param5 = 9;
+// double param5 = 10;
 inline void Command::clear_param5() {
   param5_ = 0;
 }
-inline float Command::_internal_param5() const {
+inline double Command::_internal_param5() const {
   return param5_;
 }
-inline float Command::param5() const {
+inline double Command::param5() const {
   // @@protoc_insertion_point(field_get:mavsdk.rpc.custom_action.Command.param5)
   return _internal_param5();
 }
-inline void Command::_internal_set_param5(float value) {
+inline void Command::_internal_set_param5(double value) {
   
   param5_ = value;
 }
-inline void Command::set_param5(float value) {
+inline void Command::set_param5(double value) {
   _internal_set_param5(value);
   // @@protoc_insertion_point(field_set:mavsdk.rpc.custom_action.Command.param5)
 }
 
-// float param6 = 10;
+// double param6 = 11;
 inline void Command::clear_param6() {
   param6_ = 0;
 }
-inline float Command::_internal_param6() const {
+inline double Command::_internal_param6() const {
   return param6_;
 }
-inline float Command::param6() const {
+inline double Command::param6() const {
   // @@protoc_insertion_point(field_get:mavsdk.rpc.custom_action.Command.param6)
   return _internal_param6();
 }
-inline void Command::_internal_set_param6(float value) {
+inline void Command::_internal_set_param6(double value) {
   
   param6_ = value;
 }
-inline void Command::set_param6(float value) {
+inline void Command::set_param6(double value) {
   _internal_set_param6(value);
   // @@protoc_insertion_point(field_set:mavsdk.rpc.custom_action.Command.param6)
 }
 
-// float param7 = 11;
+// double param7 = 12;
 inline void Command::clear_param7() {
   param7_ = 0;
 }
-inline float Command::_internal_param7() const {
+inline double Command::_internal_param7() const {
   return param7_;
 }
-inline float Command::param7() const {
+inline double Command::param7() const {
   // @@protoc_insertion_point(field_get:mavsdk.rpc.custom_action.Command.param7)
   return _internal_param7();
 }
-inline void Command::_internal_set_param7(float value) {
+inline void Command::_internal_set_param7(double value) {
   
   param7_ = value;
 }
-inline void Command::set_param7(float value) {
+inline void Command::set_param7(double value) {
   _internal_set_param7(value);
   // @@protoc_insertion_point(field_set:mavsdk.rpc.custom_action.Command.param7)
+}
+
+// bool is_local = 13;
+inline void Command::clear_is_local() {
+  is_local_ = false;
+}
+inline bool Command::_internal_is_local() const {
+  return is_local_;
+}
+inline bool Command::is_local() const {
+  // @@protoc_insertion_point(field_get:mavsdk.rpc.custom_action.Command.is_local)
+  return _internal_is_local();
+}
+inline void Command::_internal_set_is_local(bool value) {
+  
+  is_local_ = value;
+}
+inline void Command::set_is_local(bool value) {
+  _internal_set_is_local(value);
+  // @@protoc_insertion_point(field_set:mavsdk.rpc.custom_action.Command.is_local)
 }
 
 // -------------------------------------------------------------------
@@ -4162,42 +4224,42 @@ inline void Stage::set_allocated_run_script(std::string* run_script) {
   // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.custom_action.Stage.run_script)
 }
 
-// int32 timestamp_start = 3;
+// double timestamp_start = 3;
 inline void Stage::clear_timestamp_start() {
   timestamp_start_ = 0;
 }
-inline ::PROTOBUF_NAMESPACE_ID::int32 Stage::_internal_timestamp_start() const {
+inline double Stage::_internal_timestamp_start() const {
   return timestamp_start_;
 }
-inline ::PROTOBUF_NAMESPACE_ID::int32 Stage::timestamp_start() const {
+inline double Stage::timestamp_start() const {
   // @@protoc_insertion_point(field_get:mavsdk.rpc.custom_action.Stage.timestamp_start)
   return _internal_timestamp_start();
 }
-inline void Stage::_internal_set_timestamp_start(::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void Stage::_internal_set_timestamp_start(double value) {
   
   timestamp_start_ = value;
 }
-inline void Stage::set_timestamp_start(::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void Stage::set_timestamp_start(double value) {
   _internal_set_timestamp_start(value);
   // @@protoc_insertion_point(field_set:mavsdk.rpc.custom_action.Stage.timestamp_start)
 }
 
-// int32 timestamp_stop = 4;
+// double timestamp_stop = 4;
 inline void Stage::clear_timestamp_stop() {
   timestamp_stop_ = 0;
 }
-inline ::PROTOBUF_NAMESPACE_ID::int32 Stage::_internal_timestamp_stop() const {
+inline double Stage::_internal_timestamp_stop() const {
   return timestamp_stop_;
 }
-inline ::PROTOBUF_NAMESPACE_ID::int32 Stage::timestamp_stop() const {
+inline double Stage::timestamp_stop() const {
   // @@protoc_insertion_point(field_get:mavsdk.rpc.custom_action.Stage.timestamp_stop)
   return _internal_timestamp_stop();
 }
-inline void Stage::_internal_set_timestamp_stop(::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void Stage::_internal_set_timestamp_stop(double value) {
   
   timestamp_stop_ = value;
 }
-inline void Stage::set_timestamp_stop(::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void Stage::set_timestamp_stop(double value) {
   _internal_set_timestamp_stop(value);
   // @@protoc_insertion_point(field_set:mavsdk.rpc.custom_action.Stage.timestamp_stop)
 }
@@ -4206,22 +4268,22 @@ inline void Stage::set_timestamp_stop(::PROTOBUF_NAMESPACE_ID::int32 value) {
 
 // ActionMetadata
 
-// int32 id = 1;
+// uint32 id = 1;
 inline void ActionMetadata::clear_id() {
-  id_ = 0;
+  id_ = 0u;
 }
-inline ::PROTOBUF_NAMESPACE_ID::int32 ActionMetadata::_internal_id() const {
+inline ::PROTOBUF_NAMESPACE_ID::uint32 ActionMetadata::_internal_id() const {
   return id_;
 }
-inline ::PROTOBUF_NAMESPACE_ID::int32 ActionMetadata::id() const {
+inline ::PROTOBUF_NAMESPACE_ID::uint32 ActionMetadata::id() const {
   // @@protoc_insertion_point(field_get:mavsdk.rpc.custom_action.ActionMetadata.id)
   return _internal_id();
 }
-inline void ActionMetadata::_internal_set_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void ActionMetadata::_internal_set_id(::PROTOBUF_NAMESPACE_ID::uint32 value) {
   
   id_ = value;
 }
-inline void ActionMetadata::set_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
+inline void ActionMetadata::set_id(::PROTOBUF_NAMESPACE_ID::uint32 value) {
   _internal_set_id(value);
   // @@protoc_insertion_point(field_set:mavsdk.rpc.custom_action.ActionMetadata.id)
 }
