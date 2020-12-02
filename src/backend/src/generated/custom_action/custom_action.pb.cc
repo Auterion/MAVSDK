@@ -391,6 +391,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_custom_5faction_2fcustom_5fact
   PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::custom_action::Command, type_),
   PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::custom_action::Command, target_system_id_),
   PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::custom_action::Command, target_component_id_),
+  PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::custom_action::Command, frame_),
   PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::custom_action::Command, command_),
   PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::custom_action::Command, param1_),
   PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::custom_action::Command, param2_),
@@ -399,6 +400,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_custom_5faction_2fcustom_5fact
   PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::custom_action::Command, param5_),
   PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::custom_action::Command, param6_),
   PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::custom_action::Command, param7_),
+  PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::custom_action::Command, is_local_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::custom_action::Stage, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -439,9 +441,9 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 56, -1, sizeof(::mavsdk::rpc::custom_action::ExecuteCustomActionStageResponse)},
   { 62, -1, sizeof(::mavsdk::rpc::custom_action::ActionToExecute)},
   { 70, -1, sizeof(::mavsdk::rpc::custom_action::Command)},
-  { 86, -1, sizeof(::mavsdk::rpc::custom_action::Stage)},
-  { 95, -1, sizeof(::mavsdk::rpc::custom_action::ActionMetadata)},
-  { 105, -1, sizeof(::mavsdk::rpc::custom_action::CustomActionResult)},
+  { 88, -1, sizeof(::mavsdk::rpc::custom_action::Stage)},
+  { 97, -1, sizeof(::mavsdk::rpc::custom_action::ActionMetadata)},
+  { 107, -1, sizeof(::mavsdk::rpc::custom_action::CustomActionResult)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -490,47 +492,48 @@ const char descriptor_table_protodef_custom_5faction_2fcustom_5faction_2eproto[]
   "age\"`\n ExecuteCustomActionStageResponse\022"
   "<\n\006result\030\001 \001(\0132,.mavsdk.rpc.custom_acti"
   "on.CustomActionResult\"@\n\017ActionToExecute"
-  "\022\n\n\002id\030\001 \001(\005\022\017\n\007timeout\030\002 \001(\005\022\020\n\010progres"
-  "s\030\003 \001(\005\"\234\002\n\007Command\0224\n\004type\030\001 \001(\0162&.mavs"
+  "\022\n\n\002id\030\001 \001(\r\022\017\n\007timeout\030\002 \001(\001\022\020\n\010progres"
+  "s\030\003 \001(\001\"\275\002\n\007Command\0224\n\004type\030\001 \001(\0162&.mavs"
   "dk.rpc.custom_action.Command.Type\022\030\n\020tar"
-  "get_system_id\030\002 \001(\005\022\033\n\023target_component_"
-  "id\030\003 \001(\005\022\017\n\007command\030\004 \001(\005\022\016\n\006param1\030\005 \001("
-  "\002\022\016\n\006param2\030\006 \001(\002\022\016\n\006param3\030\007 \001(\002\022\016\n\006par"
-  "am4\030\010 \001(\002\022\016\n\006param5\030\t \001(\002\022\016\n\006param6\030\n \001("
-  "\002\022\016\n\006param7\030\013 \001(\002\"#\n\004Type\022\r\n\tTYPE_LONG\020\000"
-  "\022\014\n\010TYPE_INT\020\001\"\200\001\n\005Stage\0222\n\007command\030\001 \001("
-  "\0132!.mavsdk.rpc.custom_action.Command\022\022\n\n"
-  "run_script\030\002 \001(\t\022\027\n\017timestamp_start\030\003 \001("
-  "\005\022\026\n\016timestamp_stop\030\004 \001(\005\"\214\001\n\016ActionMeta"
-  "data\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\023\n\013descri"
-  "ption\030\003 \001(\t\022\032\n\022run_general_script\030\004 \001(\t\022"
-  "/\n\006stages\030\005 \003(\0132\037.mavsdk.rpc.custom_acti"
-  "on.Stage\"\366\001\n\022CustomActionResult\022C\n\006resul"
-  "t\030\001 \001(\01623.mavsdk.rpc.custom_action.Custo"
-  "mActionResult.Result\022\022\n\nresult_str\030\002 \001(\t"
-  "\"\206\001\n\006Result\022\022\n\016RESULT_UNKNOWN\020\000\022\022\n\016RESUL"
-  "T_SUCCESS\020\001\022\020\n\014RESULT_ERROR\020\002\022\022\n\016RESULT_"
-  "TIMEOUT\020\003\022\026\n\022RESULT_UNSUPPORTED\020\004\022\026\n\022RES"
-  "ULT_IN_PROGRESS\020\0052\275\005\n\023CustomActionServic"
-  "e\022x\n\017SetCustomAction\0220.mavsdk.rpc.custom"
-  "_action.SetCustomActionRequest\0321.mavsdk."
-  "rpc.custom_action.SetCustomActionRespons"
-  "e\"\000\022\214\001\n\025SubscribeCustomAction\0226.mavsdk.r"
-  "pc.custom_action.SubscribeCustomActionRe"
-  "quest\0327.mavsdk.rpc.custom_action.Subscri"
-  "beCustomActionResponse\"\0000\001\022}\n\023RespondCus"
-  "tomAction\0224.mavsdk.rpc.custom_action.Res"
-  "pondCustomActionRequest\032..mavsdk.rpc.cus"
-  "tom_action.CustomActionResponse\"\000\022\207\001\n\024Cu"
-  "stomActionMetadata\0225.mavsdk.rpc.custom_a"
-  "ction.CustomActionMetadataRequest\0326.mavs"
-  "dk.rpc.custom_action.CustomActionMetadat"
-  "aResponse\"\000\022\223\001\n\030ExecuteCustomActionStage"
-  "\0229.mavsdk.rpc.custom_action.ExecuteCusto"
-  "mActionStageRequest\032:.mavsdk.rpc.custom_"
-  "action.ExecuteCustomActionStageResponse\""
-  "\000B,\n\027io.mavsdk.custom_actionB\021CustomActi"
-  "onProtob\006proto3"
+  "get_system_id\030\002 \001(\r\022\033\n\023target_component_"
+  "id\030\003 \001(\r\022\r\n\005frame\030\004 \001(\r\022\017\n\007command\030\005 \001(\r"
+  "\022\016\n\006param1\030\006 \001(\001\022\016\n\006param2\030\007 \001(\001\022\016\n\006para"
+  "m3\030\010 \001(\001\022\016\n\006param4\030\t \001(\001\022\016\n\006param5\030\n \001(\001"
+  "\022\016\n\006param6\030\013 \001(\001\022\016\n\006param7\030\014 \001(\001\022\020\n\010is_l"
+  "ocal\030\r \001(\010\"#\n\004Type\022\r\n\tTYPE_LONG\020\000\022\014\n\010TYP"
+  "E_INT\020\001\"\200\001\n\005Stage\0222\n\007command\030\001 \001(\0132!.mav"
+  "sdk.rpc.custom_action.Command\022\022\n\nrun_scr"
+  "ipt\030\002 \001(\t\022\027\n\017timestamp_start\030\003 \001(\001\022\026\n\016ti"
+  "mestamp_stop\030\004 \001(\001\"\214\001\n\016ActionMetadata\022\n\n"
+  "\002id\030\001 \001(\r\022\014\n\004name\030\002 \001(\t\022\023\n\013description\030\003"
+  " \001(\t\022\032\n\022run_general_script\030\004 \001(\t\022/\n\006stag"
+  "es\030\005 \003(\0132\037.mavsdk.rpc.custom_action.Stag"
+  "e\"\366\001\n\022CustomActionResult\022C\n\006result\030\001 \001(\016"
+  "23.mavsdk.rpc.custom_action.CustomAction"
+  "Result.Result\022\022\n\nresult_str\030\002 \001(\t\"\206\001\n\006Re"
+  "sult\022\022\n\016RESULT_UNKNOWN\020\000\022\022\n\016RESULT_SUCCE"
+  "SS\020\001\022\020\n\014RESULT_ERROR\020\002\022\022\n\016RESULT_TIMEOUT"
+  "\020\003\022\026\n\022RESULT_UNSUPPORTED\020\004\022\026\n\022RESULT_IN_"
+  "PROGRESS\020\0052\275\005\n\023CustomActionService\022x\n\017Se"
+  "tCustomAction\0220.mavsdk.rpc.custom_action"
+  ".SetCustomActionRequest\0321.mavsdk.rpc.cus"
+  "tom_action.SetCustomActionResponse\"\000\022\214\001\n"
+  "\025SubscribeCustomAction\0226.mavsdk.rpc.cust"
+  "om_action.SubscribeCustomActionRequest\0327"
+  ".mavsdk.rpc.custom_action.SubscribeCusto"
+  "mActionResponse\"\0000\001\022}\n\023RespondCustomActi"
+  "on\0224.mavsdk.rpc.custom_action.RespondCus"
+  "tomActionRequest\032..mavsdk.rpc.custom_act"
+  "ion.CustomActionResponse\"\000\022\207\001\n\024CustomAct"
+  "ionMetadata\0225.mavsdk.rpc.custom_action.C"
+  "ustomActionMetadataRequest\0326.mavsdk.rpc."
+  "custom_action.CustomActionMetadataRespon"
+  "se\"\000\022\223\001\n\030ExecuteCustomActionStage\0229.mavs"
+  "dk.rpc.custom_action.ExecuteCustomAction"
+  "StageRequest\032:.mavsdk.rpc.custom_action."
+  "ExecuteCustomActionStageResponse\"\000B,\n\027io"
+  ".mavsdk.custom_actionB\021CustomActionProto"
+  "b\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_custom_5faction_2fcustom_5faction_2eproto_deps[1] = {
 };
@@ -553,7 +556,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_cus
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_custom_5faction_2fcustom_5faction_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_custom_5faction_2fcustom_5faction_2eproto = {
-  false, false, descriptor_table_protodef_custom_5faction_2fcustom_5faction_2eproto, "custom_action/custom_action.proto", 2695,
+  false, false, descriptor_table_protodef_custom_5faction_2fcustom_5faction_2eproto, "custom_action/custom_action.proto", 2728,
   &descriptor_table_custom_5faction_2fcustom_5faction_2eproto_once, descriptor_table_custom_5faction_2fcustom_5faction_2eproto_sccs, descriptor_table_custom_5faction_2fcustom_5faction_2eproto_deps, 15, 0,
   schemas, file_default_instances, TableStruct_custom_5faction_2fcustom_5faction_2eproto::offsets,
   file_level_metadata_custom_5faction_2fcustom_5faction_2eproto, 15, file_level_enum_descriptors_custom_5faction_2fcustom_5faction_2eproto, file_level_service_descriptors_custom_5faction_2fcustom_5faction_2eproto,
@@ -2868,16 +2871,16 @@ ActionToExecute::ActionToExecute(::PROTOBUF_NAMESPACE_ID::Arena* arena)
 ActionToExecute::ActionToExecute(const ActionToExecute& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  ::memcpy(&id_, &from.id_,
-    static_cast<size_t>(reinterpret_cast<char*>(&progress_) -
-    reinterpret_cast<char*>(&id_)) + sizeof(progress_));
+  ::memcpy(&timeout_, &from.timeout_,
+    static_cast<size_t>(reinterpret_cast<char*>(&id_) -
+    reinterpret_cast<char*>(&timeout_)) + sizeof(id_));
   // @@protoc_insertion_point(copy_constructor:mavsdk.rpc.custom_action.ActionToExecute)
 }
 
 void ActionToExecute::SharedCtor() {
-  ::memset(&id_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&progress_) -
-      reinterpret_cast<char*>(&id_)) + sizeof(progress_));
+  ::memset(&timeout_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&id_) -
+      reinterpret_cast<char*>(&timeout_)) + sizeof(id_));
 }
 
 ActionToExecute::~ActionToExecute() {
@@ -2911,9 +2914,9 @@ void ActionToExecute::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  ::memset(&id_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&progress_) -
-      reinterpret_cast<char*>(&id_)) + sizeof(progress_));
+  ::memset(&timeout_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&id_) -
+      reinterpret_cast<char*>(&timeout_)) + sizeof(id_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -2925,25 +2928,25 @@ const char* ActionToExecute::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPAC
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // int32 id = 1;
+      // uint32 id = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
-          id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // int32 timeout = 2;
+      // double timeout = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
-          timeout_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 17)) {
+          timeout_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
-      // int32 progress = 3;
+      // double progress = 3;
       case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
-          progress_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 25)) {
+          progress_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
       default: {
@@ -2974,22 +2977,22 @@ failure:
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // int32 id = 1;
+  // uint32 id = 1;
   if (this->id() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_id(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(1, this->_internal_id(), target);
   }
 
-  // int32 timeout = 2;
-  if (this->timeout() != 0) {
+  // double timeout = 2;
+  if (!(this->timeout() <= 0 && this->timeout() >= 0)) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_timeout(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(2, this->_internal_timeout(), target);
   }
 
-  // int32 progress = 3;
-  if (this->progress() != 0) {
+  // double progress = 3;
+  if (!(this->progress() <= 0 && this->progress() >= 0)) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(3, this->_internal_progress(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(3, this->_internal_progress(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -3008,25 +3011,21 @@ size_t ActionToExecute::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // int32 id = 1;
+  // double timeout = 2;
+  if (!(this->timeout() <= 0 && this->timeout() >= 0)) {
+    total_size += 1 + 8;
+  }
+
+  // double progress = 3;
+  if (!(this->progress() <= 0 && this->progress() >= 0)) {
+    total_size += 1 + 8;
+  }
+
+  // uint32 id = 1;
   if (this->id() != 0) {
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
         this->_internal_id());
-  }
-
-  // int32 timeout = 2;
-  if (this->timeout() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_timeout());
-  }
-
-  // int32 progress = 3;
-  if (this->progress() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_progress());
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -3060,14 +3059,14 @@ void ActionToExecute::MergeFrom(const ActionToExecute& from) {
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from.id() != 0) {
-    _internal_set_id(from._internal_id());
-  }
-  if (from.timeout() != 0) {
+  if (!(from.timeout() <= 0 && from.timeout() >= 0)) {
     _internal_set_timeout(from._internal_timeout());
   }
-  if (from.progress() != 0) {
+  if (!(from.progress() <= 0 && from.progress() >= 0)) {
     _internal_set_progress(from._internal_progress());
+  }
+  if (from.id() != 0) {
+    _internal_set_id(from._internal_id());
   }
 }
 
@@ -3093,11 +3092,11 @@ void ActionToExecute::InternalSwap(ActionToExecute* other) {
   using std::swap;
   _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(ActionToExecute, progress_)
-      + sizeof(ActionToExecute::progress_)
-      - PROTOBUF_FIELD_OFFSET(ActionToExecute, id_)>(
-          reinterpret_cast<char*>(&id_),
-          reinterpret_cast<char*>(&other->id_));
+      PROTOBUF_FIELD_OFFSET(ActionToExecute, id_)
+      + sizeof(ActionToExecute::id_)
+      - PROTOBUF_FIELD_OFFSET(ActionToExecute, timeout_)>(
+          reinterpret_cast<char*>(&timeout_),
+          reinterpret_cast<char*>(&other->timeout_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata ActionToExecute::GetMetadata() const {
@@ -3187,74 +3186,88 @@ const char* Command::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::in
           _internal_set_type(static_cast<::mavsdk::rpc::custom_action::Command_Type>(val));
         } else goto handle_unusual;
         continue;
-      // int32 target_system_id = 2;
+      // uint32 target_system_id = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
-          target_system_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          target_system_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // int32 target_component_id = 3;
+      // uint32 target_component_id = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
-          target_component_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          target_component_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // int32 command = 4;
+      // uint32 frame = 4;
       case 4:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 32)) {
-          command_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          frame_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // float param1 = 5;
+      // uint32 command = 5;
       case 5:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 45)) {
-          param1_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
-          ptr += sizeof(float);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 40)) {
+          command_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // float param2 = 6;
+      // double param1 = 6;
       case 6:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 53)) {
-          param2_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
-          ptr += sizeof(float);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 49)) {
+          param1_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
-      // float param3 = 7;
+      // double param2 = 7;
       case 7:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 61)) {
-          param3_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
-          ptr += sizeof(float);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 57)) {
+          param2_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
-      // float param4 = 8;
+      // double param3 = 8;
       case 8:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 69)) {
-          param4_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
-          ptr += sizeof(float);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 65)) {
+          param3_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
-      // float param5 = 9;
+      // double param4 = 9;
       case 9:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 77)) {
-          param5_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
-          ptr += sizeof(float);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 73)) {
+          param4_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
-      // float param6 = 10;
+      // double param5 = 10;
       case 10:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 85)) {
-          param6_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
-          ptr += sizeof(float);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 81)) {
+          param5_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
-      // float param7 = 11;
+      // double param6 = 11;
       case 11:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 93)) {
-          param7_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
-          ptr += sizeof(float);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 89)) {
+          param6_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          ptr += sizeof(double);
+        } else goto handle_unusual;
+        continue;
+      // double param7 = 12;
+      case 12:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 97)) {
+          param7_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          ptr += sizeof(double);
+        } else goto handle_unusual;
+        continue;
+      // bool is_local = 13;
+      case 13:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 104)) {
+          is_local_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
         } else goto handle_unusual;
         continue;
       default: {
@@ -3292,64 +3305,76 @@ failure:
       1, this->_internal_type(), target);
   }
 
-  // int32 target_system_id = 2;
+  // uint32 target_system_id = 2;
   if (this->target_system_id() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_target_system_id(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(2, this->_internal_target_system_id(), target);
   }
 
-  // int32 target_component_id = 3;
+  // uint32 target_component_id = 3;
   if (this->target_component_id() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(3, this->_internal_target_component_id(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(3, this->_internal_target_component_id(), target);
   }
 
-  // int32 command = 4;
+  // uint32 frame = 4;
+  if (this->frame() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(4, this->_internal_frame(), target);
+  }
+
+  // uint32 command = 5;
   if (this->command() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(4, this->_internal_command(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(5, this->_internal_command(), target);
   }
 
-  // float param1 = 5;
+  // double param1 = 6;
   if (!(this->param1() <= 0 && this->param1() >= 0)) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(5, this->_internal_param1(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(6, this->_internal_param1(), target);
   }
 
-  // float param2 = 6;
+  // double param2 = 7;
   if (!(this->param2() <= 0 && this->param2() >= 0)) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(6, this->_internal_param2(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(7, this->_internal_param2(), target);
   }
 
-  // float param3 = 7;
+  // double param3 = 8;
   if (!(this->param3() <= 0 && this->param3() >= 0)) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(7, this->_internal_param3(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(8, this->_internal_param3(), target);
   }
 
-  // float param4 = 8;
+  // double param4 = 9;
   if (!(this->param4() <= 0 && this->param4() >= 0)) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(8, this->_internal_param4(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(9, this->_internal_param4(), target);
   }
 
-  // float param5 = 9;
+  // double param5 = 10;
   if (!(this->param5() <= 0 && this->param5() >= 0)) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(9, this->_internal_param5(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(10, this->_internal_param5(), target);
   }
 
-  // float param6 = 10;
+  // double param6 = 11;
   if (!(this->param6() <= 0 && this->param6() >= 0)) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(10, this->_internal_param6(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(11, this->_internal_param6(), target);
   }
 
-  // float param7 = 11;
+  // double param7 = 12;
   if (!(this->param7() <= 0 && this->param7() >= 0)) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(11, this->_internal_param7(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(12, this->_internal_param7(), target);
+  }
+
+  // bool is_local = 13;
+  if (this->is_local() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(13, this->_internal_is_local(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -3374,60 +3399,72 @@ size_t Command::ByteSizeLong() const {
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_type());
   }
 
-  // int32 target_system_id = 2;
+  // uint32 target_system_id = 2;
   if (this->target_system_id() != 0) {
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
         this->_internal_target_system_id());
   }
 
-  // int32 target_component_id = 3;
+  // uint32 target_component_id = 3;
   if (this->target_component_id() != 0) {
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
         this->_internal_target_component_id());
   }
 
-  // int32 command = 4;
+  // uint32 frame = 4;
+  if (this->frame() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
+        this->_internal_frame());
+  }
+
+  // double param1 = 6;
+  if (!(this->param1() <= 0 && this->param1() >= 0)) {
+    total_size += 1 + 8;
+  }
+
+  // double param2 = 7;
+  if (!(this->param2() <= 0 && this->param2() >= 0)) {
+    total_size += 1 + 8;
+  }
+
+  // double param3 = 8;
+  if (!(this->param3() <= 0 && this->param3() >= 0)) {
+    total_size += 1 + 8;
+  }
+
+  // double param4 = 9;
+  if (!(this->param4() <= 0 && this->param4() >= 0)) {
+    total_size += 1 + 8;
+  }
+
+  // uint32 command = 5;
   if (this->command() != 0) {
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
         this->_internal_command());
   }
 
-  // float param1 = 5;
-  if (!(this->param1() <= 0 && this->param1() >= 0)) {
-    total_size += 1 + 4;
+  // bool is_local = 13;
+  if (this->is_local() != 0) {
+    total_size += 1 + 1;
   }
 
-  // float param2 = 6;
-  if (!(this->param2() <= 0 && this->param2() >= 0)) {
-    total_size += 1 + 4;
-  }
-
-  // float param3 = 7;
-  if (!(this->param3() <= 0 && this->param3() >= 0)) {
-    total_size += 1 + 4;
-  }
-
-  // float param4 = 8;
-  if (!(this->param4() <= 0 && this->param4() >= 0)) {
-    total_size += 1 + 4;
-  }
-
-  // float param5 = 9;
+  // double param5 = 10;
   if (!(this->param5() <= 0 && this->param5() >= 0)) {
-    total_size += 1 + 4;
+    total_size += 1 + 8;
   }
 
-  // float param6 = 10;
+  // double param6 = 11;
   if (!(this->param6() <= 0 && this->param6() >= 0)) {
-    total_size += 1 + 4;
+    total_size += 1 + 8;
   }
 
-  // float param7 = 11;
+  // double param7 = 12;
   if (!(this->param7() <= 0 && this->param7() >= 0)) {
-    total_size += 1 + 4;
+    total_size += 1 + 8;
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -3470,8 +3507,8 @@ void Command::MergeFrom(const Command& from) {
   if (from.target_component_id() != 0) {
     _internal_set_target_component_id(from._internal_target_component_id());
   }
-  if (from.command() != 0) {
-    _internal_set_command(from._internal_command());
+  if (from.frame() != 0) {
+    _internal_set_frame(from._internal_frame());
   }
   if (!(from.param1() <= 0 && from.param1() >= 0)) {
     _internal_set_param1(from._internal_param1());
@@ -3484,6 +3521,12 @@ void Command::MergeFrom(const Command& from) {
   }
   if (!(from.param4() <= 0 && from.param4() >= 0)) {
     _internal_set_param4(from._internal_param4());
+  }
+  if (from.command() != 0) {
+    _internal_set_command(from._internal_command());
+  }
+  if (from.is_local() != 0) {
+    _internal_set_is_local(from._internal_is_local());
   }
   if (!(from.param5() <= 0 && from.param5() >= 0)) {
     _internal_set_param5(from._internal_param5());
@@ -3646,18 +3689,18 @@ const char* Stage::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::inte
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // int32 timestamp_start = 3;
+      // double timestamp_start = 3;
       case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
-          timestamp_start_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 25)) {
+          timestamp_start_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
-      // int32 timestamp_stop = 4;
+      // double timestamp_stop = 4;
       case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 32)) {
-          timestamp_stop_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 33)) {
+          timestamp_stop_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          ptr += sizeof(double);
         } else goto handle_unusual;
         continue;
       default: {
@@ -3706,16 +3749,16 @@ failure:
         2, this->_internal_run_script(), target);
   }
 
-  // int32 timestamp_start = 3;
-  if (this->timestamp_start() != 0) {
+  // double timestamp_start = 3;
+  if (!(this->timestamp_start() <= 0 && this->timestamp_start() >= 0)) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(3, this->_internal_timestamp_start(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(3, this->_internal_timestamp_start(), target);
   }
 
-  // int32 timestamp_stop = 4;
-  if (this->timestamp_stop() != 0) {
+  // double timestamp_stop = 4;
+  if (!(this->timestamp_stop() <= 0 && this->timestamp_stop() >= 0)) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(4, this->_internal_timestamp_stop(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(4, this->_internal_timestamp_stop(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -3748,18 +3791,14 @@ size_t Stage::ByteSizeLong() const {
         *command_);
   }
 
-  // int32 timestamp_start = 3;
-  if (this->timestamp_start() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_timestamp_start());
+  // double timestamp_start = 3;
+  if (!(this->timestamp_start() <= 0 && this->timestamp_start() >= 0)) {
+    total_size += 1 + 8;
   }
 
-  // int32 timestamp_stop = 4;
-  if (this->timestamp_stop() != 0) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_timestamp_stop());
+  // double timestamp_stop = 4;
+  if (!(this->timestamp_stop() <= 0 && this->timestamp_stop() >= 0)) {
+    total_size += 1 + 8;
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -3799,10 +3838,10 @@ void Stage::MergeFrom(const Stage& from) {
   if (from.has_command()) {
     _internal_mutable_command()->::mavsdk::rpc::custom_action::Command::MergeFrom(from._internal_command());
   }
-  if (from.timestamp_start() != 0) {
+  if (!(from.timestamp_start() <= 0 && from.timestamp_start() >= 0)) {
     _internal_set_timestamp_start(from._internal_timestamp_start());
   }
-  if (from.timestamp_stop() != 0) {
+  if (!(from.timestamp_stop() <= 0 && from.timestamp_stop() >= 0)) {
     _internal_set_timestamp_stop(from._internal_timestamp_stop());
   }
 }
@@ -3885,7 +3924,7 @@ void ActionMetadata::SharedCtor() {
   name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   description_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   run_general_script_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  id_ = 0;
+  id_ = 0u;
 }
 
 ActionMetadata::~ActionMetadata() {
@@ -3926,7 +3965,7 @@ void ActionMetadata::Clear() {
   name_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
   description_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
   run_general_script_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
-  id_ = 0;
+  id_ = 0u;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -3938,10 +3977,10 @@ const char* ActionMetadata::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // int32 id = 1;
+      // uint32 id = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
-          id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -4012,10 +4051,10 @@ failure:
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // int32 id = 1;
+  // uint32 id = 1;
   if (this->id() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_id(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(1, this->_internal_id(), target);
   }
 
   // string name = 2;
@@ -4100,10 +4139,10 @@ size_t ActionMetadata::ByteSizeLong() const {
         this->_internal_run_general_script());
   }
 
-  // int32 id = 1;
+  // uint32 id = 1;
   if (this->id() != 0) {
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
         this->_internal_id());
   }
 
