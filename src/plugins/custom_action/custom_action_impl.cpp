@@ -134,6 +134,7 @@ CustomAction::ActionToExecute CustomActionImpl::custom_action() const
 void CustomActionImpl::custom_action_async(CustomAction::CustomActionCallback callback)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
+    LogInfo() << "Heyyyy";
     _custom_action_command_subscription = callback;
 }
 
@@ -255,45 +256,48 @@ void CustomActionImpl::custom_action_metadata_async(
 
                     cmd.target_system_id = stage_id["cmd"]["target_system"].asInt();
                     cmd.target_component_id = stage_id["cmd"]["target_system"].asInt();
+                    cmd.frame = stage_id["cmd"]["frame"].asInt();
                     cmd.command = stage_id["cmd"]["command"].asInt();
-                    cmd.param1 = stage_id["cmd"]["param7"] != Json::Value::null ?
-                                     stage_id["cmd"]["param1"].asFloat() :
-                                     NAN;
-                    cmd.param2 = stage_id["cmd"]["param7"] != Json::Value::null ?
-                                     stage_id["cmd"]["param2"].asFloat() :
-                                     NAN;
-                    cmd.param3 = stage_id["cmd"]["param7"] != Json::Value::null ?
-                                     stage_id["cmd"]["param3"].asFloat() :
-                                     NAN;
-                    cmd.param4 = stage_id["cmd"]["param7"] != Json::Value::null ?
-                                     stage_id["cmd"]["param4"].asFloat() :
-                                     NAN;
-                    cmd.param5 = stage_id["cmd"]["param7"] != Json::Value::null ?
-                                     stage_id["cmd"]["param5"].asFloat() :
-                                     NAN;
-                    cmd.param6 = stage_id["cmd"]["param7"] != Json::Value::null ?
-                                     stage_id["cmd"]["param6"].asFloat() :
-                                     NAN;
-                    cmd.param7 = stage_id["cmd"]["param7"] != Json::Value::null ?
-                                     stage_id["cmd"]["param7"].asFloat() :
-                                     NAN;
+                    cmd.param1 = stage_id["cmd"]["param1"].isNull() ?
+                                     double(NAN) :
+                                     stage_id["cmd"]["param1"].asDouble();
+                    cmd.param2 = stage_id["cmd"]["param2"].isNull() ?
+                                     double(NAN) :
+                                     stage_id["cmd"]["param2"].asDouble();
+                    cmd.param3 = stage_id["cmd"]["param3"].isNull() ?
+                                     double(NAN) :
+                                     stage_id["cmd"]["param3"].asDouble();
+                    cmd.param4 = stage_id["cmd"]["param4"].isNull() ?
+                                     double(NAN) :
+                                     stage_id["cmd"]["param4"].asDouble();
+                    cmd.param5 = stage_id["cmd"]["param5"].isNull() ?
+                                     double(NAN) :
+                                     stage_id["cmd"]["param5"].asDouble();
+                    cmd.param6 = stage_id["cmd"]["param6"].isNull() ?
+                                     double(NAN) :
+                                     stage_id["cmd"]["param6"].asDouble();
+                    cmd.param7 = stage_id["cmd"]["param7"].isNull() ?
+                                     double(NAN) :
+                                     stage_id["cmd"]["param7"].asDouble();
+                    cmd.is_local = stage_id["cmd"]["is_local"].asBool();
 
                     stage.command = cmd;
                 }
 
                 // The timestamps are optional, as the execution control ideally should
-                // be done by the client. But, if set, they can be included in a state
+                // be done by the client. But, if set, they can be used in a state
                 // machine on the client code
-                stage.timestamp_start = stage_id["timestamp_start"] != Json::Value::null ?
-                                            stage_id["timestamp_start"].asFloat() :
-                                            NAN;
-                stage.timestamp_stop = stage_id["timestamp_stop"] != Json::Value::null ?
-                                           stage_id["timestamp_stop"].asFloat() :
-                                           NAN;
+                stage.timestamp_start = stage_id["timestamp_start"].isNull() ?
+                                            double(NAN) :
+                                            stage_id["timestamp_start"].asDouble();
+                stage.timestamp_stop = stage_id["timestamp_stop"].isNull() ?
+                                           double(NAN) :
+                                           stage_id["timestamp_stop"].asDouble();
 
                 action_metadata.stages.push_back(stage);
             }
         } else {
+            LogErr() << "No global script or action stages were set for action #" << action.id;
             parsing_result = CustomAction::Result::Error;
         }
     }
@@ -331,8 +335,7 @@ void CustomActionImpl::execute_custom_action_stage_async(
             auto temp_callback = callback;
             _parent->call_user_callback([temp_callback, result]() { temp_callback(result); });
         }
-        // Process command
-    } else {
+    } else { // Process command
         if (stage.command.type == CustomAction::Command::Type::Long) { // LONG
             MavlinkCommandSender::CommandLong command{};
             command.target_system_id = stage.command.target_system_id;
@@ -355,14 +358,21 @@ void CustomActionImpl::execute_custom_action_stage_async(
             MavlinkCommandSender::CommandInt command{};
             command.target_system_id = stage.command.target_system_id;
             command.target_component_id = stage.command.target_component_id;
+            command.frame = static_cast<MAV_FRAME>(stage.command.frame);
             command.command = stage.command.command;
             command.params.param1 = stage.command.param1;
             command.params.param2 = stage.command.param2;
             command.params.param3 = stage.command.param3;
             command.params.param4 = stage.command.param4;
-            command.params.x = stage.command.param5;
-            command.params.y = stage.command.param6;
+            command.params.x = stage.command.is_local ?
+                                   static_cast<int32_t>(std::round(stage.command.param5 * 1e4)) :
+                                   static_cast<int32_t>(std::round(stage.command.param5 * 1e7));
+            command.params.y = stage.command.is_local ?
+                                   static_cast<int32_t>(std::round(stage.command.param6 * 1e4)) :
+                                   static_cast<int32_t>(std::round(stage.command.param6 * 1e7));
             command.params.z = stage.command.param7;
+
+            LogInfo() << stage;
 
             // Send command to the target system and component IDs
             _parent->send_command_async(

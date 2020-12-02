@@ -104,6 +104,8 @@ public:
 
         rpc_obj->set_target_component_id(command.target_component_id);
 
+        rpc_obj->set_frame(command.frame);
+
         rpc_obj->set_command(command.command);
 
         rpc_obj->set_param1(command.param1);
@@ -120,6 +122,8 @@ public:
 
         rpc_obj->set_param7(command.param7);
 
+        rpc_obj->set_is_local(command.is_local);
+
         return rpc_obj;
     }
 
@@ -133,6 +137,8 @@ public:
         obj.target_system_id = command.target_system_id();
 
         obj.target_component_id = command.target_component_id();
+
+        obj.frame = command.frame();
 
         obj.command = command.command();
 
@@ -149,6 +155,8 @@ public:
         obj.param6 = command.param6();
 
         obj.param7 = command.param7();
+
+        obj.is_local = command.is_local();
 
         return obj;
     }

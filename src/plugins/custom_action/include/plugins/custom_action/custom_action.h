@@ -62,9 +62,9 @@ public:
      * @brief
      */
     struct ActionToExecute {
-        int32_t id{}; /**< @brief ID of the action */
-        int32_t timeout{}; /**< @brief Action timeout / max execution time */
-        int32_t progress{}; /**< @brief Action progress */
+        uint32_t id{}; /**< @brief ID of the action */
+        double timeout{}; /**< @brief Action timeout / max execution time */
+        double progress{}; /**< @brief Action progress */
     };
 
     /**
@@ -102,18 +102,25 @@ public:
          */
         friend std::ostream& operator<<(std::ostream& str, CustomAction::Command::Type const& type);
 
-        Type type{}; /**< @brief Type enum value */
-        int32_t target_system_id{}; /**< @brief Target system ID */
-        int32_t target_component_id{}; /**< @brief Target component ID. Should match the MAV_COMP */
-        int32_t command{}; /**< @brief Command to send to target system and component. Should match
-                              the MAV_CMD */
-        float param1{}; /**< @brief Command parameter 1 */
-        float param2{}; /**< @brief Command parameter 2 */
-        float param3{}; /**< @brief Command parameter 3 */
-        float param4{}; /**< @brief Command parameter 3 */
-        float param5{}; /**< @brief Command parameter 5 */
-        float param6{}; /**< @brief Command parameter 6 */
-        float param7{}; /**< @brief Command parameter 7 */
+        Type type{}; /**< @brief Type enum value. LONG or INT */
+        uint32_t target_system_id{}; /**< @brief Target system ID */
+        uint32_t
+            target_component_id{}; /**< @brief Target component ID. Should match the MAV_COMP */
+        uint32_t frame{}; /**< @brief The coordinate system of the COMMAND. Used in COMMAND_INT */
+        uint32_t command{}; /**< @brief Command to send to target system and component. Should match
+                               the MAV_CMD */
+        double param1{}; /**< @brief Command parameter 1 */
+        double param2{}; /**< @brief Command parameter 2 */
+        double param3{}; /**< @brief Command parameter 3 */
+        double param4{}; /**< @brief Command parameter 4 */
+        double param5{}; /**< @brief Command parameter 5. In COMMAND_INT: local x position or
+                            latitude. Casted to int32 before sending the command */
+        double param6{}; /**< @brief Command parameter 6. In COMMAND_INT: local y position or
+                            longitude. Casted to int32 before sending the command */
+        double param7{}; /**< @brief Command parameter 7. In COMMAND_INT: z position: global:
+                            altitude in meters (relative or absolute, depending on frame) */
+        bool is_local{}; /**< @brief In COMMAND_INT: Set to true if x/y are local positions.
+                            Otherwise, these are lat/lon */
     };
 
     /**
@@ -137,8 +144,8 @@ public:
         Command command{}; /**< @brief Command to run in the stage (if applicable) */
         std::string run_script{}; /**< @brief Script to run in that stage (if applicable). Should
                                      contain the full path. */
-        int32_t timestamp_start{}; /**< @brief Timestamp in usec when to start the stage */
-        int32_t timestamp_stop{}; /**< @brief Timestamp in usec when the stage should stop */
+        double timestamp_start{}; /**< @brief Timestamp in usec when to start the stage */
+        double timestamp_stop{}; /**< @brief Timestamp in usec when the stage should stop */
     };
 
     /**
@@ -159,7 +166,7 @@ public:
      * @brief
      */
     struct ActionMetadata {
-        int32_t id{}; /**< @brief ID of the action */
+        uint32_t id{}; /**< @brief ID of the action */
         std::string name{}; /**< @brief Name of the action */
         std::string description{}; /**< @brief Description of the action */
         std::string run_general_script{}; /**< @brief Script to run for this specific action. Runs
