@@ -63,7 +63,7 @@ CustomActionImpl::process_custom_action_command(const MavlinkCommandReceiver::Co
             _parent->get_own_system_id(),
             _parent->get_own_component_id(),
             &command_ack,
-            MAV_CMD_WAYPOINT_USER_1,
+            MAV_CMD_WAYPOINT_USER_1, // MAV_CMD_CUSTOM_ACTION,
             MAV_RESULT_IN_PROGRESS,
             0,
             action_to_exec.id, // Use the action ID in param4 to identify the action/process
@@ -107,7 +107,7 @@ void CustomActionImpl::respond_custom_action_async(
         _parent->get_own_system_id(),
         _parent->get_own_component_id(),
         &command_ack,
-        MAV_CMD_WAYPOINT_USER_1,
+        MAV_CMD_WAYPOINT_USER_1, // MAV_CMD_CUSTOM_ACTION,
         mavlink_command_result_from_custom_action_result(result),
         action.progress, // Set the command progress when applicable
         action.id, // Use the action ID in param4 to identify the action/process
@@ -134,7 +134,6 @@ CustomAction::ActionToExecute CustomActionImpl::custom_action() const
 void CustomActionImpl::custom_action_async(CustomAction::CustomActionCallback callback)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    LogInfo() << "Heyyyy";
     _custom_action_command_subscription = callback;
 }
 
@@ -371,8 +370,6 @@ void CustomActionImpl::execute_custom_action_stage_async(
                                    static_cast<int32_t>(std::round(stage.command.param6 * 1e4)) :
                                    static_cast<int32_t>(std::round(stage.command.param6 * 1e7));
             command.params.z = stage.command.param7;
-
-            LogInfo() << stage;
 
             // Send command to the target system and component IDs
             _parent->send_command_async(

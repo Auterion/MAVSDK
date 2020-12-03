@@ -230,6 +230,8 @@ void send_progress_status(std::shared_ptr<CustomAction> custom_action_comp)
 void process_custom_action(
     CustomAction::ActionToExecute action, std::shared_ptr<CustomAction> custom_action_comp)
 {
+    // Note that this (client) function is not custom action generic, in the sense that
+    // it a priori knows the number stages the action being executed is composed of
     LogInfo() << "Custom action #" << action.id << " being executed";
 
     // Get the custom action metadata
@@ -259,9 +261,10 @@ void process_custom_action(
               << " current progress: " << _action_progress.load() << "%";
 
     // First stage
-    EXPECT_EQ(
-        custom_action_comp->execute_custom_action_stage(action_metadata.stages[0]),
-        CustomAction::Result::Success);
+    CustomAction::Result stage1_res = custom_action_comp->execute_custom_action_stage(action_metadata.stages[0]);
+    EXPECT_EQ(stage1_res, CustomAction::Result::Success);
+    _action_result.store(stage1_res, std::memory_order_relaxed);
+
     std::this_thread::sleep_for(std::chrono::seconds(10));
 
     _action_progress.store(50.0, std::memory_order_relaxed);
@@ -269,9 +272,10 @@ void process_custom_action(
               << " current progress: " << _action_progress.load() << "%";
 
     // Second stage
-    EXPECT_EQ(
-        custom_action_comp->execute_custom_action_stage(action_metadata.stages[1]),
-        CustomAction::Result::Success);
+    CustomAction::Result stage2_res = custom_action_comp->execute_custom_action_stage(action_metadata.stages[1]);
+    EXPECT_EQ(stage2_res, CustomAction::Result::Success);
+    _action_result.store(stage2_res, std::memory_order_relaxed);
+
     std::this_thread::sleep_for(std::chrono::seconds(10));
 
     // End
