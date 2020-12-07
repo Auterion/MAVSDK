@@ -33,16 +33,19 @@ TEST_F(SitlTest, CustomAction)
         std::future<void> fut = prom.get_future();
 
         mavsdk_gcs.subscribe_on_new_system([&prom, &mavsdk_gcs, &system_to_gcs]() {
-            if (mavsdk_gcs.systems().size() == 1) {
-                system_to_gcs = mavsdk_gcs.systems().at(0);
-                prom.set_value();
+            for (auto& system : mavsdk_gcs.systems()) {
+                if (system->has_autopilot()) {
+                    system_to_gcs = system;
+                    prom.set_value();
+                    break;
+                }
             }
         });
 
         ASSERT_EQ(fut.wait_for(std::chrono::seconds(10)), std::future_status::ready);
     }
-
     ASSERT_TRUE(system_to_gcs->is_connected());
+    ASSERT_TRUE(system_to_gcs->has_autopilot());
 
     // Telemetry and actions are received and sent from the GCS respectively
     // The GCS is also capable of sending the custom action commands
@@ -70,15 +73,19 @@ TEST_F(SitlTest, CustomAction)
 
         mavsdk_companion.subscribe_on_new_system(
             [&prom, &mavsdk_companion, &system_to_companion]() {
-                if (mavsdk_companion.systems().size() == 1) {
-                    system_to_companion = mavsdk_companion.systems().at(0);
-                    prom.set_value();
+                for (auto& system : mavsdk_companion.systems()) {
+                    if (system->has_autopilot()) {
+                        system_to_companion = system;
+                        prom.set_value();
+                        break;
+                    }
                 }
             });
 
         ASSERT_EQ(fut.wait_for(std::chrono::seconds(10)), std::future_status::ready);
     }
     ASSERT_TRUE(system_to_companion->is_connected());
+    ASSERT_TRUE(system_to_companion->has_autopilot());
 
     // Custom actions are processed and executed in the mission computer
     auto custom_action_comp = std::make_shared<CustomAction>(system_to_companion);
