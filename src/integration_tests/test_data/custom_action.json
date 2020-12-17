@@ -6,16 +6,16 @@
                 "stages": [{
                                 "cmd": {
                                         "type": "INT",
-                                        "target_system": 1,
-                                        "target_component": 1,
+                                        "target_system": 0,
+                                        "target_component": 0,
                                         "frame": 0,
                                         "command": 192,
                                         "param1": null,
-                                        "param2": null,
+                                        "param2": 1,
                                         "param3": null,
                                         "param4": null,
-                                        "param5": 47.35600,
-                                        "param6": 8.518757,
+                                        "param5": 47.398000,
+                                        "param6": 8.545592,
                                         "param7": null,
                                         "is_local": false
                                 },
@@ -26,16 +26,16 @@
                         {
                                 "cmd": {
                                         "type": "INT",
-                                        "target_system": 1,
-                                        "target_component": 1,
+                                        "target_system": 0,
+                                        "target_component": 0,
                                         "frame": 0,
                                         "command": 192,
                                         "param1": null,
-                                        "param2": null,
+                                        "param2": 1,
                                         "param3": null,
                                         "param4": null,
-                                        "param5": 47.355732,
-                                        "param6": 8.518757,
+                                        "param5": 47.3977233,
+                                        "param6": 8.545592,
                                         "param7": null,
                                         "is_local": false
                                 },
