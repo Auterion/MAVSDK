@@ -1,0 +1,52 @@
+#
+# Auterion PX4 v2.1 SITL testing environment for MAVSDK based on Ubuntu 20.04.
+# Author: Julian Oes <julian@oes.ch>
+#
+FROM mavsdk/mavsdk-ubuntu-20.04 as intermediate
+LABEL stage=intermediate
+MAINTAINER Julian Oes <julian@oes.ch>
+
+WORKDIR /home/user/MAVSDK
+ENV FIRMWARE_DIR /home/user/Firmware
+
+RUN apt-get update && \
+    apt-get install -y ssh \
+    && apt-get -y autoremove \
+    && apt-get clean autoclean \
+    && rm -rf /var/lib/apt/lists/{apt,dpkg,cache,log} /tmp/* /var/tmp/*
+
+# add credentials on build
+ARG SSH_PRIVATE_KEY
+RUN mkdir /root/.ssh/
+RUN echo "${SSH_PRIVATE_KEY}" > /root/.ssh/id_rsa
+RUN chmod 600 /root/.ssh/id_rsa
+
+# make sure the domain is accepted
+RUN mkdir -p $/root/.ssh/ && \
+    echo "$SSH_PRIVATE_KEY" > /root/.ssh/id_rsa && \
+    ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+
+RUN git clone git@github.com:Auterion/PX4_firmware_private.git ${FIRMWARE_DIR}
+RUN git -C ${FIRMWARE_DIR} checkout develop
+RUN git -C ${FIRMWARE_DIR} submodule update --init --recursive
+
+FROM mavsdk/mavsdk-ubuntu-20.04
+
+WORKDIR /home/user/MAVSDK
+ENV FIRMWARE_DIR /home/user/Firmware
+
+COPY --from=intermediate /home/user/Firmware/. /home/user/Firmware/
+
+RUN apt-get update && \
+    apt-get install -y locales \
+    && apt-get -y autoremove \
+    && apt-get clean autoclean \
+    && rm -rf /var/lib/apt/lists/{apt,dpkg,cache,log} /tmp/* /var/tmp/*
+
+RUN locale-gen en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
+
+RUN cd ${FIRMWARE_DIR} && Tools/setup/ubuntu.sh --no-nuttx
+RUN cd ${FIRMWARE_DIR} && DONT_RUN=1 make px4_sitl gazebo && DONT_RUN=1 make px4_sitl gazebo

@@ -20,3 +20,11 @@ docker push mavsdk/mavsdk-ubuntu-20.04-px4-sitl-v1.11:latest
 docker push mavsdk/mavsdk-ubuntu-20.04-px4-sitl-v1.12:latest
 docker push mavsdk/mavsdk-ubuntu-20.04-apm-sitl-copter-4.1.2
 docker push mavsdk/mavsdk-ubuntu-20.04-apm-sitl-rover-4.1.2
+
+# APX4 releases
+docker build --build-arg SSH_PRIVATE_KEY="$(cat ~/.ssh/id_rsa)" -f Dockerfile-Ubuntu-20.04-APX4-SITL-v2.1 -t auterion/mavsdk-ubuntu-20.04-apx4-sitl-v2.1 .
+docker build --build-arg SSH_PRIVATE_KEY="$(cat ~/.ssh/id_rsa)" -f Dockerfile-Ubuntu-20.04-APX4-SITL-develop -t auterion/mavsdk-ubuntu-20.04-apx4-sitl-develop .
+
+docker push auterion/mavsdk-ubuntu-20.04-apx4-sitl-v2.1:latest
+docker push auterion/mavsdk-ubuntu-20.04-apx4-sitl-develop:latest
+
