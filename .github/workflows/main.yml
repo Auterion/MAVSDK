@@ -559,3 +559,17 @@ jobs:
           submodules: recursive
       - name: test
         run: PX4_VERSION=${{ matrix.px4_version }} tools/run-sitl-tests.sh /home/user/Firmware
+
+  apx4-sitl:
+    name: PX4 SITL ${{ matrix.px4_version }} (ubuntu-20.04)
+    runs-on: ubuntu-18.04
+    container: auterion/mavsdk-ubuntu-20.04-px4-sitl-${{ matrix.px4_version }}
+    strategy:
+      matrix:
+        px4_version: [v2.1, develop]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: test
+        run: PX4_VERSION=${{ matrix.px4_version }} tools/run-sitl-tests.sh /home/user/Firmware
