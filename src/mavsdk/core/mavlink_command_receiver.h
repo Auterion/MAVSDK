@@ -29,7 +29,8 @@ public:
         Unsupported,
         Timeout,
         InProgress,
-        UnknownError
+        UnknownError,
+        NoAcknowledge
     };
 
     struct CommandInt {
