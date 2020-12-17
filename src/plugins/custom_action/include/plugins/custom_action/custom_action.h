@@ -250,6 +250,24 @@ public:
     ActionToExecute custom_action() const;
 
     /**
+     * @brief Callback type for subscribe_custom_action_cancellation.
+     */
+
+    using CustomActionCancellationCallback = std::function<void(bool)>;
+
+    /**
+     * @brief Receive and process custom action command cancellation.
+     */
+    void subscribe_custom_action_cancellation(CustomActionCancellationCallback callback);
+
+    /**
+     * @brief Poll for 'bool' (blocking).
+     *
+     * @return One bool update.
+     */
+    bool custom_action_cancellation() const;
+
+    /**
      * @brief Respond to the custom action command with progress.
      *
      * This function is non-blocking. See 'respond_custom_action' for the blocking counterpart.
