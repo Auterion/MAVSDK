@@ -28,11 +28,17 @@ void CustomActionImpl::init()
         MAV_CMD_WAYPOINT_USER_1, // MAV_CMD_CUSTOM_ACTION,
         std::bind(&CustomActionImpl::process_custom_action_command, this, _1),
         this);
+
+    _parent->register_mavlink_message_handler(
+        MAVLINK_MSG_ID_COMMAND_CANCEL,
+        std::bind(&CustomActionImpl::process_command_cancellation, this, _1),
+        this);
 }
 
 void CustomActionImpl::deinit()
 {
     _parent->unregister_all_mavlink_command_handlers(this);
+    _parent->unregister_all_mavlink_message_handlers(this);
 }
 
 void CustomActionImpl::enable() {}
@@ -73,14 +79,41 @@ CustomActionImpl::process_custom_action_command(const MavlinkCommandReceiver::Co
         result = _parent->send_message(command_ack);
     }
 
-    return result ? MavlinkCommandReceiver::Result::Success :
+    // If sending the message succeeds, result is NoAcknowledge
+    // so that one does not acknowledge twice
+    return result ? MavlinkCommandReceiver::Result::NoAcknowledge :
                     MavlinkCommandReceiver::Result::UnknownError;
+}
+
+void CustomActionImpl::process_command_cancellation(const mavlink_message_t& message)
+{
+    mavlink_command_cancel_t command_cancel;
+    mavlink_msg_command_cancel_decode(&message, &command_cancel);
+
+    // if (command_cancel.command == MAV_CMD_CUSTOM_ACTION) {
+    if (command_cancel.command == MAV_CMD_WAYPOINT_USER_1) {
+        store_custom_action_cancellation(true);
+    }
+
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    if (_custom_action_command_cancel_subscription) {
+        auto callback = _custom_action_command_cancel_subscription;
+        auto arg1 = custom_action_cancellation();
+
+        _parent->call_user_callback([callback, arg1]() { callback(arg1); });
+    }
 }
 
 void CustomActionImpl::store_custom_action(CustomAction::ActionToExecute action)
 {
     std::lock_guard<std::mutex> lock(_custom_action_mutex);
     _custom_action = action;
+}
+
+void CustomActionImpl::store_custom_action_cancellation(bool action_cancel)
+{
+    std::lock_guard<std::mutex> lock(_custom_action_cancellation_mutex);
+    _custom_action_cancellation = action_cancel;
 }
 
 CustomAction::Result CustomActionImpl::respond_custom_action(
@@ -114,9 +147,10 @@ void CustomActionImpl::respond_custom_action_async(
         0,
         0);
 
-    const CustomAction::Result action_result = _parent->send_message(command_ack) ?
-                                                   CustomAction::Result::Success :
-                                                   CustomAction::Result::Error;
+    auto msg_result = _parent->send_message(command_ack);
+
+    const CustomAction::Result action_result =
+        msg_result ? CustomAction::Result::Success : CustomAction::Result::Error;
 
     if (callback) {
         auto temp_callback = callback;
@@ -135,6 +169,19 @@ void CustomActionImpl::custom_action_async(CustomAction::CustomActionCallback ca
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
     _custom_action_command_subscription = callback;
+}
+
+bool CustomActionImpl::custom_action_cancellation() const
+{
+    std::lock_guard<std::mutex> lock(_custom_action_cancellation_mutex);
+    return _custom_action_cancellation;
+}
+
+void CustomActionImpl::custom_action_cancellation_async(
+    CustomAction::CustomActionCancellationCallback callback)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    _custom_action_command_cancel_subscription = callback;
 }
 
 CustomAction::Result
