@@ -21,6 +21,8 @@ public:
     MavlinkCommandReceiver::Result
     process_custom_action_command(const MavlinkCommandReceiver::CommandLong& command);
 
+    void process_command_cancellation(const mavlink_message_t& message);
+
     CustomAction::Result
     respond_custom_action(CustomAction::ActionToExecute action, CustomAction::Result result) const;
 
@@ -37,6 +39,10 @@ public:
     CustomAction::ActionToExecute custom_action() const;
 
     void custom_action_async(CustomAction::CustomActionCallback callback);
+
+    bool custom_action_cancellation() const;
+
+    void custom_action_cancellation_async(CustomAction::CustomActionCancellationCallback callback);
 
     std::pair<CustomAction::Result, CustomAction::ActionMetadata>
     custom_action_metadata(CustomAction::ActionToExecute& action, std::string& file) const;
@@ -67,11 +73,18 @@ private:
 
     void store_custom_action(CustomAction::ActionToExecute action);
 
+    void store_custom_action_cancellation(bool action_cancel);
+
     mutable std::mutex _custom_action_mutex{};
     CustomAction::ActionToExecute _custom_action{};
 
+    mutable std::mutex _custom_action_cancellation_mutex{};
+    bool _custom_action_cancellation{};
+
     std::mutex _subscription_mutex{};
     CustomAction::CustomActionCallback _custom_action_command_subscription{nullptr};
+    CustomAction::CustomActionCancellationCallback _custom_action_command_cancel_subscription{
+        nullptr};
 };
 
 } // namespace mavsdk

@@ -334,6 +334,41 @@ public:
         return grpc::Status::OK;
     }
 
+    grpc::Status SubscribeCustomActionCancellation(
+        grpc::ServerContext* /* context */,
+        const mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest* /* request */,
+        grpc::ServerWriter<rpc::custom_action::CustomActionCancellationResponse>* writer) override
+    {
+        auto stream_closed_promise = std::make_shared<std::promise<void>>();
+        auto stream_closed_future = stream_closed_promise->get_future();
+        register_stream_stop_promise(stream_closed_promise);
+
+        auto is_finished = std::make_shared<bool>(false);
+
+        std::mutex subscribe_mutex{};
+
+        _custom_action.subscribe_custom_action_cancellation(
+            [this, &writer, &stream_closed_promise, is_finished, &subscribe_mutex](
+                const bool custom_action_cancellation) {
+                rpc::custom_action::CustomActionCancellationResponse rpc_response;
+
+                rpc_response.set_cancel(custom_action_cancellation);
+
+                std::unique_lock<std::mutex> lock(subscribe_mutex);
+                if (!*is_finished && !writer->Write(rpc_response)) {
+                    _custom_action.subscribe_custom_action_cancellation(nullptr);
+
+                    *is_finished = true;
+                    unregister_stream_stop_promise(stream_closed_promise);
+                    lock.unlock();
+                    stream_closed_promise->set_value();
+                }
+            });
+
+        stream_closed_future.wait();
+        return grpc::Status::OK;
+    }
+
     grpc::Status RespondCustomAction(
         grpc::ServerContext* /* context */,
         const rpc::custom_action::RespondCustomActionRequest* request,

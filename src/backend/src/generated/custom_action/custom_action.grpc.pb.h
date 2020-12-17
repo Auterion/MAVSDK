@@ -61,6 +61,17 @@ class CustomActionService final {
       return std::unique_ptr< ::grpc::ClientAsyncReaderInterface< ::mavsdk::rpc::custom_action::SubscribeCustomActionResponse>>(PrepareAsyncSubscribeCustomActionRaw(context, request, cq));
     }
     //
+    // Receive and process custom action command cancellation.
+    std::unique_ptr< ::grpc::ClientReaderInterface< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>> SubscribeCustomActionCancellation(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest& request) {
+      return std::unique_ptr< ::grpc::ClientReaderInterface< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>>(SubscribeCustomActionCancellationRaw(context, request));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncReaderInterface< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>> AsyncSubscribeCustomActionCancellation(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest& request, ::grpc::CompletionQueue* cq, void* tag) {
+      return std::unique_ptr< ::grpc::ClientAsyncReaderInterface< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>>(AsyncSubscribeCustomActionCancellationRaw(context, request, cq, tag));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncReaderInterface< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>> PrepareAsyncSubscribeCustomActionCancellation(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncReaderInterface< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>>(PrepareAsyncSubscribeCustomActionCancellationRaw(context, request, cq));
+    }
+    //
     // Respond to the custom action command with progress.
     virtual ::grpc::Status RespondCustomAction(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::RespondCustomActionRequest& request, ::mavsdk::rpc::custom_action::CustomActionResponse* response) = 0;
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::mavsdk::rpc::custom_action::CustomActionResponse>> AsyncRespondCustomAction(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::RespondCustomActionRequest& request, ::grpc::CompletionQueue* cq) {
@@ -106,6 +117,13 @@ class CustomActionService final {
       virtual void SubscribeCustomAction(::grpc::ClientContext* context, ::mavsdk::rpc::custom_action::SubscribeCustomActionRequest* request, ::grpc::experimental::ClientReadReactor< ::mavsdk::rpc::custom_action::SubscribeCustomActionResponse>* reactor) = 0;
       #endif
       //
+      // Receive and process custom action command cancellation.
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void SubscribeCustomActionCancellation(::grpc::ClientContext* context, ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest* request, ::grpc::ClientReadReactor< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>* reactor) = 0;
+      #else
+      virtual void SubscribeCustomActionCancellation(::grpc::ClientContext* context, ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest* request, ::grpc::experimental::ClientReadReactor< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>* reactor) = 0;
+      #endif
+      //
       // Respond to the custom action command with progress.
       virtual void RespondCustomAction(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::RespondCustomActionRequest* request, ::mavsdk::rpc::custom_action::CustomActionResponse* response, std::function<void(::grpc::Status)>) = 0;
       #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -143,6 +161,9 @@ class CustomActionService final {
     virtual ::grpc::ClientReaderInterface< ::mavsdk::rpc::custom_action::SubscribeCustomActionResponse>* SubscribeCustomActionRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::SubscribeCustomActionRequest& request) = 0;
     virtual ::grpc::ClientAsyncReaderInterface< ::mavsdk::rpc::custom_action::SubscribeCustomActionResponse>* AsyncSubscribeCustomActionRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::SubscribeCustomActionRequest& request, ::grpc::CompletionQueue* cq, void* tag) = 0;
     virtual ::grpc::ClientAsyncReaderInterface< ::mavsdk::rpc::custom_action::SubscribeCustomActionResponse>* PrepareAsyncSubscribeCustomActionRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::SubscribeCustomActionRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientReaderInterface< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>* SubscribeCustomActionCancellationRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest& request) = 0;
+    virtual ::grpc::ClientAsyncReaderInterface< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>* AsyncSubscribeCustomActionCancellationRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest& request, ::grpc::CompletionQueue* cq, void* tag) = 0;
+    virtual ::grpc::ClientAsyncReaderInterface< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>* PrepareAsyncSubscribeCustomActionCancellationRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::mavsdk::rpc::custom_action::CustomActionResponse>* AsyncRespondCustomActionRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::RespondCustomActionRequest& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::mavsdk::rpc::custom_action::CustomActionResponse>* PrepareAsyncRespondCustomActionRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::RespondCustomActionRequest& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::mavsdk::rpc::custom_action::CustomActionMetadataResponse>* AsyncCustomActionMetadataRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::CustomActionMetadataRequest& request, ::grpc::CompletionQueue* cq) = 0;
@@ -168,6 +189,15 @@ class CustomActionService final {
     }
     std::unique_ptr< ::grpc::ClientAsyncReader< ::mavsdk::rpc::custom_action::SubscribeCustomActionResponse>> PrepareAsyncSubscribeCustomAction(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::SubscribeCustomActionRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncReader< ::mavsdk::rpc::custom_action::SubscribeCustomActionResponse>>(PrepareAsyncSubscribeCustomActionRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientReader< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>> SubscribeCustomActionCancellation(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest& request) {
+      return std::unique_ptr< ::grpc::ClientReader< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>>(SubscribeCustomActionCancellationRaw(context, request));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncReader< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>> AsyncSubscribeCustomActionCancellation(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest& request, ::grpc::CompletionQueue* cq, void* tag) {
+      return std::unique_ptr< ::grpc::ClientAsyncReader< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>>(AsyncSubscribeCustomActionCancellationRaw(context, request, cq, tag));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncReader< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>> PrepareAsyncSubscribeCustomActionCancellation(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncReader< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>>(PrepareAsyncSubscribeCustomActionCancellationRaw(context, request, cq));
     }
     ::grpc::Status RespondCustomAction(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::RespondCustomActionRequest& request, ::mavsdk::rpc::custom_action::CustomActionResponse* response) override;
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::mavsdk::rpc::custom_action::CustomActionResponse>> AsyncRespondCustomAction(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::RespondCustomActionRequest& request, ::grpc::CompletionQueue* cq) {
@@ -204,6 +234,11 @@ class CustomActionService final {
       #else
       void SubscribeCustomAction(::grpc::ClientContext* context, ::mavsdk::rpc::custom_action::SubscribeCustomActionRequest* request, ::grpc::experimental::ClientReadReactor< ::mavsdk::rpc::custom_action::SubscribeCustomActionResponse>* reactor) override;
       #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void SubscribeCustomActionCancellation(::grpc::ClientContext* context, ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest* request, ::grpc::ClientReadReactor< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>* reactor) override;
+      #else
+      void SubscribeCustomActionCancellation(::grpc::ClientContext* context, ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest* request, ::grpc::experimental::ClientReadReactor< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>* reactor) override;
+      #endif
       void RespondCustomAction(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::RespondCustomActionRequest* request, ::mavsdk::rpc::custom_action::CustomActionResponse* response, std::function<void(::grpc::Status)>) override;
       #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
       void RespondCustomAction(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::RespondCustomActionRequest* request, ::mavsdk::rpc::custom_action::CustomActionResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
@@ -238,6 +273,9 @@ class CustomActionService final {
     ::grpc::ClientReader< ::mavsdk::rpc::custom_action::SubscribeCustomActionResponse>* SubscribeCustomActionRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::SubscribeCustomActionRequest& request) override;
     ::grpc::ClientAsyncReader< ::mavsdk::rpc::custom_action::SubscribeCustomActionResponse>* AsyncSubscribeCustomActionRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::SubscribeCustomActionRequest& request, ::grpc::CompletionQueue* cq, void* tag) override;
     ::grpc::ClientAsyncReader< ::mavsdk::rpc::custom_action::SubscribeCustomActionResponse>* PrepareAsyncSubscribeCustomActionRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::SubscribeCustomActionRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientReader< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>* SubscribeCustomActionCancellationRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest& request) override;
+    ::grpc::ClientAsyncReader< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>* AsyncSubscribeCustomActionCancellationRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest& request, ::grpc::CompletionQueue* cq, void* tag) override;
+    ::grpc::ClientAsyncReader< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>* PrepareAsyncSubscribeCustomActionCancellationRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::mavsdk::rpc::custom_action::CustomActionResponse>* AsyncRespondCustomActionRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::RespondCustomActionRequest& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::mavsdk::rpc::custom_action::CustomActionResponse>* PrepareAsyncRespondCustomActionRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::RespondCustomActionRequest& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::mavsdk::rpc::custom_action::CustomActionMetadataResponse>* AsyncCustomActionMetadataRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::CustomActionMetadataRequest& request, ::grpc::CompletionQueue* cq) override;
@@ -246,6 +284,7 @@ class CustomActionService final {
     ::grpc::ClientAsyncResponseReader< ::mavsdk::rpc::custom_action::ExecuteCustomActionStageResponse>* PrepareAsyncExecuteCustomActionStageRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::ExecuteCustomActionStageRequest& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_SetCustomAction_;
     const ::grpc::internal::RpcMethod rpcmethod_SubscribeCustomAction_;
+    const ::grpc::internal::RpcMethod rpcmethod_SubscribeCustomActionCancellation_;
     const ::grpc::internal::RpcMethod rpcmethod_RespondCustomAction_;
     const ::grpc::internal::RpcMethod rpcmethod_CustomActionMetadata_;
     const ::grpc::internal::RpcMethod rpcmethod_ExecuteCustomActionStage_;
@@ -262,6 +301,9 @@ class CustomActionService final {
     //
     // Receive and process custom action command.
     virtual ::grpc::Status SubscribeCustomAction(::grpc::ServerContext* context, const ::mavsdk::rpc::custom_action::SubscribeCustomActionRequest* request, ::grpc::ServerWriter< ::mavsdk::rpc::custom_action::SubscribeCustomActionResponse>* writer);
+    //
+    // Receive and process custom action command cancellation.
+    virtual ::grpc::Status SubscribeCustomActionCancellation(::grpc::ServerContext* context, const ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest* request, ::grpc::ServerWriter< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>* writer);
     //
     // Respond to the custom action command with progress.
     virtual ::grpc::Status RespondCustomAction(::grpc::ServerContext* context, const ::mavsdk::rpc::custom_action::RespondCustomActionRequest* request, ::mavsdk::rpc::custom_action::CustomActionResponse* response);
@@ -313,12 +355,32 @@ class CustomActionService final {
     }
   };
   template <class BaseClass>
+  class WithAsyncMethod_SubscribeCustomActionCancellation : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_SubscribeCustomActionCancellation() {
+      ::grpc::Service::MarkMethodAsync(2);
+    }
+    ~WithAsyncMethod_SubscribeCustomActionCancellation() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SubscribeCustomActionCancellation(::grpc::ServerContext* /*context*/, const ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest* /*request*/, ::grpc::ServerWriter< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>* /*writer*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestSubscribeCustomActionCancellation(::grpc::ServerContext* context, ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest* request, ::grpc::ServerAsyncWriter< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>* writer, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncServerStreaming(2, context, request, writer, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
   class WithAsyncMethod_RespondCustomAction : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_RespondCustomAction() {
-      ::grpc::Service::MarkMethodAsync(2);
+      ::grpc::Service::MarkMethodAsync(3);
     }
     ~WithAsyncMethod_RespondCustomAction() override {
       BaseClassMustBeDerivedFromService(this);
@@ -329,7 +391,7 @@ class CustomActionService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestRespondCustomAction(::grpc::ServerContext* context, ::mavsdk::rpc::custom_action::RespondCustomActionRequest* request, ::grpc::ServerAsyncResponseWriter< ::mavsdk::rpc::custom_action::CustomActionResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -338,7 +400,7 @@ class CustomActionService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_CustomActionMetadata() {
-      ::grpc::Service::MarkMethodAsync(3);
+      ::grpc::Service::MarkMethodAsync(4);
     }
     ~WithAsyncMethod_CustomActionMetadata() override {
       BaseClassMustBeDerivedFromService(this);
@@ -349,7 +411,7 @@ class CustomActionService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestCustomActionMetadata(::grpc::ServerContext* context, ::mavsdk::rpc::custom_action::CustomActionMetadataRequest* request, ::grpc::ServerAsyncResponseWriter< ::mavsdk::rpc::custom_action::CustomActionMetadataResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -358,7 +420,7 @@ class CustomActionService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_ExecuteCustomActionStage() {
-      ::grpc::Service::MarkMethodAsync(4);
+      ::grpc::Service::MarkMethodAsync(5);
     }
     ~WithAsyncMethod_ExecuteCustomActionStage() override {
       BaseClassMustBeDerivedFromService(this);
@@ -369,10 +431,10 @@ class CustomActionService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestExecuteCustomActionStage(::grpc::ServerContext* context, ::mavsdk::rpc::custom_action::ExecuteCustomActionStageRequest* request, ::grpc::ServerAsyncResponseWriter< ::mavsdk::rpc::custom_action::ExecuteCustomActionStageResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(5, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_SetCustomAction<WithAsyncMethod_SubscribeCustomAction<WithAsyncMethod_RespondCustomAction<WithAsyncMethod_CustomActionMetadata<WithAsyncMethod_ExecuteCustomActionStage<Service > > > > > AsyncService;
+  typedef WithAsyncMethod_SetCustomAction<WithAsyncMethod_SubscribeCustomAction<WithAsyncMethod_SubscribeCustomActionCancellation<WithAsyncMethod_RespondCustomAction<WithAsyncMethod_CustomActionMetadata<WithAsyncMethod_ExecuteCustomActionStage<Service > > > > > > AsyncService;
   template <class BaseClass>
   class ExperimentalWithCallbackMethod_SetCustomAction : public BaseClass {
    private:
@@ -459,6 +521,44 @@ class CustomActionService final {
       { return nullptr; }
   };
   template <class BaseClass>
+  class ExperimentalWithCallbackMethod_SubscribeCustomActionCancellation : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithCallbackMethod_SubscribeCustomActionCancellation() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodCallback(2,
+          new ::grpc::internal::CallbackServerStreamingHandler< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest, ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest* request) { return this->SubscribeCustomActionCancellation(context, request); }));
+    }
+    ~ExperimentalWithCallbackMethod_SubscribeCustomActionCancellation() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SubscribeCustomActionCancellation(::grpc::ServerContext* /*context*/, const ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest* /*request*/, ::grpc::ServerWriter< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>* /*writer*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerWriteReactor< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>* SubscribeCustomActionCancellation(
+      ::grpc::CallbackServerContext* /*context*/, const ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest* /*request*/)
+    #else
+    virtual ::grpc::experimental::ServerWriteReactor< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>* SubscribeCustomActionCancellation(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest* /*request*/)
+    #endif
+      { return nullptr; }
+  };
+  template <class BaseClass>
   class ExperimentalWithCallbackMethod_RespondCustomAction : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
@@ -469,7 +569,7 @@ class CustomActionService final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodCallback(2,
+        MarkMethodCallback(3,
           new ::grpc::internal::CallbackUnaryHandler< ::mavsdk::rpc::custom_action::RespondCustomActionRequest, ::mavsdk::rpc::custom_action::CustomActionResponse>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -481,9 +581,9 @@ class CustomActionService final {
     void SetMessageAllocatorFor_RespondCustomAction(
         ::grpc::experimental::MessageAllocator< ::mavsdk::rpc::custom_action::RespondCustomActionRequest, ::mavsdk::rpc::custom_action::CustomActionResponse>* allocator) {
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(2);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(3);
     #else
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(2);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(3);
     #endif
       static_cast<::grpc::internal::CallbackUnaryHandler< ::mavsdk::rpc::custom_action::RespondCustomActionRequest, ::mavsdk::rpc::custom_action::CustomActionResponse>*>(handler)
               ->SetMessageAllocator(allocator);
@@ -516,7 +616,7 @@ class CustomActionService final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodCallback(3,
+        MarkMethodCallback(4,
           new ::grpc::internal::CallbackUnaryHandler< ::mavsdk::rpc::custom_action::CustomActionMetadataRequest, ::mavsdk::rpc::custom_action::CustomActionMetadataResponse>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -528,9 +628,9 @@ class CustomActionService final {
     void SetMessageAllocatorFor_CustomActionMetadata(
         ::grpc::experimental::MessageAllocator< ::mavsdk::rpc::custom_action::CustomActionMetadataRequest, ::mavsdk::rpc::custom_action::CustomActionMetadataResponse>* allocator) {
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(3);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(4);
     #else
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(3);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(4);
     #endif
       static_cast<::grpc::internal::CallbackUnaryHandler< ::mavsdk::rpc::custom_action::CustomActionMetadataRequest, ::mavsdk::rpc::custom_action::CustomActionMetadataResponse>*>(handler)
               ->SetMessageAllocator(allocator);
@@ -563,7 +663,7 @@ class CustomActionService final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodCallback(4,
+        MarkMethodCallback(5,
           new ::grpc::internal::CallbackUnaryHandler< ::mavsdk::rpc::custom_action::ExecuteCustomActionStageRequest, ::mavsdk::rpc::custom_action::ExecuteCustomActionStageResponse>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -575,9 +675,9 @@ class CustomActionService final {
     void SetMessageAllocatorFor_ExecuteCustomActionStage(
         ::grpc::experimental::MessageAllocator< ::mavsdk::rpc::custom_action::ExecuteCustomActionStageRequest, ::mavsdk::rpc::custom_action::ExecuteCustomActionStageResponse>* allocator) {
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(4);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(5);
     #else
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(4);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(5);
     #endif
       static_cast<::grpc::internal::CallbackUnaryHandler< ::mavsdk::rpc::custom_action::ExecuteCustomActionStageRequest, ::mavsdk::rpc::custom_action::ExecuteCustomActionStageResponse>*>(handler)
               ->SetMessageAllocator(allocator);
@@ -600,10 +700,10 @@ class CustomActionService final {
       { return nullptr; }
   };
   #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-  typedef ExperimentalWithCallbackMethod_SetCustomAction<ExperimentalWithCallbackMethod_SubscribeCustomAction<ExperimentalWithCallbackMethod_RespondCustomAction<ExperimentalWithCallbackMethod_CustomActionMetadata<ExperimentalWithCallbackMethod_ExecuteCustomActionStage<Service > > > > > CallbackService;
+  typedef ExperimentalWithCallbackMethod_SetCustomAction<ExperimentalWithCallbackMethod_SubscribeCustomAction<ExperimentalWithCallbackMethod_SubscribeCustomActionCancellation<ExperimentalWithCallbackMethod_RespondCustomAction<ExperimentalWithCallbackMethod_CustomActionMetadata<ExperimentalWithCallbackMethod_ExecuteCustomActionStage<Service > > > > > > CallbackService;
   #endif
 
-  typedef ExperimentalWithCallbackMethod_SetCustomAction<ExperimentalWithCallbackMethod_SubscribeCustomAction<ExperimentalWithCallbackMethod_RespondCustomAction<ExperimentalWithCallbackMethod_CustomActionMetadata<ExperimentalWithCallbackMethod_ExecuteCustomActionStage<Service > > > > > ExperimentalCallbackService;
+  typedef ExperimentalWithCallbackMethod_SetCustomAction<ExperimentalWithCallbackMethod_SubscribeCustomAction<ExperimentalWithCallbackMethod_SubscribeCustomActionCancellation<ExperimentalWithCallbackMethod_RespondCustomAction<ExperimentalWithCallbackMethod_CustomActionMetadata<ExperimentalWithCallbackMethod_ExecuteCustomActionStage<Service > > > > > > ExperimentalCallbackService;
   template <class BaseClass>
   class WithGenericMethod_SetCustomAction : public BaseClass {
    private:
@@ -639,12 +739,29 @@ class CustomActionService final {
     }
   };
   template <class BaseClass>
+  class WithGenericMethod_SubscribeCustomActionCancellation : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_SubscribeCustomActionCancellation() {
+      ::grpc::Service::MarkMethodGeneric(2);
+    }
+    ~WithGenericMethod_SubscribeCustomActionCancellation() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SubscribeCustomActionCancellation(::grpc::ServerContext* /*context*/, const ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest* /*request*/, ::grpc::ServerWriter< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>* /*writer*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
   class WithGenericMethod_RespondCustomAction : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_RespondCustomAction() {
-      ::grpc::Service::MarkMethodGeneric(2);
+      ::grpc::Service::MarkMethodGeneric(3);
     }
     ~WithGenericMethod_RespondCustomAction() override {
       BaseClassMustBeDerivedFromService(this);
@@ -661,7 +778,7 @@ class CustomActionService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_CustomActionMetadata() {
-      ::grpc::Service::MarkMethodGeneric(3);
+      ::grpc::Service::MarkMethodGeneric(4);
     }
     ~WithGenericMethod_CustomActionMetadata() override {
       BaseClassMustBeDerivedFromService(this);
@@ -678,7 +795,7 @@ class CustomActionService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_ExecuteCustomActionStage() {
-      ::grpc::Service::MarkMethodGeneric(4);
+      ::grpc::Service::MarkMethodGeneric(5);
     }
     ~WithGenericMethod_ExecuteCustomActionStage() override {
       BaseClassMustBeDerivedFromService(this);
@@ -730,12 +847,32 @@ class CustomActionService final {
     }
   };
   template <class BaseClass>
+  class WithRawMethod_SubscribeCustomActionCancellation : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_SubscribeCustomActionCancellation() {
+      ::grpc::Service::MarkMethodRaw(2);
+    }
+    ~WithRawMethod_SubscribeCustomActionCancellation() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SubscribeCustomActionCancellation(::grpc::ServerContext* /*context*/, const ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest* /*request*/, ::grpc::ServerWriter< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>* /*writer*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestSubscribeCustomActionCancellation(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncWriter< ::grpc::ByteBuffer>* writer, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncServerStreaming(2, context, request, writer, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
   class WithRawMethod_RespondCustomAction : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_RespondCustomAction() {
-      ::grpc::Service::MarkMethodRaw(2);
+      ::grpc::Service::MarkMethodRaw(3);
     }
     ~WithRawMethod_RespondCustomAction() override {
       BaseClassMustBeDerivedFromService(this);
@@ -746,7 +883,7 @@ class CustomActionService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestRespondCustomAction(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -755,7 +892,7 @@ class CustomActionService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_CustomActionMetadata() {
-      ::grpc::Service::MarkMethodRaw(3);
+      ::grpc::Service::MarkMethodRaw(4);
     }
     ~WithRawMethod_CustomActionMetadata() override {
       BaseClassMustBeDerivedFromService(this);
@@ -766,7 +903,7 @@ class CustomActionService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestCustomActionMetadata(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -775,7 +912,7 @@ class CustomActionService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_ExecuteCustomActionStage() {
-      ::grpc::Service::MarkMethodRaw(4);
+      ::grpc::Service::MarkMethodRaw(5);
     }
     ~WithRawMethod_ExecuteCustomActionStage() override {
       BaseClassMustBeDerivedFromService(this);
@@ -786,7 +923,7 @@ class CustomActionService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestExecuteCustomActionStage(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(5, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -866,6 +1003,44 @@ class CustomActionService final {
       { return nullptr; }
   };
   template <class BaseClass>
+  class ExperimentalWithRawCallbackMethod_SubscribeCustomActionCancellation : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithRawCallbackMethod_SubscribeCustomActionCancellation() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodRawCallback(2,
+          new ::grpc::internal::CallbackServerStreamingHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const::grpc::ByteBuffer* request) { return this->SubscribeCustomActionCancellation(context, request); }));
+    }
+    ~ExperimentalWithRawCallbackMethod_SubscribeCustomActionCancellation() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SubscribeCustomActionCancellation(::grpc::ServerContext* /*context*/, const ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest* /*request*/, ::grpc::ServerWriter< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>* /*writer*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerWriteReactor< ::grpc::ByteBuffer>* SubscribeCustomActionCancellation(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/)
+    #else
+    virtual ::grpc::experimental::ServerWriteReactor< ::grpc::ByteBuffer>* SubscribeCustomActionCancellation(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/)
+    #endif
+      { return nullptr; }
+  };
+  template <class BaseClass>
   class ExperimentalWithRawCallbackMethod_RespondCustomAction : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
@@ -876,7 +1051,7 @@ class CustomActionService final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodRawCallback(2,
+        MarkMethodRawCallback(3,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -914,7 +1089,7 @@ class CustomActionService final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodRawCallback(3,
+        MarkMethodRawCallback(4,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -952,7 +1127,7 @@ class CustomActionService final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodRawCallback(4,
+        MarkMethodRawCallback(5,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -1012,7 +1187,7 @@ class CustomActionService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_RespondCustomAction() {
-      ::grpc::Service::MarkMethodStreamed(2,
+      ::grpc::Service::MarkMethodStreamed(3,
         new ::grpc::internal::StreamedUnaryHandler<
           ::mavsdk::rpc::custom_action::RespondCustomActionRequest, ::mavsdk::rpc::custom_action::CustomActionResponse>(
             [this](::grpc::ServerContext* context,
@@ -1039,7 +1214,7 @@ class CustomActionService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_CustomActionMetadata() {
-      ::grpc::Service::MarkMethodStreamed(3,
+      ::grpc::Service::MarkMethodStreamed(4,
         new ::grpc::internal::StreamedUnaryHandler<
           ::mavsdk::rpc::custom_action::CustomActionMetadataRequest, ::mavsdk::rpc::custom_action::CustomActionMetadataResponse>(
             [this](::grpc::ServerContext* context,
@@ -1066,7 +1241,7 @@ class CustomActionService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_ExecuteCustomActionStage() {
-      ::grpc::Service::MarkMethodStreamed(4,
+      ::grpc::Service::MarkMethodStreamed(5,
         new ::grpc::internal::StreamedUnaryHandler<
           ::mavsdk::rpc::custom_action::ExecuteCustomActionStageRequest, ::mavsdk::rpc::custom_action::ExecuteCustomActionStageResponse>(
             [this](::grpc::ServerContext* context,
@@ -1115,8 +1290,35 @@ class CustomActionService final {
     // replace default version of method with split streamed
     virtual ::grpc::Status StreamedSubscribeCustomAction(::grpc::ServerContext* context, ::grpc::ServerSplitStreamer< ::mavsdk::rpc::custom_action::SubscribeCustomActionRequest,::mavsdk::rpc::custom_action::SubscribeCustomActionResponse>* server_split_streamer) = 0;
   };
-  typedef WithSplitStreamingMethod_SubscribeCustomAction<Service > SplitStreamedService;
-  typedef WithStreamedUnaryMethod_SetCustomAction<WithSplitStreamingMethod_SubscribeCustomAction<WithStreamedUnaryMethod_RespondCustomAction<WithStreamedUnaryMethod_CustomActionMetadata<WithStreamedUnaryMethod_ExecuteCustomActionStage<Service > > > > > StreamedService;
+  template <class BaseClass>
+  class WithSplitStreamingMethod_SubscribeCustomActionCancellation : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithSplitStreamingMethod_SubscribeCustomActionCancellation() {
+      ::grpc::Service::MarkMethodStreamed(2,
+        new ::grpc::internal::SplitServerStreamingHandler<
+          ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest, ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerSplitStreamer<
+                     ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest, ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>* streamer) {
+                       return this->StreamedSubscribeCustomActionCancellation(context,
+                         streamer);
+                  }));
+    }
+    ~WithSplitStreamingMethod_SubscribeCustomActionCancellation() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status SubscribeCustomActionCancellation(::grpc::ServerContext* /*context*/, const ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest* /*request*/, ::grpc::ServerWriter< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>* /*writer*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with split streamed
+    virtual ::grpc::Status StreamedSubscribeCustomActionCancellation(::grpc::ServerContext* context, ::grpc::ServerSplitStreamer< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest,::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>* server_split_streamer) = 0;
+  };
+  typedef WithSplitStreamingMethod_SubscribeCustomAction<WithSplitStreamingMethod_SubscribeCustomActionCancellation<Service > > SplitStreamedService;
+  typedef WithStreamedUnaryMethod_SetCustomAction<WithSplitStreamingMethod_SubscribeCustomAction<WithSplitStreamingMethod_SubscribeCustomActionCancellation<WithStreamedUnaryMethod_RespondCustomAction<WithStreamedUnaryMethod_CustomActionMetadata<WithStreamedUnaryMethod_ExecuteCustomActionStage<Service > > > > > > StreamedService;
 };
 
 }  // namespace custom_action

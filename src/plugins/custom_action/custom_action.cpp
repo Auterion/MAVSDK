@@ -44,6 +44,16 @@ CustomAction::ActionToExecute CustomAction::custom_action() const
     return _impl->custom_action();
 }
 
+void CustomAction::subscribe_custom_action_cancellation(CustomActionCancellationCallback callback)
+{
+    _impl->custom_action_cancellation_async(callback);
+}
+
+bool CustomAction::custom_action_cancellation() const
+{
+    return _impl->custom_action_cancellation();
+}
+
 void CustomAction::respond_custom_action_async(
     ActionToExecute action, Result result, const ResultCallback callback)
 {
