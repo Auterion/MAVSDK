@@ -48,7 +48,7 @@ struct TableStruct_custom_5faction_2fcustom_5faction_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[15]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[17]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -97,6 +97,12 @@ extern SetCustomActionResponseDefaultTypeInternal _SetCustomActionResponse_defau
 class Stage;
 class StageDefaultTypeInternal;
 extern StageDefaultTypeInternal _Stage_default_instance_;
+class SubscribeCustomActionCancellationRequest;
+class SubscribeCustomActionCancellationRequestDefaultTypeInternal;
+extern SubscribeCustomActionCancellationRequestDefaultTypeInternal _SubscribeCustomActionCancellationRequest_default_instance_;
+class SubscribeCustomActionCancellationResponse;
+class SubscribeCustomActionCancellationResponseDefaultTypeInternal;
+extern SubscribeCustomActionCancellationResponseDefaultTypeInternal _SubscribeCustomActionCancellationResponse_default_instance_;
 class SubscribeCustomActionRequest;
 class SubscribeCustomActionRequestDefaultTypeInternal;
 extern SubscribeCustomActionRequestDefaultTypeInternal _SubscribeCustomActionRequest_default_instance_;
@@ -120,6 +126,8 @@ template<> ::mavsdk::rpc::custom_action::RespondCustomActionRequest* Arena::Crea
 template<> ::mavsdk::rpc::custom_action::SetCustomActionRequest* Arena::CreateMaybeMessage<::mavsdk::rpc::custom_action::SetCustomActionRequest>(Arena*);
 template<> ::mavsdk::rpc::custom_action::SetCustomActionResponse* Arena::CreateMaybeMessage<::mavsdk::rpc::custom_action::SetCustomActionResponse>(Arena*);
 template<> ::mavsdk::rpc::custom_action::Stage* Arena::CreateMaybeMessage<::mavsdk::rpc::custom_action::Stage>(Arena*);
+template<> ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest* Arena::CreateMaybeMessage<::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest>(Arena*);
+template<> ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse* Arena::CreateMaybeMessage<::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>(Arena*);
 template<> ::mavsdk::rpc::custom_action::SubscribeCustomActionRequest* Arena::CreateMaybeMessage<::mavsdk::rpc::custom_action::SubscribeCustomActionRequest>(Arena*);
 template<> ::mavsdk::rpc::custom_action::SubscribeCustomActionResponse* Arena::CreateMaybeMessage<::mavsdk::rpc::custom_action::SubscribeCustomActionResponse>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
@@ -745,6 +753,267 @@ class SubscribeCustomActionResponse PROTOBUF_FINAL :
 };
 // -------------------------------------------------------------------
 
+class SubscribeCustomActionCancellationRequest PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:mavsdk.rpc.custom_action.SubscribeCustomActionCancellationRequest) */ {
+ public:
+  inline SubscribeCustomActionCancellationRequest() : SubscribeCustomActionCancellationRequest(nullptr) {}
+  virtual ~SubscribeCustomActionCancellationRequest();
+
+  SubscribeCustomActionCancellationRequest(const SubscribeCustomActionCancellationRequest& from);
+  SubscribeCustomActionCancellationRequest(SubscribeCustomActionCancellationRequest&& from) noexcept
+    : SubscribeCustomActionCancellationRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline SubscribeCustomActionCancellationRequest& operator=(const SubscribeCustomActionCancellationRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SubscribeCustomActionCancellationRequest& operator=(SubscribeCustomActionCancellationRequest&& from) noexcept {
+    if (GetArena() == from.GetArena()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const SubscribeCustomActionCancellationRequest& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const SubscribeCustomActionCancellationRequest* internal_default_instance() {
+    return reinterpret_cast<const SubscribeCustomActionCancellationRequest*>(
+               &_SubscribeCustomActionCancellationRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    4;
+
+  friend void swap(SubscribeCustomActionCancellationRequest& a, SubscribeCustomActionCancellationRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SubscribeCustomActionCancellationRequest* other) {
+    if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(SubscribeCustomActionCancellationRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline SubscribeCustomActionCancellationRequest* New() const final {
+    return CreateMaybeMessage<SubscribeCustomActionCancellationRequest>(nullptr);
+  }
+
+  SubscribeCustomActionCancellationRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<SubscribeCustomActionCancellationRequest>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const SubscribeCustomActionCancellationRequest& from);
+  void MergeFrom(const SubscribeCustomActionCancellationRequest& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SubscribeCustomActionCancellationRequest* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "mavsdk.rpc.custom_action.SubscribeCustomActionCancellationRequest";
+  }
+  protected:
+  explicit SubscribeCustomActionCancellationRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_custom_5faction_2fcustom_5faction_2eproto);
+    return ::descriptor_table_custom_5faction_2fcustom_5faction_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:mavsdk.rpc.custom_action.SubscribeCustomActionCancellationRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_custom_5faction_2fcustom_5faction_2eproto;
+};
+// -------------------------------------------------------------------
+
+class SubscribeCustomActionCancellationResponse PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:mavsdk.rpc.custom_action.SubscribeCustomActionCancellationResponse) */ {
+ public:
+  inline SubscribeCustomActionCancellationResponse() : SubscribeCustomActionCancellationResponse(nullptr) {}
+  virtual ~SubscribeCustomActionCancellationResponse();
+
+  SubscribeCustomActionCancellationResponse(const SubscribeCustomActionCancellationResponse& from);
+  SubscribeCustomActionCancellationResponse(SubscribeCustomActionCancellationResponse&& from) noexcept
+    : SubscribeCustomActionCancellationResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline SubscribeCustomActionCancellationResponse& operator=(const SubscribeCustomActionCancellationResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SubscribeCustomActionCancellationResponse& operator=(SubscribeCustomActionCancellationResponse&& from) noexcept {
+    if (GetArena() == from.GetArena()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const SubscribeCustomActionCancellationResponse& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const SubscribeCustomActionCancellationResponse* internal_default_instance() {
+    return reinterpret_cast<const SubscribeCustomActionCancellationResponse*>(
+               &_SubscribeCustomActionCancellationResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    5;
+
+  friend void swap(SubscribeCustomActionCancellationResponse& a, SubscribeCustomActionCancellationResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SubscribeCustomActionCancellationResponse* other) {
+    if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(SubscribeCustomActionCancellationResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline SubscribeCustomActionCancellationResponse* New() const final {
+    return CreateMaybeMessage<SubscribeCustomActionCancellationResponse>(nullptr);
+  }
+
+  SubscribeCustomActionCancellationResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<SubscribeCustomActionCancellationResponse>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const SubscribeCustomActionCancellationResponse& from);
+  void MergeFrom(const SubscribeCustomActionCancellationResponse& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SubscribeCustomActionCancellationResponse* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "mavsdk.rpc.custom_action.SubscribeCustomActionCancellationResponse";
+  }
+  protected:
+  explicit SubscribeCustomActionCancellationResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_custom_5faction_2fcustom_5faction_2eproto);
+    return ::descriptor_table_custom_5faction_2fcustom_5faction_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kCancelFieldNumber = 1,
+  };
+  // bool cancel = 1;
+  void clear_cancel();
+  bool cancel() const;
+  void set_cancel(bool value);
+  private:
+  bool _internal_cancel() const;
+  void _internal_set_cancel(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:mavsdk.rpc.custom_action.SubscribeCustomActionCancellationResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  bool cancel_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_custom_5faction_2fcustom_5faction_2eproto;
+};
+// -------------------------------------------------------------------
+
 class RespondCustomActionRequest PROTOBUF_FINAL :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:mavsdk.rpc.custom_action.RespondCustomActionRequest) */ {
  public:
@@ -787,7 +1056,7 @@ class RespondCustomActionRequest PROTOBUF_FINAL :
                &_RespondCustomActionRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    4;
+    6;
 
   friend void swap(RespondCustomActionRequest& a, RespondCustomActionRequest& b) {
     a.Swap(&b);
@@ -953,7 +1222,7 @@ class CustomActionResponse PROTOBUF_FINAL :
                &_CustomActionResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    7;
 
   friend void swap(CustomActionResponse& a, CustomActionResponse& b) {
     a.Swap(&b);
@@ -1099,7 +1368,7 @@ class CustomActionMetadataRequest PROTOBUF_FINAL :
                &_CustomActionMetadataRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    6;
+    8;
 
   friend void swap(CustomActionMetadataRequest& a, CustomActionMetadataRequest& b) {
     a.Swap(&b);
@@ -1263,7 +1532,7 @@ class CustomActionMetadataResponse PROTOBUF_FINAL :
                &_CustomActionMetadataResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    9;
 
   friend void swap(CustomActionMetadataResponse& a, CustomActionMetadataResponse& b) {
     a.Swap(&b);
@@ -1429,7 +1698,7 @@ class ExecuteCustomActionStageRequest PROTOBUF_FINAL :
                &_ExecuteCustomActionStageRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    8;
+    10;
 
   friend void swap(ExecuteCustomActionStageRequest& a, ExecuteCustomActionStageRequest& b) {
     a.Swap(&b);
@@ -1575,7 +1844,7 @@ class ExecuteCustomActionStageResponse PROTOBUF_FINAL :
                &_ExecuteCustomActionStageResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    11;
 
   friend void swap(ExecuteCustomActionStageResponse& a, ExecuteCustomActionStageResponse& b) {
     a.Swap(&b);
@@ -1721,7 +1990,7 @@ class ActionToExecute PROTOBUF_FINAL :
                &_ActionToExecute_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    10;
+    12;
 
   friend void swap(ActionToExecute& a, ActionToExecute& b) {
     a.Swap(&b);
@@ -1880,7 +2149,7 @@ class Command PROTOBUF_FINAL :
                &_Command_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    11;
+    13;
 
   friend void swap(Command& a, Command& b) {
     a.Swap(&b);
@@ -2179,7 +2448,7 @@ class Stage PROTOBUF_FINAL :
                &_Stage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    12;
+    14;
 
   friend void swap(Stage& a, Stage& b) {
     a.Swap(&b);
@@ -2365,7 +2634,7 @@ class ActionMetadata PROTOBUF_FINAL :
                &_ActionMetadata_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    13;
+    15;
 
   friend void swap(ActionMetadata& a, ActionMetadata& b) {
     a.Swap(&b);
@@ -2576,7 +2845,7 @@ class CustomActionResult PROTOBUF_FINAL :
                &_CustomActionResult_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    14;
+    16;
 
   friend void swap(CustomActionResult& a, CustomActionResult& b) {
     a.Swap(&b);
@@ -2995,6 +3264,34 @@ inline void SubscribeCustomActionResponse::set_allocated_action(::mavsdk::rpc::c
   }
   action_ = action;
   // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.custom_action.SubscribeCustomActionResponse.action)
+}
+
+// -------------------------------------------------------------------
+
+// SubscribeCustomActionCancellationRequest
+
+// -------------------------------------------------------------------
+
+// SubscribeCustomActionCancellationResponse
+
+// bool cancel = 1;
+inline void SubscribeCustomActionCancellationResponse::clear_cancel() {
+  cancel_ = false;
+}
+inline bool SubscribeCustomActionCancellationResponse::_internal_cancel() const {
+  return cancel_;
+}
+inline bool SubscribeCustomActionCancellationResponse::cancel() const {
+  // @@protoc_insertion_point(field_get:mavsdk.rpc.custom_action.SubscribeCustomActionCancellationResponse.cancel)
+  return _internal_cancel();
+}
+inline void SubscribeCustomActionCancellationResponse::_internal_set_cancel(bool value) {
+  
+  cancel_ = value;
+}
+inline void SubscribeCustomActionCancellationResponse::set_cancel(bool value) {
+  _internal_set_cancel(value);
+  // @@protoc_insertion_point(field_set:mavsdk.rpc.custom_action.SubscribeCustomActionCancellationResponse.cancel)
 }
 
 // -------------------------------------------------------------------
@@ -4602,6 +4899,10 @@ inline void CustomActionResult::set_allocated_result_str(std::string* result_str
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

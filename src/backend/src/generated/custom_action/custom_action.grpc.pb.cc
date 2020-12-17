@@ -26,6 +26,7 @@ namespace custom_action {
 static const char* CustomActionService_method_names[] = {
   "/mavsdk.rpc.custom_action.CustomActionService/SetCustomAction",
   "/mavsdk.rpc.custom_action.CustomActionService/SubscribeCustomAction",
+  "/mavsdk.rpc.custom_action.CustomActionService/SubscribeCustomActionCancellation",
   "/mavsdk.rpc.custom_action.CustomActionService/RespondCustomAction",
   "/mavsdk.rpc.custom_action.CustomActionService/CustomActionMetadata",
   "/mavsdk.rpc.custom_action.CustomActionService/ExecuteCustomActionStage",
@@ -40,9 +41,10 @@ std::unique_ptr< CustomActionService::Stub> CustomActionService::NewStub(const s
 CustomActionService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel)
   : channel_(channel), rpcmethod_SetCustomAction_(CustomActionService_method_names[0], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_SubscribeCustomAction_(CustomActionService_method_names[1], ::grpc::internal::RpcMethod::SERVER_STREAMING, channel)
-  , rpcmethod_RespondCustomAction_(CustomActionService_method_names[2], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_CustomActionMetadata_(CustomActionService_method_names[3], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_ExecuteCustomActionStage_(CustomActionService_method_names[4], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_SubscribeCustomActionCancellation_(CustomActionService_method_names[2], ::grpc::internal::RpcMethod::SERVER_STREAMING, channel)
+  , rpcmethod_RespondCustomAction_(CustomActionService_method_names[3], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_CustomActionMetadata_(CustomActionService_method_names[4], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_ExecuteCustomActionStage_(CustomActionService_method_names[5], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status CustomActionService::Stub::SetCustomAction(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::SetCustomActionRequest& request, ::mavsdk::rpc::custom_action::SetCustomActionResponse* response) {
@@ -82,6 +84,22 @@ void CustomActionService::Stub::experimental_async::SubscribeCustomAction(::grpc
 
 ::grpc::ClientAsyncReader< ::mavsdk::rpc::custom_action::SubscribeCustomActionResponse>* CustomActionService::Stub::PrepareAsyncSubscribeCustomActionRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::SubscribeCustomActionRequest& request, ::grpc::CompletionQueue* cq) {
   return ::grpc::internal::ClientAsyncReaderFactory< ::mavsdk::rpc::custom_action::SubscribeCustomActionResponse>::Create(channel_.get(), cq, rpcmethod_SubscribeCustomAction_, context, request, false, nullptr);
+}
+
+::grpc::ClientReader< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>* CustomActionService::Stub::SubscribeCustomActionCancellationRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest& request) {
+  return ::grpc::internal::ClientReaderFactory< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>::Create(channel_.get(), rpcmethod_SubscribeCustomActionCancellation_, context, request);
+}
+
+void CustomActionService::Stub::experimental_async::SubscribeCustomActionCancellation(::grpc::ClientContext* context, ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest* request, ::grpc::experimental::ClientReadReactor< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>* reactor) {
+  ::grpc::internal::ClientCallbackReaderFactory< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>::Create(stub_->channel_.get(), stub_->rpcmethod_SubscribeCustomActionCancellation_, context, request, reactor);
+}
+
+::grpc::ClientAsyncReader< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>* CustomActionService::Stub::AsyncSubscribeCustomActionCancellationRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest& request, ::grpc::CompletionQueue* cq, void* tag) {
+  return ::grpc::internal::ClientAsyncReaderFactory< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>::Create(channel_.get(), cq, rpcmethod_SubscribeCustomActionCancellation_, context, request, true, tag);
+}
+
+::grpc::ClientAsyncReader< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>* CustomActionService::Stub::PrepareAsyncSubscribeCustomActionCancellationRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncReaderFactory< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>::Create(channel_.get(), cq, rpcmethod_SubscribeCustomActionCancellation_, context, request, false, nullptr);
 }
 
 ::grpc::Status CustomActionService::Stub::RespondCustomAction(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::RespondCustomActionRequest& request, ::mavsdk::rpc::custom_action::CustomActionResponse* response) {
@@ -176,6 +194,16 @@ CustomActionService::Service::Service() {
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       CustomActionService_method_names[2],
+      ::grpc::internal::RpcMethod::SERVER_STREAMING,
+      new ::grpc::internal::ServerStreamingHandler< CustomActionService::Service, ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest, ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>(
+          [](CustomActionService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest* req,
+             ::grpc::ServerWriter<::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>* writer) {
+               return service->SubscribeCustomActionCancellation(ctx, req, writer);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      CustomActionService_method_names[3],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< CustomActionService::Service, ::mavsdk::rpc::custom_action::RespondCustomActionRequest, ::mavsdk::rpc::custom_action::CustomActionResponse>(
           [](CustomActionService::Service* service,
@@ -185,7 +213,7 @@ CustomActionService::Service::Service() {
                return service->RespondCustomAction(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      CustomActionService_method_names[3],
+      CustomActionService_method_names[4],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< CustomActionService::Service, ::mavsdk::rpc::custom_action::CustomActionMetadataRequest, ::mavsdk::rpc::custom_action::CustomActionMetadataResponse>(
           [](CustomActionService::Service* service,
@@ -195,7 +223,7 @@ CustomActionService::Service::Service() {
                return service->CustomActionMetadata(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      CustomActionService_method_names[4],
+      CustomActionService_method_names[5],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< CustomActionService::Service, ::mavsdk::rpc::custom_action::ExecuteCustomActionStageRequest, ::mavsdk::rpc::custom_action::ExecuteCustomActionStageResponse>(
           [](CustomActionService::Service* service,
@@ -217,6 +245,13 @@ CustomActionService::Service::~Service() {
 }
 
 ::grpc::Status CustomActionService::Service::SubscribeCustomAction(::grpc::ServerContext* context, const ::mavsdk::rpc::custom_action::SubscribeCustomActionRequest* request, ::grpc::ServerWriter< ::mavsdk::rpc::custom_action::SubscribeCustomActionResponse>* writer) {
+  (void) context;
+  (void) request;
+  (void) writer;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status CustomActionService::Service::SubscribeCustomActionCancellation(::grpc::ServerContext* context, const ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest* request, ::grpc::ServerWriter< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse>* writer) {
   (void) context;
   (void) request;
   (void) writer;
