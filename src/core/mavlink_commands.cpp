@@ -353,23 +353,24 @@ void MavlinkCommandReceiver::receive_command_int(const mavlink_message_t& messag
         if (it->cmd_id == command_int.command) {
             MavlinkCommandReceiver::Result result = it->callback(cmd);
 
-            // LogDebug() << "Result: "
-            //            << std::to_string(static_cast<uint8_t>(result));
+            // If NoAcknowledge is returned, means probably that the
+            // client side is sending an acknowledge itself
+            if (result != MavlinkCommandReceiver::Result::NoAcknowledge) {
+                // Send ACK based on the result of the callback
+                mavlink_message_t command_ack;
+                mavlink_msg_command_ack_pack(
+                    _parent.get_own_system_id(),
+                    _parent.get_own_component_id(),
+                    &command_ack,
+                    command_int.command,
+                    static_cast<uint8_t>(result),
+                    0,
+                    0,
+                    0,
+                    0);
 
-            // Send ACK based on the result of the callback
-            mavlink_message_t command_ack;
-            mavlink_msg_command_ack_pack(
-                _parent.get_own_system_id(),
-                _parent.get_own_component_id(),
-                &command_ack,
-                command_int.command,
-                static_cast<uint8_t>(result),
-                0,
-                0,
-                0,
-                0);
-
-            _parent.send_message(command_ack);
+                _parent.send_message(command_ack);
+            }
         }
     }
 }
@@ -388,23 +389,24 @@ void MavlinkCommandReceiver::receive_command_long(const mavlink_message_t& messa
         if (it->cmd_id == command_long.command) {
             MavlinkCommandReceiver::Result result = it->callback(cmd);
 
-            // LogDebug() << "Result: "
-            //            << std::to_string(static_cast<uint8_t>(result));
+            // If NoAcknowledge is returned, means probably that the
+            // client side is sending an acknowledge itself
+            if (result != MavlinkCommandReceiver::Result::NoAcknowledge) {
+                // Send ACK based on the result of the callback
+                mavlink_message_t command_ack;
+                mavlink_msg_command_ack_pack(
+                    _parent.get_own_system_id(),
+                    _parent.get_own_component_id(),
+                    &command_ack,
+                    command_long.command,
+                    static_cast<uint8_t>(result),
+                    0,
+                    0,
+                    0,
+                    0);
 
-            // Send ACK based on the result of the callback
-            mavlink_message_t command_ack;
-            mavlink_msg_command_ack_pack(
-                _parent.get_own_system_id(),
-                _parent.get_own_component_id(),
-                &command_ack,
-                command_long.command,
-                static_cast<uint8_t>(result),
-                0,
-                0,
-                0,
-                0);
-
-            _parent.send_message(command_ack);
+                _parent.send_message(command_ack);
+            }
         }
     }
 }
