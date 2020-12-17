@@ -38,6 +38,14 @@ class SubscribeCustomActionResponseDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<SubscribeCustomActionResponse> _instance;
 } _SubscribeCustomActionResponse_default_instance_;
+class SubscribeCustomActionCancellationRequestDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<SubscribeCustomActionCancellationRequest> _instance;
+} _SubscribeCustomActionCancellationRequest_default_instance_;
+class SubscribeCustomActionCancellationResponseDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<SubscribeCustomActionCancellationResponse> _instance;
+} _SubscribeCustomActionCancellationResponse_default_instance_;
 class RespondCustomActionRequestDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<RespondCustomActionRequest> _instance;
@@ -279,6 +287,34 @@ static void InitDefaultsscc_info_Stage_custom_5faction_2fcustom_5faction_2eproto
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_Stage_custom_5faction_2fcustom_5faction_2eproto}, {
       &scc_info_Command_custom_5faction_2fcustom_5faction_2eproto.base,}};
 
+static void InitDefaultsscc_info_SubscribeCustomActionCancellationRequest_custom_5faction_2fcustom_5faction_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::mavsdk::rpc::custom_action::_SubscribeCustomActionCancellationRequest_default_instance_;
+    new (ptr) ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_SubscribeCustomActionCancellationRequest_custom_5faction_2fcustom_5faction_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_SubscribeCustomActionCancellationRequest_custom_5faction_2fcustom_5faction_2eproto}, {}};
+
+static void InitDefaultsscc_info_SubscribeCustomActionCancellationResponse_custom_5faction_2fcustom_5faction_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::mavsdk::rpc::custom_action::_SubscribeCustomActionCancellationResponse_default_instance_;
+    new (ptr) ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_SubscribeCustomActionCancellationResponse_custom_5faction_2fcustom_5faction_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_SubscribeCustomActionCancellationResponse_custom_5faction_2fcustom_5faction_2eproto}, {}};
+
 static void InitDefaultsscc_info_SubscribeCustomActionRequest_custom_5faction_2fcustom_5faction_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -308,7 +344,7 @@ static void InitDefaultsscc_info_SubscribeCustomActionResponse_custom_5faction_2
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_SubscribeCustomActionResponse_custom_5faction_2fcustom_5faction_2eproto}, {
       &scc_info_ActionToExecute_custom_5faction_2fcustom_5faction_2eproto.base,}};
 
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_custom_5faction_2fcustom_5faction_2eproto[15];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_custom_5faction_2fcustom_5faction_2eproto[17];
 static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_custom_5faction_2fcustom_5faction_2eproto[2];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_custom_5faction_2fcustom_5faction_2eproto = nullptr;
 
@@ -336,6 +372,17 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_custom_5faction_2fcustom_5fact
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::custom_action::SubscribeCustomActionResponse, action_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse, cancel_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::custom_action::RespondCustomActionRequest, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -433,17 +480,19 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 6, -1, sizeof(::mavsdk::rpc::custom_action::SetCustomActionResponse)},
   { 12, -1, sizeof(::mavsdk::rpc::custom_action::SubscribeCustomActionRequest)},
   { 17, -1, sizeof(::mavsdk::rpc::custom_action::SubscribeCustomActionResponse)},
-  { 23, -1, sizeof(::mavsdk::rpc::custom_action::RespondCustomActionRequest)},
-  { 30, -1, sizeof(::mavsdk::rpc::custom_action::CustomActionResponse)},
-  { 36, -1, sizeof(::mavsdk::rpc::custom_action::CustomActionMetadataRequest)},
-  { 43, -1, sizeof(::mavsdk::rpc::custom_action::CustomActionMetadataResponse)},
-  { 50, -1, sizeof(::mavsdk::rpc::custom_action::ExecuteCustomActionStageRequest)},
-  { 56, -1, sizeof(::mavsdk::rpc::custom_action::ExecuteCustomActionStageResponse)},
-  { 62, -1, sizeof(::mavsdk::rpc::custom_action::ActionToExecute)},
-  { 70, -1, sizeof(::mavsdk::rpc::custom_action::Command)},
-  { 88, -1, sizeof(::mavsdk::rpc::custom_action::Stage)},
-  { 97, -1, sizeof(::mavsdk::rpc::custom_action::ActionMetadata)},
-  { 107, -1, sizeof(::mavsdk::rpc::custom_action::CustomActionResult)},
+  { 23, -1, sizeof(::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest)},
+  { 28, -1, sizeof(::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse)},
+  { 34, -1, sizeof(::mavsdk::rpc::custom_action::RespondCustomActionRequest)},
+  { 41, -1, sizeof(::mavsdk::rpc::custom_action::CustomActionResponse)},
+  { 47, -1, sizeof(::mavsdk::rpc::custom_action::CustomActionMetadataRequest)},
+  { 54, -1, sizeof(::mavsdk::rpc::custom_action::CustomActionMetadataResponse)},
+  { 61, -1, sizeof(::mavsdk::rpc::custom_action::ExecuteCustomActionStageRequest)},
+  { 67, -1, sizeof(::mavsdk::rpc::custom_action::ExecuteCustomActionStageResponse)},
+  { 73, -1, sizeof(::mavsdk::rpc::custom_action::ActionToExecute)},
+  { 81, -1, sizeof(::mavsdk::rpc::custom_action::Command)},
+  { 99, -1, sizeof(::mavsdk::rpc::custom_action::Stage)},
+  { 108, -1, sizeof(::mavsdk::rpc::custom_action::ActionMetadata)},
+  { 118, -1, sizeof(::mavsdk::rpc::custom_action::CustomActionResult)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -451,6 +500,8 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::mavsdk::rpc::custom_action::_SetCustomActionResponse_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::mavsdk::rpc::custom_action::_SubscribeCustomActionRequest_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::mavsdk::rpc::custom_action::_SubscribeCustomActionResponse_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::mavsdk::rpc::custom_action::_SubscribeCustomActionCancellationRequest_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::mavsdk::rpc::custom_action::_SubscribeCustomActionCancellationResponse_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::mavsdk::rpc::custom_action::_RespondCustomActionRequest_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::mavsdk::rpc::custom_action::_CustomActionResponse_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::mavsdk::rpc::custom_action::_CustomActionMetadataRequest_default_instance_),
@@ -474,70 +525,77 @@ const char descriptor_table_protodef_custom_5faction_2fcustom_5faction_2eproto[]
   "ionResult\"\036\n\034SubscribeCustomActionReques"
   "t\"Z\n\035SubscribeCustomActionResponse\0229\n\006ac"
   "tion\030\001 \001(\0132).mavsdk.rpc.custom_action.Ac"
-  "tionToExecute\"\225\001\n\032RespondCustomActionReq"
-  "uest\0229\n\006action\030\001 \001(\0132).mavsdk.rpc.custom"
-  "_action.ActionToExecute\022<\n\006result\030\002 \001(\0132"
-  ",.mavsdk.rpc.custom_action.CustomActionR"
-  "esult\"T\n\024CustomActionResponse\022<\n\006result\030"
-  "\001 \001(\0132,.mavsdk.rpc.custom_action.CustomA"
-  "ctionResult\"k\n\033CustomActionMetadataReque"
-  "st\0229\n\006action\030\001 \001(\0132).mavsdk.rpc.custom_a"
-  "ction.ActionToExecute\022\021\n\tfile_path\030\002 \001(\t"
-  "\"\235\001\n\034CustomActionMetadataResponse\022\?\n\ract"
-  "ion_config\030\001 \001(\0132(.mavsdk.rpc.custom_act"
-  "ion.ActionMetadata\022<\n\006result\030\002 \001(\0132,.mav"
-  "sdk.rpc.custom_action.CustomActionResult"
-  "\"Q\n\037ExecuteCustomActionStageRequest\022.\n\005s"
-  "tage\030\001 \001(\0132\037.mavsdk.rpc.custom_action.St"
-  "age\"`\n ExecuteCustomActionStageResponse\022"
-  "<\n\006result\030\001 \001(\0132,.mavsdk.rpc.custom_acti"
-  "on.CustomActionResult\"@\n\017ActionToExecute"
-  "\022\n\n\002id\030\001 \001(\r\022\017\n\007timeout\030\002 \001(\001\022\020\n\010progres"
-  "s\030\003 \001(\001\"\275\002\n\007Command\0224\n\004type\030\001 \001(\0162&.mavs"
-  "dk.rpc.custom_action.Command.Type\022\030\n\020tar"
-  "get_system_id\030\002 \001(\r\022\033\n\023target_component_"
-  "id\030\003 \001(\r\022\r\n\005frame\030\004 \001(\r\022\017\n\007command\030\005 \001(\r"
-  "\022\016\n\006param1\030\006 \001(\001\022\016\n\006param2\030\007 \001(\001\022\016\n\006para"
-  "m3\030\010 \001(\001\022\016\n\006param4\030\t \001(\001\022\016\n\006param5\030\n \001(\001"
-  "\022\016\n\006param6\030\013 \001(\001\022\016\n\006param7\030\014 \001(\001\022\020\n\010is_l"
-  "ocal\030\r \001(\010\"#\n\004Type\022\r\n\tTYPE_LONG\020\000\022\014\n\010TYP"
-  "E_INT\020\001\"\200\001\n\005Stage\0222\n\007command\030\001 \001(\0132!.mav"
-  "sdk.rpc.custom_action.Command\022\022\n\nrun_scr"
-  "ipt\030\002 \001(\t\022\027\n\017timestamp_start\030\003 \001(\001\022\026\n\016ti"
-  "mestamp_stop\030\004 \001(\001\"\214\001\n\016ActionMetadata\022\n\n"
-  "\002id\030\001 \001(\r\022\014\n\004name\030\002 \001(\t\022\023\n\013description\030\003"
-  " \001(\t\022\032\n\022run_general_script\030\004 \001(\t\022/\n\006stag"
-  "es\030\005 \003(\0132\037.mavsdk.rpc.custom_action.Stag"
-  "e\"\366\001\n\022CustomActionResult\022C\n\006result\030\001 \001(\016"
-  "23.mavsdk.rpc.custom_action.CustomAction"
-  "Result.Result\022\022\n\nresult_str\030\002 \001(\t\"\206\001\n\006Re"
-  "sult\022\022\n\016RESULT_UNKNOWN\020\000\022\022\n\016RESULT_SUCCE"
-  "SS\020\001\022\020\n\014RESULT_ERROR\020\002\022\022\n\016RESULT_TIMEOUT"
-  "\020\003\022\026\n\022RESULT_UNSUPPORTED\020\004\022\026\n\022RESULT_IN_"
-  "PROGRESS\020\0052\275\005\n\023CustomActionService\022x\n\017Se"
-  "tCustomAction\0220.mavsdk.rpc.custom_action"
-  ".SetCustomActionRequest\0321.mavsdk.rpc.cus"
-  "tom_action.SetCustomActionResponse\"\000\022\214\001\n"
-  "\025SubscribeCustomAction\0226.mavsdk.rpc.cust"
-  "om_action.SubscribeCustomActionRequest\0327"
-  ".mavsdk.rpc.custom_action.SubscribeCusto"
-  "mActionResponse\"\0000\001\022}\n\023RespondCustomActi"
-  "on\0224.mavsdk.rpc.custom_action.RespondCus"
-  "tomActionRequest\032..mavsdk.rpc.custom_act"
-  "ion.CustomActionResponse\"\000\022\207\001\n\024CustomAct"
-  "ionMetadata\0225.mavsdk.rpc.custom_action.C"
-  "ustomActionMetadataRequest\0326.mavsdk.rpc."
-  "custom_action.CustomActionMetadataRespon"
-  "se\"\000\022\223\001\n\030ExecuteCustomActionStage\0229.mavs"
-  "dk.rpc.custom_action.ExecuteCustomAction"
-  "StageRequest\032:.mavsdk.rpc.custom_action."
-  "ExecuteCustomActionStageResponse\"\000B,\n\027io"
-  ".mavsdk.custom_actionB\021CustomActionProto"
-  "b\006proto3"
+  "tionToExecute\"*\n(SubscribeCustomActionCa"
+  "ncellationRequest\";\n)SubscribeCustomActi"
+  "onCancellationResponse\022\016\n\006cancel\030\001 \001(\010\"\225"
+  "\001\n\032RespondCustomActionRequest\0229\n\006action\030"
+  "\001 \001(\0132).mavsdk.rpc.custom_action.ActionT"
+  "oExecute\022<\n\006result\030\002 \001(\0132,.mavsdk.rpc.cu"
+  "stom_action.CustomActionResult\"T\n\024Custom"
+  "ActionResponse\022<\n\006result\030\001 \001(\0132,.mavsdk."
+  "rpc.custom_action.CustomActionResult\"k\n\033"
+  "CustomActionMetadataRequest\0229\n\006action\030\001 "
+  "\001(\0132).mavsdk.rpc.custom_action.ActionToE"
+  "xecute\022\021\n\tfile_path\030\002 \001(\t\"\235\001\n\034CustomActi"
+  "onMetadataResponse\022\?\n\raction_config\030\001 \001("
+  "\0132(.mavsdk.rpc.custom_action.ActionMetad"
+  "ata\022<\n\006result\030\002 \001(\0132,.mavsdk.rpc.custom_"
+  "action.CustomActionResult\"Q\n\037ExecuteCust"
+  "omActionStageRequest\022.\n\005stage\030\001 \001(\0132\037.ma"
+  "vsdk.rpc.custom_action.Stage\"`\n ExecuteC"
+  "ustomActionStageResponse\022<\n\006result\030\001 \001(\013"
+  "2,.mavsdk.rpc.custom_action.CustomAction"
+  "Result\"@\n\017ActionToExecute\022\n\n\002id\030\001 \001(\r\022\017\n"
+  "\007timeout\030\002 \001(\001\022\020\n\010progress\030\003 \001(\001\"\275\002\n\007Com"
+  "mand\0224\n\004type\030\001 \001(\0162&.mavsdk.rpc.custom_a"
+  "ction.Command.Type\022\030\n\020target_system_id\030\002"
+  " \001(\r\022\033\n\023target_component_id\030\003 \001(\r\022\r\n\005fra"
+  "me\030\004 \001(\r\022\017\n\007command\030\005 \001(\r\022\016\n\006param1\030\006 \001("
+  "\001\022\016\n\006param2\030\007 \001(\001\022\016\n\006param3\030\010 \001(\001\022\016\n\006par"
+  "am4\030\t \001(\001\022\016\n\006param5\030\n \001(\001\022\016\n\006param6\030\013 \001("
+  "\001\022\016\n\006param7\030\014 \001(\001\022\020\n\010is_local\030\r \001(\010\"#\n\004T"
+  "ype\022\r\n\tTYPE_LONG\020\000\022\014\n\010TYPE_INT\020\001\"\200\001\n\005Sta"
+  "ge\0222\n\007command\030\001 \001(\0132!.mavsdk.rpc.custom_"
+  "action.Command\022\022\n\nrun_script\030\002 \001(\t\022\027\n\017ti"
+  "mestamp_start\030\003 \001(\001\022\026\n\016timestamp_stop\030\004 "
+  "\001(\001\"\214\001\n\016ActionMetadata\022\n\n\002id\030\001 \001(\r\022\014\n\004na"
+  "me\030\002 \001(\t\022\023\n\013description\030\003 \001(\t\022\032\n\022run_gen"
+  "eral_script\030\004 \001(\t\022/\n\006stages\030\005 \003(\0132\037.mavs"
+  "dk.rpc.custom_action.Stage\"\366\001\n\022CustomAct"
+  "ionResult\022C\n\006result\030\001 \001(\01623.mavsdk.rpc.c"
+  "ustom_action.CustomActionResult.Result\022\022"
+  "\n\nresult_str\030\002 \001(\t\"\206\001\n\006Result\022\022\n\016RESULT_"
+  "UNKNOWN\020\000\022\022\n\016RESULT_SUCCESS\020\001\022\020\n\014RESULT_"
+  "ERROR\020\002\022\022\n\016RESULT_TIMEOUT\020\003\022\026\n\022RESULT_UN"
+  "SUPPORTED\020\004\022\026\n\022RESULT_IN_PROGRESS\020\0052\360\006\n\023"
+  "CustomActionService\022x\n\017SetCustomAction\0220"
+  ".mavsdk.rpc.custom_action.SetCustomActio"
+  "nRequest\0321.mavsdk.rpc.custom_action.SetC"
+  "ustomActionResponse\"\000\022\214\001\n\025SubscribeCusto"
+  "mAction\0226.mavsdk.rpc.custom_action.Subsc"
+  "ribeCustomActionRequest\0327.mavsdk.rpc.cus"
+  "tom_action.SubscribeCustomActionResponse"
+  "\"\0000\001\022\260\001\n!SubscribeCustomActionCancellati"
+  "on\022B.mavsdk.rpc.custom_action.SubscribeC"
+  "ustomActionCancellationRequest\032C.mavsdk."
+  "rpc.custom_action.SubscribeCustomActionC"
+  "ancellationResponse\"\0000\001\022}\n\023RespondCustom"
+  "Action\0224.mavsdk.rpc.custom_action.Respon"
+  "dCustomActionRequest\032..mavsdk.rpc.custom"
+  "_action.CustomActionResponse\"\000\022\207\001\n\024Custo"
+  "mActionMetadata\0225.mavsdk.rpc.custom_acti"
+  "on.CustomActionMetadataRequest\0326.mavsdk."
+  "rpc.custom_action.CustomActionMetadataRe"
+  "sponse\"\000\022\223\001\n\030ExecuteCustomActionStage\0229."
+  "mavsdk.rpc.custom_action.ExecuteCustomAc"
+  "tionStageRequest\032:.mavsdk.rpc.custom_act"
+  "ion.ExecuteCustomActionStageResponse\"\000B,"
+  "\n\027io.mavsdk.custom_actionB\021CustomActionP"
+  "rotob\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_custom_5faction_2fcustom_5faction_2eproto_deps[1] = {
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_custom_5faction_2fcustom_5faction_2eproto_sccs[15] = {
+static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_custom_5faction_2fcustom_5faction_2eproto_sccs[17] = {
   &scc_info_ActionMetadata_custom_5faction_2fcustom_5faction_2eproto.base,
   &scc_info_ActionToExecute_custom_5faction_2fcustom_5faction_2eproto.base,
   &scc_info_Command_custom_5faction_2fcustom_5faction_2eproto.base,
@@ -551,15 +609,17 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_cus
   &scc_info_SetCustomActionRequest_custom_5faction_2fcustom_5faction_2eproto.base,
   &scc_info_SetCustomActionResponse_custom_5faction_2fcustom_5faction_2eproto.base,
   &scc_info_Stage_custom_5faction_2fcustom_5faction_2eproto.base,
+  &scc_info_SubscribeCustomActionCancellationRequest_custom_5faction_2fcustom_5faction_2eproto.base,
+  &scc_info_SubscribeCustomActionCancellationResponse_custom_5faction_2fcustom_5faction_2eproto.base,
   &scc_info_SubscribeCustomActionRequest_custom_5faction_2fcustom_5faction_2eproto.base,
   &scc_info_SubscribeCustomActionResponse_custom_5faction_2fcustom_5faction_2eproto.base,
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_custom_5faction_2fcustom_5faction_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_custom_5faction_2fcustom_5faction_2eproto = {
-  false, false, descriptor_table_protodef_custom_5faction_2fcustom_5faction_2eproto, "custom_action/custom_action.proto", 2728,
-  &descriptor_table_custom_5faction_2fcustom_5faction_2eproto_once, descriptor_table_custom_5faction_2fcustom_5faction_2eproto_sccs, descriptor_table_custom_5faction_2fcustom_5faction_2eproto_deps, 15, 0,
+  false, false, descriptor_table_protodef_custom_5faction_2fcustom_5faction_2eproto, "custom_action/custom_action.proto", 3012,
+  &descriptor_table_custom_5faction_2fcustom_5faction_2eproto_once, descriptor_table_custom_5faction_2fcustom_5faction_2eproto_sccs, descriptor_table_custom_5faction_2fcustom_5faction_2eproto_deps, 17, 0,
   schemas, file_default_instances, TableStruct_custom_5faction_2fcustom_5faction_2eproto::offsets,
-  file_level_metadata_custom_5faction_2fcustom_5faction_2eproto, 15, file_level_enum_descriptors_custom_5faction_2fcustom_5faction_2eproto, file_level_service_descriptors_custom_5faction_2fcustom_5faction_2eproto,
+  file_level_metadata_custom_5faction_2fcustom_5faction_2eproto, 17, file_level_enum_descriptors_custom_5faction_2fcustom_5faction_2eproto, file_level_service_descriptors_custom_5faction_2fcustom_5faction_2eproto,
 };
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -1424,6 +1484,366 @@ void SubscribeCustomActionResponse::InternalSwap(SubscribeCustomActionResponse* 
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata SubscribeCustomActionResponse::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
+// ===================================================================
+
+void SubscribeCustomActionCancellationRequest::InitAsDefaultInstance() {
+}
+class SubscribeCustomActionCancellationRequest::_Internal {
+ public:
+};
+
+SubscribeCustomActionCancellationRequest::SubscribeCustomActionCancellationRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+  SharedCtor();
+  RegisterArenaDtor(arena);
+  // @@protoc_insertion_point(arena_constructor:mavsdk.rpc.custom_action.SubscribeCustomActionCancellationRequest)
+}
+SubscribeCustomActionCancellationRequest::SubscribeCustomActionCancellationRequest(const SubscribeCustomActionCancellationRequest& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:mavsdk.rpc.custom_action.SubscribeCustomActionCancellationRequest)
+}
+
+void SubscribeCustomActionCancellationRequest::SharedCtor() {
+}
+
+SubscribeCustomActionCancellationRequest::~SubscribeCustomActionCancellationRequest() {
+  // @@protoc_insertion_point(destructor:mavsdk.rpc.custom_action.SubscribeCustomActionCancellationRequest)
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+void SubscribeCustomActionCancellationRequest::SharedDtor() {
+  GOOGLE_DCHECK(GetArena() == nullptr);
+}
+
+void SubscribeCustomActionCancellationRequest::ArenaDtor(void* object) {
+  SubscribeCustomActionCancellationRequest* _this = reinterpret_cast< SubscribeCustomActionCancellationRequest* >(object);
+  (void)_this;
+}
+void SubscribeCustomActionCancellationRequest::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void SubscribeCustomActionCancellationRequest::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const SubscribeCustomActionCancellationRequest& SubscribeCustomActionCancellationRequest::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_SubscribeCustomActionCancellationRequest_custom_5faction_2fcustom_5faction_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void SubscribeCustomActionCancellationRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:mavsdk.rpc.custom_action.SubscribeCustomActionCancellationRequest)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* SubscribeCustomActionCancellationRequest::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  ::PROTOBUF_NAMESPACE_ID::Arena* arena = GetArena(); (void)arena;
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag,
+            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+            ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* SubscribeCustomActionCancellationRequest::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:mavsdk.rpc.custom_action.SubscribeCustomActionCancellationRequest)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:mavsdk.rpc.custom_action.SubscribeCustomActionCancellationRequest)
+  return target;
+}
+
+size_t SubscribeCustomActionCancellationRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:mavsdk.rpc.custom_action.SubscribeCustomActionCancellationRequest)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void SubscribeCustomActionCancellationRequest::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:mavsdk.rpc.custom_action.SubscribeCustomActionCancellationRequest)
+  GOOGLE_DCHECK_NE(&from, this);
+  const SubscribeCustomActionCancellationRequest* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<SubscribeCustomActionCancellationRequest>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:mavsdk.rpc.custom_action.SubscribeCustomActionCancellationRequest)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:mavsdk.rpc.custom_action.SubscribeCustomActionCancellationRequest)
+    MergeFrom(*source);
+  }
+}
+
+void SubscribeCustomActionCancellationRequest::MergeFrom(const SubscribeCustomActionCancellationRequest& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:mavsdk.rpc.custom_action.SubscribeCustomActionCancellationRequest)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+}
+
+void SubscribeCustomActionCancellationRequest::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:mavsdk.rpc.custom_action.SubscribeCustomActionCancellationRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void SubscribeCustomActionCancellationRequest::CopyFrom(const SubscribeCustomActionCancellationRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:mavsdk.rpc.custom_action.SubscribeCustomActionCancellationRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool SubscribeCustomActionCancellationRequest::IsInitialized() const {
+  return true;
+}
+
+void SubscribeCustomActionCancellationRequest::InternalSwap(SubscribeCustomActionCancellationRequest* other) {
+  using std::swap;
+  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata SubscribeCustomActionCancellationRequest::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
+// ===================================================================
+
+void SubscribeCustomActionCancellationResponse::InitAsDefaultInstance() {
+}
+class SubscribeCustomActionCancellationResponse::_Internal {
+ public:
+};
+
+SubscribeCustomActionCancellationResponse::SubscribeCustomActionCancellationResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+  SharedCtor();
+  RegisterArenaDtor(arena);
+  // @@protoc_insertion_point(arena_constructor:mavsdk.rpc.custom_action.SubscribeCustomActionCancellationResponse)
+}
+SubscribeCustomActionCancellationResponse::SubscribeCustomActionCancellationResponse(const SubscribeCustomActionCancellationResponse& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  cancel_ = from.cancel_;
+  // @@protoc_insertion_point(copy_constructor:mavsdk.rpc.custom_action.SubscribeCustomActionCancellationResponse)
+}
+
+void SubscribeCustomActionCancellationResponse::SharedCtor() {
+  cancel_ = false;
+}
+
+SubscribeCustomActionCancellationResponse::~SubscribeCustomActionCancellationResponse() {
+  // @@protoc_insertion_point(destructor:mavsdk.rpc.custom_action.SubscribeCustomActionCancellationResponse)
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+void SubscribeCustomActionCancellationResponse::SharedDtor() {
+  GOOGLE_DCHECK(GetArena() == nullptr);
+}
+
+void SubscribeCustomActionCancellationResponse::ArenaDtor(void* object) {
+  SubscribeCustomActionCancellationResponse* _this = reinterpret_cast< SubscribeCustomActionCancellationResponse* >(object);
+  (void)_this;
+}
+void SubscribeCustomActionCancellationResponse::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void SubscribeCustomActionCancellationResponse::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const SubscribeCustomActionCancellationResponse& SubscribeCustomActionCancellationResponse::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_SubscribeCustomActionCancellationResponse_custom_5faction_2fcustom_5faction_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void SubscribeCustomActionCancellationResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:mavsdk.rpc.custom_action.SubscribeCustomActionCancellationResponse)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cancel_ = false;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* SubscribeCustomActionCancellationResponse::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  ::PROTOBUF_NAMESPACE_ID::Arena* arena = GetArena(); (void)arena;
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // bool cancel = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
+          cancel_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag,
+            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+            ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* SubscribeCustomActionCancellationResponse::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:mavsdk.rpc.custom_action.SubscribeCustomActionCancellationResponse)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // bool cancel = 1;
+  if (this->cancel() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(1, this->_internal_cancel(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:mavsdk.rpc.custom_action.SubscribeCustomActionCancellationResponse)
+  return target;
+}
+
+size_t SubscribeCustomActionCancellationResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:mavsdk.rpc.custom_action.SubscribeCustomActionCancellationResponse)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // bool cancel = 1;
+  if (this->cancel() != 0) {
+    total_size += 1 + 1;
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void SubscribeCustomActionCancellationResponse::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:mavsdk.rpc.custom_action.SubscribeCustomActionCancellationResponse)
+  GOOGLE_DCHECK_NE(&from, this);
+  const SubscribeCustomActionCancellationResponse* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<SubscribeCustomActionCancellationResponse>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:mavsdk.rpc.custom_action.SubscribeCustomActionCancellationResponse)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:mavsdk.rpc.custom_action.SubscribeCustomActionCancellationResponse)
+    MergeFrom(*source);
+  }
+}
+
+void SubscribeCustomActionCancellationResponse::MergeFrom(const SubscribeCustomActionCancellationResponse& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:mavsdk.rpc.custom_action.SubscribeCustomActionCancellationResponse)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.cancel() != 0) {
+    _internal_set_cancel(from._internal_cancel());
+  }
+}
+
+void SubscribeCustomActionCancellationResponse::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:mavsdk.rpc.custom_action.SubscribeCustomActionCancellationResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void SubscribeCustomActionCancellationResponse::CopyFrom(const SubscribeCustomActionCancellationResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:mavsdk.rpc.custom_action.SubscribeCustomActionCancellationResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool SubscribeCustomActionCancellationResponse::IsInitialized() const {
+  return true;
+}
+
+void SubscribeCustomActionCancellationResponse::InternalSwap(SubscribeCustomActionCancellationResponse* other) {
+  using std::swap;
+  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
+  swap(cancel_, other->cancel_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata SubscribeCustomActionCancellationResponse::GetMetadata() const {
   return GetMetadataStatic();
 }
 
@@ -4478,6 +4898,12 @@ template<> PROTOBUF_NOINLINE ::mavsdk::rpc::custom_action::SubscribeCustomAction
 }
 template<> PROTOBUF_NOINLINE ::mavsdk::rpc::custom_action::SubscribeCustomActionResponse* Arena::CreateMaybeMessage< ::mavsdk::rpc::custom_action::SubscribeCustomActionResponse >(Arena* arena) {
   return Arena::CreateMessageInternal< ::mavsdk::rpc::custom_action::SubscribeCustomActionResponse >(arena);
+}
+template<> PROTOBUF_NOINLINE ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest* Arena::CreateMaybeMessage< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest >(arena);
+}
+template<> PROTOBUF_NOINLINE ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse* Arena::CreateMaybeMessage< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationResponse >(arena);
 }
 template<> PROTOBUF_NOINLINE ::mavsdk::rpc::custom_action::RespondCustomActionRequest* Arena::CreateMaybeMessage< ::mavsdk::rpc::custom_action::RespondCustomActionRequest >(Arena* arena) {
   return Arena::CreateMessageInternal< ::mavsdk::rpc::custom_action::RespondCustomActionRequest >(arena);
