@@ -268,7 +268,8 @@ void process_custom_action(
               << " current progress: " << _action_progress.load() << "%";
 
     // First stage
-    CustomAction::Result stage1_res = custom_action_comp->execute_custom_action_stage(action_metadata.stages[0]);
+    CustomAction::Result stage1_res =
+        custom_action_comp->execute_custom_action_stage(action_metadata.stages[0]);
     EXPECT_EQ(stage1_res, CustomAction::Result::Success);
     _action_result.store(stage1_res, std::memory_order_relaxed);
 
@@ -279,7 +280,8 @@ void process_custom_action(
               << " current progress: " << _action_progress.load() << "%";
 
     // Second stage
-    CustomAction::Result stage2_res = custom_action_comp->execute_custom_action_stage(action_metadata.stages[1]);
+    CustomAction::Result stage2_res =
+        custom_action_comp->execute_custom_action_stage(action_metadata.stages[1]);
     EXPECT_EQ(stage2_res, CustomAction::Result::Success);
     _action_result.store(stage2_res, std::memory_order_relaxed);
 
