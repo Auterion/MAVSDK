@@ -702,4 +702,4 @@ jobs:
       - name: Pull image from DockerHub
         run: docker pull auterion/mavsdk-ubuntu-20.04-apx4-sitl-${{ matrix.px4_version }}
       - name: Run image in container and Test
-        run: docker run -v $(pwd):/home/user/MAVSDK --env=PX4_VERSION="${{ matrix.px4_version }}" auterion/mavsdk-ubuntu-20.04-apx4-sitl-${{ matrix.px4_version }} /home/user/MAVSDK/tools/run-sitl-tests.sh /home/user/Firmware
+        run: docker run -v $(pwd):/home/user/MAVSDK --env=PX4_VERSION="auterion-${{ matrix.px4_version }}" auterion/mavsdk-ubuntu-20.04-apx4-sitl-${{ matrix.px4_version }} /home/user/MAVSDK/tools/run-sitl-tests.sh /home/user/Firmware
