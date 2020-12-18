@@ -66,7 +66,7 @@ if [ "$PX4_VERSION" = "v1.9" ] || [ "$PX4_VERSION" = "v1.10" ]; then
         $px4_firmware_dir \
         $px4_firmware_dir/build/px4_sitl_default &
 else
-    # 1.11 onwards requires the world argument
+    # 1.11 (and APX4 2.1) onwards requires the world argument
     $px4_firmware_dir/Tools/sitl_run.sh \
         $px4_firmware_dir/build/px4_sitl_default/bin/px4 \
         none \
