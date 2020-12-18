@@ -632,6 +632,11 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: recursive
+      - name: Docker Login
+        uses: Azure/docker-login@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
       - name: git permission workaround
         run: |
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
@@ -664,6 +669,11 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: recursive
+      - name: Docker Login
+        uses: Azure/docker-login@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
       - name: git permission workaround
         run: |
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
