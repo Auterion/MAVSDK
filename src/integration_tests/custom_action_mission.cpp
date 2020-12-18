@@ -52,7 +52,8 @@ float _progress_total{0};
 static void send_progress_status(std::shared_ptr<CustomAction> custom_action);
 static void process_custom_action(
     CustomAction::ActionToExecute action, std::shared_ptr<CustomAction> custom_action);
-static void execute_stages(CustomAction::ActionMetadata action_metadata, std::shared_ptr<CustomAction> custom_action);
+static void execute_stages(
+    CustomAction::ActionMetadata action_metadata, std::shared_ptr<CustomAction> custom_action);
 
 TEST_F(SitlTest, CustomActionMission)
 {
@@ -161,7 +162,7 @@ void test_mission(
         1.0, // Pass Radius
         NAN, // Yaw
         0 // MAV_MISSION_TYPE_MISSION
-    ));
+        ));
 
     // Custom action waypoint
     mission_raw_items.push_back(add_mission_raw_item(
@@ -178,7 +179,7 @@ void test_mission(
         30.0, // Action timeout (in seconds)
         NAN,
         0 // MAV_MISSION_TYPE_MISSION
-    ));
+        ));
 
     // Normal waypoint
     mission_raw_items.push_back(add_mission_raw_item(
@@ -195,7 +196,7 @@ void test_mission(
         1.0, // Pass Radius
         NAN, // Yaw
         0 // MAV_MISSION_TYPE_MISSION
-    ));
+        ));
 
     {
         LogInfo() << "Uploading mission...";
@@ -235,9 +236,7 @@ void test_mission(
 
     // Subscribe to the cancelation message
     custom_action->subscribe_custom_action_cancellation(
-        [](bool canceled) {
-            _action_stoped.store(canceled, std::memory_order_relaxed);
-    });
+        [](bool canceled) { _action_stoped.store(canceled, std::memory_order_relaxed); });
 
     {
         LogInfo() << "Starting mission.";
@@ -329,8 +328,7 @@ MissionRaw::MissionItem add_mission_raw_item(
     float param2,
     float param3,
     float param4,
-    uint8_t mission_type
-    )
+    uint8_t mission_type)
 {
     MissionRaw::MissionItem new_raw_item_nav{};
     new_raw_item_nav.seq = sequence;
@@ -368,7 +366,7 @@ void send_progress_status(std::shared_ptr<CustomAction> custom_action)
             });
 
         std::this_thread::sleep_for(std::chrono::seconds(1));
-    } ;
+    };
 }
 
 void process_custom_action(
@@ -414,12 +412,14 @@ void process_custom_action(
     status_th.join();
 }
 
-void execute_stages(CustomAction::ActionMetadata action_metadata, std::shared_ptr<CustomAction> custom_action)
+void execute_stages(
+    CustomAction::ActionMetadata action_metadata, std::shared_ptr<CustomAction> custom_action)
 {
     // First stage
     {
         if (!_action_stoped.load()) {
-            CustomAction::Result stage1_res = custom_action->execute_custom_action_stage(action_metadata.stages[0]);
+            CustomAction::Result stage1_res =
+                custom_action->execute_custom_action_stage(action_metadata.stages[0]);
             EXPECT_EQ(stage1_res, CustomAction::Result::Success);
             _action_result.store(CustomAction::Result::InProgress, std::memory_order_relaxed);
         }
@@ -436,7 +436,8 @@ void execute_stages(CustomAction::ActionMetadata action_metadata, std::shared_pt
             LogInfo() << "Custom action #" << action_metadata.id
                       << " current progress: " << _action_progress.load() << "%";
 
-            CustomAction::Result stage2_res = custom_action->execute_custom_action_stage(action_metadata.stages[1]);
+            CustomAction::Result stage2_res =
+                custom_action->execute_custom_action_stage(action_metadata.stages[1]);
             EXPECT_EQ(stage2_res, CustomAction::Result::Success);
             _action_result.store(CustomAction::Result::InProgress, std::memory_order_relaxed);
         }
@@ -465,7 +466,7 @@ void execute_stages(CustomAction::ActionMetadata action_metadata, std::shared_pt
 
     if (_action_stoped.load()) {
         LogWarn() << "Custom action #" << action_metadata.id << " canceled!";
-    } else if (!_action_stoped.load() && _action_progress == 100){
+    } else if (!_action_stoped.load() && _action_progress == 100) {
         LogInfo() << "Custom action #" << action_metadata.id << " executed!";
     }
 }
