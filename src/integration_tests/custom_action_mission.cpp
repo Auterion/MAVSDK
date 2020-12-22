@@ -12,7 +12,7 @@
 #include "plugins/mission_raw/mission_raw.h"
 
 using namespace mavsdk;
-using namespace std::placeholders; // for `_1`
+using namespace std::placeholders;
 using namespace std::chrono_literals;
 
 static void test_mission(
@@ -43,8 +43,8 @@ static std::atomic<bool> _action_stoped{false};
 static std::atomic<int> _action_progress{0};
 static std::atomic<CustomAction::Result> _action_result{CustomAction::Result::Unknown};
 
-std::mutex mtxAlert;
-std::condition_variable sigAlert;
+static std::mutex cancel_mtx;
+static std::condition_variable cancel_signal;
 
 float _progress_current{0};
 float _progress_total{0};
@@ -272,8 +272,6 @@ void test_mission(
         LogInfo() << "Process custom action";
         CustomAction::ActionToExecute action_exec = fut_act.get();
 
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-
         // Process the custom action
         process_custom_action(action_exec, custom_action);
     }
@@ -374,7 +372,7 @@ void process_custom_action(
 {
     // Note that this (client) function is not custom action generic, in the sense that
     // it a priori knows the number stages the action being executed is composed of
-    LogInfo() << "Custom action #" << action.id << " being executed";
+    LogInfo() << "Custom action #" << action.id << " being processed";
 
     // Get the custom action metadata
     std::promise<CustomAction::ActionMetadata> prom;
@@ -425,8 +423,8 @@ void execute_stages(
         }
 
         auto wait_time = 10s;
-        std::unique_lock<std::mutex> lock(mtxAlert);
-        sigAlert.wait_for(lock, wait_time, []() { return _action_stoped.load(); });
+        std::unique_lock<std::mutex> lock(cancel_mtx);
+        cancel_signal.wait_for(lock, wait_time, []() { return _action_stoped.load(); });
     }
 
     // Second stage
@@ -443,8 +441,8 @@ void execute_stages(
         }
 
         auto wait_time = 10s;
-        std::unique_lock<std::mutex> lock(mtxAlert);
-        sigAlert.wait_for(lock, wait_time, []() { return _action_stoped.load(); });
+        std::unique_lock<std::mutex> lock(cancel_mtx);
+        cancel_signal.wait_for(lock, wait_time, []() { return _action_stoped.load(); });
     }
 
     // End
@@ -457,8 +455,8 @@ void execute_stages(
         }
 
         auto wait_time = 3s;
-        std::unique_lock<std::mutex> lock(mtxAlert);
-        sigAlert.wait_for(lock, wait_time, []() { return _action_stoped.load(); });
+        std::unique_lock<std::mutex> lock(cancel_mtx);
+        cancel_signal.wait_for(lock, wait_time, []() { return _action_stoped.load(); });
 
         // Used to stop the threads
         _action_result.store(CustomAction::Result::Unknown, std::memory_order_relaxed);
