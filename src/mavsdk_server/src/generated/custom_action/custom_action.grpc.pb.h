@@ -30,8 +30,8 @@ namespace mavsdk {
 namespace rpc {
 namespace custom_action {
 
-// Allows to send a receive and process custom actions, which
-// description and parameters are defined by a metadata XML file
+// Allows to send, receive and process custom actions, which description and
+// configuration are defined in a JSON file.
 class CustomActionService final {
  public:
   static constexpr char const* service_full_name() {
