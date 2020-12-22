@@ -9,14 +9,17 @@
 
 using namespace mavsdk;
 using namespace std::placeholders;
+using namespace std::chrono_literals;
 
-static bool _received_custom_action = false;
-static std::atomic<int> _action_progress;
+static std::atomic<bool> _received_custom_action{false};
+static std::atomic<int> _action_progress{0};
 static std::atomic<CustomAction::Result> _action_result;
 
 static void send_progress_status(std::shared_ptr<CustomAction> custom_action);
 static void process_custom_action(
     CustomAction::ActionToExecute action, std::shared_ptr<CustomAction> custom_action);
+static void execute_stages(
+    CustomAction::ActionMetadata action_metadata, std::shared_ptr<CustomAction> custom_action);
 
 TEST_F(SitlTest, CustomAction)
 {
@@ -147,33 +150,26 @@ TEST_F(SitlTest, CustomAction)
                 prom_res.set_value();
             });
 
-        LogInfo() << "Process custom action";
-
         // Get the custom action to process
         std::promise<CustomAction::ActionToExecute> prom_act;
         std::future<CustomAction::ActionToExecute> fut_act = prom_act.get_future();
         custom_action_comp->subscribe_custom_action(
             [&prom_act](CustomAction::ActionToExecute action_to_exec) {
-                prom_act.set_value(action_to_exec);
-                _received_custom_action = true;
-                EXPECT_TRUE(_received_custom_action);
+                if (!_received_custom_action) {
+                    prom_act.set_value(action_to_exec);
+                    _received_custom_action = true;
+                }
             });
-        EXPECT_EQ(fut_act.wait_for(std::chrono::seconds(1)), std::future_status::ready);
-        CustomAction::ActionToExecute action_exec = fut_act.get();
 
-        // Start the progress status report thread
-        std::thread status_th(send_progress_status, custom_action_comp);
+        while (!_received_custom_action) {
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+        }
+
+        LogInfo() << "Process custom action";
+        CustomAction::ActionToExecute action_exec = fut_act.get();
 
         // Process the custom action
         process_custom_action(action_exec, custom_action_comp);
-
-        LogInfo() << "Custom action #" << action_exec.id << " executed!";
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-        // Used to stop the status report thread
-        _action_result.store(CustomAction::Result::Unknown, std::memory_order_relaxed);
-        status_th.join();
-
-        std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 
     {
@@ -213,9 +209,9 @@ TEST_F(SitlTest, CustomAction)
     }
 }
 
-void send_progress_status(std::shared_ptr<CustomAction> custom_action_comp)
+void send_progress_status(std::shared_ptr<CustomAction> custom_action)
 {
-    do {
+    while (_action_result.load() != CustomAction::Result::Unknown) {
         CustomAction::ActionToExecute action_exec{};
         action_exec.progress = _action_progress.load();
         auto action_result = _action_result.load();
@@ -224,27 +220,27 @@ void send_progress_status(std::shared_ptr<CustomAction> custom_action_comp)
         std::future<void> fut = prom.get_future();
 
         // Send response with the result and the progress
-        custom_action_comp->respond_custom_action_async(
+        custom_action->respond_custom_action_async(
             action_exec, action_result, [&prom](CustomAction::Result result) {
                 EXPECT_EQ(result, CustomAction::Result::Success);
                 prom.set_value();
             });
 
         std::this_thread::sleep_for(std::chrono::seconds(1));
-    } while (_action_result.load() != CustomAction::Result::Unknown);
+    };
 }
 
 void process_custom_action(
-    CustomAction::ActionToExecute action, std::shared_ptr<CustomAction> custom_action_comp)
+    CustomAction::ActionToExecute action, std::shared_ptr<CustomAction> custom_action)
 {
     // Note that this (client) function is not custom action generic, in the sense that
     // it a priori knows the number stages the action being executed is composed of
-    LogInfo() << "Custom action #" << action.id << " being executed";
+    LogInfo() << "Custom action #" << action.id << " being processed";
 
     // Get the custom action metadata
     std::promise<CustomAction::ActionMetadata> prom;
     std::future<CustomAction::ActionMetadata> fut = prom.get_future();
-    custom_action_comp->custom_action_metadata_async(
+    custom_action->custom_action_metadata_async(
         action,
         "src/integration_tests/test_data/custom_action.json",
         [&prom](CustomAction::Result result, CustomAction::ActionMetadata action_metadata) {
@@ -267,29 +263,55 @@ void process_custom_action(
     LogInfo() << "Custom action #" << action_metadata.id
               << " current progress: " << _action_progress.load() << "%";
 
+    // Start the progress status report thread
+    std::thread status_th(send_progress_status, custom_action);
+
+    // Start the custom action execution
+    execute_stages(action_metadata, custom_action);
+    EXPECT_EQ(_action_progress, 100);
+
+    status_th.join();
+}
+
+void execute_stages(
+    CustomAction::ActionMetadata action_metadata, std::shared_ptr<CustomAction> custom_action)
+{
     // First stage
-    CustomAction::Result stage1_res =
-        custom_action_comp->execute_custom_action_stage(action_metadata.stages[0]);
-    EXPECT_EQ(stage1_res, CustomAction::Result::Success);
-    _action_result.store(stage1_res, std::memory_order_relaxed);
+    {
+        CustomAction::Result stage1_res =
+            custom_action->execute_custom_action_stage(action_metadata.stages[0]);
+        EXPECT_EQ(stage1_res, CustomAction::Result::Success);
+        _action_result.store(CustomAction::Result::InProgress, std::memory_order_relaxed);
 
-    std::this_thread::sleep_for(std::chrono::seconds(10));
-
-    _action_progress.store(50.0, std::memory_order_relaxed);
-    LogInfo() << "Custom action #" << action_metadata.id
-              << " current progress: " << _action_progress.load() << "%";
+        std::this_thread::sleep_for(std::chrono::seconds(10));
+    }
 
     // Second stage
-    CustomAction::Result stage2_res =
-        custom_action_comp->execute_custom_action_stage(action_metadata.stages[1]);
-    EXPECT_EQ(stage2_res, CustomAction::Result::Success);
-    _action_result.store(stage2_res, std::memory_order_relaxed);
+    {
+        _action_progress.store(50.0, std::memory_order_relaxed);
+        LogInfo() << "Custom action #" << action_metadata.id
+                  << " current progress: " << _action_progress.load() << "%";
 
-    std::this_thread::sleep_for(std::chrono::seconds(10));
+        CustomAction::Result stage2_res =
+            custom_action->execute_custom_action_stage(action_metadata.stages[1]);
+        EXPECT_EQ(stage2_res, CustomAction::Result::Success);
+        _action_result.store(CustomAction::Result::InProgress, std::memory_order_relaxed);
+
+        std::this_thread::sleep_for(std::chrono::seconds(10));
+    }
 
     // End
-    _action_progress.store(100.0, std::memory_order_relaxed);
-    _action_result.store(CustomAction::Result::Success, std::memory_order_relaxed);
-    LogInfo() << "Custom action #" << action_metadata.id
-              << " current progress: " << _action_progress.load() << "%";
+    {
+        _action_progress.store(100.0, std::memory_order_relaxed);
+        _action_result.store(CustomAction::Result::Success, std::memory_order_relaxed);
+        LogInfo() << "Custom action #" << action_metadata.id
+                  << " current progress: " << _action_progress.load() << "%";
+
+        std::this_thread::sleep_for(std::chrono::seconds(3));
+
+        // Used to stop the threads
+        _action_result.store(CustomAction::Result::Unknown, std::memory_order_relaxed);
+    }
+
+    LogInfo() << "Custom action #" << action_metadata.id << " executed!";
 }
