@@ -21,8 +21,8 @@ class System;
 class CustomActionImpl;
 
 /**
- * @brief Allows to send a receive and process custom actions, which
- * description and parameters are defined by a metadata XML file
+ * @brief Allows to send, receive and process custom actions, which description and
+ * configuration are defined in a JSON file.
  */
 class CustomAction : public PluginBase {
 public:
@@ -58,7 +58,9 @@ public:
     ~CustomAction();
 
     /**
-     * @brief
+     * @brief Used to identify action to be executed, its timeout / max execution time,
+     * and, while being processed, its execution progress, which is used to send
+     * MAVLink command ACKs with progress to the autopilot side.
      */
     struct ActionToExecute {
         uint32_t id{}; /**< @brief ID of the action */
@@ -83,7 +85,8 @@ public:
     operator<<(std::ostream& str, CustomAction::ActionToExecute const& action_to_execute);
 
     /**
-     * @brief
+     * @brief General definition of a COMMAND_LONG or a COMMAND_INT MAVLink message to be
+     * sent and executed during a custom action.
      */
     struct Command {
         /**
@@ -137,7 +140,8 @@ public:
     friend std::ostream& operator<<(std::ostream& str, CustomAction::Command const& command);
 
     /**
-     * @brief
+     * @brief Defines totally or partially a custom action. Can be a Mavlink command or a
+     * script.
      */
     struct Stage {
         Command command{}; /**< @brief Command to run in the stage (if applicable) */
@@ -162,7 +166,7 @@ public:
     friend std::ostream& operator<<(std::ostream& str, CustomAction::Stage const& stage);
 
     /**
-     * @brief
+     * @brief Metadata that describes the custom action and defines its stages.
      */
     struct ActionMetadata {
         uint32_t id{}; /**< @brief ID of the action */
