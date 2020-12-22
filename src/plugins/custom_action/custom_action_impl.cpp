@@ -3,6 +3,13 @@
 
 #include <fstream>
 
+#ifdef __APPLE__
+#include <spawn.h>
+#include <sys/wait.h>
+
+extern char **environ;
+#endif
+
 namespace mavsdk {
 
 CustomActionImpl::CustomActionImpl(System& system) : PluginImplBase(system)
@@ -429,15 +436,31 @@ void CustomActionImpl::execute_custom_action_stage_async(
 
 int CustomActionImpl::exec_command(const std::string& cmd_str)
 {
-    const char* cmd = cmd_str.c_str();
+    const char *cmd = cmd_str.c_str();
 
-    if (system(NULL)) {
-        puts("Ok");
+#ifdef __APPLE__
+    pid_t pid;
+    char *argv[] = {"sh", "-c", (char*)cmd, NULL};
+    int status;
+
+    status = posix_spawn(&pid, "/bin/sh", NULL, NULL, argv, environ);
+    if (status == 0) {
+        if (waitpid(pid, &status, 0) == -1) {
+            perror("waitpid");
+            return -1;
+        }
     } else {
         return -1;
     }
 
+    return 0;
+#else
+    if (!system(NULL)) {
+        return -1;
+    }
+
     return system(cmd);
+#endif
 }
 
 CustomAction::Result
