@@ -88,6 +88,18 @@ CustomAction::Result CustomAction::execute_custom_action_stage(Stage stage) cons
     return _impl->execute_custom_action_stage(stage);
 }
 
+void CustomAction::execute_custom_action_global_script_async(
+    std::string global_script, const ResultCallback callback)
+{
+    _impl->execute_custom_action_global_script_async(global_script, callback);
+}
+
+CustomAction::Result
+CustomAction::execute_custom_action_global_script(std::string global_script) const
+{
+    return _impl->execute_custom_action_global_script(global_script);
+}
+
 bool operator==(const CustomAction::ActionToExecute& lhs, const CustomAction::ActionToExecute& rhs)
 {
     return (rhs.id == lhs.id) &&
@@ -155,7 +167,7 @@ std::ostream& operator<<(std::ostream& str, CustomAction::Command const& command
 
 bool operator==(const CustomAction::Stage& lhs, const CustomAction::Stage& rhs)
 {
-    return (rhs.command == lhs.command) && (rhs.run_script == lhs.run_script) &&
+    return (rhs.command == lhs.command) && (rhs.script == lhs.script) &&
            ((std::isnan(rhs.timestamp_start) && std::isnan(lhs.timestamp_start)) ||
             rhs.timestamp_start == lhs.timestamp_start) &&
            ((std::isnan(rhs.timestamp_stop) && std::isnan(lhs.timestamp_stop)) ||
@@ -167,7 +179,7 @@ std::ostream& operator<<(std::ostream& str, CustomAction::Stage const& stage)
     str << std::setprecision(15);
     str << "stage:" << '\n' << "{\n";
     str << "    command: " << stage.command << '\n';
-    str << "    run_script: " << stage.run_script << '\n';
+    str << "    script: " << stage.script << '\n';
     str << "    timestamp_start: " << stage.timestamp_start << '\n';
     str << "    timestamp_stop: " << stage.timestamp_stop << '\n';
     str << '}';
@@ -177,7 +189,7 @@ std::ostream& operator<<(std::ostream& str, CustomAction::Stage const& stage)
 bool operator==(const CustomAction::ActionMetadata& lhs, const CustomAction::ActionMetadata& rhs)
 {
     return (rhs.id == lhs.id) && (rhs.name == lhs.name) && (rhs.description == lhs.description) &&
-           (rhs.run_general_script == lhs.run_general_script) && (rhs.stages == lhs.stages);
+           (rhs.global_script == lhs.global_script) && (rhs.stages == lhs.stages);
 }
 
 std::ostream& operator<<(std::ostream& str, CustomAction::ActionMetadata const& action_metadata)
@@ -187,7 +199,7 @@ std::ostream& operator<<(std::ostream& str, CustomAction::ActionMetadata const& 
     str << "    id: " << action_metadata.id << '\n';
     str << "    name: " << action_metadata.name << '\n';
     str << "    description: " << action_metadata.description << '\n';
-    str << "    run_general_script: " << action_metadata.run_general_script << '\n';
+    str << "    global_script: " << action_metadata.global_script << '\n';
     str << "    stages: [";
     for (auto it = action_metadata.stages.begin(); it != action_metadata.stages.end(); ++it) {
         str << *it;
