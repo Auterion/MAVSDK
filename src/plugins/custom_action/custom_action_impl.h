@@ -57,19 +57,24 @@ public:
     void execute_custom_action_stage_async(
         CustomAction::Stage& stage, const CustomAction::ResultCallback& callback) const;
 
+    CustomAction::Result execute_custom_action_global_script(std::string& global_script) const;
+
+    void execute_custom_action_global_script_async(
+        std::string& global_script, const CustomAction::ResultCallback& callback) const;
+
     void command_result_callback(
         MavlinkCommandSender::Result command_result,
         const CustomAction::ResultCallback& callback) const;
 
     static int exec_command(const std::string& cmd_str);
 
+    static CustomAction::Result custom_action_result_from_script_result(int result);
+
 private:
     static CustomAction::Result
     custom_action_result_from_command_result(MavlinkCommandSender::Result result);
 
     static MAV_RESULT mavlink_command_result_from_custom_action_result(CustomAction::Result result);
-
-    static CustomAction::Result custom_action_result_from_script_result(int result);
 
     void store_custom_action(CustomAction::ActionToExecute action);
 

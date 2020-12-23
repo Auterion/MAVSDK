@@ -145,8 +145,7 @@ public:
      */
     struct Stage {
         Command command{}; /**< @brief Command to run in the stage (if applicable) */
-        std::string run_script{}; /**< @brief Script to run in that stage (if applicable). Should
-                                     contain the full path. */
+        std::string script{}; /**< @brief Script to run in that stage (if applicable). */
         double timestamp_start{}; /**< @brief Timestamp in usec when to start the stage */
         double timestamp_stop{}; /**< @brief Timestamp in usec when the stage should stop */
     };
@@ -172,10 +171,10 @@ public:
         uint32_t id{}; /**< @brief ID of the action */
         std::string name{}; /**< @brief Name of the action */
         std::string description{}; /**< @brief Description of the action */
-        std::string run_general_script{}; /**< @brief Script to run for this specific action. Runs
-                                             instead of the stages. */
+        std::string global_script{}; /**< @brief Script to run for this specific action. Runs
+                                        instead of the stages. */
         std::vector<Stage>
-            stages{}; /**< @brief Timestamped ordered stages. Runs instead of the general script. */
+            stages{}; /**< @brief Timestamped ordered stages. Runs instead of the global script. */
     };
 
     /**
@@ -329,6 +328,25 @@ public:
      * @return Result of request.
      */
     Result execute_custom_action_stage(Stage stage) const;
+
+    /**
+     * @brief Execute custom action global script.
+     *
+     * This function is non-blocking. See 'execute_custom_action_global_script' for the blocking
+     * counterpart.
+     */
+    void execute_custom_action_global_script_async(
+        std::string global_script, const ResultCallback callback);
+
+    /**
+     * @brief Execute custom action global script.
+     *
+     * This function is blocking. See 'execute_custom_action_global_script_async' for the
+     * non-blocking counterpart.
+     *
+     * @return Result of request.
+     */
+    Result execute_custom_action_global_script(std::string global_script) const;
 
     /**
      * @brief Copy constructor.

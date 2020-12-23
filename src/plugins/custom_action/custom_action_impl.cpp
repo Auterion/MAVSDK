@@ -7,7 +7,7 @@
 #include <spawn.h>
 #include <sys/wait.h>
 
-extern char **environ;
+extern char** environ;
 #endif
 
 namespace mavsdk {
@@ -280,8 +280,8 @@ void CustomActionImpl::custom_action_metadata_async(
     action_metadata.description = action_root["description"].asString();
 
     // If the action triggers a global script, pass it instead to the client
-    if (action_root["run_general_script"].asString() != "") {
-        action_metadata.run_general_script = action_root["run_general_script"].asString();
+    if (action_root["global_script"].asString() != "") {
+        action_metadata.global_script = action_root["global_script"].asString();
         parsing_result = CustomAction::Result::Success;
     } else {
         // Get the action stages
@@ -293,8 +293,8 @@ void CustomActionImpl::custom_action_metadata_async(
                 parsing_result = CustomAction::Result::Success;
 
                 // If it is to run a script, pass the script to the client side
-                if (stage_id["run_script"].asString() != "") {
-                    stage.run_script = stage_id["run_script"].asString();
+                if (stage_id["script"].asString() != "") {
+                    stage.script = stage_id["script"].asString();
 
                 } else { // Else, pass the command to the client side
                     CustomAction::Command cmd{};
@@ -380,9 +380,9 @@ void CustomActionImpl::execute_custom_action_stage_async(
     CustomAction::Stage& stage, const CustomAction::ResultCallback& callback) const
 {
     // Process script
-    if (stage.run_script != "") {
+    if (stage.script != "") {
         CustomAction::Result result =
-            custom_action_result_from_script_result(exec_command(stage.run_script));
+            custom_action_result_from_script_result(exec_command(stage.script));
 
         if (callback) {
             auto temp_callback = callback;
@@ -434,13 +434,39 @@ void CustomActionImpl::execute_custom_action_stage_async(
     }
 }
 
+CustomAction::Result
+CustomActionImpl::execute_custom_action_global_script(std::string& global_script) const
+{
+    auto prom = std::promise<CustomAction::Result>();
+    auto fut = prom.get_future();
+
+    execute_custom_action_global_script_async(
+        global_script, [&prom](CustomAction::Result result) { prom.set_value(result); });
+
+    return fut.get();
+}
+
+void CustomActionImpl::execute_custom_action_global_script_async(
+    std::string& global_script, const CustomAction::ResultCallback& callback) const
+{
+    if (global_script != "") {
+        CustomAction::Result result =
+            custom_action_result_from_script_result(exec_command(global_script));
+
+        if (callback) {
+            auto temp_callback = callback;
+            _parent->call_user_callback([temp_callback, result]() { temp_callback(result); });
+        }
+    }
+}
+
 int CustomActionImpl::exec_command(const std::string& cmd_str)
 {
-    const char *cmd = cmd_str.c_str();
+    const char* cmd = cmd_str.c_str();
 
 #ifdef __APPLE__
     pid_t pid;
-    char *argv[] = {"sh", "-c", (char*)cmd, NULL};
+    char* argv[] = {"sh", "-c", (char*)cmd, NULL};
     int status;
 
     status = posix_spawn(&pid, "/bin/sh", NULL, NULL, argv, environ);
