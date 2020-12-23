@@ -4,6 +4,7 @@
 #include "plugins/action/action.h"
 #include "plugins/custom_action/custom_action.h"
 #include "plugins/telemetry/telemetry.h"
+#include "plugins/param/param.h"
 
 #include <future>
 
@@ -92,6 +93,25 @@ TEST_F(SitlTest, CustomAction)
 
     // Custom actions are processed and executed in the mission computer
     auto custom_action_comp = std::make_shared<CustomAction>(system_to_companion);
+    auto param = std::make_shared<Param>(system_to_companion);
+
+    // Set COM_DISARM_LAND to 0 for this action
+    std::pair<Param::Result, float> get_com_disarm_land = param->get_param_float("COM_DISARM_LAND");
+
+    // Get initial value.
+    ASSERT_EQ(get_com_disarm_land.first, Param::Result::Success);
+
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+
+    // Toggle the value.
+    Param::Result set_com_disarm_land = param->set_param_float("COM_DISARM_LAND", 0.0f);
+    EXPECT_EQ(set_com_disarm_land, Param::Result::Success);
+
+    // Verify toggle.
+    std::pair<Param::Result, float> verify_get_com_disarm_land =
+        param->get_param_float("COM_DISARM_LAND");
+    EXPECT_EQ(verify_get_com_disarm_land.first, Param::Result::Success);
+    EXPECT_FLOAT_EQ(verify_get_com_disarm_land.second, 0.0f);
 
     // Start tests
     {
@@ -197,6 +217,15 @@ TEST_F(SitlTest, CustomAction)
         EXPECT_EQ(fut.wait_for(std::chrono::seconds(20)), std::future_status::ready);
     }
 
+    // Reset COM_DISARM_LAND back to the initial value.
+    set_com_disarm_land = param->set_param_float("COM_DISARM_LAND", get_com_disarm_land.second);
+    EXPECT_EQ(set_com_disarm_land, Param::Result::Success);
+
+    // Verify COM_DISARM_LAND reset.
+    verify_get_com_disarm_land = param->get_param_float("COM_DISARM_LAND");
+    EXPECT_EQ(verify_get_com_disarm_land.first, Param::Result::Success);
+    EXPECT_FLOAT_EQ(verify_get_com_disarm_land.second, get_com_disarm_land.second);
+
     {
         LogInfo() << "Disarming";
         std::promise<void> prom;
@@ -250,10 +279,8 @@ void process_custom_action(
     CustomAction::ActionMetadata action_metadata = fut.get();
 
     EXPECT_EQ(action_metadata.id, 0);
-    EXPECT_EQ(action_metadata.name, "Integration test action");
-    EXPECT_EQ(
-        action_metadata.description,
-        "Example action to use on the integration test, mimicking the Go To Action test");
+    EXPECT_EQ(action_metadata.name, "Integration test - package delivery action");
+    EXPECT_EQ(action_metadata.description, "Example action of a delivery procedure");
     LogInfo() << "Custom action #" << action_metadata.id << " is \"" << action_metadata.name
               << "\"";
 
@@ -278,35 +305,87 @@ void execute_stages(
 {
     // First stage
     {
-        CustomAction::Result stage1_res =
+        CustomAction::Result stage_res =
             custom_action->execute_custom_action_stage(action_metadata.stages[0]);
-        EXPECT_EQ(stage1_res, CustomAction::Result::Success);
-        _action_result.store(CustomAction::Result::InProgress, std::memory_order_relaxed);
+        EXPECT_EQ(stage_res, CustomAction::Result::Success);
 
         std::this_thread::sleep_for(std::chrono::seconds(10));
     }
+
+    _action_progress.store(25.0, std::memory_order_relaxed);
+    _action_result.store(CustomAction::Result::Success, std::memory_order_relaxed);
+    LogInfo() << "Custom action #" << action_metadata.id
+              << " current progress: " << _action_progress.load() << "%";
 
     // Second stage
     {
-        _action_progress.store(50.0, std::memory_order_relaxed);
-        LogInfo() << "Custom action #" << action_metadata.id
-                  << " current progress: " << _action_progress.load() << "%";
-
-        CustomAction::Result stage2_res =
+        CustomAction::Result stage_res =
             custom_action->execute_custom_action_stage(action_metadata.stages[1]);
-        EXPECT_EQ(stage2_res, CustomAction::Result::Success);
-        _action_result.store(CustomAction::Result::InProgress, std::memory_order_relaxed);
+        EXPECT_EQ(stage_res, CustomAction::Result::Success);
+    }
+
+    // Third stage
+    {
+        CustomAction::Result stage_res =
+            custom_action->execute_custom_action_stage(action_metadata.stages[2]);
+        EXPECT_EQ(stage_res, CustomAction::Result::Success);
+
+        std::this_thread::sleep_for(std::chrono::seconds(3));
+    }
+
+    // Fourth stage
+    {
+        CustomAction::Result stage_res =
+            custom_action->execute_custom_action_stage(action_metadata.stages[3]);
+        EXPECT_EQ(stage_res, CustomAction::Result::Success);
+
+        std::this_thread::sleep_for(std::chrono::seconds(5));
+    }
+
+    _action_progress.store(50.0, std::memory_order_relaxed);
+    _action_result.store(CustomAction::Result::Success, std::memory_order_relaxed);
+    LogInfo() << "Custom action #" << action_metadata.id
+              << " current progress: " << _action_progress.load() << "%";
+
+    // Fifth stage
+    {
+        CustomAction::Result stage_res =
+            custom_action->execute_custom_action_stage(action_metadata.stages[4]);
+        EXPECT_EQ(stage_res, CustomAction::Result::Success);
+
+        std::this_thread::sleep_for(std::chrono::seconds(5));
+    }
+
+    // Sixth stage
+    {
+        CustomAction::Result stage_res =
+            custom_action->execute_custom_action_stage(action_metadata.stages[5]);
+        EXPECT_EQ(stage_res, CustomAction::Result::Success);
+
+        std::this_thread::sleep_for(std::chrono::seconds(5));
+    }
+
+    _action_progress.store(75.0, std::memory_order_relaxed);
+    _action_result.store(CustomAction::Result::Success, std::memory_order_relaxed);
+    LogInfo() << "Custom action #" << action_metadata.id
+              << " current progress: " << _action_progress.load() << "%";
+
+    // Seventh stage
+    {
+        CustomAction::Result stage_res =
+            custom_action->execute_custom_action_stage(action_metadata.stages[6]);
+        EXPECT_EQ(stage_res, CustomAction::Result::Success);
 
         std::this_thread::sleep_for(std::chrono::seconds(10));
     }
 
+    _action_progress.store(100.0, std::memory_order_relaxed);
+    _action_result.store(CustomAction::Result::Success, std::memory_order_relaxed);
+    LogInfo() << "Custom action #" << action_metadata.id
+              << " current progress: " << _action_progress.load() << "%";
+
     // End
     {
-        _action_progress.store(100.0, std::memory_order_relaxed);
-        _action_result.store(CustomAction::Result::Success, std::memory_order_relaxed);
-        LogInfo() << "Custom action #" << action_metadata.id
-                  << " current progress: " << _action_progress.load() << "%";
-
         std::this_thread::sleep_for(std::chrono::seconds(3));
 
         // Used to stop the threads

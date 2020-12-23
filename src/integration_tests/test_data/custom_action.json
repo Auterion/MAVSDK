@@ -1,8 +1,8 @@
 {
         "action_0": {
-                "name": "Integration test action",
-                "description": "Example action to use on the integration test, mimicking the Go To Action test",
-                "run_general_script": "",
+                "name": "Integration test - package delivery action",
+                "description": "Example action of a delivery procedure",
+                "global_script": "",
                 "stages": [{
                                 "cmd": {
                                         "type": "INT",
@@ -11,7 +11,7 @@
                                         "frame": 0,
                                         "command": 192,
                                         "param1": null,
-                                        "param2": 1,
+                                        "param2": 1.0,
                                         "param3": null,
                                         "param4": null,
                                         "param5": 47.398000,
@@ -19,19 +19,77 @@
                                         "param7": null,
                                         "is_local": false
                                 },
-                                "run_script": "",
+                                "script": "",
                                 "timestamp_start": null,
                                 "timestamp_stop": null
                         },
                         {
                                 "cmd": {
-                                        "type": "INT",
+                                        "type": "LONG",
+                                        "target_system": 0,
+                                        "target_component": 0,
+                                        "frame": 0,
+                                        "command": 21,
+                                        "param1": null,
+                                        "param2": null,
+                                        "param3": null,
+                                        "param4": null,
+                                        "param5": null,
+                                        "param6": null,
+                                        "param7": null,
+                                        "is_local": false
+                                },
+                                "script": "",
+                                "timestamp_start": null,
+                                "timestamp_stop": null
+                        },
+                        {
+                                "cmd": {},
+                                "script": "./src/integration_tests/test_data/custom_action_scripts/dummy_safe_landing.py",
+                                "timestamp_start": null,
+                                "timestamp_stop": null
+                        },
+                        {
+                                "cmd": {},
+                                "script": "./src/integration_tests/test_data/custom_action_scripts/dummy_cargo_compartment.py open",
+                                "timestamp_start": null,
+                                "timestamp_stop": null
+                        },
+                        {
+                                "cmd": {},
+                                "script": "./src/integration_tests/test_data/custom_action_scripts/dummy_cargo_compartment.py close",
+                                "timestamp_start": null,
+                                "timestamp_stop": null
+                        },
+                        {
+                                "cmd": {
+                                        "type": "LONG",
+                                        "target_system": 0,
+                                        "target_component": 0,
+                                        "frame": 0,
+                                        "command": 22,
+                                        "param1": null,
+                                        "param2": null,
+                                        "param3": null,
+                                        "param4": null,
+                                        "param5": null,
+                                        "param6": null,
+                                        "param7": null,
+                                        "is_local": false
+                                },
+                                "script": "",
+                                "timestamp_start": null,
+                                "timestamp_stop": null
+                        },
+                        {
+                                "cmd": {
+                                        "type": "LONG",
                                         "target_system": 0,
                                         "target_component": 0,
                                         "frame": 0,
                                         "command": 192,
                                         "param1": null,
-                                        "param2": 1,
+                                        "param2": 1.0,
                                         "param3": null,
                                         "param4": null,
                                         "param5": 47.3977233,
@@ -39,9 +97,39 @@
                                         "param7": null,
                                         "is_local": false
                                 },
-                                "run_script": "",
+                                "script": "",
                                 "timestamp_start": null,
                                 "timestamp_stop": null
+                        }
+                ]
+        },
+        "action_1": {
+                "name": "Integration test - turn-on air quality sensor",
+                "description": "Example action to turn-on an onboard sensor",
+                "global_script": "./src/integration_tests/test_data/custom_action_scripts/dummy_air_quality_sensor.py on",
+                "stages": [{}]
+        },
+        "action_2": {
+                "name": "Integration test - turn-off air quality sensor",
+                "description": "Example action to turn-off an onboard sensor",
+                "global_script": "./src/integration_tests/test_data/custom_action_scripts/dummy_air_quality_sensor.py off",
+                "stages": [{}]
+        },
+        "action_3": {
+                "name": "Integration test - package delivery with winch action",
+                "description": "Example action of a delivery with a winch procedure",
+                "global_script": "",
+                "stages": [{
+                                "cmd": {},
+                                "script": "./src/integration_tests/test_data/custom_action_scripts/dummy_winch.py descend",
+                                "timestamp_start": null,
+                                "timestamp_stop": 5.0
+                        },
+                        {
+                                "cmd": {},
+                                "script": "./src/integration_tests/test_data/custom_action_scripts/dummy_winch.py raise",
+                                "timestamp_start": null,
+                                "timestamp_stop": 5.0
                         }
                 ]
         }
