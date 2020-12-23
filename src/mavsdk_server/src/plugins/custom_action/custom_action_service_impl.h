@@ -168,7 +168,7 @@ public:
 
         rpc_obj->set_allocated_command(translateToRpcCommand(stage.command).release());
 
-        rpc_obj->set_run_script(stage.run_script);
+        rpc_obj->set_script(stage.script);
 
         rpc_obj->set_timestamp_start(stage.timestamp_start);
 
@@ -183,7 +183,7 @@ public:
 
         obj.command = translateFromRpcCommand(stage.command());
 
-        obj.run_script = stage.run_script();
+        obj.script = stage.script();
 
         obj.timestamp_start = stage.timestamp_start();
 
@@ -203,7 +203,7 @@ public:
 
         rpc_obj->set_description(action_metadata.description);
 
-        rpc_obj->set_run_general_script(action_metadata.run_general_script);
+        rpc_obj->set_global_script(action_metadata.global_script);
 
         for (const auto& elem : action_metadata.stages) {
             auto* ptr = rpc_obj->add_stages();
@@ -224,7 +224,7 @@ public:
 
         obj.description = action_metadata.description();
 
-        obj.run_general_script = action_metadata.run_general_script();
+        obj.global_script = action_metadata.global_script();
 
         for (const auto& elem : action_metadata.stages()) {
             obj.stages.push_back(
@@ -425,6 +425,25 @@ public:
 
         auto result =
             _custom_action.execute_custom_action_stage(translateFromRpcStage(request->stage()));
+
+        if (response != nullptr) {
+            fillResponseWithResult(response, result);
+        }
+
+        return grpc::Status::OK;
+    }
+
+    grpc::Status ExecuteCustomActionGlobalScript(
+        grpc::ServerContext* /* context */,
+        const rpc::custom_action::ExecuteCustomActionGlobalScriptRequest* request,
+        rpc::custom_action::ExecuteCustomActionGlobalScriptResponse* response) override
+    {
+        if (request == nullptr) {
+            LogWarn() << "ExecuteCustomActionGlobalScript sent with a null request! Ignoring...";
+            return grpc::Status::OK;
+        }
+
+        auto result = _custom_action.execute_custom_action_global_script(request->global_script());
 
         if (response != nullptr) {
             fillResponseWithResult(response, result);
