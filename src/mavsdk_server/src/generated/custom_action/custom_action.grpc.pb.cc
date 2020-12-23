@@ -30,6 +30,7 @@ static const char* CustomActionService_method_names[] = {
   "/mavsdk.rpc.custom_action.CustomActionService/RespondCustomAction",
   "/mavsdk.rpc.custom_action.CustomActionService/CustomActionMetadata",
   "/mavsdk.rpc.custom_action.CustomActionService/ExecuteCustomActionStage",
+  "/mavsdk.rpc.custom_action.CustomActionService/ExecuteCustomActionGlobalScript",
 };
 
 std::unique_ptr< CustomActionService::Stub> CustomActionService::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
@@ -45,6 +46,7 @@ CustomActionService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>
   , rpcmethod_RespondCustomAction_(CustomActionService_method_names[3], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_CustomActionMetadata_(CustomActionService_method_names[4], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_ExecuteCustomActionStage_(CustomActionService_method_names[5], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_ExecuteCustomActionGlobalScript_(CustomActionService_method_names[6], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status CustomActionService::Stub::SetCustomAction(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::SetCustomActionRequest& request, ::mavsdk::rpc::custom_action::SetCustomActionResponse* response) {
@@ -171,6 +173,29 @@ void CustomActionService::Stub::experimental_async::ExecuteCustomActionStage(::g
   return result;
 }
 
+::grpc::Status CustomActionService::Stub::ExecuteCustomActionGlobalScript(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptRequest& request, ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptResponse* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptRequest, ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_ExecuteCustomActionGlobalScript_, context, request, response);
+}
+
+void CustomActionService::Stub::experimental_async::ExecuteCustomActionGlobalScript(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptRequest* request, ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptResponse* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptRequest, ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_ExecuteCustomActionGlobalScript_, context, request, response, std::move(f));
+}
+
+void CustomActionService::Stub::experimental_async::ExecuteCustomActionGlobalScript(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptRequest* request, ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptResponse* response, ::grpc::experimental::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_ExecuteCustomActionGlobalScript_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptResponse>* CustomActionService::Stub::PrepareAsyncExecuteCustomActionGlobalScriptRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptResponse, ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_ExecuteCustomActionGlobalScript_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptResponse>* CustomActionService::Stub::AsyncExecuteCustomActionGlobalScriptRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptRequest& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncExecuteCustomActionGlobalScriptRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
 CustomActionService::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       CustomActionService_method_names[0],
@@ -232,6 +257,16 @@ CustomActionService::Service::Service() {
              ::mavsdk::rpc::custom_action::ExecuteCustomActionStageResponse* resp) {
                return service->ExecuteCustomActionStage(ctx, req, resp);
              }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      CustomActionService_method_names[6],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< CustomActionService::Service, ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptRequest, ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](CustomActionService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptRequest* req,
+             ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptResponse* resp) {
+               return service->ExecuteCustomActionGlobalScript(ctx, req, resp);
+             }, this)));
 }
 
 CustomActionService::Service::~Service() {
@@ -273,6 +308,13 @@ CustomActionService::Service::~Service() {
 }
 
 ::grpc::Status CustomActionService::Service::ExecuteCustomActionStage(::grpc::ServerContext* context, const ::mavsdk::rpc::custom_action::ExecuteCustomActionStageRequest* request, ::mavsdk::rpc::custom_action::ExecuteCustomActionStageResponse* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status CustomActionService::Service::ExecuteCustomActionGlobalScript(::grpc::ServerContext* context, const ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptRequest* request, ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptResponse* response) {
   (void) context;
   (void) request;
   (void) response;
