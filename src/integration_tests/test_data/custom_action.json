@@ -123,13 +123,13 @@
                                 "cmd": {},
                                 "script": "./src/integration_tests/test_data/custom_action_scripts/dummy_winch.py descend",
                                 "timestamp_start": null,
-                                "timestamp_stop": 5.0
+                                "timestamp_stop": 7.0
                         },
                         {
                                 "cmd": {},
                                 "script": "./src/integration_tests/test_data/custom_action_scripts/dummy_winch.py raise",
                                 "timestamp_start": null,
-                                "timestamp_stop": 5.0
+                                "timestamp_stop": 7.0
                         }
                 ]
         }

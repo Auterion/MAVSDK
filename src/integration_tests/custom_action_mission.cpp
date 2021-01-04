@@ -36,18 +36,17 @@ static MissionRaw::MissionItem add_mission_raw_item(
     float param4,
     uint8_t mission_type);
 
-// static std::atomic<bool> _received_custom_action{false};
 static std::atomic<bool> _received_custom_action{false};
 static std::atomic<bool> _mission_finished{false};
 static std::atomic<bool> _action_stopped{false};
 static std::atomic<bool> _new_action{false};
+static std::atomic<bool> _new_actions_check_int{false};
 
 static std::vector<CustomAction::ActionToExecute> _actions;
 static std::vector<int> _actions_progress;
 static std::vector<CustomAction::Result> _actions_result;
 static std::vector<CustomAction::ActionMetadata> _actions_metadata;
 static std::vector<std::thread> _progress_threads;
-static void new_action();
 
 static std::shared_ptr<CustomAction> _custom_action;
 
@@ -57,10 +56,12 @@ static std::condition_variable cancel_signal;
 float _progress_current{0};
 float _progress_total{0};
 
-void send_progress_status(std::shared_ptr<CustomAction> custom_action, unsigned action_idx);
+static void new_action_check();
+static void send_progress_status(
+    std::shared_ptr<CustomAction> custom_action, CustomAction::ActionToExecute action_metadata);
 static void process_custom_action(CustomAction::ActionToExecute action);
-static void execute_stages(
-    CustomAction::ActionMetadata _actions_metadata, std::shared_ptr<CustomAction> custom_action);
+static void execute_custom_action(
+    CustomAction::ActionMetadata action_metadata, std::shared_ptr<CustomAction> custom_action);
 
 TEST_F(SitlTest, CustomActionMission)
 {
@@ -200,7 +201,7 @@ void test_mission(
         16, // MAV_CMD_NAV_WAYPOINT
         0,
         1,
-        12.0, // Hold
+        0.0, // Hold
         1.0, // Acceptance Radius
         1.0, // Pass Radius
         NAN, // Yaw
@@ -225,39 +226,56 @@ void test_mission(
         0 // MAV_MISSION_TYPE_MISSION
         ));
 
+    // Normal waypoint (Hold WP for delivery)
+    mission_raw_items.push_back(add_mission_raw_item(
+        47.398241338125118,
+        8.5455360114574432,
+        10.0f,
+        4,
+        6, // MAV_FRAME_GLOBAL_RELATIVE_ALT_INT
+        16, // MAV_CMD_NAV_WAYPOINT
+        0,
+        1,
+        16.0, // Hold
+        1.0, // Acceptance Radius
+        1.0, // Pass Radius
+        NAN, // Yaw
+        0 // MAV_MISSION_TYPE_MISSION
+        ));
+
     // Normal waypoint
-    // mission_raw_items.push_back(add_mission_raw_item(
-    //     47.398170327054473,
-    //     8.5456490218639658,
-    //     10.0f,
-    //     4,
-    //     6, // MAV_FRAME_GLOBAL_RELATIVE_ALT_INT
-    //     16, // MAV_CMD_NAV_WAYPOINT
-    //     1,
-    //     1,
-    //     1.0, // Hold
-    //     1.0, // Acceptance Radius
-    //     1.0, // Pass Radius
-    //     NAN, // Yaw
-    //     0 // MAV_MISSION_TYPE_MISSION
-    //     ));
+    mission_raw_items.push_back(add_mission_raw_item(
+        47.398170327054473,
+        8.5456490218639658,
+        10.0f,
+        5,
+        6, // MAV_FRAME_GLOBAL_RELATIVE_ALT_INT
+        16, // MAV_CMD_NAV_WAYPOINT
+        0,
+        1,
+        1.0, // Hold
+        1.0, // Acceptance Radius
+        1.0, // Pass Radius
+        NAN, // Yaw
+        0 // MAV_MISSION_TYPE_MISSION
+        ));
 
     // Custom action waypoint to turn-off air quality sensor
-    // mission_raw_items.push_back(add_mission_raw_item(
-    //     NAN,
-    //     NAN,
-    //     NAN,
-    //     5,
-    //     2, // MAV_FRAME_MISSION
-    //     31000, // MAV_CMD_WAYPOINT_USER_1
-    //     0,
-    //     1,
-    //     2.0, // Action ID
-    //     0.0, // Action execution control
-    //     2.0, // Action timeout (in seconds)
-    //     NAN,
-    //     0 // MAV_MISSION_TYPE_MISSION
-    //     ));
+    mission_raw_items.push_back(add_mission_raw_item(
+        NAN,
+        NAN,
+        NAN,
+        6,
+        2, // MAV_FRAME_MISSION
+        31000, // MAV_CMD_WAYPOINT_USER_1
+        0,
+        1,
+        2.0, // Action ID
+        0.0, // Action execution control
+        2.0, // Action timeout (in seconds)
+        NAN,
+        0 // MAV_MISSION_TYPE_MISSION
+        ));
 
     {
         LogInfo() << "Uploading mission...";
@@ -314,15 +332,17 @@ void test_mission(
         future_result.get();
     }
 
-    auto new_actions = std::thread(new_action);
+    auto new_actions_check_th = std::thread(new_action_check);
 
     {
         // Get the custom action to process
-        // std::promise<CustomAction::ActionToExecute> prom_act;
-        // std::future<CustomAction::ActionToExecute> fut_act = prom_act.get_future();
         custom_action->subscribe_custom_action([](CustomAction::ActionToExecute action_to_exec) {
-            _actions.push_back(action_to_exec);
-            _new_action.store(true, std::memory_order_relaxed);
+            if (_actions.empty() ||
+                (!_actions.empty() && _actions.back().id != action_to_exec.id)) {
+                _actions.push_back(action_to_exec);
+                _new_action.store(true, std::memory_order_relaxed);
+                LogInfo() << "New action received: " << action_to_exec.id;
+            }
         });
     }
 
@@ -330,7 +350,8 @@ void test_mission(
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 
-    new_actions.join();
+    _new_actions_check_int.store(true, std::memory_order_relaxed);
+    new_actions_check_th.join();
 
     {
         LogInfo() << "Return-to-launch";
@@ -398,13 +419,14 @@ MissionRaw::MissionItem add_mission_raw_item(
     return new_raw_item_nav;
 }
 
-void send_progress_status(std::shared_ptr<CustomAction> custom_action, unsigned action_idx)
+void send_progress_status(
+    std::shared_ptr<CustomAction> custom_action, CustomAction::ActionToExecute action)
 {
-    while (!_action_stopped.load() &&
-           _actions_result[action_idx] != CustomAction::Result::Unknown) {
+    while (!_action_stopped.load() && _actions_result.back() != CustomAction::Result::Unknown) {
         CustomAction::ActionToExecute action_exec{};
-        action_exec.progress = _actions_progress[action_idx];
-        auto action_result = _actions_result[action_idx];
+        action_exec.id = action.id;
+        action_exec.progress = _actions_progress.back();
+        auto action_result = _actions_result.back();
 
         std::promise<void> prom;
         std::future<void> fut = prom.get_future();
@@ -416,13 +438,13 @@ void send_progress_status(std::shared_ptr<CustomAction> custom_action, unsigned 
                 prom.set_value();
             });
 
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     };
 }
 
-void new_action()
+void new_action_check()
 {
-    while (true) {
+    while (!_new_actions_check_int) {
         if (_new_action.load()) {
             process_custom_action(_actions.back());
             _new_action.store(false, std::memory_order_relaxed);
@@ -455,25 +477,23 @@ void process_custom_action(CustomAction::ActionToExecute action)
               << " current progress: " << _actions_progress.back() << "%";
 
     // Start the progress status report thread
-    _progress_threads.push_back(
-        std::thread(send_progress_status, _custom_action, _actions_metadata.size()));
+    _progress_threads.push_back(std::thread(send_progress_status, _custom_action, _actions.back()));
 
     // Start the custom action execution
-    execute_stages(_actions_metadata.back(), _custom_action);
+    // For the purpose of the test, we are storing all the actions but only processing the last one.
+    // This means that only one action at a time can be processed
+    execute_custom_action(_actions_metadata.back(), _custom_action);
 
     EXPECT_EQ(_actions_progress.back(), 100);
 
     _progress_threads.back().join();
 }
 
-void execute_stages(
+void execute_custom_action(
     CustomAction::ActionMetadata action_metadata, std::shared_ptr<CustomAction> custom_action)
 {
     if (!action_metadata.stages.empty()) {
-        const unsigned stages_size =
-            sizeof(action_metadata.stages) / sizeof(action_metadata.stages[0]);
-
-        for (unsigned i = 0; i < stages_size; i++) {
+        for (unsigned i = 0; i < action_metadata.stages.size(); i++) {
             if (!_action_stopped.load()) {
                 CustomAction::Result stage_res =
                     custom_action->execute_custom_action_stage(action_metadata.stages[i]);
@@ -485,25 +505,37 @@ void execute_stages(
             std::unique_lock<std::mutex> lock(cancel_mtx);
             cancel_signal.wait_for(lock, wait_time, []() { return _action_stopped.load(); });
 
-            _actions_progress.back() = (i + 1) / stages_size * 100.0;
+            _actions_progress.back() = (i + 1.0) / action_metadata.stages.size() * 100.0;
             _actions_result.back() = CustomAction::Result::InProgress;
             LogInfo() << "Custom action #" << _actions_metadata.back().id
                       << " current progress: " << _actions_progress.back() << "%";
         }
+
+        _actions_progress.back() = 100.0;
+        _actions_result.back() = CustomAction::Result::Success;
+
     } else if (action_metadata.global_script != "") {
         if (!_action_stopped.load()) {
             CustomAction::Result result =
                 custom_action->execute_custom_action_global_script(action_metadata.global_script);
             EXPECT_EQ(result, CustomAction::Result::Success);
-        }
 
-        auto wait_time = 3s;
-        std::unique_lock<std::mutex> lock(cancel_mtx);
-        cancel_signal.wait_for(lock, wait_time, []() { return _action_stopped.load(); });
+            _actions_result.back() = result;
+
+            if (result == CustomAction::Result::Success) {
+                _actions_progress.back() = 100.0;
+            }
+        }
     }
 
-    _actions_progress.back() = 100.0;
-    _actions_result.back() = CustomAction::Result::Success;
+    // We wait for half a second to make sure that the ACCEPTED ACKs are sent
+    // to the FMU and don't get lost
+    auto wait_time = 500ms;
+    std::unique_lock<std::mutex> lock(cancel_mtx);
+    cancel_signal.wait_for(lock, wait_time, []() { return _action_stopped.load(); });
+
+    // Used to stop the progress status thread
+    _actions_result.back() = CustomAction::Result::Unknown;
 
     if (_action_stopped.load()) {
         LogWarn() << "Custom action #" << _actions_metadata.back().id << " canceled!";
