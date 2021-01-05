@@ -108,6 +108,21 @@ void CustomActionImpl::process_command_cancellation(const mavlink_message_t& mes
         auto arg1 = custom_action_cancellation();
 
         _parent->call_user_callback([callback, arg1]() { callback(arg1); });
+
+        // Send ACK for cancellation
+        mavlink_message_t command_ack;
+        mavlink_msg_command_ack_pack(
+            _parent->get_own_system_id(),
+            _parent->get_own_component_id(),
+            &command_ack,
+            MAV_CMD_WAYPOINT_USER_1, // MAV_CMD_CUSTOM_ACTION,
+            MAV_RESULT_CANCELLED,
+            0,
+            0,
+            0,
+            0);
+
+        _parent->send_message(command_ack);
     }
 }
 
