@@ -186,7 +186,7 @@ void test_mission(
         1,
         1.0, // Action ID
         0.0, // Action execution control
-        5.0, // Action timeout (in seconds)
+        2.0, // Action timeout (in seconds)
         NAN,
         0 // MAV_MISSION_TYPE_MISSION
         ));
@@ -221,7 +221,7 @@ void test_mission(
         1,
         3.0, // Action ID
         0.0, // Action execution control
-        10.0, // Action timeout (in seconds)
+        16.0, // Action timeout (in seconds)
         NAN,
         0 // MAV_MISSION_TYPE_MISSION
         ));
