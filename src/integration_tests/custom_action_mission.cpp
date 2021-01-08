@@ -153,14 +153,19 @@ void test_mission(
     }
 
     LogInfo() << "System ready";
-    LogInfo() << "Creating and uploading mission";
 
+    // Get the home position so the waypoint mission items are set with respect
+    // to the home position instead of being hardcoded.
+    auto home = telemetry->home();
+    LogInfo() << "Vehicle home " << home;
+
+    LogInfo() << "Creating and uploading mission";
     std::vector<MissionRaw::MissionItem> mission_raw_items;
 
     // Normal waypoint
     mission_raw_items.push_back(add_mission_raw_item(
-        47.398170327054473,
-        8.5456490218639658,
+        home.latitude_deg + 0.000419627,
+        home.longitude_deg - 0.000041622,
         10.0f,
         0,
         6, // MAV_FRAME_GLOBAL_RELATIVE_ALT_INT
@@ -193,8 +198,8 @@ void test_mission(
 
     // Normal waypoint
     mission_raw_items.push_back(add_mission_raw_item(
-        47.398241338125118,
-        8.5455360114574432,
+        home.latitude_deg + 0.000490638,
+        home.longitude_deg - 0.000071389,
         10.0f,
         2,
         6, // MAV_FRAME_GLOBAL_RELATIVE_ALT_INT
@@ -228,8 +233,8 @@ void test_mission(
 
     // Normal waypoint (Hold WP for delivery)
     mission_raw_items.push_back(add_mission_raw_item(
-        47.398241338125118,
-        8.5455360114574432,
+        home.latitude_deg + 0.000490638,
+        home.longitude_deg - 0.000071389,
         10.0f,
         4,
         6, // MAV_FRAME_GLOBAL_RELATIVE_ALT_INT
@@ -245,8 +250,8 @@ void test_mission(
 
     // Normal waypoint
     mission_raw_items.push_back(add_mission_raw_item(
-        47.398170327054473,
-        8.5456490218639658,
+        home.latitude_deg + 0.000419627,
+        home.longitude_deg - 0.000041622,
         10.0f,
         5,
         6, // MAV_FRAME_GLOBAL_RELATIVE_ALT_INT
