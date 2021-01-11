@@ -13,7 +13,7 @@ using namespace std::placeholders;
 using namespace std::chrono_literals;
 
 static std::atomic<bool> _received_custom_action{false};
-static std::atomic<int> _action_progress{0};
+static std::atomic<double> _action_progress{0};
 static std::atomic<CustomAction::Result> _action_result;
 
 static void send_progress_status(std::shared_ptr<CustomAction> custom_action);
@@ -242,7 +242,7 @@ void send_progress_status(std::shared_ptr<CustomAction> custom_action)
 {
     while (_action_result.load() != CustomAction::Result::Unknown) {
         CustomAction::ActionToExecute action_exec{};
-        action_exec.progress = _action_progress.load();
+        action_exec.progress = static_cast<int32_t>(_action_progress.load());
         auto action_result = _action_result.load();
 
         std::promise<void> prom;
@@ -295,7 +295,7 @@ void process_custom_action(
 
     // Start the custom action execution
     execute_stages(action_metadata, custom_action);
-    EXPECT_EQ(_action_progress, 100);
+    EXPECT_DOUBLE_EQ(_action_progress, 100.0);
 
     status_th.join();
 }
