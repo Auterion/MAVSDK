@@ -56,7 +56,7 @@ MavlinkCommandReceiver::Result
 CustomActionImpl::process_custom_action_command(const MavlinkCommandReceiver::CommandLong& command)
 {
     CustomAction::ActionToExecute action_to_exec;
-    action_to_exec.id = command.params.param1;
+    action_to_exec.id = static_cast<uint32_t>(command.params.param1);
     action_to_exec.timeout = command.params.param3;
 
     store_custom_action(action_to_exec);
@@ -164,7 +164,7 @@ void CustomActionImpl::respond_custom_action_async(
         &command_ack,
         MAV_CMD_WAYPOINT_USER_1, // MAV_CMD_CUSTOM_ACTION,
         mavlink_command_result_from_custom_action_result(result),
-        action.progress, // Set the command progress when applicable
+        static_cast<uint8_t>(action.progress), // Set the command progress when applicable
         action.id, // Use the action ID in param4 to identify the action/process
         0,
         0);
@@ -225,7 +225,7 @@ void CustomActionImpl::set_custom_action_async(
 
     // command.command = MAV_CMD_CUSTOM_ACTION;
     command.command = MAV_CMD_WAYPOINT_USER_1;
-    command.params.param1 = action.id; // Action ID
+    command.params.param1 = static_cast<float>(action.id); // Action ID
     command.params.param2 = 0; // Action execution control (N/A)
     command.params.param3 = action.timeout; // Action timeout
     command.target_component_id = _parent->get_autopilot_id();
