@@ -43,7 +43,7 @@ static std::atomic<bool> _new_action{false};
 static std::atomic<bool> _new_actions_check_int{false};
 
 static std::vector<CustomAction::ActionToExecute> _actions;
-static std::vector<int> _actions_progress;
+static std::vector<double> _actions_progress;
 static std::vector<CustomAction::Result> _actions_result;
 static std::vector<CustomAction::ActionMetadata> _actions_metadata;
 static std::vector<std::thread> _progress_threads;
@@ -310,8 +310,8 @@ void test_mission(
             LogInfo() << "Mission status update: " << progress.current << " / " << progress.total;
         }
 
-        _progress_current = progress.current;
-        _progress_total = progress.total;
+        _progress_current = static_cast<float>(progress.current);
+        _progress_total = static_cast<float>(progress.total);
 
         if (progress.current == progress.total && !_mission_finished) {
             _mission_finished = true;
@@ -489,7 +489,7 @@ void process_custom_action(CustomAction::ActionToExecute action)
     // This means that only one action at a time can be processed
     execute_custom_action(_actions_metadata.back(), _custom_action);
 
-    EXPECT_EQ(_actions_progress.back(), 100);
+    EXPECT_DOUBLE_EQ(_actions_progress.back(), 100.0);
 
     _progress_threads.back().join();
 }
