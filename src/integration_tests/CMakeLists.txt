@@ -1,3 +1,6 @@
+# Required for custom_action plugin testing
+find_package(Python3 COMPONENTS Interpreter)
+
 # SYSTEM because we don't want warnings for gtest headers.
 include_directories(
     SYSTEM ${PROJECT_SOURCE_DIR}/third_party/gtest/googletest/include
