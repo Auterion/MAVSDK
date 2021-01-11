@@ -1,3 +1,25 @@
+# Required for custom_action plugin testing
+find_package(Python3 COMPONENTS Interpreter)
+
+# SYSTEM because we don't want warnings for gtest headers.
+include_directories(
+    SYSTEM ${PROJECT_SOURCE_DIR}/third_party/gtest/googletest/include
+    SYSTEM ${PROJECT_SOURCE_DIR}/third_party/gtest/googlemock/include
+    SYSTEM ${PROJECT_SOURCE_DIR}/third_party/mavlink/include
+)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DTESTING")
+
+if(MSVC)
+    add_compile_options(
+         /wd4996 # ignore deprecated
+    )
+else()
+    add_compile_options(
+        -Wno-error=deprecated-declarations
+    )
+endif()
+
 # `make test` does not show output, but `make check` does
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --verbose)
 
