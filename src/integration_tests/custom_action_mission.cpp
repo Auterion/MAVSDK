@@ -490,6 +490,10 @@ void process_custom_action(CustomAction::ActionToExecute action)
     execute_custom_action(_actions_metadata.back(), _custom_action);
 
     EXPECT_DOUBLE_EQ(_actions_progress.back(), 100.0);
+    EXPECT_EQ(_actions_result.back(), CustomAction::Result::Success);
+
+    // Used to stop the progress status thread
+    _actions_result.back() = CustomAction::Result::Unknown;
 
     _progress_threads.back().join();
 }
@@ -503,26 +507,40 @@ void execute_custom_action(
                 CustomAction::Result stage_res =
                     custom_action->execute_custom_action_stage(action_metadata.stages[i]);
                 EXPECT_EQ(stage_res, CustomAction::Result::Success);
-                _actions_result.back() = CustomAction::Result::InProgress;
             }
 
             auto wait_time = action_metadata.stages[i].timestamp_stop * 1s;
             std::unique_lock<std::mutex> lock(cancel_mtx);
             cancel_signal.wait_for(lock, wait_time, []() { return _action_stopped.load(); });
 
-            _actions_progress.back() = (i + 1.0) / action_metadata.stages.size() * 100.0;
-            _actions_result.back() = CustomAction::Result::InProgress;
-            LogInfo() << "Custom action #" << _actions_metadata.back().id
-                      << " current progress: " << _actions_progress.back() << "%";
-        }
+            if (!_action_stopped.load()) {
+                _actions_progress.back() = (i + 1.0) / action_metadata.stages.size() * 100.0;
 
-        _actions_progress.back() = 100.0;
-        _actions_result.back() = CustomAction::Result::Success;
+                if (_actions_progress.back() != 100.0) {
+                    _actions_result.back() = CustomAction::Result::InProgress;
+                    LogInfo() << "Custom action #" << _actions_metadata.back().id
+                              << " current progress: " << _actions_progress.back() << "%";
+                } else {
+                    _actions_result.back() = CustomAction::Result::Success;
+                }
+            }
+        }
 
     } else if (action_metadata.global_script != "") {
         if (!_action_stopped.load()) {
-            CustomAction::Result result =
-                custom_action->execute_custom_action_global_script(action_metadata.global_script);
+            std::promise<CustomAction::Result> prom;
+            std::future<CustomAction::Result> fut = prom.get_future();
+            custom_action->execute_custom_action_global_script_async(
+                action_metadata.global_script,
+                [&prom](CustomAction::Result script_result) { prom.set_value(script_result); });
+
+            CustomAction::Result result = CustomAction::Result::Unknown;
+            if (!std::isnan(action_metadata.global_timeout)) {
+                std::chrono::seconds timeout(static_cast<long int>(action_metadata.global_timeout));
+                EXPECT_EQ(fut.wait_for(timeout), std::future_status::ready);
+            }
+
+            result = fut.get();
             EXPECT_EQ(result, CustomAction::Result::Success);
 
             _actions_result.back() = result;
@@ -538,9 +556,6 @@ void execute_custom_action(
     auto wait_time = 500ms;
     std::unique_lock<std::mutex> lock(cancel_mtx);
     cancel_signal.wait_for(lock, wait_time, []() { return _action_stopped.load(); });
-
-    // Used to stop the progress status thread
-    _actions_result.back() = CustomAction::Result::Unknown;
 
     if (_action_stopped.load()) {
         LogWarn() << "Custom action #" << _actions_metadata.back().id << " canceled!";
