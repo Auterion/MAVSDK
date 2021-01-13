@@ -95,15 +95,13 @@ TEST_F(SitlTest, CustomAction)
     auto custom_action_comp = std::make_shared<CustomAction>(system_to_companion);
     auto param = std::make_shared<Param>(system_to_companion);
 
-    // Set COM_DISARM_LAND to 0 for this action
+    // Get COM_DISARM_LAND current value.
     std::pair<Param::Result, float> get_com_disarm_land = param->get_param_float("COM_DISARM_LAND");
-
-    // Get initial value.
     ASSERT_EQ(get_com_disarm_land.first, Param::Result::Success);
 
     std::this_thread::sleep_for(std::chrono::seconds(1));
 
-    // Toggle the value.
+    // Set COM_DISARM_LAND to 0 for this action.
     Param::Result set_com_disarm_land = param->set_param_float("COM_DISARM_LAND", 0.0f);
     EXPECT_EQ(set_com_disarm_land, Param::Result::Success);
 
