@@ -297,6 +297,9 @@ void CustomActionImpl::custom_action_metadata_async(
     action_metadata.id = action.id;
     action_metadata.name = action_root["name"].asString();
     action_metadata.description = action_root["description"].asString();
+    action_metadata.global_timeout = action_root["global_timeout"].isNull() ?
+                                         double(NAN) :
+                                         action_root["global_timeout"].asDouble();
 
     // If the action triggers a global script, pass it instead to the client
     if (action_root["global_script"].asString() != "") {

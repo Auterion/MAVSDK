@@ -189,7 +189,10 @@ std::ostream& operator<<(std::ostream& str, CustomAction::Stage const& stage)
 bool operator==(const CustomAction::ActionMetadata& lhs, const CustomAction::ActionMetadata& rhs)
 {
     return (rhs.id == lhs.id) && (rhs.name == lhs.name) && (rhs.description == lhs.description) &&
-           (rhs.global_script == lhs.global_script) && (rhs.stages == lhs.stages);
+           (rhs.global_script == lhs.global_script) &&
+           ((std::isnan(rhs.global_timeout) && std::isnan(lhs.global_timeout)) ||
+            rhs.global_timeout == lhs.global_timeout) &&
+           (rhs.stages == lhs.stages);
 }
 
 std::ostream& operator<<(std::ostream& str, CustomAction::ActionMetadata const& action_metadata)
@@ -200,6 +203,7 @@ std::ostream& operator<<(std::ostream& str, CustomAction::ActionMetadata const& 
     str << "    name: " << action_metadata.name << '\n';
     str << "    description: " << action_metadata.description << '\n';
     str << "    global_script: " << action_metadata.global_script << '\n';
+    str << "    global_timeout: " << action_metadata.global_timeout << '\n';
     str << "    stages: [";
     for (auto it = action_metadata.stages.begin(); it != action_metadata.stages.end(); ++it) {
         str << *it;
