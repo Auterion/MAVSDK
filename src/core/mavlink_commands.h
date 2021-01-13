@@ -133,19 +133,6 @@ public:
     explicit MavlinkCommandReceiver(SystemImpl& system_impl);
     ~MavlinkCommandReceiver();
 
-    enum class Result {
-        Success = 0,
-        NoSystem,
-        ConnectionError,
-        Busy,
-        CommandDenied,
-        Unsupported,
-        Timeout,
-        InProgress,
-        UnknownError,
-        NoAcknowledge
-    };
-
     struct CommandInt {
         uint8_t target_system_id{0};
         uint8_t target_component_id{0};
@@ -213,10 +200,8 @@ public:
         }
     };
 
-    using MavlinkCommandIntHandler =
-        std::function<MavlinkCommandReceiver::Result(const CommandInt&)>;
-    using MavlinkCommandLongHandler =
-        std::function<MavlinkCommandReceiver::Result(const CommandLong&)>;
+    using MavlinkCommandIntHandler = std::function<mavlink_message_t(const CommandInt&)>;
+    using MavlinkCommandLongHandler = std::function<mavlink_message_t(const CommandLong&)>;
 
     void register_mavlink_command_handler(
         uint16_t cmd_id, MavlinkCommandIntHandler callback, const void* cookie);
