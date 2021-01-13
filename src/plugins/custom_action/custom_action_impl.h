@@ -18,7 +18,7 @@ public:
     void enable() override;
     void disable() override;
 
-    MavlinkCommandReceiver::Result
+    mavlink_message_t
     process_custom_action_command(const MavlinkCommandReceiver::CommandLong& command);
 
     void process_command_cancellation(const mavlink_message_t& message);
