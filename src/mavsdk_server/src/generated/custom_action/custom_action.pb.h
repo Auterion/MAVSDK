@@ -3003,13 +3003,14 @@ class ActionMetadata PROTOBUF_FINAL :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kStagesFieldNumber = 5,
+    kStagesFieldNumber = 6,
     kNameFieldNumber = 2,
     kDescriptionFieldNumber = 3,
     kGlobalScriptFieldNumber = 4,
+    kGlobalTimeoutFieldNumber = 5,
     kIdFieldNumber = 1,
   };
-  // repeated .mavsdk.rpc.custom_action.Stage stages = 5;
+  // repeated .mavsdk.rpc.custom_action.Stage stages = 6;
   int stages_size() const;
   private:
   int _internal_stages_size() const;
@@ -3075,6 +3076,15 @@ class ActionMetadata PROTOBUF_FINAL :
   std::string* _internal_mutable_global_script();
   public:
 
+  // double global_timeout = 5;
+  void clear_global_timeout();
+  double global_timeout() const;
+  void set_global_timeout(double value);
+  private:
+  double _internal_global_timeout() const;
+  void _internal_set_global_timeout(double value);
+  public:
+
   // uint32 id = 1;
   void clear_id();
   ::PROTOBUF_NAMESPACE_ID::uint32 id() const;
@@ -3095,6 +3105,7 @@ class ActionMetadata PROTOBUF_FINAL :
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr description_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr global_script_;
+  double global_timeout_;
   ::PROTOBUF_NAMESPACE_ID::uint32 id_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_custom_5faction_2fcustom_5faction_2eproto;
@@ -5222,7 +5233,27 @@ inline void ActionMetadata::set_allocated_global_script(std::string* global_scri
   // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.custom_action.ActionMetadata.global_script)
 }
 
-// repeated .mavsdk.rpc.custom_action.Stage stages = 5;
+// double global_timeout = 5;
+inline void ActionMetadata::clear_global_timeout() {
+  global_timeout_ = 0;
+}
+inline double ActionMetadata::_internal_global_timeout() const {
+  return global_timeout_;
+}
+inline double ActionMetadata::global_timeout() const {
+  // @@protoc_insertion_point(field_get:mavsdk.rpc.custom_action.ActionMetadata.global_timeout)
+  return _internal_global_timeout();
+}
+inline void ActionMetadata::_internal_set_global_timeout(double value) {
+  
+  global_timeout_ = value;
+}
+inline void ActionMetadata::set_global_timeout(double value) {
+  _internal_set_global_timeout(value);
+  // @@protoc_insertion_point(field_set:mavsdk.rpc.custom_action.ActionMetadata.global_timeout)
+}
+
+// repeated .mavsdk.rpc.custom_action.Stage stages = 6;
 inline int ActionMetadata::_internal_stages_size() const {
   return stages_.size();
 }
