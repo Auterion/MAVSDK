@@ -32,7 +32,8 @@ void CustomActionImpl::init()
     using namespace std::placeholders;
 
     _parent->register_mavlink_command_handler(
-        MAV_CMD_WAYPOINT_USER_1, // MAV_CMD_CUSTOM_ACTION,
+        MAV_CMD_WAYPOINT_USER_1, // TODO: use MAV_CMD_CUSTOM_ACTION when it is merged in upstream
+                                 // MAVLink
         std::bind(&CustomActionImpl::process_custom_action_command, this, _1),
         this);
 
@@ -76,7 +77,8 @@ CustomActionImpl::process_custom_action_command(const MavlinkCommandReceiver::Co
             _parent->get_own_system_id(),
             _parent->get_own_component_id(),
             &command_ack,
-            MAV_CMD_WAYPOINT_USER_1, // MAV_CMD_CUSTOM_ACTION,
+            MAV_CMD_WAYPOINT_USER_1, // TODO: use MAV_CMD_CUSTOM_ACTION when it is merged in
+                                     // upstream MAVLink
             MAV_RESULT_IN_PROGRESS,
             0,
             action_to_exec.id, // Use the action ID in param4 to identify the action/process
@@ -97,8 +99,8 @@ void CustomActionImpl::process_command_cancellation(const mavlink_message_t& mes
     mavlink_command_cancel_t command_cancel;
     mavlink_msg_command_cancel_decode(&message, &command_cancel);
 
-    // if (command_cancel.command == MAV_CMD_CUSTOM_ACTION) {
-    if (command_cancel.command == MAV_CMD_WAYPOINT_USER_1) {
+    if (command_cancel.command == MAV_CMD_WAYPOINT_USER_1) { // TODO: use MAV_CMD_CUSTOM_ACTION when
+                                                             // it is merged in upstream MAVLink
         store_custom_action_cancellation(true);
     }
 
@@ -115,7 +117,8 @@ void CustomActionImpl::process_command_cancellation(const mavlink_message_t& mes
             _parent->get_own_system_id(),
             _parent->get_own_component_id(),
             &command_ack,
-            MAV_CMD_WAYPOINT_USER_1, // MAV_CMD_CUSTOM_ACTION,
+            MAV_CMD_WAYPOINT_USER_1, // TODO: use MAV_CMD_CUSTOM_ACTION when it is merged in
+                                     // upstream MAVLink
             MAV_RESULT_CANCELLED,
             0,
             0,
@@ -162,7 +165,8 @@ void CustomActionImpl::respond_custom_action_async(
         _parent->get_own_system_id(),
         _parent->get_own_component_id(),
         &command_ack,
-        MAV_CMD_WAYPOINT_USER_1, // MAV_CMD_CUSTOM_ACTION,
+        MAV_CMD_WAYPOINT_USER_1, // TODO: use MAV_CMD_CUSTOM_ACTION when it is merged in upstream
+                                 // MAVLink
         mavlink_command_result_from_custom_action_result(result),
         static_cast<uint8_t>(action.progress), // Set the command progress when applicable
         action.id, // Use the action ID in param4 to identify the action/process
@@ -223,8 +227,8 @@ void CustomActionImpl::set_custom_action_async(
 {
     MavlinkCommandSender::CommandLong command{};
 
-    // command.command = MAV_CMD_CUSTOM_ACTION;
-    command.command = MAV_CMD_WAYPOINT_USER_1;
+    command.command = MAV_CMD_WAYPOINT_USER_1; // TODO: use MAV_CMD_CUSTOM_ACTION when it is merged
+                                               // in upstream MAVLink
     command.params.param1 = static_cast<float>(action.id); // Action ID
     command.params.param2 = 0; // Action execution control (N/A)
     command.params.param3 = action.timeout; // Action timeout
