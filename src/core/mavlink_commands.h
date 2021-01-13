@@ -165,19 +165,6 @@ public:
     explicit MavlinkCommandReceiver(SystemImpl& system_impl);
     ~MavlinkCommandReceiver();
 
-    enum class Result {
-        Success = 0,
-        NoSystem,
-        ConnectionError,
-        Busy,
-        CommandDenied,
-        Unsupported,
-        Timeout,
-        InProgress,
-        UnknownError,
-        NoAcknowledge
-    };
-
     struct CommandInt {
         uint8_t target_system_id{0};
         uint8_t target_component_id{0};
