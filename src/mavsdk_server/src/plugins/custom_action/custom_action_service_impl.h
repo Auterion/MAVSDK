@@ -205,6 +205,8 @@ public:
 
         rpc_obj->set_global_script(action_metadata.global_script);
 
+        rpc_obj->set_global_timeout(action_metadata.global_timeout);
+
         for (const auto& elem : action_metadata.stages) {
             auto* ptr = rpc_obj->add_stages();
             ptr->CopyFrom(*translateToRpcStage(elem).release());
@@ -225,6 +227,8 @@ public:
         obj.description = action_metadata.description();
 
         obj.global_script = action_metadata.global_script();
+
+        obj.global_timeout = action_metadata.global_timeout();
 
         for (const auto& elem : action_metadata.stages()) {
             obj.stages.push_back(
