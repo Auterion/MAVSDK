@@ -3,6 +3,7 @@
                 "name": "Integration test - package delivery action",
                 "description": "Example action of a delivery procedure",
                 "global_script": "",
+                "global_timeout": null,
                 "stages": [{
                                 "cmd": {
                                         "type": "INT",
@@ -107,18 +108,21 @@
                 "name": "Integration test - turn-on air quality sensor",
                 "description": "Example action to turn-on an onboard sensor",
                 "global_script": "./src/integration_tests/test_data/custom_action_scripts/dummy_air_quality_sensor.py on",
+                "global_timeout": 1.0,
                 "stages": [{}]
         },
         "action_2": {
                 "name": "Integration test - turn-off air quality sensor",
                 "description": "Example action to turn-off an onboard sensor",
                 "global_script": "./src/integration_tests/test_data/custom_action_scripts/dummy_air_quality_sensor.py off",
+                "global_timeout": 1.0,
                 "stages": [{}]
         },
         "action_3": {
                 "name": "Integration test - package delivery with winch action",
                 "description": "Example action of a delivery with a winch procedure",
                 "global_script": "",
+                "global_timeout": null,
                 "stages": [{
                                 "cmd": {},
                                 "script": "./src/integration_tests/test_data/custom_action_scripts/dummy_winch.py descend",
