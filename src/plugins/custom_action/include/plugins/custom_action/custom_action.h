@@ -140,8 +140,17 @@ public:
     friend std::ostream& operator<<(std::ostream& str, CustomAction::Command const& command);
 
     /**
-     * @brief Defines totally or partially a custom action. Can be a Mavlink command or a
-     * script.
+     * @brief Defines totally or partially a custom action. Can be a MAVLink command or a
+     * script (with full or relative path).
+     *
+     * The timestamps are relative to the start of the action. This is rather useful
+     * if one has a state machine on the Companion/Mission Computer to process this.
+     * In the other hand, one does not have to consume these timestamps by just
+     * defining the trigger times manually on the state machine.
+     *
+     * @note it is considered that a timestamp_start of 0 and timestamp_stop > 0,
+     * then timestamp_stop is used as a timeout to the stage, forcing the action
+     * to the next stage, if available, or to complete.
      */
     struct Stage {
         Command command{}; /**< @brief Command to run in the stage (if applicable) */
@@ -173,6 +182,10 @@ public:
         std::string description{}; /**< @brief Description of the action */
         std::string global_script{}; /**< @brief Script to run for this specific action. Runs
                                         instead of the stages. */
+        double global_timeout{}; /**< @brief Timeout for the action. If a global script is set, it
+                                    is used as a timeout for the script. Otherwise, for a staged
+                                    action, defines the global timeout for the action. independently
+                                    of the state of the stage processing. */
         std::vector<Stage>
             stages{}; /**< @brief Timestamped ordered stages. Runs instead of the global script. */
     };
