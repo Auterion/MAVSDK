@@ -53,7 +53,7 @@ void CustomActionImpl::enable() {}
 
 void CustomActionImpl::disable() {}
 
-MavlinkCommandReceiver::Result
+mavlink_message_t
 CustomActionImpl::process_custom_action_command(const MavlinkCommandReceiver::CommandLong& command)
 {
     CustomAction::ActionToExecute action_to_exec;
@@ -62,7 +62,7 @@ CustomActionImpl::process_custom_action_command(const MavlinkCommandReceiver::Co
 
     store_custom_action(action_to_exec);
 
-    bool result = false;
+    mavlink_message_t command_ack;
 
     std::lock_guard<std::mutex> lock(_subscription_mutex);
     if (_custom_action_command_subscription) {
@@ -72,7 +72,6 @@ CustomActionImpl::process_custom_action_command(const MavlinkCommandReceiver::Co
         _parent->call_user_callback([callback, arg1]() { callback(arg1); });
 
         // Send first ACK marking the command as being in progress
-        mavlink_message_t command_ack;
         mavlink_msg_command_ack_pack(
             _parent->get_own_system_id(),
             _parent->get_own_component_id(),
@@ -84,14 +83,11 @@ CustomActionImpl::process_custom_action_command(const MavlinkCommandReceiver::Co
             action_to_exec.id, // Use the action ID in param4 to identify the action/process
             0,
             0);
-
-        result = _parent->send_message(command_ack);
     }
 
-    // If sending the message succeeds, result is NoAcknowledge
-    // so that one does not acknowledge twice
-    return result ? MavlinkCommandReceiver::Result::NoAcknowledge :
-                    MavlinkCommandReceiver::Result::UnknownError;
+    // The COMMAND_ACK is sent as a result fo the callback so to be processed and
+    // sent on the server side.
+    return command_ack;
 }
 
 void CustomActionImpl::process_command_cancellation(const mavlink_message_t& message)
