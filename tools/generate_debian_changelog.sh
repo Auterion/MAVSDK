@@ -1,13 +1,19 @@
 #!/usr/bin/env bash
 
 # We want to extract "1.2.3" from "v1.2.3-5-g123abc".
-tag_version=`git describe --always --tags | sed 's/v\([0-9]*\.[0-9]*\.[0-9]*\).*$/\1/'`
+default_tag_version=`git describe --always --tags $(git rev-list --tags --max-count=1) | sed 's/v\([0-9]*\.[0-9]*\.[0-9]*\).*$/\1/'`
 
 # Default to 1 for package version
-if [ "$#" == 1 ]; then
-    package_version=$1
+if [ -z "$1" ]; then
+    package_version=1
 else
-    package_version="1"
+    package_version=$1
+fi
+
+if [ -z "$2" ]; then
+    tag_version=$default_tag_version
+else
+    tag_version=$2
 fi
 
 # Date according to RFC 5322
