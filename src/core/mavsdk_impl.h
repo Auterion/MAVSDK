@@ -25,7 +25,7 @@ public:
     /** @brief Default System ID for CompanionComputer configuration type. */
     static constexpr int DEFAULT_SYSTEM_ID_CC = 1;
     /** @brief Default Component ID for CompanionComputer configuration type. */
-    static constexpr int DEFAULT_COMPONENT_ID_CC = MAV_COMP_ID_PATHPLANNER;
+    static constexpr int DEFAULT_COMPONENT_ID_CC = MAV_COMP_ID_ONBOARD_COMPUTER;
     /** @brief Default System ID for Autopilot configuration type. */
     static constexpr int DEFAULT_SYSTEM_ID_AUTOPILOT = 1;
     /** @brief Default Component ID for Autopilot configuration type. */
