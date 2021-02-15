@@ -18,7 +18,8 @@ ObstacleAvoidanceServerImpl::~ObstacleAvoidanceServerImpl()
     _parent->unregister_plugin(this);
 }
 
-void ObstacleAvoidanceServerImpl::init() {
+void ObstacleAvoidanceServerImpl::init()
+{
     using namespace std::placeholders;
 
     _parent->register_mavlink_command_handler(
@@ -27,7 +28,8 @@ void ObstacleAvoidanceServerImpl::init() {
         this);
 }
 
-void ObstacleAvoidanceServerImpl::deinit() {
+void ObstacleAvoidanceServerImpl::deinit()
+{
     _parent->unregister_all_mavlink_command_handlers(this);
 }
 
