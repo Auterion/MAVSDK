@@ -1,6 +1,6 @@
 add_library(mavsdk_mocap
-        mocap.cpp
-        mocap_impl.cpp
+    mocap.cpp
+    mocap_impl.cpp
 )
 
 target_link_libraries(mavsdk_mocap
@@ -25,6 +25,6 @@ install(TARGETS mavsdk_mocap
     )
 
 install(FILES
-        include/plugins/mocap/mocap.h
+    include/plugins/mocap/mocap.h
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/mavsdk/plugins/mocap
 )
