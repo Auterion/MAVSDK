@@ -25,13 +25,12 @@ public:
     void control_async(ObstacleAvoidanceServer::ControlCallback callback);
 
 private:
-    mutable std::mutex _component_control_command_mutex{};
-    ObstacleAvoidanceServer::ControlType _control{};
+    void store_control(ObstacleAvoidanceServer::ControlType control);
+
+    std::atomic<ObstacleAvoidanceServer::ControlType> _control{};
 
     std::mutex _subscription_mutex{};
     ObstacleAvoidanceServer::ControlCallback _component_control_command_subscription{nullptr};
-
-    void store_control(ObstacleAvoidanceServer::ControlType control);
 };
 
 } // namespace mavsdk
