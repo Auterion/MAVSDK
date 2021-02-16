@@ -28,5 +28,5 @@ cmake --build build/debug -- -j $NPROCS;
 if [ -n "`echo $AUTERION_PX4_VERSIONS | xargs -n1 echo | grep -e \"^$PX4_VERSION$\"`" ] ; then
   PX4_SIM_SPEED_FACTOR=10 AUTOSTART_SITL=1 PX4_FIRMWARE_DIR=$PX4_FIRMWARE_DIR HEADLESS=1 build/debug/src/integration_tests/integration_tests_runner --gtest_filter="SitlTest.*:-SitlTest.AP*"
 else
-  PX4_SIM_SPEED_FACTOR=10 AUTOSTART_SITL=1 PX4_FIRMWARE_DIR=$PX4_FIRMWARE_DIR HEADLESS=1 build/debug/src/integration_tests/integration_tests_runner --gtest_filter="SitlTest.*:-SitlTest.CustomAction*:-SitlTest.AP*"
+  PX4_SIM_SPEED_FACTOR=10 AUTOSTART_SITL=1 PX4_FIRMWARE_DIR=$PX4_FIRMWARE_DIR HEADLESS=1 build/debug/src/integration_tests/integration_tests_runner --gtest_filter="SitlTest.*:-SitlTest.AP*:-SitlTest.CustomAction*:SitlTest.ObstacleAvoidanceControl*"
 fi
