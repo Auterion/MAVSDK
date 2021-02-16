@@ -31,10 +31,11 @@ namespace rpc {
 namespace obstacle_avoidance_server {
 
 //
-// Companion computer/server side API to manage/control obstacle avoidance
-// services identified as MAV_COMP_ID_OBSTACLE_AVOIDANCE.
+// Companion computer/server side API to manage and control obstacle avoidance
+// services.
 //
-// -> Currently only a single obstacle avoidance service instance is supported! <-
+// Currently a single obstacle avoidance service instance is supported which
+// needs to have component ID MAV_COMP_ID_OBSTACLE_AVOIDANCE.
 //
 // Note also that application/service specific configurations should live in
 // the application layer, as they are not defined at the MAVLink level.

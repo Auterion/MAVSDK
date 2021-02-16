@@ -31,10 +31,10 @@ namespace rpc {
 namespace obstacle_avoidance {
 
 //
-// Allows manage/control of obstacle avoidance services, identified as
-// MAV_COMP_ID_OBSTACLE_AVOIDANCE, from the ground.
+// Plugin to manage and control obstacle avoidance services from the ground.
 //
-// -> Currently only a single obstacle avoidance service instance is supported! <-
+// Currently a single obstacle avoidance service instance is supported which
+// needs to have component ID MAV_COMP_ID_OBSTACLE_AVOIDANCE.
 //
 // Note also that application/service specific configurations should live in
 // the server application layer, as they are not defined at the MAVLink level.
