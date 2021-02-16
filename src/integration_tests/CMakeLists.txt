@@ -58,6 +58,7 @@ add_executable(integration_tests_runner
     mission_raw_mission_changed.cpp
     mission_raw_import_and_fly.cpp
     mission_set_current.cpp
+    obstacle_avoidance_control.cpp
     offboard_acceleration.cpp
     offboard_velocity.cpp
     offboard_position.cpp
@@ -90,6 +91,8 @@ target_link_libraries(integration_tests_runner
     mavsdk_custom_action
     mavsdk_mission
     mavsdk_mission_raw
+    mavsdk_obstacle_avoidance
+    mavsdk_obstacle_avoidance_server
     mavsdk_offboard
     mavsdk_log_files
     mavsdk_info
