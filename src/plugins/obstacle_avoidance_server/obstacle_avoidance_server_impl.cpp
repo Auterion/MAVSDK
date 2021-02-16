@@ -20,11 +20,11 @@ ObstacleAvoidanceServerImpl::~ObstacleAvoidanceServerImpl()
 
 void ObstacleAvoidanceServerImpl::init()
 {
-    using namespace std::placeholders;
-
     _parent->register_mavlink_command_handler(
         MAV_CMD_COMPONENT_CONTROL,
-        std::bind(&ObstacleAvoidanceServerImpl::process_component_control_command, this, _1),
+        [this](const MavlinkCommandReceiver::CommandLong& command) {
+            return process_component_control_command(command);
+        },
         this);
 }
 
@@ -40,12 +40,12 @@ void ObstacleAvoidanceServerImpl::disable() {}
 mavlink_message_t ObstacleAvoidanceServerImpl::process_component_control_command(
     const MavlinkCommandReceiver::CommandLong& command)
 {
-    mavlink_message_t command_ack;
+    mavlink_message_t ack_message;
 
     if (command.params.param1 == MAV_COMP_ID_OBSTACLE_AVOIDANCE) {
         ObstacleAvoidanceServer::ControlType control_type;
         control_type.control_type =
-            static_cast<ObstacleAvoidanceServer::ControlType::Type>(command.params.param2);
+            static_cast<ObstacleAvoidanceServer::ControlType::Type>(command.params.param2 + 0.5f);
 
         store_control(control_type);
 
@@ -60,7 +60,7 @@ mavlink_message_t ObstacleAvoidanceServerImpl::process_component_control_command
             mavlink_msg_command_ack_pack(
                 _parent->get_own_system_id(),
                 _parent->get_own_component_id(),
-                &command_ack,
+                &ack_message,
                 MAV_CMD_COMPONENT_CONTROL,
                 MAV_RESULT_ACCEPTED,
                 0,
@@ -68,35 +68,21 @@ mavlink_message_t ObstacleAvoidanceServerImpl::process_component_control_command
                 0,
                 0);
         }
-    } else {
-        // Send command denied ACK
-        mavlink_msg_command_ack_pack(
-            _parent->get_own_system_id(),
-            _parent->get_own_component_id(),
-            &command_ack,
-            MAV_CMD_COMPONENT_CONTROL,
-            MAV_RESULT_DENIED,
-            0,
-            0,
-            0,
-            0);
     }
 
     // The COMMAND_ACK is sent as a result to the callback so to be processed and
     // sent on the server side.
-    return command_ack;
+    return ack_message;
 }
 
 void ObstacleAvoidanceServerImpl::store_control(ObstacleAvoidanceServer::ControlType control)
 {
-    std::lock_guard<std::mutex> lock(_component_control_command_mutex);
-    _control = control;
+    _control.store(control);
 }
 
 ObstacleAvoidanceServer::ControlType ObstacleAvoidanceServerImpl::control() const
 {
-    std::lock_guard<std::mutex> lock(_component_control_command_mutex);
-    return _control;
+    return _control.load();
 }
 
 void ObstacleAvoidanceServerImpl::control_async(ObstacleAvoidanceServer::ControlCallback callback)
