@@ -322,6 +322,16 @@ std::string SystemImpl::component_name(uint8_t component_id)
             return "Camera 6";
         case MAV_COMP_ID_GIMBAL:
             return "Gimbal";
+        case MAV_COMP_ID_MISSIONPLANNER:
+            return "Mission Planner / GCS";
+        case MAV_COMP_ID_PATHPLANNER:
+            return "Path Planner";
+        case MAV_COMP_ID_ONBOARD_COMPUTER:
+            return "Onboard Computer";
+        case MAV_COMP_ID_OBSTACLE_AVOIDANCE:
+            return "Obstacle Avoidance";
+        case MAV_COMP_ID_VISUAL_INERTIAL_ODOMETRY:
+            return "VIO";
         default:
             return "Unsupported component";
     }
