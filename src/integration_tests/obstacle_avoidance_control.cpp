@@ -10,7 +10,7 @@ using namespace mavsdk;
 using namespace std::placeholders;
 using namespace std::chrono_literals;
 
-static void run_cmd(const std::string& cmd_str);
+static int run_cmd(const std::string& cmd_str);
 
 TEST_F(SitlTest, ObstacleAvoidanceControl)
 {
@@ -56,24 +56,23 @@ TEST_F(SitlTest, ObstacleAvoidanceControl)
     ConnectionResult ret_comp = mavsdk_companion.add_udp_connection(14540);
     ASSERT_EQ(ret_comp, ConnectionResult::Success);
 
-    bool gcs_set = false;
     auto gcs_to_companion = std::shared_ptr<System>{nullptr};
     {
         LogInfo() << "Waiting to discover GCS from the mission computer side";
         std::promise<void> prom;
         std::future<void> fut = prom.get_future();
 
-        mavsdk_companion.subscribe_on_new_system(
-            [&prom, &mavsdk_companion, &gcs_to_companion, &gcs_set]() {
-                for (auto& system : mavsdk_companion.systems()) {
-                    if (!gcs_set && system->get_system_id() == 245) {
-                        gcs_to_companion = system;
-                        gcs_set = true;
-                        prom.set_value();
-                        break;
-                    }
+        mavsdk_companion.subscribe_on_new_system([&prom, &mavsdk_companion, &gcs_to_companion]() {
+            for (auto& system : mavsdk_companion.systems()) {
+                if (system->get_system_id() == 245) {
+                    gcs_to_companion = system;
+                    // Avoid setting the promise twice
+                    mavsdk_companion.subscribe_on_new_system(nullptr);
+                    prom.set_value();
+                    break;
                 }
-            });
+            }
+        });
 
         ASSERT_EQ(fut.wait_for(std::chrono::seconds(10)), std::future_status::ready);
     }
@@ -86,15 +85,23 @@ TEST_F(SitlTest, ObstacleAvoidanceControl)
     obstacle_avoidance_server->subscribe_control([](ObstacleAvoidanceServer::ControlType control) {
         switch (control.control_type) {
             case ObstacleAvoidanceServer::ControlType::Type::ControlStart:
-                run_cmd("python3 src/integration_tests/test_data/obstacle_avoidance_dummy.py &");
+                EXPECT_EQ(
+                    run_cmd(
+                        "python3 src/integration_tests/test_data/obstacle_avoidance_dummy.py &"),
+                    0);
                 break;
             case ObstacleAvoidanceServer::ControlType::Type::ControlStop:
-                run_cmd("kill `cat obs_avoid_service.pid` && rm -rf obs_avoid_service.pid");
+                EXPECT_EQ(
+                    run_cmd("kill `cat obs_avoid_service.pid` && rm -rf obs_avoid_service.pid"), 0);
                 break;
             case ObstacleAvoidanceServer::ControlType::Type::ControlRestart:
-                run_cmd("kill `cat obs_avoid_service.pid` && rm -rf obs_avoid_service.pid");
-                std::this_thread::sleep_for(std::chrono::seconds(1));
-                run_cmd("python3 src/integration_tests/test_data/obstacle_avoidance_dummy.py &");
+                EXPECT_EQ(
+                    run_cmd("kill `cat obs_avoid_service.pid` && rm -rf obs_avoid_service.pid"), 0);
+                std::this_thread::sleep_for(std::chrono::milliseconds(500));
+                EXPECT_EQ(
+                    run_cmd(
+                        "python3 src/integration_tests/test_data/obstacle_avoidance_dummy.py &"),
+                    0);
                 break;
             default:
                 LogInfo() << "Unsupported control type";
@@ -104,46 +111,30 @@ TEST_F(SitlTest, ObstacleAvoidanceControl)
     // Start controls sending
     {
         LogInfo() << "Starting obstacle avoidance...";
-        std::promise<void> prom1;
-        std::future<void> fut1 = prom1.get_future();
-        obstacle_avoidance->start_async([&prom1](ObstacleAvoidance::Result result) {
-            EXPECT_EQ(result, ObstacleAvoidance::Result::Success);
-            prom1.set_value();
-        });
-        EXPECT_EQ(fut1.wait_for(std::chrono::seconds(2)), std::future_status::ready);
+        EXPECT_EQ(obstacle_avoidance->start(), ObstacleAvoidance::Result::Success);
     }
 
     std::this_thread::sleep_for(std::chrono::seconds(3));
 
     {
         LogInfo() << "Restarting obstacle avoidance...";
-        std::promise<void> prom;
-        std::future<void> fut = prom.get_future();
-        obstacle_avoidance->restart_async([&prom](ObstacleAvoidance::Result result) {
-            EXPECT_EQ(result, ObstacleAvoidance::Result::Success);
-            prom.set_value();
-        });
-        EXPECT_EQ(fut.wait_for(std::chrono::seconds(2)), std::future_status::ready);
+        EXPECT_EQ(obstacle_avoidance->restart(), ObstacleAvoidance::Result::Success);
     }
 
     std::this_thread::sleep_for(std::chrono::seconds(5));
 
     {
         LogInfo() << "Stopping obstacle avoidance...";
-        std::promise<void> prom;
-        std::future<void> fut = prom.get_future();
-        obstacle_avoidance->stop_async([&prom](ObstacleAvoidance::Result result) {
-            EXPECT_EQ(result, ObstacleAvoidance::Result::Success);
-            prom.set_value();
-        });
-        EXPECT_EQ(fut.wait_for(std::chrono::seconds(3)), std::future_status::ready);
+        EXPECT_EQ(obstacle_avoidance->stop(), ObstacleAvoidance::Result::Success);
     }
 }
 
-void run_cmd(const std::string& cmd_str)
+int run_cmd(const std::string& cmd_str)
 {
     const char* cmd = cmd_str.c_str();
-    if (system(NULL)) {
-        system(cmd);
+    if (!system(NULL)) {
+        return -1;
     }
+
+    return system(cmd);
 }
