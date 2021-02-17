@@ -24,7 +24,6 @@ def run():
 def signal_handler(th, sig, frame):
     global stop_signal
     stop_signal = True
-    th.join()
 
 def main():
     th = Thread(target=run, args=())
@@ -42,7 +41,7 @@ def main():
     pause()
 
     print("\nObstacle avoidance service stopped! Ran for {} cycles.".format(cycle_counter));
-    sys.exit(0)
+    th.join()
 
 if __name__ == '__main__':
     main()
