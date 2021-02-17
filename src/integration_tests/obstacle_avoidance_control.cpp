@@ -10,6 +10,8 @@ using namespace mavsdk;
 using namespace std::placeholders;
 using namespace std::chrono_literals;
 
+static void run_cmd(const std::string& cmd_str);
+
 TEST_F(SitlTest, ObstacleAvoidanceControl)
 {
     // Configure MAVSDK GCS instance
@@ -84,22 +86,18 @@ TEST_F(SitlTest, ObstacleAvoidanceControl)
     obstacle_avoidance_server->subscribe_control([](ObstacleAvoidanceServer::ControlType control) {
         switch (control.control_type) {
             case ObstacleAvoidanceServer::ControlType::Type::ControlStart:
-                LogInfo() << "Obstacle avoidance started!";
-                break;
-            case ObstacleAvoidanceServer::ControlType::Type::ControlRestart:
-                LogInfo() << "Obstacle avoidance restarted!";
+                run_cmd("python3 src/integration_tests/test_data/obstacle_avoidance_dummy.py &");
                 break;
             case ObstacleAvoidanceServer::ControlType::Type::ControlStop:
-                LogInfo() << "Obstacle avoidance stopped!";
+                run_cmd("kill `cat obs_avoid_service.pid` && rm -rf obs_avoid_service.pid");
                 break;
-            case ObstacleAvoidanceServer::ControlType::Type::ControlEnable:
-                LogInfo() << "Obstacle avoidance enabled!";
-                break;
-            case ObstacleAvoidanceServer::ControlType::Type::ControlDisable:
-                LogInfo() << "Obstacle avoidance disabled!";
+            case ObstacleAvoidanceServer::ControlType::Type::ControlRestart:
+                run_cmd("kill `cat obs_avoid_service.pid` && rm -rf obs_avoid_service.pid");
+                std::this_thread::sleep_for(std::chrono::seconds(1));
+                run_cmd("python3 src/integration_tests/test_data/obstacle_avoidance_dummy.py &");
                 break;
             default:
-                LogInfo() << "Unknown control type";
+                LogInfo() << "Unsupported control type";
         }
     });
 
@@ -115,7 +113,7 @@ TEST_F(SitlTest, ObstacleAvoidanceControl)
         EXPECT_EQ(fut1.wait_for(std::chrono::seconds(2)), std::future_status::ready);
     }
 
-    std::this_thread::sleep_for(std::chrono::seconds(2));
+    std::this_thread::sleep_for(std::chrono::seconds(3));
 
     {
         LogInfo() << "Restarting obstacle avoidance...";
@@ -128,7 +126,7 @@ TEST_F(SitlTest, ObstacleAvoidanceControl)
         EXPECT_EQ(fut.wait_for(std::chrono::seconds(2)), std::future_status::ready);
     }
 
-    std::this_thread::sleep_for(std::chrono::seconds(2));
+    std::this_thread::sleep_for(std::chrono::seconds(5));
 
     {
         LogInfo() << "Stopping obstacle avoidance...";
@@ -138,6 +136,14 @@ TEST_F(SitlTest, ObstacleAvoidanceControl)
             EXPECT_EQ(result, ObstacleAvoidance::Result::Success);
             prom.set_value();
         });
-        EXPECT_EQ(fut.wait_for(std::chrono::seconds(2)), std::future_status::ready);
+        EXPECT_EQ(fut.wait_for(std::chrono::seconds(3)), std::future_status::ready);
+    }
+}
+
+void run_cmd(const std::string& cmd_str)
+{
+    const char* cmd = cmd_str.c_str();
+    if (system(NULL)) {
+        system(cmd);
     }
 }
