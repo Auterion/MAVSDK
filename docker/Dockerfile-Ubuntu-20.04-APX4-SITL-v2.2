@@ -1,5 +1,5 @@
 #
-# Auterion PX4 develop SITL testing environment for MAVSDK based on Ubuntu 20.04.
+# Auterion PX4 v2.2 SITL testing environment for MAVSDK based on Ubuntu 20.04.
 # Author: Julian Oes <julian@oes.ch>
 #
 FROM mavsdk/mavsdk-ubuntu-20.04 as intermediate
@@ -27,7 +27,7 @@ RUN mkdir -p $/root/.ssh/ && \
     ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
 
 RUN git clone git@github.com:Auterion/PX4_firmware_private.git ${FIRMWARE_DIR}
-RUN git -C ${FIRMWARE_DIR} checkout develop
+RUN git -C ${FIRMWARE_DIR} checkout v1.11.0-2.2.0
 RUN git -C ${FIRMWARE_DIR} submodule update --init --recursive
 
 FROM mavsdk/mavsdk-ubuntu-20.04
