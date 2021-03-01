@@ -49,14 +49,14 @@ class ObstacleAvoidanceServerService final {
     virtual ~StubInterface() {}
     //
     // Receive and process obstacle avoidance service control commands.
-    std::unique_ptr< ::grpc::ClientReaderInterface< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>> SubscribeControl(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest& request) {
-      return std::unique_ptr< ::grpc::ClientReaderInterface< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>>(SubscribeControlRaw(context, request));
+    std::unique_ptr< ::grpc::ClientReaderInterface< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>> SubscribeControl(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest& request) {
+      return std::unique_ptr< ::grpc::ClientReaderInterface< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>>(SubscribeControlRaw(context, request));
     }
-    std::unique_ptr< ::grpc::ClientAsyncReaderInterface< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>> AsyncSubscribeControl(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest& request, ::grpc::CompletionQueue* cq, void* tag) {
-      return std::unique_ptr< ::grpc::ClientAsyncReaderInterface< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>>(AsyncSubscribeControlRaw(context, request, cq, tag));
+    std::unique_ptr< ::grpc::ClientAsyncReaderInterface< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>> AsyncSubscribeControl(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest& request, ::grpc::CompletionQueue* cq, void* tag) {
+      return std::unique_ptr< ::grpc::ClientAsyncReaderInterface< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>>(AsyncSubscribeControlRaw(context, request, cq, tag));
     }
-    std::unique_ptr< ::grpc::ClientAsyncReaderInterface< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>> PrepareAsyncSubscribeControl(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncReaderInterface< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>>(PrepareAsyncSubscribeControlRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncReaderInterface< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>> PrepareAsyncSubscribeControl(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncReaderInterface< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>>(PrepareAsyncSubscribeControlRaw(context, request, cq));
     }
     class experimental_async_interface {
      public:
@@ -64,9 +64,9 @@ class ObstacleAvoidanceServerService final {
       //
       // Receive and process obstacle avoidance service control commands.
       #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      virtual void SubscribeControl(::grpc::ClientContext* context, ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* request, ::grpc::ClientReadReactor< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>* reactor) = 0;
+      virtual void SubscribeControl(::grpc::ClientContext* context, ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* request, ::grpc::ClientReadReactor< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>* reactor) = 0;
       #else
-      virtual void SubscribeControl(::grpc::ClientContext* context, ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* request, ::grpc::experimental::ClientReadReactor< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>* reactor) = 0;
+      virtual void SubscribeControl(::grpc::ClientContext* context, ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* request, ::grpc::experimental::ClientReadReactor< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>* reactor) = 0;
       #endif
     };
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -77,29 +77,29 @@ class ObstacleAvoidanceServerService final {
     #endif
     virtual class experimental_async_interface* experimental_async() { return nullptr; }
   private:
-    virtual ::grpc::ClientReaderInterface< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>* SubscribeControlRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest& request) = 0;
-    virtual ::grpc::ClientAsyncReaderInterface< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>* AsyncSubscribeControlRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest& request, ::grpc::CompletionQueue* cq, void* tag) = 0;
-    virtual ::grpc::ClientAsyncReaderInterface< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>* PrepareAsyncSubscribeControlRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientReaderInterface< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>* SubscribeControlRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest& request) = 0;
+    virtual ::grpc::ClientAsyncReaderInterface< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>* AsyncSubscribeControlRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest& request, ::grpc::CompletionQueue* cq, void* tag) = 0;
+    virtual ::grpc::ClientAsyncReaderInterface< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>* PrepareAsyncSubscribeControlRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
     Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel);
-    std::unique_ptr< ::grpc::ClientReader< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>> SubscribeControl(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest& request) {
-      return std::unique_ptr< ::grpc::ClientReader< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>>(SubscribeControlRaw(context, request));
+    std::unique_ptr< ::grpc::ClientReader< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>> SubscribeControl(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest& request) {
+      return std::unique_ptr< ::grpc::ClientReader< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>>(SubscribeControlRaw(context, request));
     }
-    std::unique_ptr< ::grpc::ClientAsyncReader< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>> AsyncSubscribeControl(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest& request, ::grpc::CompletionQueue* cq, void* tag) {
-      return std::unique_ptr< ::grpc::ClientAsyncReader< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>>(AsyncSubscribeControlRaw(context, request, cq, tag));
+    std::unique_ptr< ::grpc::ClientAsyncReader< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>> AsyncSubscribeControl(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest& request, ::grpc::CompletionQueue* cq, void* tag) {
+      return std::unique_ptr< ::grpc::ClientAsyncReader< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>>(AsyncSubscribeControlRaw(context, request, cq, tag));
     }
-    std::unique_ptr< ::grpc::ClientAsyncReader< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>> PrepareAsyncSubscribeControl(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncReader< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>>(PrepareAsyncSubscribeControlRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncReader< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>> PrepareAsyncSubscribeControl(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncReader< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>>(PrepareAsyncSubscribeControlRaw(context, request, cq));
     }
     class experimental_async final :
       public StubInterface::experimental_async_interface {
      public:
       #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      void SubscribeControl(::grpc::ClientContext* context, ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* request, ::grpc::ClientReadReactor< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>* reactor) override;
+      void SubscribeControl(::grpc::ClientContext* context, ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* request, ::grpc::ClientReadReactor< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>* reactor) override;
       #else
-      void SubscribeControl(::grpc::ClientContext* context, ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* request, ::grpc::experimental::ClientReadReactor< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>* reactor) override;
+      void SubscribeControl(::grpc::ClientContext* context, ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* request, ::grpc::experimental::ClientReadReactor< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>* reactor) override;
       #endif
      private:
       friend class Stub;
@@ -112,9 +112,9 @@ class ObstacleAvoidanceServerService final {
    private:
     std::shared_ptr< ::grpc::ChannelInterface> channel_;
     class experimental_async async_stub_{this};
-    ::grpc::ClientReader< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>* SubscribeControlRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest& request) override;
-    ::grpc::ClientAsyncReader< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>* AsyncSubscribeControlRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest& request, ::grpc::CompletionQueue* cq, void* tag) override;
-    ::grpc::ClientAsyncReader< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>* PrepareAsyncSubscribeControlRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientReader< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>* SubscribeControlRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest& request) override;
+    ::grpc::ClientAsyncReader< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>* AsyncSubscribeControlRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest& request, ::grpc::CompletionQueue* cq, void* tag) override;
+    ::grpc::ClientAsyncReader< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>* PrepareAsyncSubscribeControlRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_SubscribeControl_;
   };
   static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
@@ -125,7 +125,7 @@ class ObstacleAvoidanceServerService final {
     virtual ~Service();
     //
     // Receive and process obstacle avoidance service control commands.
-    virtual ::grpc::Status SubscribeControl(::grpc::ServerContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* request, ::grpc::ServerWriter< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>* writer);
+    virtual ::grpc::Status SubscribeControl(::grpc::ServerContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* request, ::grpc::ServerWriter< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>* writer);
   };
   template <class BaseClass>
   class WithAsyncMethod_SubscribeControl : public BaseClass {
@@ -139,11 +139,11 @@ class ObstacleAvoidanceServerService final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SubscribeControl(::grpc::ServerContext* /*context*/, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* /*request*/, ::grpc::ServerWriter< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>* /*writer*/) override {
+    ::grpc::Status SubscribeControl(::grpc::ServerContext* /*context*/, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* /*request*/, ::grpc::ServerWriter< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>* /*writer*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestSubscribeControl(::grpc::ServerContext* context, ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* request, ::grpc::ServerAsyncWriter< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>* writer, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+    void RequestSubscribeControl(::grpc::ServerContext* context, ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* request, ::grpc::ServerAsyncWriter< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>* writer, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncServerStreaming(0, context, request, writer, new_call_cq, notification_cq, tag);
     }
   };
@@ -160,7 +160,7 @@ class ObstacleAvoidanceServerService final {
       ::grpc::Service::experimental().
     #endif
         MarkMethodCallback(0,
-          new ::grpc::internal::CallbackServerStreamingHandler< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest, ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>(
+          new ::grpc::internal::CallbackServerStreamingHandler< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest, ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
                    ::grpc::CallbackServerContext*
@@ -173,15 +173,15 @@ class ObstacleAvoidanceServerService final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SubscribeControl(::grpc::ServerContext* /*context*/, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* /*request*/, ::grpc::ServerWriter< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>* /*writer*/) override {
+    ::grpc::Status SubscribeControl(::grpc::ServerContext* /*context*/, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* /*request*/, ::grpc::ServerWriter< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>* /*writer*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-    virtual ::grpc::ServerWriteReactor< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>* SubscribeControl(
+    virtual ::grpc::ServerWriteReactor< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>* SubscribeControl(
       ::grpc::CallbackServerContext* /*context*/, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* /*request*/)
     #else
-    virtual ::grpc::experimental::ServerWriteReactor< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>* SubscribeControl(
+    virtual ::grpc::experimental::ServerWriteReactor< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>* SubscribeControl(
       ::grpc::experimental::CallbackServerContext* /*context*/, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* /*request*/)
     #endif
       { return nullptr; }
@@ -203,7 +203,7 @@ class ObstacleAvoidanceServerService final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SubscribeControl(::grpc::ServerContext* /*context*/, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* /*request*/, ::grpc::ServerWriter< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>* /*writer*/) override {
+    ::grpc::Status SubscribeControl(::grpc::ServerContext* /*context*/, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* /*request*/, ::grpc::ServerWriter< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>* /*writer*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -220,7 +220,7 @@ class ObstacleAvoidanceServerService final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SubscribeControl(::grpc::ServerContext* /*context*/, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* /*request*/, ::grpc::ServerWriter< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>* /*writer*/) override {
+    ::grpc::Status SubscribeControl(::grpc::ServerContext* /*context*/, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* /*request*/, ::grpc::ServerWriter< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>* /*writer*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -253,7 +253,7 @@ class ObstacleAvoidanceServerService final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SubscribeControl(::grpc::ServerContext* /*context*/, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* /*request*/, ::grpc::ServerWriter< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>* /*writer*/) override {
+    ::grpc::Status SubscribeControl(::grpc::ServerContext* /*context*/, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* /*request*/, ::grpc::ServerWriter< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>* /*writer*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -275,10 +275,10 @@ class ObstacleAvoidanceServerService final {
     WithSplitStreamingMethod_SubscribeControl() {
       ::grpc::Service::MarkMethodStreamed(0,
         new ::grpc::internal::SplitServerStreamingHandler<
-          ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest, ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>(
+          ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest, ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>(
             [this](::grpc::ServerContext* context,
                    ::grpc::ServerSplitStreamer<
-                     ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest, ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>* streamer) {
+                     ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest, ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>* streamer) {
                        return this->StreamedSubscribeControl(context,
                          streamer);
                   }));
@@ -287,12 +287,12 @@ class ObstacleAvoidanceServerService final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status SubscribeControl(::grpc::ServerContext* /*context*/, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* /*request*/, ::grpc::ServerWriter< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>* /*writer*/) override {
+    ::grpc::Status SubscribeControl(::grpc::ServerContext* /*context*/, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* /*request*/, ::grpc::ServerWriter< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>* /*writer*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with split streamed
-    virtual ::grpc::Status StreamedSubscribeControl(::grpc::ServerContext* context, ::grpc::ServerSplitStreamer< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest,::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>* server_split_streamer) = 0;
+    virtual ::grpc::Status StreamedSubscribeControl(::grpc::ServerContext* context, ::grpc::ServerSplitStreamer< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest,::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>* server_split_streamer) = 0;
   };
   typedef WithSplitStreamingMethod_SubscribeControl<Service > SplitStreamedService;
   typedef WithSplitStreamingMethod_SubscribeControl<Service > StreamedService;

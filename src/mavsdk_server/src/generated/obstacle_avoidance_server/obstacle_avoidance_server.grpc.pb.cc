@@ -37,31 +37,31 @@ ObstacleAvoidanceServerService::Stub::Stub(const std::shared_ptr< ::grpc::Channe
   : channel_(channel), rpcmethod_SubscribeControl_(ObstacleAvoidanceServerService_method_names[0], ::grpc::internal::RpcMethod::SERVER_STREAMING, channel)
   {}
 
-::grpc::ClientReader< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>* ObstacleAvoidanceServerService::Stub::SubscribeControlRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest& request) {
-  return ::grpc::internal::ClientReaderFactory< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>::Create(channel_.get(), rpcmethod_SubscribeControl_, context, request);
+::grpc::ClientReader< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>* ObstacleAvoidanceServerService::Stub::SubscribeControlRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest& request) {
+  return ::grpc::internal::ClientReaderFactory< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>::Create(channel_.get(), rpcmethod_SubscribeControl_, context, request);
 }
 
-void ObstacleAvoidanceServerService::Stub::experimental_async::SubscribeControl(::grpc::ClientContext* context, ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* request, ::grpc::experimental::ClientReadReactor< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>* reactor) {
-  ::grpc::internal::ClientCallbackReaderFactory< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>::Create(stub_->channel_.get(), stub_->rpcmethod_SubscribeControl_, context, request, reactor);
+void ObstacleAvoidanceServerService::Stub::experimental_async::SubscribeControl(::grpc::ClientContext* context, ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* request, ::grpc::experimental::ClientReadReactor< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>* reactor) {
+  ::grpc::internal::ClientCallbackReaderFactory< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>::Create(stub_->channel_.get(), stub_->rpcmethod_SubscribeControl_, context, request, reactor);
 }
 
-::grpc::ClientAsyncReader< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>* ObstacleAvoidanceServerService::Stub::AsyncSubscribeControlRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest& request, ::grpc::CompletionQueue* cq, void* tag) {
-  return ::grpc::internal::ClientAsyncReaderFactory< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>::Create(channel_.get(), cq, rpcmethod_SubscribeControl_, context, request, true, tag);
+::grpc::ClientAsyncReader< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>* ObstacleAvoidanceServerService::Stub::AsyncSubscribeControlRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest& request, ::grpc::CompletionQueue* cq, void* tag) {
+  return ::grpc::internal::ClientAsyncReaderFactory< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>::Create(channel_.get(), cq, rpcmethod_SubscribeControl_, context, request, true, tag);
 }
 
-::grpc::ClientAsyncReader< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>* ObstacleAvoidanceServerService::Stub::PrepareAsyncSubscribeControlRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest& request, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncReaderFactory< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>::Create(channel_.get(), cq, rpcmethod_SubscribeControl_, context, request, false, nullptr);
+::grpc::ClientAsyncReader< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>* ObstacleAvoidanceServerService::Stub::PrepareAsyncSubscribeControlRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncReaderFactory< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>::Create(channel_.get(), cq, rpcmethod_SubscribeControl_, context, request, false, nullptr);
 }
 
 ObstacleAvoidanceServerService::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       ObstacleAvoidanceServerService_method_names[0],
       ::grpc::internal::RpcMethod::SERVER_STREAMING,
-      new ::grpc::internal::ServerStreamingHandler< ObstacleAvoidanceServerService::Service, ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest, ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>(
+      new ::grpc::internal::ServerStreamingHandler< ObstacleAvoidanceServerService::Service, ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest, ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>(
           [](ObstacleAvoidanceServerService::Service* service,
              ::grpc::ServerContext* ctx,
              const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* req,
-             ::grpc::ServerWriter<::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>* writer) {
+             ::grpc::ServerWriter<::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>* writer) {
                return service->SubscribeControl(ctx, req, writer);
              }, this)));
 }
@@ -69,7 +69,7 @@ ObstacleAvoidanceServerService::Service::Service() {
 ObstacleAvoidanceServerService::Service::~Service() {
 }
 
-::grpc::Status ObstacleAvoidanceServerService::Service::SubscribeControl(::grpc::ServerContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* request, ::grpc::ServerWriter< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>* writer) {
+::grpc::Status ObstacleAvoidanceServerService::Service::SubscribeControl(::grpc::ServerContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* request, ::grpc::ServerWriter< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>* writer) {
   (void) context;
   (void) request;
   (void) writer;
