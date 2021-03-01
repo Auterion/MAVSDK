@@ -43,11 +43,11 @@ mavlink_message_t ObstacleAvoidanceServerImpl::process_component_control_command
     mavlink_message_t ack_message;
 
     if (command.params.param1 == MAV_COMP_ID_OBSTACLE_AVOIDANCE) {
-        ObstacleAvoidanceServer::ControlType control_type;
-        control_type.control_type =
-            static_cast<ObstacleAvoidanceServer::ControlType::Type>(command.params.param2 + 0.5f);
+        ObstacleAvoidanceServer::Control control_cmd;
+        control_cmd.control_type = static_cast<ObstacleAvoidanceServer::Control::ControlType>(
+            command.params.param2 + 0.5f);
 
-        store_control(control_type);
+        store_control(control_cmd);
 
         std::lock_guard<std::mutex> lock(_subscription_mutex);
         if (_component_control_command_subscription) {
@@ -75,17 +75,18 @@ mavlink_message_t ObstacleAvoidanceServerImpl::process_component_control_command
     return ack_message;
 }
 
-void ObstacleAvoidanceServerImpl::store_control(ObstacleAvoidanceServer::ControlType control)
+void ObstacleAvoidanceServerImpl::store_control(ObstacleAvoidanceServer::Control control)
 {
     _control.store(control);
 }
 
-ObstacleAvoidanceServer::ControlType ObstacleAvoidanceServerImpl::control() const
+ObstacleAvoidanceServer::Control ObstacleAvoidanceServerImpl::control() const
 {
     return _control.load();
 }
 
-void ObstacleAvoidanceServerImpl::control_async(ObstacleAvoidanceServer::ControlCallback callback)
+void ObstacleAvoidanceServerImpl::subscribe_control(
+    ObstacleAvoidanceServer::ControlCallback callback)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
     _component_control_command_subscription = callback;

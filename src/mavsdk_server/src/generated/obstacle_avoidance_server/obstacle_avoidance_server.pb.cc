@@ -14,7 +14,7 @@
 #include <google/protobuf/wire_format.h>
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
-extern PROTOBUF_INTERNAL_EXPORT_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_ControlType_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Control_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto;
 namespace mavsdk {
 namespace rpc {
 namespace obstacle_avoidance_server {
@@ -22,30 +22,45 @@ class SubscribeControlRequestDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<SubscribeControlRequest> _instance;
 } _SubscribeControlRequest_default_instance_;
-class SubscribeControlResponseDefaultTypeInternal {
+class ControlResponseDefaultTypeInternal {
  public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<SubscribeControlResponse> _instance;
-} _SubscribeControlResponse_default_instance_;
-class ControlTypeDefaultTypeInternal {
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<ControlResponse> _instance;
+} _ControlResponse_default_instance_;
+class ControlDefaultTypeInternal {
  public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<ControlType> _instance;
-} _ControlType_default_instance_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Control> _instance;
+} _Control_default_instance_;
 }  // namespace obstacle_avoidance_server
 }  // namespace rpc
 }  // namespace mavsdk
-static void InitDefaultsscc_info_ControlType_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto() {
+static void InitDefaultsscc_info_Control_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   {
-    void* ptr = &::mavsdk::rpc::obstacle_avoidance_server::_ControlType_default_instance_;
-    new (ptr) ::mavsdk::rpc::obstacle_avoidance_server::ControlType();
+    void* ptr = &::mavsdk::rpc::obstacle_avoidance_server::_Control_default_instance_;
+    new (ptr) ::mavsdk::rpc::obstacle_avoidance_server::Control();
     ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::mavsdk::rpc::obstacle_avoidance_server::ControlType::InitAsDefaultInstance();
+  ::mavsdk::rpc::obstacle_avoidance_server::Control::InitAsDefaultInstance();
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_ControlType_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_ControlType_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto}, {}};
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Control_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_Control_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto}, {}};
+
+static void InitDefaultsscc_info_ControlResponse_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::mavsdk::rpc::obstacle_avoidance_server::_ControlResponse_default_instance_;
+    new (ptr) ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_ControlResponse_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_ControlResponse_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto}, {
+      &scc_info_Control_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto.base,}};
 
 static void InitDefaultsscc_info_SubscribeControlRequest_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -61,21 +76,6 @@ static void InitDefaultsscc_info_SubscribeControlRequest_obstacle_5favoidance_5f
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_SubscribeControlRequest_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_SubscribeControlRequest_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto}, {}};
 
-static void InitDefaultsscc_info_SubscribeControlResponse_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::mavsdk::rpc::obstacle_avoidance_server::_SubscribeControlResponse_default_instance_;
-    new (ptr) ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-  ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse::InitAsDefaultInstance();
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_SubscribeControlResponse_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_SubscribeControlResponse_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto}, {
-      &scc_info_ControlType_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto.base,}};
-
 static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto[3];
 static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto[1];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto = nullptr;
@@ -87,60 +87,61 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_obstacle_5favoidance_5fserver_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::obstacle_avoidance_server::ControlResponse, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse, control_type_),
+  PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::obstacle_avoidance_server::ControlResponse, control_),
   ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::obstacle_avoidance_server::ControlType, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::obstacle_avoidance_server::Control, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::obstacle_avoidance_server::ControlType, control_type_),
+  PROTOBUF_FIELD_OFFSET(::mavsdk::rpc::obstacle_avoidance_server::Control, control_type_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest)},
-  { 5, -1, sizeof(::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse)},
-  { 11, -1, sizeof(::mavsdk::rpc::obstacle_avoidance_server::ControlType)},
+  { 5, -1, sizeof(::mavsdk::rpc::obstacle_avoidance_server::ControlResponse)},
+  { 11, -1, sizeof(::mavsdk::rpc::obstacle_avoidance_server::Control)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::mavsdk::rpc::obstacle_avoidance_server::_SubscribeControlRequest_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::mavsdk::rpc::obstacle_avoidance_server::_SubscribeControlResponse_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::mavsdk::rpc::obstacle_avoidance_server::_ControlType_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::mavsdk::rpc::obstacle_avoidance_server::_ControlResponse_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::mavsdk::rpc::obstacle_avoidance_server::_Control_default_instance_),
 };
 
 const char descriptor_table_protodef_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n9obstacle_avoidance_server/obstacle_avo"
   "idance_server.proto\022$mavsdk.rpc.obstacle"
   "_avoidance_server\"\031\n\027SubscribeControlReq"
-  "uest\"c\n\030SubscribeControlResponse\022G\n\014cont"
-  "rol_type\030\001 \001(\01321.mavsdk.rpc.obstacle_avo"
-  "idance_server.ControlType\"\333\001\n\013ControlTyp"
-  "e\022L\n\014control_type\030\001 \001(\01626.mavsdk.rpc.obs"
-  "tacle_avoidance_server.ControlType.Type\""
-  "~\n\004Type\022\023\n\017CONTROL_UNKNOWN\020\000\022\021\n\rCONTROL_"
-  "START\020\001\022\020\n\014CONTROL_STOP\020\002\022\023\n\017CONTROL_RES"
-  "TART\020\003\022\022\n\016CONTROL_ENABLE\020\004\022\023\n\017CONTROL_DI"
-  "SABLE\020\0052\270\001\n\036ObstacleAvoidanceServerServi"
-  "ce\022\225\001\n\020SubscribeControl\022=.mavsdk.rpc.obs"
-  "tacle_avoidance_server.SubscribeControlR"
-  "equest\032>.mavsdk.rpc.obstacle_avoidance_s"
-  "erver.SubscribeControlResponse\"\0000\001BC\n#io"
-  ".mavsdk.obstacle_avoidance_serverB\034Obsta"
-  "cleAvoidanceServerProtob\006proto3"
+  "uest\"Q\n\017ControlResponse\022>\n\007control\030\001 \001(\013"
+  "2-.mavsdk.rpc.obstacle_avoidance_server."
+  "Control\"\200\002\n\007Control\022O\n\014control_type\030\001 \001("
+  "\01629.mavsdk.rpc.obstacle_avoidance_server"
+  ".Control.ControlType\"\243\001\n\013ControlType\022\030\n\024"
+  "CONTROL_TYPE_UNKNOWN\020\000\022\026\n\022CONTROL_TYPE_S"
+  "TART\020\001\022\025\n\021CONTROL_TYPE_STOP\020\002\022\030\n\024CONTROL"
+  "_TYPE_RESTART\020\003\022\027\n\023CONTROL_TYPE_ENABLE\020\004"
+  "\022\030\n\024CONTROL_TYPE_DISABLE\020\0052\257\001\n\036ObstacleA"
+  "voidanceServerService\022\214\001\n\020SubscribeContr"
+  "ol\022=.mavsdk.rpc.obstacle_avoidance_serve"
+  "r.SubscribeControlRequest\0325.mavsdk.rpc.o"
+  "bstacle_avoidance_server.ControlResponse"
+  "\"\0000\001BC\n#io.mavsdk.obstacle_avoidance_ser"
+  "verB\034ObstacleAvoidanceServerProtob\006proto"
+  "3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto_deps[1] = {
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto_sccs[3] = {
-  &scc_info_ControlType_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto.base,
+  &scc_info_Control_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto.base,
+  &scc_info_ControlResponse_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto.base,
   &scc_info_SubscribeControlRequest_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto.base,
-  &scc_info_SubscribeControlResponse_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto.base,
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto = {
-  false, false, descriptor_table_protodef_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto, "obstacle_avoidance_server/obstacle_avoidance_server.proto", 711,
+  false, false, descriptor_table_protodef_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto, "obstacle_avoidance_server/obstacle_avoidance_server.proto", 721,
   &descriptor_table_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto_once, descriptor_table_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto_sccs, descriptor_table_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto_deps, 3, 0,
   schemas, file_default_instances, TableStruct_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto::offsets,
   file_level_metadata_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto, 3, file_level_enum_descriptors_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto, file_level_service_descriptors_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto,
@@ -151,11 +152,11 @@ static bool dynamic_init_dummy_obstacle_5favoidance_5fserver_2fobstacle_5favoida
 namespace mavsdk {
 namespace rpc {
 namespace obstacle_avoidance_server {
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ControlType_Type_descriptor() {
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* Control_ControlType_descriptor() {
   ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto);
   return file_level_enum_descriptors_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto[0];
 }
-bool ControlType_Type_IsValid(int value) {
+bool Control_ControlType_IsValid(int value) {
   switch (value) {
     case 0:
     case 1:
@@ -170,15 +171,15 @@ bool ControlType_Type_IsValid(int value) {
 }
 
 #if (__cplusplus < 201703) && (!defined(_MSC_VER) || _MSC_VER >= 1900)
-constexpr ControlType_Type ControlType::CONTROL_UNKNOWN;
-constexpr ControlType_Type ControlType::CONTROL_START;
-constexpr ControlType_Type ControlType::CONTROL_STOP;
-constexpr ControlType_Type ControlType::CONTROL_RESTART;
-constexpr ControlType_Type ControlType::CONTROL_ENABLE;
-constexpr ControlType_Type ControlType::CONTROL_DISABLE;
-constexpr ControlType_Type ControlType::Type_MIN;
-constexpr ControlType_Type ControlType::Type_MAX;
-constexpr int ControlType::Type_ARRAYSIZE;
+constexpr Control_ControlType Control::CONTROL_TYPE_UNKNOWN;
+constexpr Control_ControlType Control::CONTROL_TYPE_START;
+constexpr Control_ControlType Control::CONTROL_TYPE_STOP;
+constexpr Control_ControlType Control::CONTROL_TYPE_RESTART;
+constexpr Control_ControlType Control::CONTROL_TYPE_ENABLE;
+constexpr Control_ControlType Control::CONTROL_TYPE_DISABLE;
+constexpr Control_ControlType Control::ControlType_MIN;
+constexpr Control_ControlType Control::ControlType_MAX;
+constexpr int Control::ControlType_ARRAYSIZE;
 #endif  // (__cplusplus < 201703) && (!defined(_MSC_VER) || _MSC_VER >= 1900)
 
 // ===================================================================
@@ -348,81 +349,81 @@ void SubscribeControlRequest::InternalSwap(SubscribeControlRequest* other) {
 
 // ===================================================================
 
-void SubscribeControlResponse::InitAsDefaultInstance() {
-  ::mavsdk::rpc::obstacle_avoidance_server::_SubscribeControlResponse_default_instance_._instance.get_mutable()->control_type_ = const_cast< ::mavsdk::rpc::obstacle_avoidance_server::ControlType*>(
-      ::mavsdk::rpc::obstacle_avoidance_server::ControlType::internal_default_instance());
+void ControlResponse::InitAsDefaultInstance() {
+  ::mavsdk::rpc::obstacle_avoidance_server::_ControlResponse_default_instance_._instance.get_mutable()->control_ = const_cast< ::mavsdk::rpc::obstacle_avoidance_server::Control*>(
+      ::mavsdk::rpc::obstacle_avoidance_server::Control::internal_default_instance());
 }
-class SubscribeControlResponse::_Internal {
+class ControlResponse::_Internal {
  public:
-  static const ::mavsdk::rpc::obstacle_avoidance_server::ControlType& control_type(const SubscribeControlResponse* msg);
+  static const ::mavsdk::rpc::obstacle_avoidance_server::Control& control(const ControlResponse* msg);
 };
 
-const ::mavsdk::rpc::obstacle_avoidance_server::ControlType&
-SubscribeControlResponse::_Internal::control_type(const SubscribeControlResponse* msg) {
-  return *msg->control_type_;
+const ::mavsdk::rpc::obstacle_avoidance_server::Control&
+ControlResponse::_Internal::control(const ControlResponse* msg) {
+  return *msg->control_;
 }
-SubscribeControlResponse::SubscribeControlResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+ControlResponse::ControlResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
   SharedCtor();
   RegisterArenaDtor(arena);
-  // @@protoc_insertion_point(arena_constructor:mavsdk.rpc.obstacle_avoidance_server.SubscribeControlResponse)
+  // @@protoc_insertion_point(arena_constructor:mavsdk.rpc.obstacle_avoidance_server.ControlResponse)
 }
-SubscribeControlResponse::SubscribeControlResponse(const SubscribeControlResponse& from)
+ControlResponse::ControlResponse(const ControlResponse& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  if (from._internal_has_control_type()) {
-    control_type_ = new ::mavsdk::rpc::obstacle_avoidance_server::ControlType(*from.control_type_);
+  if (from._internal_has_control()) {
+    control_ = new ::mavsdk::rpc::obstacle_avoidance_server::Control(*from.control_);
   } else {
-    control_type_ = nullptr;
+    control_ = nullptr;
   }
-  // @@protoc_insertion_point(copy_constructor:mavsdk.rpc.obstacle_avoidance_server.SubscribeControlResponse)
+  // @@protoc_insertion_point(copy_constructor:mavsdk.rpc.obstacle_avoidance_server.ControlResponse)
 }
 
-void SubscribeControlResponse::SharedCtor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_SubscribeControlResponse_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto.base);
-  control_type_ = nullptr;
+void ControlResponse::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_ControlResponse_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto.base);
+  control_ = nullptr;
 }
 
-SubscribeControlResponse::~SubscribeControlResponse() {
-  // @@protoc_insertion_point(destructor:mavsdk.rpc.obstacle_avoidance_server.SubscribeControlResponse)
+ControlResponse::~ControlResponse() {
+  // @@protoc_insertion_point(destructor:mavsdk.rpc.obstacle_avoidance_server.ControlResponse)
   SharedDtor();
   _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-void SubscribeControlResponse::SharedDtor() {
+void ControlResponse::SharedDtor() {
   GOOGLE_DCHECK(GetArena() == nullptr);
-  if (this != internal_default_instance()) delete control_type_;
+  if (this != internal_default_instance()) delete control_;
 }
 
-void SubscribeControlResponse::ArenaDtor(void* object) {
-  SubscribeControlResponse* _this = reinterpret_cast< SubscribeControlResponse* >(object);
+void ControlResponse::ArenaDtor(void* object) {
+  ControlResponse* _this = reinterpret_cast< ControlResponse* >(object);
   (void)_this;
 }
-void SubscribeControlResponse::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+void ControlResponse::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
 }
-void SubscribeControlResponse::SetCachedSize(int size) const {
+void ControlResponse::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const SubscribeControlResponse& SubscribeControlResponse::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_SubscribeControlResponse_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto.base);
+const ControlResponse& ControlResponse::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_ControlResponse_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto.base);
   return *internal_default_instance();
 }
 
 
-void SubscribeControlResponse::Clear() {
-// @@protoc_insertion_point(message_clear_start:mavsdk.rpc.obstacle_avoidance_server.SubscribeControlResponse)
+void ControlResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:mavsdk.rpc.obstacle_avoidance_server.ControlResponse)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  if (GetArena() == nullptr && control_type_ != nullptr) {
-    delete control_type_;
+  if (GetArena() == nullptr && control_ != nullptr) {
+    delete control_;
   }
-  control_type_ = nullptr;
+  control_ = nullptr;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* SubscribeControlResponse::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* ControlResponse::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   ::PROTOBUF_NAMESPACE_ID::Arena* arena = GetArena(); (void)arena;
   while (!ctx->Done(&ptr)) {
@@ -430,10 +431,10 @@ const char* SubscribeControlResponse::_InternalParse(const char* ptr, ::PROTOBUF
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // .mavsdk.rpc.obstacle_avoidance_server.ControlType control_type = 1;
+      // .mavsdk.rpc.obstacle_avoidance_server.Control control = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
-          ptr = ctx->ParseMessage(_internal_mutable_control_type(), ptr);
+          ptr = ctx->ParseMessage(_internal_mutable_control(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -459,41 +460,41 @@ failure:
 #undef CHK_
 }
 
-::PROTOBUF_NAMESPACE_ID::uint8* SubscribeControlResponse::_InternalSerialize(
+::PROTOBUF_NAMESPACE_ID::uint8* ControlResponse::_InternalSerialize(
     ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:mavsdk.rpc.obstacle_avoidance_server.SubscribeControlResponse)
+  // @@protoc_insertion_point(serialize_to_array_start:mavsdk.rpc.obstacle_avoidance_server.ControlResponse)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .mavsdk.rpc.obstacle_avoidance_server.ControlType control_type = 1;
-  if (this->has_control_type()) {
+  // .mavsdk.rpc.obstacle_avoidance_server.Control control = 1;
+  if (this->has_control()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        1, _Internal::control_type(this), target, stream);
+        1, _Internal::control(this), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:mavsdk.rpc.obstacle_avoidance_server.SubscribeControlResponse)
+  // @@protoc_insertion_point(serialize_to_array_end:mavsdk.rpc.obstacle_avoidance_server.ControlResponse)
   return target;
 }
 
-size_t SubscribeControlResponse::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:mavsdk.rpc.obstacle_avoidance_server.SubscribeControlResponse)
+size_t ControlResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:mavsdk.rpc.obstacle_avoidance_server.ControlResponse)
   size_t total_size = 0;
 
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // .mavsdk.rpc.obstacle_avoidance_server.ControlType control_type = 1;
-  if (this->has_control_type()) {
+  // .mavsdk.rpc.obstacle_avoidance_server.Control control = 1;
+  if (this->has_control()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *control_type_);
+        *control_);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -505,114 +506,114 @@ size_t SubscribeControlResponse::ByteSizeLong() const {
   return total_size;
 }
 
-void SubscribeControlResponse::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:mavsdk.rpc.obstacle_avoidance_server.SubscribeControlResponse)
+void ControlResponse::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:mavsdk.rpc.obstacle_avoidance_server.ControlResponse)
   GOOGLE_DCHECK_NE(&from, this);
-  const SubscribeControlResponse* source =
-      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<SubscribeControlResponse>(
+  const ControlResponse* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<ControlResponse>(
           &from);
   if (source == nullptr) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:mavsdk.rpc.obstacle_avoidance_server.SubscribeControlResponse)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:mavsdk.rpc.obstacle_avoidance_server.ControlResponse)
     ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:mavsdk.rpc.obstacle_avoidance_server.SubscribeControlResponse)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:mavsdk.rpc.obstacle_avoidance_server.ControlResponse)
     MergeFrom(*source);
   }
 }
 
-void SubscribeControlResponse::MergeFrom(const SubscribeControlResponse& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:mavsdk.rpc.obstacle_avoidance_server.SubscribeControlResponse)
+void ControlResponse::MergeFrom(const ControlResponse& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:mavsdk.rpc.obstacle_avoidance_server.ControlResponse)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from.has_control_type()) {
-    _internal_mutable_control_type()->::mavsdk::rpc::obstacle_avoidance_server::ControlType::MergeFrom(from._internal_control_type());
+  if (from.has_control()) {
+    _internal_mutable_control()->::mavsdk::rpc::obstacle_avoidance_server::Control::MergeFrom(from._internal_control());
   }
 }
 
-void SubscribeControlResponse::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:mavsdk.rpc.obstacle_avoidance_server.SubscribeControlResponse)
+void ControlResponse::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:mavsdk.rpc.obstacle_avoidance_server.ControlResponse)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void SubscribeControlResponse::CopyFrom(const SubscribeControlResponse& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:mavsdk.rpc.obstacle_avoidance_server.SubscribeControlResponse)
+void ControlResponse::CopyFrom(const ControlResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:mavsdk.rpc.obstacle_avoidance_server.ControlResponse)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool SubscribeControlResponse::IsInitialized() const {
+bool ControlResponse::IsInitialized() const {
   return true;
 }
 
-void SubscribeControlResponse::InternalSwap(SubscribeControlResponse* other) {
+void ControlResponse::InternalSwap(ControlResponse* other) {
   using std::swap;
   _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
-  swap(control_type_, other->control_type_);
+  swap(control_, other->control_);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata SubscribeControlResponse::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata ControlResponse::GetMetadata() const {
   return GetMetadataStatic();
 }
 
 
 // ===================================================================
 
-void ControlType::InitAsDefaultInstance() {
+void Control::InitAsDefaultInstance() {
 }
-class ControlType::_Internal {
+class Control::_Internal {
  public:
 };
 
-ControlType::ControlType(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+Control::Control(::PROTOBUF_NAMESPACE_ID::Arena* arena)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
   SharedCtor();
   RegisterArenaDtor(arena);
-  // @@protoc_insertion_point(arena_constructor:mavsdk.rpc.obstacle_avoidance_server.ControlType)
+  // @@protoc_insertion_point(arena_constructor:mavsdk.rpc.obstacle_avoidance_server.Control)
 }
-ControlType::ControlType(const ControlType& from)
+Control::Control(const Control& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   control_type_ = from.control_type_;
-  // @@protoc_insertion_point(copy_constructor:mavsdk.rpc.obstacle_avoidance_server.ControlType)
+  // @@protoc_insertion_point(copy_constructor:mavsdk.rpc.obstacle_avoidance_server.Control)
 }
 
-void ControlType::SharedCtor() {
+void Control::SharedCtor() {
   control_type_ = 0;
 }
 
-ControlType::~ControlType() {
-  // @@protoc_insertion_point(destructor:mavsdk.rpc.obstacle_avoidance_server.ControlType)
+Control::~Control() {
+  // @@protoc_insertion_point(destructor:mavsdk.rpc.obstacle_avoidance_server.Control)
   SharedDtor();
   _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-void ControlType::SharedDtor() {
+void Control::SharedDtor() {
   GOOGLE_DCHECK(GetArena() == nullptr);
 }
 
-void ControlType::ArenaDtor(void* object) {
-  ControlType* _this = reinterpret_cast< ControlType* >(object);
+void Control::ArenaDtor(void* object) {
+  Control* _this = reinterpret_cast< Control* >(object);
   (void)_this;
 }
-void ControlType::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+void Control::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
 }
-void ControlType::SetCachedSize(int size) const {
+void Control::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const ControlType& ControlType::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_ControlType_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto.base);
+const Control& Control::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_Control_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto.base);
   return *internal_default_instance();
 }
 
 
-void ControlType::Clear() {
-// @@protoc_insertion_point(message_clear_start:mavsdk.rpc.obstacle_avoidance_server.ControlType)
+void Control::Clear() {
+// @@protoc_insertion_point(message_clear_start:mavsdk.rpc.obstacle_avoidance_server.Control)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -621,7 +622,7 @@ void ControlType::Clear() {
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* ControlType::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* Control::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   ::PROTOBUF_NAMESPACE_ID::Arena* arena = GetArena(); (void)arena;
   while (!ctx->Done(&ptr)) {
@@ -629,12 +630,12 @@ const char* ControlType::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // .mavsdk.rpc.obstacle_avoidance_server.ControlType.Type control_type = 1;
+      // .mavsdk.rpc.obstacle_avoidance_server.Control.ControlType control_type = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
           ::PROTOBUF_NAMESPACE_ID::uint64 val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
-          _internal_set_control_type(static_cast<::mavsdk::rpc::obstacle_avoidance_server::ControlType_Type>(val));
+          _internal_set_control_type(static_cast<::mavsdk::rpc::obstacle_avoidance_server::Control_ControlType>(val));
         } else goto handle_unusual;
         continue;
       default: {
@@ -659,13 +660,13 @@ failure:
 #undef CHK_
 }
 
-::PROTOBUF_NAMESPACE_ID::uint8* ControlType::_InternalSerialize(
+::PROTOBUF_NAMESPACE_ID::uint8* Control::_InternalSerialize(
     ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:mavsdk.rpc.obstacle_avoidance_server.ControlType)
+  // @@protoc_insertion_point(serialize_to_array_start:mavsdk.rpc.obstacle_avoidance_server.Control)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .mavsdk.rpc.obstacle_avoidance_server.ControlType.Type control_type = 1;
+  // .mavsdk.rpc.obstacle_avoidance_server.Control.ControlType control_type = 1;
   if (this->control_type() != 0) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
@@ -676,19 +677,19 @@ failure:
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:mavsdk.rpc.obstacle_avoidance_server.ControlType)
+  // @@protoc_insertion_point(serialize_to_array_end:mavsdk.rpc.obstacle_avoidance_server.Control)
   return target;
 }
 
-size_t ControlType::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:mavsdk.rpc.obstacle_avoidance_server.ControlType)
+size_t Control::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:mavsdk.rpc.obstacle_avoidance_server.Control)
   size_t total_size = 0;
 
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // .mavsdk.rpc.obstacle_avoidance_server.ControlType.Type control_type = 1;
+  // .mavsdk.rpc.obstacle_avoidance_server.Control.ControlType control_type = 1;
   if (this->control_type() != 0) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_control_type());
@@ -703,23 +704,23 @@ size_t ControlType::ByteSizeLong() const {
   return total_size;
 }
 
-void ControlType::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:mavsdk.rpc.obstacle_avoidance_server.ControlType)
+void Control::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:mavsdk.rpc.obstacle_avoidance_server.Control)
   GOOGLE_DCHECK_NE(&from, this);
-  const ControlType* source =
-      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<ControlType>(
+  const Control* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<Control>(
           &from);
   if (source == nullptr) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:mavsdk.rpc.obstacle_avoidance_server.ControlType)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:mavsdk.rpc.obstacle_avoidance_server.Control)
     ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:mavsdk.rpc.obstacle_avoidance_server.ControlType)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:mavsdk.rpc.obstacle_avoidance_server.Control)
     MergeFrom(*source);
   }
 }
 
-void ControlType::MergeFrom(const ControlType& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:mavsdk.rpc.obstacle_avoidance_server.ControlType)
+void Control::MergeFrom(const Control& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:mavsdk.rpc.obstacle_avoidance_server.Control)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
@@ -730,31 +731,31 @@ void ControlType::MergeFrom(const ControlType& from) {
   }
 }
 
-void ControlType::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:mavsdk.rpc.obstacle_avoidance_server.ControlType)
+void Control::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:mavsdk.rpc.obstacle_avoidance_server.Control)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void ControlType::CopyFrom(const ControlType& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:mavsdk.rpc.obstacle_avoidance_server.ControlType)
+void Control::CopyFrom(const Control& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:mavsdk.rpc.obstacle_avoidance_server.Control)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool ControlType::IsInitialized() const {
+bool Control::IsInitialized() const {
   return true;
 }
 
-void ControlType::InternalSwap(ControlType* other) {
+void Control::InternalSwap(Control* other) {
   using std::swap;
   _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
   swap(control_type_, other->control_type_);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata ControlType::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata Control::GetMetadata() const {
   return GetMetadataStatic();
 }
 
@@ -767,11 +768,11 @@ PROTOBUF_NAMESPACE_OPEN
 template<> PROTOBUF_NOINLINE ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* Arena::CreateMaybeMessage< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest >(Arena* arena) {
   return Arena::CreateMessageInternal< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest >(arena);
 }
-template<> PROTOBUF_NOINLINE ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse* Arena::CreateMaybeMessage< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse >(arena);
+template<> PROTOBUF_NOINLINE ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse* Arena::CreateMaybeMessage< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse >(arena);
 }
-template<> PROTOBUF_NOINLINE ::mavsdk::rpc::obstacle_avoidance_server::ControlType* Arena::CreateMaybeMessage< ::mavsdk::rpc::obstacle_avoidance_server::ControlType >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::mavsdk::rpc::obstacle_avoidance_server::ControlType >(arena);
+template<> PROTOBUF_NOINLINE ::mavsdk::rpc::obstacle_avoidance_server::Control* Arena::CreateMaybeMessage< ::mavsdk::rpc::obstacle_avoidance_server::Control >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::mavsdk::rpc::obstacle_avoidance_server::Control >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 
