@@ -10,7 +10,7 @@
 
 namespace mavsdk {
 
-using ControlType = ObstacleAvoidanceServer::ControlType;
+using Control = ObstacleAvoidanceServer::Control;
 
 ObstacleAvoidanceServer::ObstacleAvoidanceServer(System& system) :
     PluginBase(),
@@ -26,46 +26,45 @@ ObstacleAvoidanceServer::~ObstacleAvoidanceServer() {}
 
 void ObstacleAvoidanceServer::subscribe_control(ControlCallback callback)
 {
-    _impl->control_async(callback);
+    _impl->subscribe_control(callback);
 }
 
-ObstacleAvoidanceServer::ControlType ObstacleAvoidanceServer::control() const
+ObstacleAvoidanceServer::Control ObstacleAvoidanceServer::control() const
 {
     return _impl->control();
 }
 
-std::ostream& operator<<(std::ostream& str, ObstacleAvoidanceServer::ControlType::Type const& type)
+std::ostream&
+operator<<(std::ostream& str, ObstacleAvoidanceServer::Control::ControlType const& control_type)
 {
-    switch (type) {
-        case ObstacleAvoidanceServer::ControlType::Type::ControlUnknown:
-            return str << "Control Unknown";
-        case ObstacleAvoidanceServer::ControlType::Type::ControlStart:
-            return str << "Control Start";
-        case ObstacleAvoidanceServer::ControlType::Type::ControlStop:
-            return str << "Control Stop";
-        case ObstacleAvoidanceServer::ControlType::Type::ControlRestart:
-            return str << "Control Restart";
-        case ObstacleAvoidanceServer::ControlType::Type::ControlEnable:
-            return str << "Control Enable";
-        case ObstacleAvoidanceServer::ControlType::Type::ControlDisable:
-            return str << "Control Disable";
+    switch (control_type) {
+        case ObstacleAvoidanceServer::Control::ControlType::Unknown:
+            return str << "Unknown";
+        case ObstacleAvoidanceServer::Control::ControlType::Start:
+            return str << "Start";
+        case ObstacleAvoidanceServer::Control::ControlType::Stop:
+            return str << "Stop";
+        case ObstacleAvoidanceServer::Control::ControlType::Restart:
+            return str << "Restart";
+        case ObstacleAvoidanceServer::Control::ControlType::Enable:
+            return str << "Enable";
+        case ObstacleAvoidanceServer::Control::ControlType::Disable:
+            return str << "Disable";
         default:
             return str << "Unknown";
     }
 }
 bool operator==(
-    const ObstacleAvoidanceServer::ControlType& lhs,
-    const ObstacleAvoidanceServer::ControlType& rhs)
+    const ObstacleAvoidanceServer::Control& lhs, const ObstacleAvoidanceServer::Control& rhs)
 {
     return (rhs.control_type == lhs.control_type);
 }
 
-std::ostream&
-operator<<(std::ostream& str, ObstacleAvoidanceServer::ControlType const& control_type)
+std::ostream& operator<<(std::ostream& str, ObstacleAvoidanceServer::Control const& control)
 {
     str << std::setprecision(15);
-    str << "control_type:" << '\n' << "{\n";
-    str << "    control_type: " << control_type.control_type << '\n';
+    str << "control:" << '\n' << "{\n";
+    str << "    control_type: " << control.control_type << '\n';
     str << '}';
     return str;
 }

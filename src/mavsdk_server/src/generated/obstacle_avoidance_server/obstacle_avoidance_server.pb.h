@@ -58,55 +58,55 @@ extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table
 namespace mavsdk {
 namespace rpc {
 namespace obstacle_avoidance_server {
-class ControlType;
-class ControlTypeDefaultTypeInternal;
-extern ControlTypeDefaultTypeInternal _ControlType_default_instance_;
+class Control;
+class ControlDefaultTypeInternal;
+extern ControlDefaultTypeInternal _Control_default_instance_;
+class ControlResponse;
+class ControlResponseDefaultTypeInternal;
+extern ControlResponseDefaultTypeInternal _ControlResponse_default_instance_;
 class SubscribeControlRequest;
 class SubscribeControlRequestDefaultTypeInternal;
 extern SubscribeControlRequestDefaultTypeInternal _SubscribeControlRequest_default_instance_;
-class SubscribeControlResponse;
-class SubscribeControlResponseDefaultTypeInternal;
-extern SubscribeControlResponseDefaultTypeInternal _SubscribeControlResponse_default_instance_;
 }  // namespace obstacle_avoidance_server
 }  // namespace rpc
 }  // namespace mavsdk
 PROTOBUF_NAMESPACE_OPEN
-template<> ::mavsdk::rpc::obstacle_avoidance_server::ControlType* Arena::CreateMaybeMessage<::mavsdk::rpc::obstacle_avoidance_server::ControlType>(Arena*);
+template<> ::mavsdk::rpc::obstacle_avoidance_server::Control* Arena::CreateMaybeMessage<::mavsdk::rpc::obstacle_avoidance_server::Control>(Arena*);
+template<> ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse* Arena::CreateMaybeMessage<::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>(Arena*);
 template<> ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* Arena::CreateMaybeMessage<::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest>(Arena*);
-template<> ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse* Arena::CreateMaybeMessage<::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlResponse>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace mavsdk {
 namespace rpc {
 namespace obstacle_avoidance_server {
 
-enum ControlType_Type : int {
-  ControlType_Type_CONTROL_UNKNOWN = 0,
-  ControlType_Type_CONTROL_START = 1,
-  ControlType_Type_CONTROL_STOP = 2,
-  ControlType_Type_CONTROL_RESTART = 3,
-  ControlType_Type_CONTROL_ENABLE = 4,
-  ControlType_Type_CONTROL_DISABLE = 5,
-  ControlType_Type_ControlType_Type_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
-  ControlType_Type_ControlType_Type_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
+enum Control_ControlType : int {
+  Control_ControlType_CONTROL_TYPE_UNKNOWN = 0,
+  Control_ControlType_CONTROL_TYPE_START = 1,
+  Control_ControlType_CONTROL_TYPE_STOP = 2,
+  Control_ControlType_CONTROL_TYPE_RESTART = 3,
+  Control_ControlType_CONTROL_TYPE_ENABLE = 4,
+  Control_ControlType_CONTROL_TYPE_DISABLE = 5,
+  Control_ControlType_Control_ControlType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
+  Control_ControlType_Control_ControlType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
 };
-bool ControlType_Type_IsValid(int value);
-constexpr ControlType_Type ControlType_Type_Type_MIN = ControlType_Type_CONTROL_UNKNOWN;
-constexpr ControlType_Type ControlType_Type_Type_MAX = ControlType_Type_CONTROL_DISABLE;
-constexpr int ControlType_Type_Type_ARRAYSIZE = ControlType_Type_Type_MAX + 1;
+bool Control_ControlType_IsValid(int value);
+constexpr Control_ControlType Control_ControlType_ControlType_MIN = Control_ControlType_CONTROL_TYPE_UNKNOWN;
+constexpr Control_ControlType Control_ControlType_ControlType_MAX = Control_ControlType_CONTROL_TYPE_DISABLE;
+constexpr int Control_ControlType_ControlType_ARRAYSIZE = Control_ControlType_ControlType_MAX + 1;
 
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ControlType_Type_descriptor();
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* Control_ControlType_descriptor();
 template<typename T>
-inline const std::string& ControlType_Type_Name(T enum_t_value) {
-  static_assert(::std::is_same<T, ControlType_Type>::value ||
+inline const std::string& Control_ControlType_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, Control_ControlType>::value ||
     ::std::is_integral<T>::value,
-    "Incorrect type passed to function ControlType_Type_Name.");
+    "Incorrect type passed to function Control_ControlType_Name.");
   return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
-    ControlType_Type_descriptor(), enum_t_value);
+    Control_ControlType_descriptor(), enum_t_value);
 }
-inline bool ControlType_Type_Parse(
-    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, ControlType_Type* value) {
-  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<ControlType_Type>(
-    ControlType_Type_descriptor(), name, value);
+inline bool Control_ControlType_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, Control_ControlType* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<Control_ControlType>(
+    Control_ControlType_descriptor(), name, value);
 }
 // ===================================================================
 
@@ -234,23 +234,23 @@ class SubscribeControlRequest PROTOBUF_FINAL :
 };
 // -------------------------------------------------------------------
 
-class SubscribeControlResponse PROTOBUF_FINAL :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:mavsdk.rpc.obstacle_avoidance_server.SubscribeControlResponse) */ {
+class ControlResponse PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:mavsdk.rpc.obstacle_avoidance_server.ControlResponse) */ {
  public:
-  inline SubscribeControlResponse() : SubscribeControlResponse(nullptr) {}
-  virtual ~SubscribeControlResponse();
+  inline ControlResponse() : ControlResponse(nullptr) {}
+  virtual ~ControlResponse();
 
-  SubscribeControlResponse(const SubscribeControlResponse& from);
-  SubscribeControlResponse(SubscribeControlResponse&& from) noexcept
-    : SubscribeControlResponse() {
+  ControlResponse(const ControlResponse& from);
+  ControlResponse(ControlResponse&& from) noexcept
+    : ControlResponse() {
     *this = ::std::move(from);
   }
 
-  inline SubscribeControlResponse& operator=(const SubscribeControlResponse& from) {
+  inline ControlResponse& operator=(const ControlResponse& from) {
     CopyFrom(from);
     return *this;
   }
-  inline SubscribeControlResponse& operator=(SubscribeControlResponse&& from) noexcept {
+  inline ControlResponse& operator=(ControlResponse&& from) noexcept {
     if (GetArena() == from.GetArena()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -268,20 +268,20 @@ class SubscribeControlResponse PROTOBUF_FINAL :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return GetMetadataStatic().reflection;
   }
-  static const SubscribeControlResponse& default_instance();
+  static const ControlResponse& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const SubscribeControlResponse* internal_default_instance() {
-    return reinterpret_cast<const SubscribeControlResponse*>(
-               &_SubscribeControlResponse_default_instance_);
+  static inline const ControlResponse* internal_default_instance() {
+    return reinterpret_cast<const ControlResponse*>(
+               &_ControlResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     1;
 
-  friend void swap(SubscribeControlResponse& a, SubscribeControlResponse& b) {
+  friend void swap(ControlResponse& a, ControlResponse& b) {
     a.Swap(&b);
   }
-  inline void Swap(SubscribeControlResponse* other) {
+  inline void Swap(ControlResponse* other) {
     if (other == this) return;
     if (GetArena() == other->GetArena()) {
       InternalSwap(other);
@@ -289,7 +289,7 @@ class SubscribeControlResponse PROTOBUF_FINAL :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(SubscribeControlResponse* other) {
+  void UnsafeArenaSwap(ControlResponse* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetArena() == other->GetArena());
     InternalSwap(other);
@@ -297,17 +297,17 @@ class SubscribeControlResponse PROTOBUF_FINAL :
 
   // implements Message ----------------------------------------------
 
-  inline SubscribeControlResponse* New() const final {
-    return CreateMaybeMessage<SubscribeControlResponse>(nullptr);
+  inline ControlResponse* New() const final {
+    return CreateMaybeMessage<ControlResponse>(nullptr);
   }
 
-  SubscribeControlResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
-    return CreateMaybeMessage<SubscribeControlResponse>(arena);
+  ControlResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<ControlResponse>(arena);
   }
   void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
   void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
-  void CopyFrom(const SubscribeControlResponse& from);
-  void MergeFrom(const SubscribeControlResponse& from);
+  void CopyFrom(const ControlResponse& from);
+  void MergeFrom(const ControlResponse& from);
   PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
   bool IsInitialized() const final;
 
@@ -321,13 +321,13 @@ class SubscribeControlResponse PROTOBUF_FINAL :
   inline void SharedCtor();
   inline void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(SubscribeControlResponse* other);
+  void InternalSwap(ControlResponse* other);
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "mavsdk.rpc.obstacle_avoidance_server.SubscribeControlResponse";
+    return "mavsdk.rpc.obstacle_avoidance_server.ControlResponse";
   }
   protected:
-  explicit SubscribeControlResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  explicit ControlResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena);
   private:
   static void ArenaDtor(void* object);
   inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
@@ -347,56 +347,56 @@ class SubscribeControlResponse PROTOBUF_FINAL :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kControlTypeFieldNumber = 1,
+    kControlFieldNumber = 1,
   };
-  // .mavsdk.rpc.obstacle_avoidance_server.ControlType control_type = 1;
-  bool has_control_type() const;
+  // .mavsdk.rpc.obstacle_avoidance_server.Control control = 1;
+  bool has_control() const;
   private:
-  bool _internal_has_control_type() const;
+  bool _internal_has_control() const;
   public:
-  void clear_control_type();
-  const ::mavsdk::rpc::obstacle_avoidance_server::ControlType& control_type() const;
-  ::mavsdk::rpc::obstacle_avoidance_server::ControlType* release_control_type();
-  ::mavsdk::rpc::obstacle_avoidance_server::ControlType* mutable_control_type();
-  void set_allocated_control_type(::mavsdk::rpc::obstacle_avoidance_server::ControlType* control_type);
+  void clear_control();
+  const ::mavsdk::rpc::obstacle_avoidance_server::Control& control() const;
+  ::mavsdk::rpc::obstacle_avoidance_server::Control* release_control();
+  ::mavsdk::rpc::obstacle_avoidance_server::Control* mutable_control();
+  void set_allocated_control(::mavsdk::rpc::obstacle_avoidance_server::Control* control);
   private:
-  const ::mavsdk::rpc::obstacle_avoidance_server::ControlType& _internal_control_type() const;
-  ::mavsdk::rpc::obstacle_avoidance_server::ControlType* _internal_mutable_control_type();
+  const ::mavsdk::rpc::obstacle_avoidance_server::Control& _internal_control() const;
+  ::mavsdk::rpc::obstacle_avoidance_server::Control* _internal_mutable_control();
   public:
-  void unsafe_arena_set_allocated_control_type(
-      ::mavsdk::rpc::obstacle_avoidance_server::ControlType* control_type);
-  ::mavsdk::rpc::obstacle_avoidance_server::ControlType* unsafe_arena_release_control_type();
+  void unsafe_arena_set_allocated_control(
+      ::mavsdk::rpc::obstacle_avoidance_server::Control* control);
+  ::mavsdk::rpc::obstacle_avoidance_server::Control* unsafe_arena_release_control();
 
-  // @@protoc_insertion_point(class_scope:mavsdk.rpc.obstacle_avoidance_server.SubscribeControlResponse)
+  // @@protoc_insertion_point(class_scope:mavsdk.rpc.obstacle_avoidance_server.ControlResponse)
  private:
   class _Internal;
 
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::mavsdk::rpc::obstacle_avoidance_server::ControlType* control_type_;
+  ::mavsdk::rpc::obstacle_avoidance_server::Control* control_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto;
 };
 // -------------------------------------------------------------------
 
-class ControlType PROTOBUF_FINAL :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:mavsdk.rpc.obstacle_avoidance_server.ControlType) */ {
+class Control PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:mavsdk.rpc.obstacle_avoidance_server.Control) */ {
  public:
-  inline ControlType() : ControlType(nullptr) {}
-  virtual ~ControlType();
+  inline Control() : Control(nullptr) {}
+  virtual ~Control();
 
-  ControlType(const ControlType& from);
-  ControlType(ControlType&& from) noexcept
-    : ControlType() {
+  Control(const Control& from);
+  Control(Control&& from) noexcept
+    : Control() {
     *this = ::std::move(from);
   }
 
-  inline ControlType& operator=(const ControlType& from) {
+  inline Control& operator=(const Control& from) {
     CopyFrom(from);
     return *this;
   }
-  inline ControlType& operator=(ControlType&& from) noexcept {
+  inline Control& operator=(Control&& from) noexcept {
     if (GetArena() == from.GetArena()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -414,20 +414,20 @@ class ControlType PROTOBUF_FINAL :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return GetMetadataStatic().reflection;
   }
-  static const ControlType& default_instance();
+  static const Control& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const ControlType* internal_default_instance() {
-    return reinterpret_cast<const ControlType*>(
-               &_ControlType_default_instance_);
+  static inline const Control* internal_default_instance() {
+    return reinterpret_cast<const Control*>(
+               &_Control_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     2;
 
-  friend void swap(ControlType& a, ControlType& b) {
+  friend void swap(Control& a, Control& b) {
     a.Swap(&b);
   }
-  inline void Swap(ControlType* other) {
+  inline void Swap(Control* other) {
     if (other == this) return;
     if (GetArena() == other->GetArena()) {
       InternalSwap(other);
@@ -435,7 +435,7 @@ class ControlType PROTOBUF_FINAL :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(ControlType* other) {
+  void UnsafeArenaSwap(Control* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetArena() == other->GetArena());
     InternalSwap(other);
@@ -443,17 +443,17 @@ class ControlType PROTOBUF_FINAL :
 
   // implements Message ----------------------------------------------
 
-  inline ControlType* New() const final {
-    return CreateMaybeMessage<ControlType>(nullptr);
+  inline Control* New() const final {
+    return CreateMaybeMessage<Control>(nullptr);
   }
 
-  ControlType* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
-    return CreateMaybeMessage<ControlType>(arena);
+  Control* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<Control>(arena);
   }
   void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
   void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
-  void CopyFrom(const ControlType& from);
-  void MergeFrom(const ControlType& from);
+  void CopyFrom(const Control& from);
+  void MergeFrom(const Control& from);
   PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
   bool IsInitialized() const final;
 
@@ -467,13 +467,13 @@ class ControlType PROTOBUF_FINAL :
   inline void SharedCtor();
   inline void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(ControlType* other);
+  void InternalSwap(Control* other);
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "mavsdk.rpc.obstacle_avoidance_server.ControlType";
+    return "mavsdk.rpc.obstacle_avoidance_server.Control";
   }
   protected:
-  explicit ControlType(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  explicit Control(::PROTOBUF_NAMESPACE_ID::Arena* arena);
   private:
   static void ArenaDtor(void* object);
   inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
@@ -490,42 +490,42 @@ class ControlType PROTOBUF_FINAL :
 
   // nested types ----------------------------------------------------
 
-  typedef ControlType_Type Type;
-  static constexpr Type CONTROL_UNKNOWN =
-    ControlType_Type_CONTROL_UNKNOWN;
-  static constexpr Type CONTROL_START =
-    ControlType_Type_CONTROL_START;
-  static constexpr Type CONTROL_STOP =
-    ControlType_Type_CONTROL_STOP;
-  static constexpr Type CONTROL_RESTART =
-    ControlType_Type_CONTROL_RESTART;
-  static constexpr Type CONTROL_ENABLE =
-    ControlType_Type_CONTROL_ENABLE;
-  static constexpr Type CONTROL_DISABLE =
-    ControlType_Type_CONTROL_DISABLE;
-  static inline bool Type_IsValid(int value) {
-    return ControlType_Type_IsValid(value);
+  typedef Control_ControlType ControlType;
+  static constexpr ControlType CONTROL_TYPE_UNKNOWN =
+    Control_ControlType_CONTROL_TYPE_UNKNOWN;
+  static constexpr ControlType CONTROL_TYPE_START =
+    Control_ControlType_CONTROL_TYPE_START;
+  static constexpr ControlType CONTROL_TYPE_STOP =
+    Control_ControlType_CONTROL_TYPE_STOP;
+  static constexpr ControlType CONTROL_TYPE_RESTART =
+    Control_ControlType_CONTROL_TYPE_RESTART;
+  static constexpr ControlType CONTROL_TYPE_ENABLE =
+    Control_ControlType_CONTROL_TYPE_ENABLE;
+  static constexpr ControlType CONTROL_TYPE_DISABLE =
+    Control_ControlType_CONTROL_TYPE_DISABLE;
+  static inline bool ControlType_IsValid(int value) {
+    return Control_ControlType_IsValid(value);
   }
-  static constexpr Type Type_MIN =
-    ControlType_Type_Type_MIN;
-  static constexpr Type Type_MAX =
-    ControlType_Type_Type_MAX;
-  static constexpr int Type_ARRAYSIZE =
-    ControlType_Type_Type_ARRAYSIZE;
+  static constexpr ControlType ControlType_MIN =
+    Control_ControlType_ControlType_MIN;
+  static constexpr ControlType ControlType_MAX =
+    Control_ControlType_ControlType_MAX;
+  static constexpr int ControlType_ARRAYSIZE =
+    Control_ControlType_ControlType_ARRAYSIZE;
   static inline const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor*
-  Type_descriptor() {
-    return ControlType_Type_descriptor();
+  ControlType_descriptor() {
+    return Control_ControlType_descriptor();
   }
   template<typename T>
-  static inline const std::string& Type_Name(T enum_t_value) {
-    static_assert(::std::is_same<T, Type>::value ||
+  static inline const std::string& ControlType_Name(T enum_t_value) {
+    static_assert(::std::is_same<T, ControlType>::value ||
       ::std::is_integral<T>::value,
-      "Incorrect type passed to function Type_Name.");
-    return ControlType_Type_Name(enum_t_value);
+      "Incorrect type passed to function ControlType_Name.");
+    return Control_ControlType_Name(enum_t_value);
   }
-  static inline bool Type_Parse(::PROTOBUF_NAMESPACE_ID::ConstStringParam name,
-      Type* value) {
-    return ControlType_Type_Parse(name, value);
+  static inline bool ControlType_Parse(::PROTOBUF_NAMESPACE_ID::ConstStringParam name,
+      ControlType* value) {
+    return Control_ControlType_Parse(name, value);
   }
 
   // accessors -------------------------------------------------------
@@ -533,16 +533,16 @@ class ControlType PROTOBUF_FINAL :
   enum : int {
     kControlTypeFieldNumber = 1,
   };
-  // .mavsdk.rpc.obstacle_avoidance_server.ControlType.Type control_type = 1;
+  // .mavsdk.rpc.obstacle_avoidance_server.Control.ControlType control_type = 1;
   void clear_control_type();
-  ::mavsdk::rpc::obstacle_avoidance_server::ControlType_Type control_type() const;
-  void set_control_type(::mavsdk::rpc::obstacle_avoidance_server::ControlType_Type value);
+  ::mavsdk::rpc::obstacle_avoidance_server::Control_ControlType control_type() const;
+  void set_control_type(::mavsdk::rpc::obstacle_avoidance_server::Control_ControlType value);
   private:
-  ::mavsdk::rpc::obstacle_avoidance_server::ControlType_Type _internal_control_type() const;
-  void _internal_set_control_type(::mavsdk::rpc::obstacle_avoidance_server::ControlType_Type value);
+  ::mavsdk::rpc::obstacle_avoidance_server::Control_ControlType _internal_control_type() const;
+  void _internal_set_control_type(::mavsdk::rpc::obstacle_avoidance_server::Control_ControlType value);
   public:
 
-  // @@protoc_insertion_point(class_scope:mavsdk.rpc.obstacle_avoidance_server.ControlType)
+  // @@protoc_insertion_point(class_scope:mavsdk.rpc.obstacle_avoidance_server.Control)
  private:
   class _Internal;
 
@@ -566,113 +566,113 @@ class ControlType PROTOBUF_FINAL :
 
 // -------------------------------------------------------------------
 
-// SubscribeControlResponse
+// ControlResponse
 
-// .mavsdk.rpc.obstacle_avoidance_server.ControlType control_type = 1;
-inline bool SubscribeControlResponse::_internal_has_control_type() const {
-  return this != internal_default_instance() && control_type_ != nullptr;
+// .mavsdk.rpc.obstacle_avoidance_server.Control control = 1;
+inline bool ControlResponse::_internal_has_control() const {
+  return this != internal_default_instance() && control_ != nullptr;
 }
-inline bool SubscribeControlResponse::has_control_type() const {
-  return _internal_has_control_type();
+inline bool ControlResponse::has_control() const {
+  return _internal_has_control();
 }
-inline void SubscribeControlResponse::clear_control_type() {
-  if (GetArena() == nullptr && control_type_ != nullptr) {
-    delete control_type_;
+inline void ControlResponse::clear_control() {
+  if (GetArena() == nullptr && control_ != nullptr) {
+    delete control_;
   }
-  control_type_ = nullptr;
+  control_ = nullptr;
 }
-inline const ::mavsdk::rpc::obstacle_avoidance_server::ControlType& SubscribeControlResponse::_internal_control_type() const {
-  const ::mavsdk::rpc::obstacle_avoidance_server::ControlType* p = control_type_;
-  return p != nullptr ? *p : *reinterpret_cast<const ::mavsdk::rpc::obstacle_avoidance_server::ControlType*>(
-      &::mavsdk::rpc::obstacle_avoidance_server::_ControlType_default_instance_);
+inline const ::mavsdk::rpc::obstacle_avoidance_server::Control& ControlResponse::_internal_control() const {
+  const ::mavsdk::rpc::obstacle_avoidance_server::Control* p = control_;
+  return p != nullptr ? *p : *reinterpret_cast<const ::mavsdk::rpc::obstacle_avoidance_server::Control*>(
+      &::mavsdk::rpc::obstacle_avoidance_server::_Control_default_instance_);
 }
-inline const ::mavsdk::rpc::obstacle_avoidance_server::ControlType& SubscribeControlResponse::control_type() const {
-  // @@protoc_insertion_point(field_get:mavsdk.rpc.obstacle_avoidance_server.SubscribeControlResponse.control_type)
-  return _internal_control_type();
+inline const ::mavsdk::rpc::obstacle_avoidance_server::Control& ControlResponse::control() const {
+  // @@protoc_insertion_point(field_get:mavsdk.rpc.obstacle_avoidance_server.ControlResponse.control)
+  return _internal_control();
 }
-inline void SubscribeControlResponse::unsafe_arena_set_allocated_control_type(
-    ::mavsdk::rpc::obstacle_avoidance_server::ControlType* control_type) {
+inline void ControlResponse::unsafe_arena_set_allocated_control(
+    ::mavsdk::rpc::obstacle_avoidance_server::Control* control) {
   if (GetArena() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(control_type_);
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(control_);
   }
-  control_type_ = control_type;
-  if (control_type) {
+  control_ = control;
+  if (control) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:mavsdk.rpc.obstacle_avoidance_server.SubscribeControlResponse.control_type)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:mavsdk.rpc.obstacle_avoidance_server.ControlResponse.control)
 }
-inline ::mavsdk::rpc::obstacle_avoidance_server::ControlType* SubscribeControlResponse::release_control_type() {
+inline ::mavsdk::rpc::obstacle_avoidance_server::Control* ControlResponse::release_control() {
   
-  ::mavsdk::rpc::obstacle_avoidance_server::ControlType* temp = control_type_;
-  control_type_ = nullptr;
+  ::mavsdk::rpc::obstacle_avoidance_server::Control* temp = control_;
+  control_ = nullptr;
   if (GetArena() != nullptr) {
     temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
   }
   return temp;
 }
-inline ::mavsdk::rpc::obstacle_avoidance_server::ControlType* SubscribeControlResponse::unsafe_arena_release_control_type() {
-  // @@protoc_insertion_point(field_release:mavsdk.rpc.obstacle_avoidance_server.SubscribeControlResponse.control_type)
+inline ::mavsdk::rpc::obstacle_avoidance_server::Control* ControlResponse::unsafe_arena_release_control() {
+  // @@protoc_insertion_point(field_release:mavsdk.rpc.obstacle_avoidance_server.ControlResponse.control)
   
-  ::mavsdk::rpc::obstacle_avoidance_server::ControlType* temp = control_type_;
-  control_type_ = nullptr;
+  ::mavsdk::rpc::obstacle_avoidance_server::Control* temp = control_;
+  control_ = nullptr;
   return temp;
 }
-inline ::mavsdk::rpc::obstacle_avoidance_server::ControlType* SubscribeControlResponse::_internal_mutable_control_type() {
+inline ::mavsdk::rpc::obstacle_avoidance_server::Control* ControlResponse::_internal_mutable_control() {
   
-  if (control_type_ == nullptr) {
-    auto* p = CreateMaybeMessage<::mavsdk::rpc::obstacle_avoidance_server::ControlType>(GetArena());
-    control_type_ = p;
+  if (control_ == nullptr) {
+    auto* p = CreateMaybeMessage<::mavsdk::rpc::obstacle_avoidance_server::Control>(GetArena());
+    control_ = p;
   }
-  return control_type_;
+  return control_;
 }
-inline ::mavsdk::rpc::obstacle_avoidance_server::ControlType* SubscribeControlResponse::mutable_control_type() {
-  // @@protoc_insertion_point(field_mutable:mavsdk.rpc.obstacle_avoidance_server.SubscribeControlResponse.control_type)
-  return _internal_mutable_control_type();
+inline ::mavsdk::rpc::obstacle_avoidance_server::Control* ControlResponse::mutable_control() {
+  // @@protoc_insertion_point(field_mutable:mavsdk.rpc.obstacle_avoidance_server.ControlResponse.control)
+  return _internal_mutable_control();
 }
-inline void SubscribeControlResponse::set_allocated_control_type(::mavsdk::rpc::obstacle_avoidance_server::ControlType* control_type) {
+inline void ControlResponse::set_allocated_control(::mavsdk::rpc::obstacle_avoidance_server::Control* control) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
   if (message_arena == nullptr) {
-    delete control_type_;
+    delete control_;
   }
-  if (control_type) {
+  if (control) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::GetArena(control_type);
+      ::PROTOBUF_NAMESPACE_ID::Arena::GetArena(control);
     if (message_arena != submessage_arena) {
-      control_type = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, control_type, submessage_arena);
+      control = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, control, submessage_arena);
     }
     
   } else {
     
   }
-  control_type_ = control_type;
-  // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.obstacle_avoidance_server.SubscribeControlResponse.control_type)
+  control_ = control;
+  // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.obstacle_avoidance_server.ControlResponse.control)
 }
 
 // -------------------------------------------------------------------
 
-// ControlType
+// Control
 
-// .mavsdk.rpc.obstacle_avoidance_server.ControlType.Type control_type = 1;
-inline void ControlType::clear_control_type() {
+// .mavsdk.rpc.obstacle_avoidance_server.Control.ControlType control_type = 1;
+inline void Control::clear_control_type() {
   control_type_ = 0;
 }
-inline ::mavsdk::rpc::obstacle_avoidance_server::ControlType_Type ControlType::_internal_control_type() const {
-  return static_cast< ::mavsdk::rpc::obstacle_avoidance_server::ControlType_Type >(control_type_);
+inline ::mavsdk::rpc::obstacle_avoidance_server::Control_ControlType Control::_internal_control_type() const {
+  return static_cast< ::mavsdk::rpc::obstacle_avoidance_server::Control_ControlType >(control_type_);
 }
-inline ::mavsdk::rpc::obstacle_avoidance_server::ControlType_Type ControlType::control_type() const {
-  // @@protoc_insertion_point(field_get:mavsdk.rpc.obstacle_avoidance_server.ControlType.control_type)
+inline ::mavsdk::rpc::obstacle_avoidance_server::Control_ControlType Control::control_type() const {
+  // @@protoc_insertion_point(field_get:mavsdk.rpc.obstacle_avoidance_server.Control.control_type)
   return _internal_control_type();
 }
-inline void ControlType::_internal_set_control_type(::mavsdk::rpc::obstacle_avoidance_server::ControlType_Type value) {
+inline void Control::_internal_set_control_type(::mavsdk::rpc::obstacle_avoidance_server::Control_ControlType value) {
   
   control_type_ = value;
 }
-inline void ControlType::set_control_type(::mavsdk::rpc::obstacle_avoidance_server::ControlType_Type value) {
+inline void Control::set_control_type(::mavsdk::rpc::obstacle_avoidance_server::Control_ControlType value) {
   _internal_set_control_type(value);
-  // @@protoc_insertion_point(field_set:mavsdk.rpc.obstacle_avoidance_server.ControlType.control_type)
+  // @@protoc_insertion_point(field_set:mavsdk.rpc.obstacle_avoidance_server.Control.control_type)
 }
 
 #ifdef __GNUC__
@@ -691,10 +691,10 @@ inline void ControlType::set_control_type(::mavsdk::rpc::obstacle_avoidance_serv
 
 PROTOBUF_NAMESPACE_OPEN
 
-template <> struct is_proto_enum< ::mavsdk::rpc::obstacle_avoidance_server::ControlType_Type> : ::std::true_type {};
+template <> struct is_proto_enum< ::mavsdk::rpc::obstacle_avoidance_server::Control_ControlType> : ::std::true_type {};
 template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::mavsdk::rpc::obstacle_avoidance_server::ControlType_Type>() {
-  return ::mavsdk::rpc::obstacle_avoidance_server::ControlType_Type_descriptor();
+inline const EnumDescriptor* GetEnumDescriptor< ::mavsdk::rpc::obstacle_avoidance_server::Control_ControlType>() {
+  return ::mavsdk::rpc::obstacle_avoidance_server::Control_ControlType_descriptor();
 }
 
 PROTOBUF_NAMESPACE_CLOSE
