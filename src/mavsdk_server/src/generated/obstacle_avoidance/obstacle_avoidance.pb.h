@@ -380,25 +380,25 @@ class StartResponse PROTOBUF_FINAL :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kResultFieldNumber = 1,
+    kObstacleAvoidanceResultFieldNumber = 1,
   };
-  // .mavsdk.rpc.obstacle_avoidance.ObstacleAvoidanceResult result = 1;
-  bool has_result() const;
+  // .mavsdk.rpc.obstacle_avoidance.ObstacleAvoidanceResult obstacle_avoidance_result = 1;
+  bool has_obstacle_avoidance_result() const;
   private:
-  bool _internal_has_result() const;
+  bool _internal_has_obstacle_avoidance_result() const;
   public:
-  void clear_result();
-  const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& result() const;
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* release_result();
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* mutable_result();
-  void set_allocated_result(::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* result);
+  void clear_obstacle_avoidance_result();
+  const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& obstacle_avoidance_result() const;
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* release_obstacle_avoidance_result();
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* mutable_obstacle_avoidance_result();
+  void set_allocated_obstacle_avoidance_result(::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* obstacle_avoidance_result);
   private:
-  const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& _internal_result() const;
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* _internal_mutable_result();
+  const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& _internal_obstacle_avoidance_result() const;
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* _internal_mutable_obstacle_avoidance_result();
   public:
-  void unsafe_arena_set_allocated_result(
-      ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* result);
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* unsafe_arena_release_result();
+  void unsafe_arena_set_allocated_obstacle_avoidance_result(
+      ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* obstacle_avoidance_result);
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* unsafe_arena_release_obstacle_avoidance_result();
 
   // @@protoc_insertion_point(class_scope:mavsdk.rpc.obstacle_avoidance.StartResponse)
  private:
@@ -407,7 +407,7 @@ class StartResponse PROTOBUF_FINAL :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* result_;
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* obstacle_avoidance_result_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_obstacle_5favoidance_2fobstacle_5favoidance_2eproto;
 };
@@ -650,25 +650,25 @@ class StopResponse PROTOBUF_FINAL :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kResultFieldNumber = 1,
+    kObstacleAvoidanceResultFieldNumber = 1,
   };
-  // .mavsdk.rpc.obstacle_avoidance.ObstacleAvoidanceResult result = 1;
-  bool has_result() const;
+  // .mavsdk.rpc.obstacle_avoidance.ObstacleAvoidanceResult obstacle_avoidance_result = 1;
+  bool has_obstacle_avoidance_result() const;
   private:
-  bool _internal_has_result() const;
+  bool _internal_has_obstacle_avoidance_result() const;
   public:
-  void clear_result();
-  const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& result() const;
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* release_result();
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* mutable_result();
-  void set_allocated_result(::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* result);
+  void clear_obstacle_avoidance_result();
+  const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& obstacle_avoidance_result() const;
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* release_obstacle_avoidance_result();
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* mutable_obstacle_avoidance_result();
+  void set_allocated_obstacle_avoidance_result(::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* obstacle_avoidance_result);
   private:
-  const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& _internal_result() const;
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* _internal_mutable_result();
+  const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& _internal_obstacle_avoidance_result() const;
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* _internal_mutable_obstacle_avoidance_result();
   public:
-  void unsafe_arena_set_allocated_result(
-      ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* result);
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* unsafe_arena_release_result();
+  void unsafe_arena_set_allocated_obstacle_avoidance_result(
+      ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* obstacle_avoidance_result);
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* unsafe_arena_release_obstacle_avoidance_result();
 
   // @@protoc_insertion_point(class_scope:mavsdk.rpc.obstacle_avoidance.StopResponse)
  private:
@@ -677,7 +677,7 @@ class StopResponse PROTOBUF_FINAL :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* result_;
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* obstacle_avoidance_result_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_obstacle_5favoidance_2fobstacle_5favoidance_2eproto;
 };
@@ -920,25 +920,25 @@ class RestartResponse PROTOBUF_FINAL :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kResultFieldNumber = 1,
+    kObstacleAvoidanceResultFieldNumber = 1,
   };
-  // .mavsdk.rpc.obstacle_avoidance.ObstacleAvoidanceResult result = 1;
-  bool has_result() const;
+  // .mavsdk.rpc.obstacle_avoidance.ObstacleAvoidanceResult obstacle_avoidance_result = 1;
+  bool has_obstacle_avoidance_result() const;
   private:
-  bool _internal_has_result() const;
+  bool _internal_has_obstacle_avoidance_result() const;
   public:
-  void clear_result();
-  const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& result() const;
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* release_result();
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* mutable_result();
-  void set_allocated_result(::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* result);
+  void clear_obstacle_avoidance_result();
+  const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& obstacle_avoidance_result() const;
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* release_obstacle_avoidance_result();
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* mutable_obstacle_avoidance_result();
+  void set_allocated_obstacle_avoidance_result(::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* obstacle_avoidance_result);
   private:
-  const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& _internal_result() const;
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* _internal_mutable_result();
+  const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& _internal_obstacle_avoidance_result() const;
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* _internal_mutable_obstacle_avoidance_result();
   public:
-  void unsafe_arena_set_allocated_result(
-      ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* result);
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* unsafe_arena_release_result();
+  void unsafe_arena_set_allocated_obstacle_avoidance_result(
+      ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* obstacle_avoidance_result);
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* unsafe_arena_release_obstacle_avoidance_result();
 
   // @@protoc_insertion_point(class_scope:mavsdk.rpc.obstacle_avoidance.RestartResponse)
  private:
@@ -947,7 +947,7 @@ class RestartResponse PROTOBUF_FINAL :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* result_;
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* obstacle_avoidance_result_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_obstacle_5favoidance_2fobstacle_5favoidance_2eproto;
 };
@@ -1190,25 +1190,25 @@ class StateEnableResponse PROTOBUF_FINAL :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kResultFieldNumber = 1,
+    kObstacleAvoidanceResultFieldNumber = 1,
   };
-  // .mavsdk.rpc.obstacle_avoidance.ObstacleAvoidanceResult result = 1;
-  bool has_result() const;
+  // .mavsdk.rpc.obstacle_avoidance.ObstacleAvoidanceResult obstacle_avoidance_result = 1;
+  bool has_obstacle_avoidance_result() const;
   private:
-  bool _internal_has_result() const;
+  bool _internal_has_obstacle_avoidance_result() const;
   public:
-  void clear_result();
-  const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& result() const;
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* release_result();
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* mutable_result();
-  void set_allocated_result(::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* result);
+  void clear_obstacle_avoidance_result();
+  const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& obstacle_avoidance_result() const;
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* release_obstacle_avoidance_result();
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* mutable_obstacle_avoidance_result();
+  void set_allocated_obstacle_avoidance_result(::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* obstacle_avoidance_result);
   private:
-  const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& _internal_result() const;
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* _internal_mutable_result();
+  const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& _internal_obstacle_avoidance_result() const;
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* _internal_mutable_obstacle_avoidance_result();
   public:
-  void unsafe_arena_set_allocated_result(
-      ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* result);
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* unsafe_arena_release_result();
+  void unsafe_arena_set_allocated_obstacle_avoidance_result(
+      ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* obstacle_avoidance_result);
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* unsafe_arena_release_obstacle_avoidance_result();
 
   // @@protoc_insertion_point(class_scope:mavsdk.rpc.obstacle_avoidance.StateEnableResponse)
  private:
@@ -1217,7 +1217,7 @@ class StateEnableResponse PROTOBUF_FINAL :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* result_;
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* obstacle_avoidance_result_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_obstacle_5favoidance_2fobstacle_5favoidance_2eproto;
 };
@@ -1460,25 +1460,25 @@ class StateDisableResponse PROTOBUF_FINAL :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kResultFieldNumber = 1,
+    kObstacleAvoidanceResultFieldNumber = 1,
   };
-  // .mavsdk.rpc.obstacle_avoidance.ObstacleAvoidanceResult result = 1;
-  bool has_result() const;
+  // .mavsdk.rpc.obstacle_avoidance.ObstacleAvoidanceResult obstacle_avoidance_result = 1;
+  bool has_obstacle_avoidance_result() const;
   private:
-  bool _internal_has_result() const;
+  bool _internal_has_obstacle_avoidance_result() const;
   public:
-  void clear_result();
-  const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& result() const;
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* release_result();
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* mutable_result();
-  void set_allocated_result(::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* result);
+  void clear_obstacle_avoidance_result();
+  const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& obstacle_avoidance_result() const;
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* release_obstacle_avoidance_result();
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* mutable_obstacle_avoidance_result();
+  void set_allocated_obstacle_avoidance_result(::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* obstacle_avoidance_result);
   private:
-  const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& _internal_result() const;
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* _internal_mutable_result();
+  const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& _internal_obstacle_avoidance_result() const;
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* _internal_mutable_obstacle_avoidance_result();
   public:
-  void unsafe_arena_set_allocated_result(
-      ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* result);
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* unsafe_arena_release_result();
+  void unsafe_arena_set_allocated_obstacle_avoidance_result(
+      ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* obstacle_avoidance_result);
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* unsafe_arena_release_obstacle_avoidance_result();
 
   // @@protoc_insertion_point(class_scope:mavsdk.rpc.obstacle_avoidance.StateDisableResponse)
  private:
@@ -1487,7 +1487,7 @@ class StateDisableResponse PROTOBUF_FINAL :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* result_;
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* obstacle_avoidance_result_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_obstacle_5favoidance_2fobstacle_5favoidance_2eproto;
 };
@@ -1646,8 +1646,25 @@ class ObstacleAvoidanceResult PROTOBUF_FINAL :
   // accessors -------------------------------------------------------
 
   enum : int {
+    kResultStrFieldNumber = 2,
     kResultFieldNumber = 1,
   };
+  // string result_str = 2;
+  void clear_result_str();
+  const std::string& result_str() const;
+  void set_result_str(const std::string& value);
+  void set_result_str(std::string&& value);
+  void set_result_str(const char* value);
+  void set_result_str(const char* value, size_t size);
+  std::string* mutable_result_str();
+  std::string* release_result_str();
+  void set_allocated_result_str(std::string* result_str);
+  private:
+  const std::string& _internal_result_str() const;
+  void _internal_set_result_str(const std::string& value);
+  std::string* _internal_mutable_result_str();
+  public:
+
   // .mavsdk.rpc.obstacle_avoidance.ObstacleAvoidanceResult.Result result = 1;
   void clear_result();
   ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult_Result result() const;
@@ -1664,6 +1681,7 @@ class ObstacleAvoidanceResult PROTOBUF_FINAL :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr result_str_;
   int result_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_obstacle_5favoidance_2fobstacle_5favoidance_2eproto;
@@ -1683,87 +1701,87 @@ class ObstacleAvoidanceResult PROTOBUF_FINAL :
 
 // StartResponse
 
-// .mavsdk.rpc.obstacle_avoidance.ObstacleAvoidanceResult result = 1;
-inline bool StartResponse::_internal_has_result() const {
-  return this != internal_default_instance() && result_ != nullptr;
+// .mavsdk.rpc.obstacle_avoidance.ObstacleAvoidanceResult obstacle_avoidance_result = 1;
+inline bool StartResponse::_internal_has_obstacle_avoidance_result() const {
+  return this != internal_default_instance() && obstacle_avoidance_result_ != nullptr;
 }
-inline bool StartResponse::has_result() const {
-  return _internal_has_result();
+inline bool StartResponse::has_obstacle_avoidance_result() const {
+  return _internal_has_obstacle_avoidance_result();
 }
-inline void StartResponse::clear_result() {
-  if (GetArena() == nullptr && result_ != nullptr) {
-    delete result_;
+inline void StartResponse::clear_obstacle_avoidance_result() {
+  if (GetArena() == nullptr && obstacle_avoidance_result_ != nullptr) {
+    delete obstacle_avoidance_result_;
   }
-  result_ = nullptr;
+  obstacle_avoidance_result_ = nullptr;
 }
-inline const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& StartResponse::_internal_result() const {
-  const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* p = result_;
+inline const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& StartResponse::_internal_obstacle_avoidance_result() const {
+  const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* p = obstacle_avoidance_result_;
   return p != nullptr ? *p : *reinterpret_cast<const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult*>(
       &::mavsdk::rpc::obstacle_avoidance::_ObstacleAvoidanceResult_default_instance_);
 }
-inline const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& StartResponse::result() const {
-  // @@protoc_insertion_point(field_get:mavsdk.rpc.obstacle_avoidance.StartResponse.result)
-  return _internal_result();
+inline const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& StartResponse::obstacle_avoidance_result() const {
+  // @@protoc_insertion_point(field_get:mavsdk.rpc.obstacle_avoidance.StartResponse.obstacle_avoidance_result)
+  return _internal_obstacle_avoidance_result();
 }
-inline void StartResponse::unsafe_arena_set_allocated_result(
-    ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* result) {
+inline void StartResponse::unsafe_arena_set_allocated_obstacle_avoidance_result(
+    ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* obstacle_avoidance_result) {
   if (GetArena() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(result_);
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(obstacle_avoidance_result_);
   }
-  result_ = result;
-  if (result) {
+  obstacle_avoidance_result_ = obstacle_avoidance_result;
+  if (obstacle_avoidance_result) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:mavsdk.rpc.obstacle_avoidance.StartResponse.result)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:mavsdk.rpc.obstacle_avoidance.StartResponse.obstacle_avoidance_result)
 }
-inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* StartResponse::release_result() {
+inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* StartResponse::release_obstacle_avoidance_result() {
   
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* temp = result_;
-  result_ = nullptr;
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* temp = obstacle_avoidance_result_;
+  obstacle_avoidance_result_ = nullptr;
   if (GetArena() != nullptr) {
     temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
   }
   return temp;
 }
-inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* StartResponse::unsafe_arena_release_result() {
-  // @@protoc_insertion_point(field_release:mavsdk.rpc.obstacle_avoidance.StartResponse.result)
+inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* StartResponse::unsafe_arena_release_obstacle_avoidance_result() {
+  // @@protoc_insertion_point(field_release:mavsdk.rpc.obstacle_avoidance.StartResponse.obstacle_avoidance_result)
   
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* temp = result_;
-  result_ = nullptr;
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* temp = obstacle_avoidance_result_;
+  obstacle_avoidance_result_ = nullptr;
   return temp;
 }
-inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* StartResponse::_internal_mutable_result() {
+inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* StartResponse::_internal_mutable_obstacle_avoidance_result() {
   
-  if (result_ == nullptr) {
+  if (obstacle_avoidance_result_ == nullptr) {
     auto* p = CreateMaybeMessage<::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult>(GetArena());
-    result_ = p;
+    obstacle_avoidance_result_ = p;
   }
-  return result_;
+  return obstacle_avoidance_result_;
 }
-inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* StartResponse::mutable_result() {
-  // @@protoc_insertion_point(field_mutable:mavsdk.rpc.obstacle_avoidance.StartResponse.result)
-  return _internal_mutable_result();
+inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* StartResponse::mutable_obstacle_avoidance_result() {
+  // @@protoc_insertion_point(field_mutable:mavsdk.rpc.obstacle_avoidance.StartResponse.obstacle_avoidance_result)
+  return _internal_mutable_obstacle_avoidance_result();
 }
-inline void StartResponse::set_allocated_result(::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* result) {
+inline void StartResponse::set_allocated_obstacle_avoidance_result(::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* obstacle_avoidance_result) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
   if (message_arena == nullptr) {
-    delete result_;
+    delete obstacle_avoidance_result_;
   }
-  if (result) {
+  if (obstacle_avoidance_result) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::GetArena(result);
+      ::PROTOBUF_NAMESPACE_ID::Arena::GetArena(obstacle_avoidance_result);
     if (message_arena != submessage_arena) {
-      result = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, result, submessage_arena);
+      obstacle_avoidance_result = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, obstacle_avoidance_result, submessage_arena);
     }
     
   } else {
     
   }
-  result_ = result;
-  // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.obstacle_avoidance.StartResponse.result)
+  obstacle_avoidance_result_ = obstacle_avoidance_result;
+  // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.obstacle_avoidance.StartResponse.obstacle_avoidance_result)
 }
 
 // -------------------------------------------------------------------
@@ -1774,87 +1792,87 @@ inline void StartResponse::set_allocated_result(::mavsdk::rpc::obstacle_avoidanc
 
 // StopResponse
 
-// .mavsdk.rpc.obstacle_avoidance.ObstacleAvoidanceResult result = 1;
-inline bool StopResponse::_internal_has_result() const {
-  return this != internal_default_instance() && result_ != nullptr;
+// .mavsdk.rpc.obstacle_avoidance.ObstacleAvoidanceResult obstacle_avoidance_result = 1;
+inline bool StopResponse::_internal_has_obstacle_avoidance_result() const {
+  return this != internal_default_instance() && obstacle_avoidance_result_ != nullptr;
 }
-inline bool StopResponse::has_result() const {
-  return _internal_has_result();
+inline bool StopResponse::has_obstacle_avoidance_result() const {
+  return _internal_has_obstacle_avoidance_result();
 }
-inline void StopResponse::clear_result() {
-  if (GetArena() == nullptr && result_ != nullptr) {
-    delete result_;
+inline void StopResponse::clear_obstacle_avoidance_result() {
+  if (GetArena() == nullptr && obstacle_avoidance_result_ != nullptr) {
+    delete obstacle_avoidance_result_;
   }
-  result_ = nullptr;
+  obstacle_avoidance_result_ = nullptr;
 }
-inline const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& StopResponse::_internal_result() const {
-  const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* p = result_;
+inline const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& StopResponse::_internal_obstacle_avoidance_result() const {
+  const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* p = obstacle_avoidance_result_;
   return p != nullptr ? *p : *reinterpret_cast<const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult*>(
       &::mavsdk::rpc::obstacle_avoidance::_ObstacleAvoidanceResult_default_instance_);
 }
-inline const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& StopResponse::result() const {
-  // @@protoc_insertion_point(field_get:mavsdk.rpc.obstacle_avoidance.StopResponse.result)
-  return _internal_result();
+inline const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& StopResponse::obstacle_avoidance_result() const {
+  // @@protoc_insertion_point(field_get:mavsdk.rpc.obstacle_avoidance.StopResponse.obstacle_avoidance_result)
+  return _internal_obstacle_avoidance_result();
 }
-inline void StopResponse::unsafe_arena_set_allocated_result(
-    ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* result) {
+inline void StopResponse::unsafe_arena_set_allocated_obstacle_avoidance_result(
+    ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* obstacle_avoidance_result) {
   if (GetArena() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(result_);
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(obstacle_avoidance_result_);
   }
-  result_ = result;
-  if (result) {
+  obstacle_avoidance_result_ = obstacle_avoidance_result;
+  if (obstacle_avoidance_result) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:mavsdk.rpc.obstacle_avoidance.StopResponse.result)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:mavsdk.rpc.obstacle_avoidance.StopResponse.obstacle_avoidance_result)
 }
-inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* StopResponse::release_result() {
+inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* StopResponse::release_obstacle_avoidance_result() {
   
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* temp = result_;
-  result_ = nullptr;
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* temp = obstacle_avoidance_result_;
+  obstacle_avoidance_result_ = nullptr;
   if (GetArena() != nullptr) {
     temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
   }
   return temp;
 }
-inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* StopResponse::unsafe_arena_release_result() {
-  // @@protoc_insertion_point(field_release:mavsdk.rpc.obstacle_avoidance.StopResponse.result)
+inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* StopResponse::unsafe_arena_release_obstacle_avoidance_result() {
+  // @@protoc_insertion_point(field_release:mavsdk.rpc.obstacle_avoidance.StopResponse.obstacle_avoidance_result)
   
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* temp = result_;
-  result_ = nullptr;
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* temp = obstacle_avoidance_result_;
+  obstacle_avoidance_result_ = nullptr;
   return temp;
 }
-inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* StopResponse::_internal_mutable_result() {
+inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* StopResponse::_internal_mutable_obstacle_avoidance_result() {
   
-  if (result_ == nullptr) {
+  if (obstacle_avoidance_result_ == nullptr) {
     auto* p = CreateMaybeMessage<::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult>(GetArena());
-    result_ = p;
+    obstacle_avoidance_result_ = p;
   }
-  return result_;
+  return obstacle_avoidance_result_;
 }
-inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* StopResponse::mutable_result() {
-  // @@protoc_insertion_point(field_mutable:mavsdk.rpc.obstacle_avoidance.StopResponse.result)
-  return _internal_mutable_result();
+inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* StopResponse::mutable_obstacle_avoidance_result() {
+  // @@protoc_insertion_point(field_mutable:mavsdk.rpc.obstacle_avoidance.StopResponse.obstacle_avoidance_result)
+  return _internal_mutable_obstacle_avoidance_result();
 }
-inline void StopResponse::set_allocated_result(::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* result) {
+inline void StopResponse::set_allocated_obstacle_avoidance_result(::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* obstacle_avoidance_result) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
   if (message_arena == nullptr) {
-    delete result_;
+    delete obstacle_avoidance_result_;
   }
-  if (result) {
+  if (obstacle_avoidance_result) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::GetArena(result);
+      ::PROTOBUF_NAMESPACE_ID::Arena::GetArena(obstacle_avoidance_result);
     if (message_arena != submessage_arena) {
-      result = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, result, submessage_arena);
+      obstacle_avoidance_result = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, obstacle_avoidance_result, submessage_arena);
     }
     
   } else {
     
   }
-  result_ = result;
-  // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.obstacle_avoidance.StopResponse.result)
+  obstacle_avoidance_result_ = obstacle_avoidance_result;
+  // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.obstacle_avoidance.StopResponse.obstacle_avoidance_result)
 }
 
 // -------------------------------------------------------------------
@@ -1865,87 +1883,87 @@ inline void StopResponse::set_allocated_result(::mavsdk::rpc::obstacle_avoidance
 
 // RestartResponse
 
-// .mavsdk.rpc.obstacle_avoidance.ObstacleAvoidanceResult result = 1;
-inline bool RestartResponse::_internal_has_result() const {
-  return this != internal_default_instance() && result_ != nullptr;
+// .mavsdk.rpc.obstacle_avoidance.ObstacleAvoidanceResult obstacle_avoidance_result = 1;
+inline bool RestartResponse::_internal_has_obstacle_avoidance_result() const {
+  return this != internal_default_instance() && obstacle_avoidance_result_ != nullptr;
 }
-inline bool RestartResponse::has_result() const {
-  return _internal_has_result();
+inline bool RestartResponse::has_obstacle_avoidance_result() const {
+  return _internal_has_obstacle_avoidance_result();
 }
-inline void RestartResponse::clear_result() {
-  if (GetArena() == nullptr && result_ != nullptr) {
-    delete result_;
+inline void RestartResponse::clear_obstacle_avoidance_result() {
+  if (GetArena() == nullptr && obstacle_avoidance_result_ != nullptr) {
+    delete obstacle_avoidance_result_;
   }
-  result_ = nullptr;
+  obstacle_avoidance_result_ = nullptr;
 }
-inline const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& RestartResponse::_internal_result() const {
-  const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* p = result_;
+inline const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& RestartResponse::_internal_obstacle_avoidance_result() const {
+  const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* p = obstacle_avoidance_result_;
   return p != nullptr ? *p : *reinterpret_cast<const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult*>(
       &::mavsdk::rpc::obstacle_avoidance::_ObstacleAvoidanceResult_default_instance_);
 }
-inline const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& RestartResponse::result() const {
-  // @@protoc_insertion_point(field_get:mavsdk.rpc.obstacle_avoidance.RestartResponse.result)
-  return _internal_result();
+inline const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& RestartResponse::obstacle_avoidance_result() const {
+  // @@protoc_insertion_point(field_get:mavsdk.rpc.obstacle_avoidance.RestartResponse.obstacle_avoidance_result)
+  return _internal_obstacle_avoidance_result();
 }
-inline void RestartResponse::unsafe_arena_set_allocated_result(
-    ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* result) {
+inline void RestartResponse::unsafe_arena_set_allocated_obstacle_avoidance_result(
+    ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* obstacle_avoidance_result) {
   if (GetArena() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(result_);
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(obstacle_avoidance_result_);
   }
-  result_ = result;
-  if (result) {
+  obstacle_avoidance_result_ = obstacle_avoidance_result;
+  if (obstacle_avoidance_result) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:mavsdk.rpc.obstacle_avoidance.RestartResponse.result)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:mavsdk.rpc.obstacle_avoidance.RestartResponse.obstacle_avoidance_result)
 }
-inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* RestartResponse::release_result() {
+inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* RestartResponse::release_obstacle_avoidance_result() {
   
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* temp = result_;
-  result_ = nullptr;
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* temp = obstacle_avoidance_result_;
+  obstacle_avoidance_result_ = nullptr;
   if (GetArena() != nullptr) {
     temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
   }
   return temp;
 }
-inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* RestartResponse::unsafe_arena_release_result() {
-  // @@protoc_insertion_point(field_release:mavsdk.rpc.obstacle_avoidance.RestartResponse.result)
+inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* RestartResponse::unsafe_arena_release_obstacle_avoidance_result() {
+  // @@protoc_insertion_point(field_release:mavsdk.rpc.obstacle_avoidance.RestartResponse.obstacle_avoidance_result)
   
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* temp = result_;
-  result_ = nullptr;
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* temp = obstacle_avoidance_result_;
+  obstacle_avoidance_result_ = nullptr;
   return temp;
 }
-inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* RestartResponse::_internal_mutable_result() {
+inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* RestartResponse::_internal_mutable_obstacle_avoidance_result() {
   
-  if (result_ == nullptr) {
+  if (obstacle_avoidance_result_ == nullptr) {
     auto* p = CreateMaybeMessage<::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult>(GetArena());
-    result_ = p;
+    obstacle_avoidance_result_ = p;
   }
-  return result_;
+  return obstacle_avoidance_result_;
 }
-inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* RestartResponse::mutable_result() {
-  // @@protoc_insertion_point(field_mutable:mavsdk.rpc.obstacle_avoidance.RestartResponse.result)
-  return _internal_mutable_result();
+inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* RestartResponse::mutable_obstacle_avoidance_result() {
+  // @@protoc_insertion_point(field_mutable:mavsdk.rpc.obstacle_avoidance.RestartResponse.obstacle_avoidance_result)
+  return _internal_mutable_obstacle_avoidance_result();
 }
-inline void RestartResponse::set_allocated_result(::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* result) {
+inline void RestartResponse::set_allocated_obstacle_avoidance_result(::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* obstacle_avoidance_result) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
   if (message_arena == nullptr) {
-    delete result_;
+    delete obstacle_avoidance_result_;
   }
-  if (result) {
+  if (obstacle_avoidance_result) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::GetArena(result);
+      ::PROTOBUF_NAMESPACE_ID::Arena::GetArena(obstacle_avoidance_result);
     if (message_arena != submessage_arena) {
-      result = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, result, submessage_arena);
+      obstacle_avoidance_result = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, obstacle_avoidance_result, submessage_arena);
     }
     
   } else {
     
   }
-  result_ = result;
-  // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.obstacle_avoidance.RestartResponse.result)
+  obstacle_avoidance_result_ = obstacle_avoidance_result;
+  // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.obstacle_avoidance.RestartResponse.obstacle_avoidance_result)
 }
 
 // -------------------------------------------------------------------
@@ -1956,87 +1974,87 @@ inline void RestartResponse::set_allocated_result(::mavsdk::rpc::obstacle_avoida
 
 // StateEnableResponse
 
-// .mavsdk.rpc.obstacle_avoidance.ObstacleAvoidanceResult result = 1;
-inline bool StateEnableResponse::_internal_has_result() const {
-  return this != internal_default_instance() && result_ != nullptr;
+// .mavsdk.rpc.obstacle_avoidance.ObstacleAvoidanceResult obstacle_avoidance_result = 1;
+inline bool StateEnableResponse::_internal_has_obstacle_avoidance_result() const {
+  return this != internal_default_instance() && obstacle_avoidance_result_ != nullptr;
 }
-inline bool StateEnableResponse::has_result() const {
-  return _internal_has_result();
+inline bool StateEnableResponse::has_obstacle_avoidance_result() const {
+  return _internal_has_obstacle_avoidance_result();
 }
-inline void StateEnableResponse::clear_result() {
-  if (GetArena() == nullptr && result_ != nullptr) {
-    delete result_;
+inline void StateEnableResponse::clear_obstacle_avoidance_result() {
+  if (GetArena() == nullptr && obstacle_avoidance_result_ != nullptr) {
+    delete obstacle_avoidance_result_;
   }
-  result_ = nullptr;
+  obstacle_avoidance_result_ = nullptr;
 }
-inline const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& StateEnableResponse::_internal_result() const {
-  const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* p = result_;
+inline const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& StateEnableResponse::_internal_obstacle_avoidance_result() const {
+  const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* p = obstacle_avoidance_result_;
   return p != nullptr ? *p : *reinterpret_cast<const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult*>(
       &::mavsdk::rpc::obstacle_avoidance::_ObstacleAvoidanceResult_default_instance_);
 }
-inline const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& StateEnableResponse::result() const {
-  // @@protoc_insertion_point(field_get:mavsdk.rpc.obstacle_avoidance.StateEnableResponse.result)
-  return _internal_result();
+inline const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& StateEnableResponse::obstacle_avoidance_result() const {
+  // @@protoc_insertion_point(field_get:mavsdk.rpc.obstacle_avoidance.StateEnableResponse.obstacle_avoidance_result)
+  return _internal_obstacle_avoidance_result();
 }
-inline void StateEnableResponse::unsafe_arena_set_allocated_result(
-    ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* result) {
+inline void StateEnableResponse::unsafe_arena_set_allocated_obstacle_avoidance_result(
+    ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* obstacle_avoidance_result) {
   if (GetArena() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(result_);
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(obstacle_avoidance_result_);
   }
-  result_ = result;
-  if (result) {
+  obstacle_avoidance_result_ = obstacle_avoidance_result;
+  if (obstacle_avoidance_result) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:mavsdk.rpc.obstacle_avoidance.StateEnableResponse.result)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:mavsdk.rpc.obstacle_avoidance.StateEnableResponse.obstacle_avoidance_result)
 }
-inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* StateEnableResponse::release_result() {
+inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* StateEnableResponse::release_obstacle_avoidance_result() {
   
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* temp = result_;
-  result_ = nullptr;
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* temp = obstacle_avoidance_result_;
+  obstacle_avoidance_result_ = nullptr;
   if (GetArena() != nullptr) {
     temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
   }
   return temp;
 }
-inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* StateEnableResponse::unsafe_arena_release_result() {
-  // @@protoc_insertion_point(field_release:mavsdk.rpc.obstacle_avoidance.StateEnableResponse.result)
+inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* StateEnableResponse::unsafe_arena_release_obstacle_avoidance_result() {
+  // @@protoc_insertion_point(field_release:mavsdk.rpc.obstacle_avoidance.StateEnableResponse.obstacle_avoidance_result)
   
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* temp = result_;
-  result_ = nullptr;
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* temp = obstacle_avoidance_result_;
+  obstacle_avoidance_result_ = nullptr;
   return temp;
 }
-inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* StateEnableResponse::_internal_mutable_result() {
+inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* StateEnableResponse::_internal_mutable_obstacle_avoidance_result() {
   
-  if (result_ == nullptr) {
+  if (obstacle_avoidance_result_ == nullptr) {
     auto* p = CreateMaybeMessage<::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult>(GetArena());
-    result_ = p;
+    obstacle_avoidance_result_ = p;
   }
-  return result_;
+  return obstacle_avoidance_result_;
 }
-inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* StateEnableResponse::mutable_result() {
-  // @@protoc_insertion_point(field_mutable:mavsdk.rpc.obstacle_avoidance.StateEnableResponse.result)
-  return _internal_mutable_result();
+inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* StateEnableResponse::mutable_obstacle_avoidance_result() {
+  // @@protoc_insertion_point(field_mutable:mavsdk.rpc.obstacle_avoidance.StateEnableResponse.obstacle_avoidance_result)
+  return _internal_mutable_obstacle_avoidance_result();
 }
-inline void StateEnableResponse::set_allocated_result(::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* result) {
+inline void StateEnableResponse::set_allocated_obstacle_avoidance_result(::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* obstacle_avoidance_result) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
   if (message_arena == nullptr) {
-    delete result_;
+    delete obstacle_avoidance_result_;
   }
-  if (result) {
+  if (obstacle_avoidance_result) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::GetArena(result);
+      ::PROTOBUF_NAMESPACE_ID::Arena::GetArena(obstacle_avoidance_result);
     if (message_arena != submessage_arena) {
-      result = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, result, submessage_arena);
+      obstacle_avoidance_result = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, obstacle_avoidance_result, submessage_arena);
     }
     
   } else {
     
   }
-  result_ = result;
-  // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.obstacle_avoidance.StateEnableResponse.result)
+  obstacle_avoidance_result_ = obstacle_avoidance_result;
+  // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.obstacle_avoidance.StateEnableResponse.obstacle_avoidance_result)
 }
 
 // -------------------------------------------------------------------
@@ -2047,87 +2065,87 @@ inline void StateEnableResponse::set_allocated_result(::mavsdk::rpc::obstacle_av
 
 // StateDisableResponse
 
-// .mavsdk.rpc.obstacle_avoidance.ObstacleAvoidanceResult result = 1;
-inline bool StateDisableResponse::_internal_has_result() const {
-  return this != internal_default_instance() && result_ != nullptr;
+// .mavsdk.rpc.obstacle_avoidance.ObstacleAvoidanceResult obstacle_avoidance_result = 1;
+inline bool StateDisableResponse::_internal_has_obstacle_avoidance_result() const {
+  return this != internal_default_instance() && obstacle_avoidance_result_ != nullptr;
 }
-inline bool StateDisableResponse::has_result() const {
-  return _internal_has_result();
+inline bool StateDisableResponse::has_obstacle_avoidance_result() const {
+  return _internal_has_obstacle_avoidance_result();
 }
-inline void StateDisableResponse::clear_result() {
-  if (GetArena() == nullptr && result_ != nullptr) {
-    delete result_;
+inline void StateDisableResponse::clear_obstacle_avoidance_result() {
+  if (GetArena() == nullptr && obstacle_avoidance_result_ != nullptr) {
+    delete obstacle_avoidance_result_;
   }
-  result_ = nullptr;
+  obstacle_avoidance_result_ = nullptr;
 }
-inline const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& StateDisableResponse::_internal_result() const {
-  const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* p = result_;
+inline const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& StateDisableResponse::_internal_obstacle_avoidance_result() const {
+  const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* p = obstacle_avoidance_result_;
   return p != nullptr ? *p : *reinterpret_cast<const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult*>(
       &::mavsdk::rpc::obstacle_avoidance::_ObstacleAvoidanceResult_default_instance_);
 }
-inline const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& StateDisableResponse::result() const {
-  // @@protoc_insertion_point(field_get:mavsdk.rpc.obstacle_avoidance.StateDisableResponse.result)
-  return _internal_result();
+inline const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& StateDisableResponse::obstacle_avoidance_result() const {
+  // @@protoc_insertion_point(field_get:mavsdk.rpc.obstacle_avoidance.StateDisableResponse.obstacle_avoidance_result)
+  return _internal_obstacle_avoidance_result();
 }
-inline void StateDisableResponse::unsafe_arena_set_allocated_result(
-    ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* result) {
+inline void StateDisableResponse::unsafe_arena_set_allocated_obstacle_avoidance_result(
+    ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* obstacle_avoidance_result) {
   if (GetArena() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(result_);
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(obstacle_avoidance_result_);
   }
-  result_ = result;
-  if (result) {
+  obstacle_avoidance_result_ = obstacle_avoidance_result;
+  if (obstacle_avoidance_result) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:mavsdk.rpc.obstacle_avoidance.StateDisableResponse.result)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:mavsdk.rpc.obstacle_avoidance.StateDisableResponse.obstacle_avoidance_result)
 }
-inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* StateDisableResponse::release_result() {
+inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* StateDisableResponse::release_obstacle_avoidance_result() {
   
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* temp = result_;
-  result_ = nullptr;
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* temp = obstacle_avoidance_result_;
+  obstacle_avoidance_result_ = nullptr;
   if (GetArena() != nullptr) {
     temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
   }
   return temp;
 }
-inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* StateDisableResponse::unsafe_arena_release_result() {
-  // @@protoc_insertion_point(field_release:mavsdk.rpc.obstacle_avoidance.StateDisableResponse.result)
+inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* StateDisableResponse::unsafe_arena_release_obstacle_avoidance_result() {
+  // @@protoc_insertion_point(field_release:mavsdk.rpc.obstacle_avoidance.StateDisableResponse.obstacle_avoidance_result)
   
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* temp = result_;
-  result_ = nullptr;
+  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* temp = obstacle_avoidance_result_;
+  obstacle_avoidance_result_ = nullptr;
   return temp;
 }
-inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* StateDisableResponse::_internal_mutable_result() {
+inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* StateDisableResponse::_internal_mutable_obstacle_avoidance_result() {
   
-  if (result_ == nullptr) {
+  if (obstacle_avoidance_result_ == nullptr) {
     auto* p = CreateMaybeMessage<::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult>(GetArena());
-    result_ = p;
+    obstacle_avoidance_result_ = p;
   }
-  return result_;
+  return obstacle_avoidance_result_;
 }
-inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* StateDisableResponse::mutable_result() {
-  // @@protoc_insertion_point(field_mutable:mavsdk.rpc.obstacle_avoidance.StateDisableResponse.result)
-  return _internal_mutable_result();
+inline ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* StateDisableResponse::mutable_obstacle_avoidance_result() {
+  // @@protoc_insertion_point(field_mutable:mavsdk.rpc.obstacle_avoidance.StateDisableResponse.obstacle_avoidance_result)
+  return _internal_mutable_obstacle_avoidance_result();
 }
-inline void StateDisableResponse::set_allocated_result(::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* result) {
+inline void StateDisableResponse::set_allocated_obstacle_avoidance_result(::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult* obstacle_avoidance_result) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArena();
   if (message_arena == nullptr) {
-    delete result_;
+    delete obstacle_avoidance_result_;
   }
-  if (result) {
+  if (obstacle_avoidance_result) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-      ::PROTOBUF_NAMESPACE_ID::Arena::GetArena(result);
+      ::PROTOBUF_NAMESPACE_ID::Arena::GetArena(obstacle_avoidance_result);
     if (message_arena != submessage_arena) {
-      result = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, result, submessage_arena);
+      obstacle_avoidance_result = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, obstacle_avoidance_result, submessage_arena);
     }
     
   } else {
     
   }
-  result_ = result;
-  // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.obstacle_avoidance.StateDisableResponse.result)
+  obstacle_avoidance_result_ = obstacle_avoidance_result;
+  // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.obstacle_avoidance.StateDisableResponse.obstacle_avoidance_result)
 }
 
 // -------------------------------------------------------------------
@@ -2152,6 +2170,68 @@ inline void ObstacleAvoidanceResult::_internal_set_result(::mavsdk::rpc::obstacl
 inline void ObstacleAvoidanceResult::set_result(::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult_Result value) {
   _internal_set_result(value);
   // @@protoc_insertion_point(field_set:mavsdk.rpc.obstacle_avoidance.ObstacleAvoidanceResult.result)
+}
+
+// string result_str = 2;
+inline void ObstacleAvoidanceResult::clear_result_str() {
+  result_str_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline const std::string& ObstacleAvoidanceResult::result_str() const {
+  // @@protoc_insertion_point(field_get:mavsdk.rpc.obstacle_avoidance.ObstacleAvoidanceResult.result_str)
+  return _internal_result_str();
+}
+inline void ObstacleAvoidanceResult::set_result_str(const std::string& value) {
+  _internal_set_result_str(value);
+  // @@protoc_insertion_point(field_set:mavsdk.rpc.obstacle_avoidance.ObstacleAvoidanceResult.result_str)
+}
+inline std::string* ObstacleAvoidanceResult::mutable_result_str() {
+  // @@protoc_insertion_point(field_mutable:mavsdk.rpc.obstacle_avoidance.ObstacleAvoidanceResult.result_str)
+  return _internal_mutable_result_str();
+}
+inline const std::string& ObstacleAvoidanceResult::_internal_result_str() const {
+  return result_str_.Get();
+}
+inline void ObstacleAvoidanceResult::_internal_set_result_str(const std::string& value) {
+  
+  result_str_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value, GetArena());
+}
+inline void ObstacleAvoidanceResult::set_result_str(std::string&& value) {
+  
+  result_str_.Set(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value), GetArena());
+  // @@protoc_insertion_point(field_set_rvalue:mavsdk.rpc.obstacle_avoidance.ObstacleAvoidanceResult.result_str)
+}
+inline void ObstacleAvoidanceResult::set_result_str(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  result_str_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
+              GetArena());
+  // @@protoc_insertion_point(field_set_char:mavsdk.rpc.obstacle_avoidance.ObstacleAvoidanceResult.result_str)
+}
+inline void ObstacleAvoidanceResult::set_result_str(const char* value,
+    size_t size) {
+  
+  result_str_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(
+      reinterpret_cast<const char*>(value), size), GetArena());
+  // @@protoc_insertion_point(field_set_pointer:mavsdk.rpc.obstacle_avoidance.ObstacleAvoidanceResult.result_str)
+}
+inline std::string* ObstacleAvoidanceResult::_internal_mutable_result_str() {
+  
+  return result_str_.Mutable(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline std::string* ObstacleAvoidanceResult::release_result_str() {
+  // @@protoc_insertion_point(field_release:mavsdk.rpc.obstacle_avoidance.ObstacleAvoidanceResult.result_str)
+  return result_str_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline void ObstacleAvoidanceResult::set_allocated_result_str(std::string* result_str) {
+  if (result_str != nullptr) {
+    
+  } else {
+    
+  }
+  result_str_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), result_str,
+      GetArena());
+  // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.obstacle_avoidance.ObstacleAvoidanceResult.result_str)
 }
 
 #ifdef __GNUC__
