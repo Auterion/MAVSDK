@@ -225,6 +225,7 @@ Calibration::Result CalibrationImpl::cancel()
     command.target_component_id = target_component_id;
     _parent->send_command_async(command, nullptr);
 
+<<<<<<< HEAD
     auto prom = std::promise<Calibration::Result>();
     auto fut = prom.get_future();
     _parent->send_command_async(
@@ -237,6 +238,9 @@ Calibration::Result CalibrationImpl::cancel()
         });
 
     return fut.get();
+=======
+    return Calibration::Result::Success;
+>>>>>>> fix calibration API due to proto update
 }
 
 void CalibrationImpl::command_result_callback(
