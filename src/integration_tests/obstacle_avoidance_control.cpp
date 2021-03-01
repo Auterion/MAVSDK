@@ -82,19 +82,19 @@ TEST_F(SitlTest, ObstacleAvoidanceControl)
     auto obstacle_avoidance_server = std::make_shared<ObstacleAvoidanceServer>(gcs_to_companion);
 
     // Start obstacle avoidance control commands handler
-    obstacle_avoidance_server->subscribe_control([](ObstacleAvoidanceServer::ControlType control) {
+    obstacle_avoidance_server->subscribe_control([](ObstacleAvoidanceServer::Control control) {
         switch (control.control_type) {
-            case ObstacleAvoidanceServer::ControlType::Type::ControlStart:
+            case ObstacleAvoidanceServer::Control::ControlType::Start:
                 EXPECT_EQ(
                     run_cmd(
                         "python3 src/integration_tests/test_data/obstacle_avoidance_dummy.py &"),
                     0);
                 break;
-            case ObstacleAvoidanceServer::ControlType::Type::ControlStop:
+            case ObstacleAvoidanceServer::Control::ControlType::Stop:
                 EXPECT_EQ(
                     run_cmd("kill `cat obs_avoid_service.pid` && rm -rf obs_avoid_service.pid"), 0);
                 break;
-            case ObstacleAvoidanceServer::ControlType::Type::ControlRestart:
+            case ObstacleAvoidanceServer::Control::ControlType::Restart:
                 EXPECT_EQ(
                     run_cmd("kill `cat obs_avoid_service.pid` && rm -rf obs_avoid_service.pid"), 0);
                 std::this_thread::sleep_for(std::chrono::milliseconds(500));

@@ -20,14 +20,14 @@ public:
     mavlink_message_t
     process_component_control_command(const MavlinkCommandReceiver::CommandLong& command);
 
-    ObstacleAvoidanceServer::ControlType control() const;
+    ObstacleAvoidanceServer::Control control() const;
 
-    void control_async(ObstacleAvoidanceServer::ControlCallback callback);
+    void subscribe_control(ObstacleAvoidanceServer::ControlCallback callback);
 
 private:
-    void store_control(ObstacleAvoidanceServer::ControlType control);
+    void store_control(ObstacleAvoidanceServer::Control control);
 
-    std::atomic<ObstacleAvoidanceServer::ControlType> _control{};
+    std::atomic<ObstacleAvoidanceServer::Control> _control{};
 
     std::mutex _subscription_mutex{};
     ObstacleAvoidanceServer::ControlCallback _component_control_command_subscription{nullptr};

@@ -67,55 +67,55 @@ public:
     /**
      * @brief Control type.
      */
-    struct ControlType {
+    struct Control {
         /**
          * @brief Possible obstacle avoidance service control commands, according to
          * MAVLink COMPONENT_CONTROL enum.
          */
-        enum class Type {
-            ControlUnknown, /**< @brief Unknown control command.. */
-            ControlStart, /**< @brief Start/turn-on obstacle avoidance service.. */
-            ControlStop, /**< @brief Stop/turn-off obstacle avoidance service.. */
-            ControlRestart, /**< @brief Restart/reboot obstacle avoidance service.. */
-            ControlEnable, /**< @brief Enable obstacle avoidance service. Used to switch the service
-                              from an idle state to an active state.. */
-            ControlDisable, /**< @brief Disable obstacle avoidance service. Used to switch the
-                               service from an active state to an idle state.. */
+        enum class ControlType {
+            Unknown, /**< @brief Unknown control command.. */
+            Start, /**< @brief Start/turn-on obstacle avoidance service.. */
+            Stop, /**< @brief Stop/turn-off obstacle avoidance service.. */
+            Restart, /**< @brief Restart/reboot obstacle avoidance service.. */
+            Enable, /**< @brief Enable obstacle avoidance service. Used to switch the service from
+                       an idle state to an active state.. */
+            Disable, /**< @brief Disable obstacle avoidance service. Used to switch the service from
+                        an active state to an idle state.. */
         };
 
         /**
-         * @brief Stream operator to print information about a `ObstacleAvoidanceServer::Type`.
+         * @brief Stream operator to print information about a
+         * `ObstacleAvoidanceServer::ControlType`.
          *
          * @return A reference to the stream.
          */
-        friend std::ostream&
-        operator<<(std::ostream& str, ObstacleAvoidanceServer::ControlType::Type const& type);
+        friend std::ostream& operator<<(
+            std::ostream& str, ObstacleAvoidanceServer::Control::ControlType const& control_type);
 
-        Type control_type{}; /**< @brief Control type enum value. */
+        ControlType control_type{}; /**< @brief Control type enum value. */
     };
 
     /**
-     * @brief Equal operator to compare two `ObstacleAvoidanceServer::ControlType` objects.
+     * @brief Equal operator to compare two `ObstacleAvoidanceServer::Control` objects.
      *
      * @return `true` if items are equal.
      */
     friend bool operator==(
-        const ObstacleAvoidanceServer::ControlType& lhs,
-        const ObstacleAvoidanceServer::ControlType& rhs);
+        const ObstacleAvoidanceServer::Control& lhs, const ObstacleAvoidanceServer::Control& rhs);
 
     /**
-     * @brief Stream operator to print information about a `ObstacleAvoidanceServer::ControlType`.
+     * @brief Stream operator to print information about a `ObstacleAvoidanceServer::Control`.
      *
      * @return A reference to the stream.
      */
     friend std::ostream&
-    operator<<(std::ostream& str, ObstacleAvoidanceServer::ControlType const& control_type);
+    operator<<(std::ostream& str, ObstacleAvoidanceServer::Control const& control);
 
     /**
      * @brief Callback type for subscribe_control.
      */
 
-    using ControlCallback = std::function<void(ControlType)>;
+    using ControlCallback = std::function<void(Control)>;
 
     /**
      * @brief Receive and process obstacle avoidance service control commands.
@@ -123,11 +123,11 @@ public:
     void subscribe_control(ControlCallback callback);
 
     /**
-     * @brief Poll for 'ControlType' (blocking).
+     * @brief Poll for 'Control' (blocking).
      *
-     * @return One ControlType update.
+     * @return One Control update.
      */
-    ControlType control() const;
+    Control control() const;
 
     /**
      * @brief Copy constructor.

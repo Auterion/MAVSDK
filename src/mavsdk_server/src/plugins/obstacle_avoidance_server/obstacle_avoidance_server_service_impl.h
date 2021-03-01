@@ -26,66 +26,66 @@ public:
         _obstacle_avoidance_server(obstacle_avoidance_server)
     {}
 
-    static rpc::obstacle_avoidance_server::ControlType::Type
-    translateToRpcType(const mavsdk::ObstacleAvoidanceServer::ControlType::Type& type)
+    static rpc::obstacle_avoidance_server::Control::ControlType translateToRpcControlType(
+        const mavsdk::ObstacleAvoidanceServer::Control::ControlType& control_type)
     {
-        switch (type) {
+        switch (control_type) {
             default:
-                LogErr() << "Unknown type enum value: " << static_cast<int>(type);
+                LogErr() << "Unknown control_type enum value: " << static_cast<int>(control_type);
             // FALLTHROUGH
-            case mavsdk::ObstacleAvoidanceServer::ControlType::Type::ControlUnknown:
-                return rpc::obstacle_avoidance_server::ControlType_Type_TYPE_CONTROL_UNKNOWN;
-            case mavsdk::ObstacleAvoidanceServer::ControlType::Type::ControlStart:
-                return rpc::obstacle_avoidance_server::ControlType_Type_TYPE_CONTROL_START;
-            case mavsdk::ObstacleAvoidanceServer::ControlType::Type::ControlStop:
-                return rpc::obstacle_avoidance_server::ControlType_Type_TYPE_CONTROL_STOP;
-            case mavsdk::ObstacleAvoidanceServer::ControlType::Type::ControlRestart:
-                return rpc::obstacle_avoidance_server::ControlType_Type_TYPE_CONTROL_RESTART;
-            case mavsdk::ObstacleAvoidanceServer::ControlType::Type::ControlEnable:
-                return rpc::obstacle_avoidance_server::ControlType_Type_TYPE_CONTROL_ENABLE;
-            case mavsdk::ObstacleAvoidanceServer::ControlType::Type::ControlDisable:
-                return rpc::obstacle_avoidance_server::ControlType_Type_TYPE_CONTROL_DISABLE;
+            case mavsdk::ObstacleAvoidanceServer::Control::ControlType::Unknown:
+                return rpc::obstacle_avoidance_server::Control_ControlType_CONTROL_TYPE_UNKNOWN;
+            case mavsdk::ObstacleAvoidanceServer::Control::ControlType::Start:
+                return rpc::obstacle_avoidance_server::Control_ControlType_CONTROL_TYPE_START;
+            case mavsdk::ObstacleAvoidanceServer::Control::ControlType::Stop:
+                return rpc::obstacle_avoidance_server::Control_ControlType_CONTROL_TYPE_STOP;
+            case mavsdk::ObstacleAvoidanceServer::Control::ControlType::Restart:
+                return rpc::obstacle_avoidance_server::Control_ControlType_CONTROL_TYPE_RESTART;
+            case mavsdk::ObstacleAvoidanceServer::Control::ControlType::Enable:
+                return rpc::obstacle_avoidance_server::Control_ControlType_CONTROL_TYPE_ENABLE;
+            case mavsdk::ObstacleAvoidanceServer::Control::ControlType::Disable:
+                return rpc::obstacle_avoidance_server::Control_ControlType_CONTROL_TYPE_DISABLE;
         }
     }
 
-    static mavsdk::ObstacleAvoidanceServer::ControlType::Type
-    translateFromRpcType(const rpc::obstacle_avoidance_server::ControlType::Type type)
+    static mavsdk::ObstacleAvoidanceServer::Control::ControlType translateFromRpcControlType(
+        const rpc::obstacle_avoidance_server::Control::ControlType control_type)
     {
-        switch (type) {
+        switch (control_type) {
             default:
-                LogErr() << "Unknown type enum value: " << static_cast<int>(type);
+                LogErr() << "Unknown control_type enum value: " << static_cast<int>(control_type);
             // FALLTHROUGH
-            case rpc::obstacle_avoidance_server::ControlType_Type_TYPE_CONTROL_UNKNOWN:
-                return mavsdk::ObstacleAvoidanceServer::ControlType::Type::ControlUnknown;
-            case rpc::obstacle_avoidance_server::ControlType_Type_TYPE_CONTROL_START:
-                return mavsdk::ObstacleAvoidanceServer::ControlType::Type::ControlStart;
-            case rpc::obstacle_avoidance_server::ControlType_Type_TYPE_CONTROL_STOP:
-                return mavsdk::ObstacleAvoidanceServer::ControlType::Type::ControlStop;
-            case rpc::obstacle_avoidance_server::ControlType_Type_TYPE_CONTROL_RESTART:
-                return mavsdk::ObstacleAvoidanceServer::ControlType::Type::ControlRestart;
-            case rpc::obstacle_avoidance_server::ControlType_Type_TYPE_CONTROL_ENABLE:
-                return mavsdk::ObstacleAvoidanceServer::ControlType::Type::ControlEnable;
-            case rpc::obstacle_avoidance_server::ControlType_Type_TYPE_CONTROL_DISABLE:
-                return mavsdk::ObstacleAvoidanceServer::ControlType::Type::ControlDisable;
+            case rpc::obstacle_avoidance_server::Control_ControlType_CONTROL_TYPE_UNKNOWN:
+                return mavsdk::ObstacleAvoidanceServer::Control::ControlType::Unknown;
+            case rpc::obstacle_avoidance_server::Control_ControlType_CONTROL_TYPE_START:
+                return mavsdk::ObstacleAvoidanceServer::Control::ControlType::Start;
+            case rpc::obstacle_avoidance_server::Control_ControlType_CONTROL_TYPE_STOP:
+                return mavsdk::ObstacleAvoidanceServer::Control::ControlType::Stop;
+            case rpc::obstacle_avoidance_server::Control_ControlType_CONTROL_TYPE_RESTART:
+                return mavsdk::ObstacleAvoidanceServer::Control::ControlType::Restart;
+            case rpc::obstacle_avoidance_server::Control_ControlType_CONTROL_TYPE_ENABLE:
+                return mavsdk::ObstacleAvoidanceServer::Control::ControlType::Enable;
+            case rpc::obstacle_avoidance_server::Control_ControlType_CONTROL_TYPE_DISABLE:
+                return mavsdk::ObstacleAvoidanceServer::Control::ControlType::Disable;
         }
     }
 
-    static std::unique_ptr<rpc::obstacle_avoidance_server::ControlType>
-    translateToRpcControlType(const mavsdk::ObstacleAvoidanceServer::ControlType& control_type)
+    static std::unique_ptr<rpc::obstacle_avoidance_server::Control>
+    translateToRpcControl(const mavsdk::ObstacleAvoidanceServer::Control& control)
     {
-        auto rpc_obj = std::make_unique<rpc::obstacle_avoidance_server::ControlType>();
+        auto rpc_obj = std::make_unique<rpc::obstacle_avoidance_server::Control>();
 
-        rpc_obj->set_control_type(translateToRpcType(control_type.control_type));
+        rpc_obj->set_control_type(translateToRpcControlType(control.control_type));
 
         return rpc_obj;
     }
 
-    static mavsdk::ObstacleAvoidanceServer::ControlType
-    translateFromRpcControlType(const rpc::obstacle_avoidance_server::ControlType& control_type)
+    static mavsdk::ObstacleAvoidanceServer::Control
+    translateFromRpcControl(const rpc::obstacle_avoidance_server::Control& control)
     {
-        mavsdk::ObstacleAvoidanceServer::ControlType obj;
+        mavsdk::ObstacleAvoidanceServer::Control obj;
 
-        obj.control_type = translateFromRpcType(control_type.control_type());
+        obj.control_type = translateFromRpcControlType(control.control_type());
 
         return obj;
     }
@@ -105,11 +105,10 @@ public:
 
         _obstacle_avoidance_server.subscribe_control(
             [this, &writer, &stream_closed_promise, is_finished, &subscribe_mutex](
-                const mavsdk::ObstacleAvoidanceServer::ControlType control) {
+                const mavsdk::ObstacleAvoidanceServer::Control control) {
                 rpc::obstacle_avoidance_server::ControlResponse rpc_response;
 
-                rpc_response.set_allocated_control_type(
-                    translateToRpcControlType(control).release());
+                rpc_response.set_allocated_control(translateToRpcControl(control).release());
 
                 std::unique_lock<std::mutex> lock(subscribe_mutex);
                 if (!*is_finished && !writer->Write(rpc_response)) {
