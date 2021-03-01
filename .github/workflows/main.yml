@@ -687,7 +687,7 @@ jobs:
     runs-on: ubuntu-18.04
     strategy:
       matrix:
-        px4_version: [v2.1, develop]
+        px4_version: [v2.2, v2.1, develop]
     steps:
       - uses: actions/checkout@v2
         with:
