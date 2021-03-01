@@ -396,7 +396,7 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_calibration_2fcalibration_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_calibration_2fcalibration_2eproto = {
-  false, false, 2703, descriptor_table_protodef_calibration_2fcalibration_2eproto, "calibration/calibration.proto", 
+  false, false, 2703, descriptor_table_protodef_calibration_2fcalibration_2eproto, "calibration/calibration.proto",
   &descriptor_table_calibration_2fcalibration_2eproto_once, descriptor_table_calibration_2fcalibration_2eproto_deps, 1, 14,
   schemas, file_default_instances, TableStruct_calibration_2fcalibration_2eproto::offsets,
   file_level_metadata_calibration_2fcalibration_2eproto, file_level_enum_descriptors_calibration_2fcalibration_2eproto, file_level_service_descriptors_calibration_2fcalibration_2eproto,
@@ -2656,6 +2656,13 @@ void CancelRequest::InternalSwap(CancelRequest* other) {
 
 // ===================================================================
 
+<<<<<<< HEAD
+=======
+void CancelResponse::InitAsDefaultInstance() {
+  ::mavsdk::rpc::calibration::_CancelResponse_default_instance_._instance.get_mutable()->calibration_result_ = const_cast< ::mavsdk::rpc::calibration::CalibrationResult*>(
+      ::mavsdk::rpc::calibration::CalibrationResult::internal_default_instance());
+}
+>>>>>>> fix calibration API due to proto update
 class CancelResponse::_Internal {
  public:
   static const ::mavsdk::rpc::calibration::CalibrationResult& calibration_result(const CancelResponse* msg);
@@ -2683,7 +2690,12 @@ CancelResponse::CancelResponse(const CancelResponse& from)
 }
 
 void CancelResponse::SharedCtor() {
+<<<<<<< HEAD
 calibration_result_ = nullptr;
+=======
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_CancelResponse_calibration_2fcalibration_2eproto.base);
+  calibration_result_ = nullptr;
+>>>>>>> fix calibration API due to proto update
 }
 
 CancelResponse::~CancelResponse() {
@@ -2875,7 +2887,7 @@ CalibrationResult::CalibrationResult(const CalibrationResult& from)
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   result_str_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (!from._internal_result_str().empty()) {
-    result_str_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_result_str(), 
+    result_str_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_result_str(),
       GetArena());
   }
   result_ = from.result_;
@@ -3103,7 +3115,7 @@ ProgressData::ProgressData(const ProgressData& from)
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   status_text_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (!from._internal_status_text().empty()) {
-    status_text_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_status_text(), 
+    status_text_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_status_text(),
       GetArena());
   }
   ::memcpy(&progress_, &from.progress_,
