@@ -125,10 +125,10 @@ void CustomActionImpl::process_command_cancellation(const mavlink_message_t& mes
     }
 }
 
-void CustomActionImpl::store_custom_action(CustomAction::ActionToExecute action)
+void CustomActionImpl::store_custom_action(CustomAction::ActionToExecute action_to_execute)
 {
     std::lock_guard<std::mutex> lock(_custom_action_mutex);
-    _custom_action = action;
+    _custom_action = action_to_execute;
 }
 
 void CustomActionImpl::store_custom_action_cancellation(bool action_cancel)
@@ -138,20 +138,21 @@ void CustomActionImpl::store_custom_action_cancellation(bool action_cancel)
 }
 
 CustomAction::Result CustomActionImpl::respond_custom_action(
-    CustomAction::ActionToExecute action, CustomAction::Result result) const
+    CustomAction::ActionToExecute action_to_execute, CustomAction::Result result) const
 {
     auto prom = std::promise<CustomAction::Result>();
     auto fut = prom.get_future();
 
-    respond_custom_action_async(action, result, [&prom](CustomAction::Result action_result) {
-        prom.set_value(action_result);
-    });
+    respond_custom_action_async(
+        action_to_execute, result, [&prom](CustomAction::Result action_result) {
+            prom.set_value(action_result);
+        });
 
     return fut.get();
 }
 
 void CustomActionImpl::respond_custom_action_async(
-    CustomAction::ActionToExecute action,
+    CustomAction::ActionToExecute action_to_execute,
     CustomAction::Result result,
     const CustomAction::ResultCallback& callback) const
 {
@@ -164,8 +165,9 @@ void CustomActionImpl::respond_custom_action_async(
         MAV_CMD_WAYPOINT_USER_1, // TODO: use MAV_CMD_CUSTOM_ACTION when it is merged in upstream
                                  // MAVLink
         mavlink_command_result_from_custom_action_result(result),
-        static_cast<uint8_t>(action.progress), // Set the command progress when applicable
-        action.id, // Use the action ID in param4 to identify the action/process
+        static_cast<uint8_t>(
+            action_to_execute.progress), // Set the command progress when applicable
+        action_to_execute.id, // Use the action ID in param4 to identify the action/process
         0,
         0);
 
@@ -187,7 +189,7 @@ CustomAction::ActionToExecute CustomActionImpl::custom_action() const
     return _custom_action;
 }
 
-void CustomActionImpl::custom_action_async(CustomAction::CustomActionCallback callback)
+void CustomActionImpl::subscribe_custom_action(CustomAction::CustomActionCallback callback)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
     _custom_action_command_subscription = callback;
@@ -199,7 +201,7 @@ bool CustomActionImpl::custom_action_cancellation() const
     return _custom_action_cancellation;
 }
 
-void CustomActionImpl::custom_action_cancellation_async(
+void CustomActionImpl::subscribe_custom_action_cancellation(
     CustomAction::CustomActionCancellationCallback callback)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
@@ -291,8 +293,8 @@ void CustomActionImpl::custom_action_metadata_async(
     auto action_root = root[action_id.str()];
 
     action_metadata.id = action.id;
-    action_metadata.name = action_root["name"].asString();
-    action_metadata.description = action_root["description"].asString();
+    action_metadata.action_name = action_root["name"].asString();
+    action_metadata.action_description = action_root["description"].asString();
     action_metadata.global_timeout = action_root["global_timeout"].isNull() ?
                                          double(NAN) :
                                          action_root["global_timeout"].asDouble();
@@ -317,9 +319,9 @@ void CustomActionImpl::custom_action_metadata_async(
                 } else { // Else, pass the command to the client side
                     CustomAction::Command cmd{};
                     if (stage_id["cmd"]["type"].asString() == "LONG") {
-                        cmd.type = CustomAction::Command::Type::Long;
+                        cmd.type = CustomAction::Command::CommandType::Long;
                     } else if (stage_id["cmd"]["type"].asString() == "INT") {
-                        cmd.type = CustomAction::Command::Type::Int;
+                        cmd.type = CustomAction::Command::CommandType::Int;
                     } else {
                         LogErr() << "Invalid command type. Valid ones are \"INT\" and \"LONG\"";
                         parsing_result = CustomAction::Result::Error;
@@ -407,7 +409,7 @@ void CustomActionImpl::execute_custom_action_stage_async(
             _parent->call_user_callback([temp_callback, result]() { temp_callback(result); });
         }
     } else { // Process command
-        if (stage.command.type == CustomAction::Command::Type::Long) { // LONG
+        if (stage.command.type == CustomAction::Command::CommandType::Long) { // LONG
             MavlinkCommandSender::CommandLong command{};
             command.target_system_id = stage.command.target_system_id;
             command.target_component_id = stage.command.target_component_id;
@@ -425,7 +427,7 @@ void CustomActionImpl::execute_custom_action_stage_async(
                 command, [this, callback](MavlinkCommandSender::Result cmd_result, float) {
                     command_result_callback(cmd_result, callback);
                 });
-        } else if (stage.command.type == CustomAction::Command::Type::Int) { // INT
+        } else if (stage.command.type == CustomAction::Command::CommandType::Int) { // INT
             MavlinkCommandSender::CommandInt command{};
             command.target_system_id = stage.command.target_system_id;
             command.target_component_id = stage.command.target_component_id;

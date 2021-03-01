@@ -23,11 +23,11 @@ public:
 
     void process_command_cancellation(const mavlink_message_t& message);
 
-    CustomAction::Result
-    respond_custom_action(CustomAction::ActionToExecute action, CustomAction::Result result) const;
+    CustomAction::Result respond_custom_action(
+        CustomAction::ActionToExecute action_to_execute, CustomAction::Result result) const;
 
     void respond_custom_action_async(
-        CustomAction::ActionToExecute action,
+        CustomAction::ActionToExecute action_to_execute,
         CustomAction::Result result,
         const CustomAction::ResultCallback& callback) const;
 
@@ -38,11 +38,12 @@ public:
 
     CustomAction::ActionToExecute custom_action() const;
 
-    void custom_action_async(CustomAction::CustomActionCallback callback);
+    void subscribe_custom_action(CustomAction::CustomActionCallback callback);
 
     bool custom_action_cancellation() const;
 
-    void custom_action_cancellation_async(CustomAction::CustomActionCancellationCallback callback);
+    void
+    subscribe_custom_action_cancellation(CustomAction::CustomActionCancellationCallback callback);
 
     std::pair<CustomAction::Result, CustomAction::ActionMetadata>
     custom_action_metadata(CustomAction::ActionToExecute& action, std::string& file) const;
@@ -76,7 +77,7 @@ private:
 
     static MAV_RESULT mavlink_command_result_from_custom_action_result(CustomAction::Result result);
 
-    void store_custom_action(CustomAction::ActionToExecute action);
+    void store_custom_action(CustomAction::ActionToExecute action_to_execute);
 
     void store_custom_action_cancellation(bool action_cancel);
 
