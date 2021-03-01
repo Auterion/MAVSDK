@@ -92,19 +92,20 @@ public:
         /**
          * @brief Command type enumeration
          */
-        enum class Type {
+        enum class CommandType {
             Long, /**< @brief Command long. */
             Int, /**< @brief Command int. */
         };
 
         /**
-         * @brief Stream operator to print information about a `CustomAction::Type`.
+         * @brief Stream operator to print information about a `CustomAction::CommandType`.
          *
          * @return A reference to the stream.
          */
-        friend std::ostream& operator<<(std::ostream& str, CustomAction::Command::Type const& type);
+        friend std::ostream&
+        operator<<(std::ostream& str, CustomAction::Command::CommandType const& command_type);
 
-        Type type{}; /**< @brief Type enum value. LONG or INT */
+        CommandType type{}; /**< @brief Type enum value. LONG or INT */
         uint32_t target_system_id{}; /**< @brief Target system ID */
         uint32_t
             target_component_id{}; /**< @brief Target component ID. Should match the MAV_COMP */
@@ -178,8 +179,8 @@ public:
      */
     struct ActionMetadata {
         uint32_t id{}; /**< @brief ID of the action */
-        std::string name{}; /**< @brief Name of the action */
-        std::string description{}; /**< @brief Description of the action */
+        std::string action_name{}; /**< @brief Name of the action */
+        std::string action_description{}; /**< @brief Description of the action */
         std::string global_script{}; /**< @brief Script to run for this specific action. Runs
                                         instead of the stages. */
         double global_timeout{}; /**< @brief Timeout for the action. If a global script is set, it
@@ -235,7 +236,7 @@ public:
      *
      * This function is non-blocking. See 'set_custom_action' for the blocking counterpart.
      */
-    void set_custom_action_async(ActionToExecute action, const ResultCallback callback);
+    void set_custom_action_async(ActionToExecute action_to_execute, const ResultCallback callback);
 
     /**
      * @brief Send custom action command to the system.
@@ -244,7 +245,7 @@ public:
      *
      * @return Result of request.
      */
-    Result set_custom_action(ActionToExecute action) const;
+    Result set_custom_action(ActionToExecute action_to_execute) const;
 
     /**
      * @brief Callback type for subscribe_custom_action.
@@ -288,7 +289,9 @@ public:
      * This function is non-blocking. See 'respond_custom_action' for the blocking counterpart.
      */
     void respond_custom_action_async(
-        ActionToExecute action, Result result, const ResultCallback callback);
+        ActionToExecute action_to_execute,
+        Result custom_action_result,
+        const ResultCallback callback);
 
     /**
      * @brief Respond to the custom action command with progress.
@@ -298,7 +301,8 @@ public:
      *
      * @return Result of request.
      */
-    Result respond_custom_action(ActionToExecute action, Result result) const;
+    Result
+    respond_custom_action(ActionToExecute action_to_execute, Result custom_action_result) const;
 
     /**
      * @brief Callback type for custom_action_metadata_async.
@@ -311,7 +315,9 @@ public:
      * This function is non-blocking. See 'custom_action_metadata' for the blocking counterpart.
      */
     void custom_action_metadata_async(
-        ActionToExecute action, std::string file_path, const CustomActionMetadataCallback callback);
+        ActionToExecute action_to_execute,
+        std::string file_path,
+        const CustomActionMetadataCallback callback);
 
     /**
      * @brief Request custom action metadata.
@@ -322,7 +328,7 @@ public:
      * @return Result of request.
      */
     std::pair<Result, CustomAction::ActionMetadata>
-    custom_action_metadata(ActionToExecute action, std::string file_path) const;
+    custom_action_metadata(ActionToExecute action_to_execute, std::string file_path) const;
 
     /**
      * @brief Execute custom action stage.

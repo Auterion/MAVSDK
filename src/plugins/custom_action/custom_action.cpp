@@ -24,19 +24,20 @@ CustomAction::CustomAction(std::shared_ptr<System> system) :
 
 CustomAction::~CustomAction() {}
 
-void CustomAction::set_custom_action_async(ActionToExecute action, const ResultCallback callback)
+void CustomAction::set_custom_action_async(
+    ActionToExecute action_to_execute, const ResultCallback callback)
 {
-    _impl->set_custom_action_async(action, callback);
+    _impl->set_custom_action_async(action_to_execute, callback);
 }
 
-CustomAction::Result CustomAction::set_custom_action(ActionToExecute action) const
+CustomAction::Result CustomAction::set_custom_action(ActionToExecute action_to_execute) const
 {
-    return _impl->set_custom_action(action);
+    return _impl->set_custom_action(action_to_execute);
 }
 
 void CustomAction::subscribe_custom_action(CustomActionCallback callback)
 {
-    _impl->custom_action_async(callback);
+    _impl->subscribe_custom_action(callback);
 }
 
 CustomAction::ActionToExecute CustomAction::custom_action() const
@@ -46,7 +47,7 @@ CustomAction::ActionToExecute CustomAction::custom_action() const
 
 void CustomAction::subscribe_custom_action_cancellation(CustomActionCancellationCallback callback)
 {
-    _impl->custom_action_cancellation_async(callback);
+    _impl->subscribe_custom_action_cancellation(callback);
 }
 
 bool CustomAction::custom_action_cancellation() const
@@ -55,27 +56,29 @@ bool CustomAction::custom_action_cancellation() const
 }
 
 void CustomAction::respond_custom_action_async(
-    ActionToExecute action, Result result, const ResultCallback callback)
+    ActionToExecute action_to_execute, Result custom_action_result, const ResultCallback callback)
 {
-    _impl->respond_custom_action_async(action, result, callback);
+    _impl->respond_custom_action_async(action_to_execute, custom_action_result, callback);
 }
 
-CustomAction::Result
-CustomAction::respond_custom_action(ActionToExecute action, Result result) const
+CustomAction::Result CustomAction::respond_custom_action(
+    ActionToExecute action_to_execute, Result custom_action_result) const
 {
-    return _impl->respond_custom_action(action, result);
+    return _impl->respond_custom_action(action_to_execute, custom_action_result);
 }
 
 void CustomAction::custom_action_metadata_async(
-    ActionToExecute action, std::string file_path, const CustomActionMetadataCallback callback)
+    ActionToExecute action_to_execute,
+    std::string file_path,
+    const CustomActionMetadataCallback callback)
 {
-    _impl->custom_action_metadata_async(action, file_path, callback);
+    _impl->custom_action_metadata_async(action_to_execute, file_path, callback);
 }
 
 std::pair<CustomAction::Result, CustomAction::ActionMetadata>
-CustomAction::custom_action_metadata(ActionToExecute action, std::string file_path) const
+CustomAction::custom_action_metadata(ActionToExecute action_to_execute, std::string file_path) const
 {
-    return _impl->custom_action_metadata(action, file_path);
+    return _impl->custom_action_metadata(action_to_execute, file_path);
 }
 
 void CustomAction::execute_custom_action_stage_async(Stage stage, const ResultCallback callback)
@@ -118,12 +121,12 @@ std::ostream& operator<<(std::ostream& str, CustomAction::ActionToExecute const&
     return str;
 }
 
-std::ostream& operator<<(std::ostream& str, CustomAction::Command::Type const& type)
+std::ostream& operator<<(std::ostream& str, CustomAction::Command::CommandType const& command_type)
 {
-    switch (type) {
-        case CustomAction::Command::Type::Long:
+    switch (command_type) {
+        case CustomAction::Command::CommandType::Long:
             return str << "Long";
-        case CustomAction::Command::Type::Int:
+        case CustomAction::Command::CommandType::Int:
             return str << "Int";
         default:
             return str << "Unknown";
@@ -188,7 +191,8 @@ std::ostream& operator<<(std::ostream& str, CustomAction::Stage const& stage)
 
 bool operator==(const CustomAction::ActionMetadata& lhs, const CustomAction::ActionMetadata& rhs)
 {
-    return (rhs.id == lhs.id) && (rhs.name == lhs.name) && (rhs.description == lhs.description) &&
+    return (rhs.id == lhs.id) && (rhs.action_name == lhs.action_name) &&
+           (rhs.action_description == lhs.action_description) &&
            (rhs.global_script == lhs.global_script) &&
            ((std::isnan(rhs.global_timeout) && std::isnan(lhs.global_timeout)) ||
             rhs.global_timeout == lhs.global_timeout) &&
@@ -200,8 +204,8 @@ std::ostream& operator<<(std::ostream& str, CustomAction::ActionMetadata const& 
     str << std::setprecision(15);
     str << "action_metadata:" << '\n' << "{\n";
     str << "    id: " << action_metadata.id << '\n';
-    str << "    name: " << action_metadata.name << '\n';
-    str << "    description: " << action_metadata.description << '\n';
+    str << "    action_name: " << action_metadata.action_name << '\n';
+    str << "    action_description: " << action_metadata.action_description << '\n';
     str << "    global_script: " << action_metadata.global_script << '\n';
     str << "    global_timeout: " << action_metadata.global_timeout << '\n';
     str << "    stages: [";
