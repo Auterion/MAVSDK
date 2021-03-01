@@ -65,31 +65,31 @@ public:
         return obj;
     }
 
-    static rpc::custom_action::Command::Type
-    translateToRpcType(const mavsdk::CustomAction::Command::Type& type)
+    static rpc::custom_action::Command::CommandType
+    translateToRpcCommandType(const mavsdk::CustomAction::Command::CommandType& command_type)
     {
-        switch (type) {
+        switch (command_type) {
             default:
-                LogErr() << "Unknown type enum value: " << static_cast<int>(type);
+                LogErr() << "Unknown command_type enum value: " << static_cast<int>(command_type);
             // FALLTHROUGH
-            case mavsdk::CustomAction::Command::Type::Long:
-                return rpc::custom_action::Command_Type_TYPE_LONG;
-            case mavsdk::CustomAction::Command::Type::Int:
-                return rpc::custom_action::Command_Type_TYPE_INT;
+            case mavsdk::CustomAction::Command::CommandType::Long:
+                return rpc::custom_action::Command_CommandType_COMMAND_TYPE_LONG;
+            case mavsdk::CustomAction::Command::CommandType::Int:
+                return rpc::custom_action::Command_CommandType_COMMAND_TYPE_INT;
         }
     }
 
-    static mavsdk::CustomAction::Command::Type
-    translateFromRpcType(const rpc::custom_action::Command::Type type)
+    static mavsdk::CustomAction::Command::CommandType
+    translateFromRpcCommandType(const rpc::custom_action::Command::CommandType command_type)
     {
-        switch (type) {
+        switch (command_type) {
             default:
-                LogErr() << "Unknown type enum value: " << static_cast<int>(type);
+                LogErr() << "Unknown command_type enum value: " << static_cast<int>(command_type);
             // FALLTHROUGH
-            case rpc::custom_action::Command_Type_TYPE_LONG:
-                return mavsdk::CustomAction::Command::Type::Long;
-            case rpc::custom_action::Command_Type_TYPE_INT:
-                return mavsdk::CustomAction::Command::Type::Int;
+            case rpc::custom_action::Command_CommandType_COMMAND_TYPE_LONG:
+                return mavsdk::CustomAction::Command::CommandType::Long;
+            case rpc::custom_action::Command_CommandType_COMMAND_TYPE_INT:
+                return mavsdk::CustomAction::Command::CommandType::Int;
         }
     }
 
@@ -98,7 +98,7 @@ public:
     {
         auto rpc_obj = std::make_unique<rpc::custom_action::Command>();
 
-        rpc_obj->set_type(translateToRpcType(command.type));
+        rpc_obj->set_type(translateToRpcCommandType(command.type));
 
         rpc_obj->set_target_system_id(command.target_system_id);
 
@@ -132,7 +132,7 @@ public:
     {
         mavsdk::CustomAction::Command obj;
 
-        obj.type = translateFromRpcType(command.type());
+        obj.type = translateFromRpcCommandType(command.type());
 
         obj.target_system_id = command.target_system_id();
 
@@ -199,9 +199,9 @@ public:
 
         rpc_obj->set_id(action_metadata.id);
 
-        rpc_obj->set_name(action_metadata.name);
+        rpc_obj->set_action_name(action_metadata.action_name);
 
-        rpc_obj->set_description(action_metadata.description);
+        rpc_obj->set_action_description(action_metadata.action_description);
 
         rpc_obj->set_global_script(action_metadata.global_script);
 
@@ -222,9 +222,9 @@ public:
 
         obj.id = action_metadata.id();
 
-        obj.name = action_metadata.name();
+        obj.action_name = action_metadata.action_name();
 
-        obj.description = action_metadata.description();
+        obj.action_description = action_metadata.action_description();
 
         obj.global_script = action_metadata.global_script();
 
@@ -292,8 +292,8 @@ public:
             return grpc::Status::OK;
         }
 
-        auto result =
-            _custom_action.set_custom_action(translateFromRpcActionToExecute(request->action()));
+        auto result = _custom_action.set_custom_action(
+            translateFromRpcActionToExecute(request->action_to_execute()));
 
         if (response != nullptr) {
             fillResponseWithResult(response, result);
@@ -320,7 +320,7 @@ public:
                 const mavsdk::CustomAction::ActionToExecute custom_action) {
                 rpc::custom_action::CustomActionResponse rpc_response;
 
-                rpc_response.set_allocated_action(
+                rpc_response.set_allocated_action_to_execute(
                     translateToRpcActionToExecute(custom_action).release());
 
                 std::unique_lock<std::mutex> lock(subscribe_mutex);
@@ -384,8 +384,8 @@ public:
         }
 
         auto result = _custom_action.respond_custom_action(
-            translateFromRpcActionToExecute(request->action()),
-            translateFromRpcCustomActionResult(request->result()));
+            translateFromRpcActionToExecute(request->action_to_execute()),
+            translateFromRpcCustomActionResult(request->custom_action_result()));
 
         if (response != nullptr) {
             fillResponseWithResult(response, result);
@@ -405,12 +405,12 @@ public:
         }
 
         auto result = _custom_action.custom_action_metadata(
-            translateFromRpcAction(request->action()), request->file_path());
+            translateFromRpcActionToExecute(request->action_to_execute()), request->file_path());
 
         if (response != nullptr) {
             fillResponseWithResult(response, result.first);
 
-            response->set_allocated_action_config(
+            response->set_allocated_action_metadata(
                 translateToRpcActionMetadata(result.second).release());
         }
 

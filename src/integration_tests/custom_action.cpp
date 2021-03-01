@@ -277,9 +277,9 @@ void process_custom_action(
     CustomAction::ActionMetadata action_metadata = fut.get();
 
     EXPECT_EQ(action_metadata.id, 0);
-    EXPECT_EQ(action_metadata.name, "Integration test - package delivery action");
-    EXPECT_EQ(action_metadata.description, "Example action of a delivery procedure");
-    LogInfo() << "Custom action #" << action_metadata.id << " is \"" << action_metadata.name
+    EXPECT_EQ(action_metadata.action_name, "Integration test - package delivery action");
+    EXPECT_EQ(action_metadata.action_description, "Example action of a delivery procedure");
+    LogInfo() << "Custom action #" << action_metadata.id << " is \"" << action_metadata.action_name
               << "\"";
 
     // Start
