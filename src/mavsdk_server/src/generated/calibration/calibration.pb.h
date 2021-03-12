@@ -3500,7 +3500,7 @@ inline std::string* ProgressData::release_status_text() {
 }
 inline void ProgressData::set_allocated_status_text(std::string* status_text) {
   if (status_text != nullptr) {
-
+    
   } else {
 
   }

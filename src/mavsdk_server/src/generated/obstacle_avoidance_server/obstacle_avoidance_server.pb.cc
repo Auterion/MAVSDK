@@ -14,68 +14,50 @@
 #include <google/protobuf/wire_format.h>
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
-extern PROTOBUF_INTERNAL_EXPORT_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Control_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto;
+
+PROTOBUF_PRAGMA_INIT_SEG
 namespace mavsdk {
 namespace rpc {
 namespace obstacle_avoidance_server {
-class SubscribeControlRequestDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<SubscribeControlRequest> _instance;
-} _SubscribeControlRequest_default_instance_;
-class ControlResponseDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<ControlResponse> _instance;
-} _ControlResponse_default_instance_;
-class ControlDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Control> _instance;
-} _Control_default_instance_;
+constexpr SubscribeControlRequest::SubscribeControlRequest(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized){}
+struct SubscribeControlRequestDefaultTypeInternal {
+  constexpr SubscribeControlRequestDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~SubscribeControlRequestDefaultTypeInternal() {}
+  union {
+    SubscribeControlRequest _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT SubscribeControlRequestDefaultTypeInternal _SubscribeControlRequest_default_instance_;
+constexpr ControlResponse::ControlResponse(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : control_(nullptr){}
+struct ControlResponseDefaultTypeInternal {
+  constexpr ControlResponseDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~ControlResponseDefaultTypeInternal() {}
+  union {
+    ControlResponse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT ControlResponseDefaultTypeInternal _ControlResponse_default_instance_;
+constexpr Control::Control(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : control_type_(0)
+{}
+struct ControlDefaultTypeInternal {
+  constexpr ControlDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~ControlDefaultTypeInternal() {}
+  union {
+    Control _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT ControlDefaultTypeInternal _Control_default_instance_;
 }  // namespace obstacle_avoidance_server
 }  // namespace rpc
 }  // namespace mavsdk
-static void InitDefaultsscc_info_Control_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::mavsdk::rpc::obstacle_avoidance_server::_Control_default_instance_;
-    new (ptr) ::mavsdk::rpc::obstacle_avoidance_server::Control();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-  ::mavsdk::rpc::obstacle_avoidance_server::Control::InitAsDefaultInstance();
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Control_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_Control_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto}, {}};
-
-static void InitDefaultsscc_info_ControlResponse_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::mavsdk::rpc::obstacle_avoidance_server::_ControlResponse_default_instance_;
-    new (ptr) ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-  ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse::InitAsDefaultInstance();
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_ControlResponse_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_ControlResponse_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto}, {
-      &scc_info_Control_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto.base,}};
-
-static void InitDefaultsscc_info_SubscribeControlRequest_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::mavsdk::rpc::obstacle_avoidance_server::_SubscribeControlRequest_default_instance_;
-    new (ptr) ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-  ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest::InitAsDefaultInstance();
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_SubscribeControlRequest_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_SubscribeControlRequest_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto}, {}};
-
 static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto[3];
 static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto[1];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto = nullptr;
@@ -132,23 +114,21 @@ const char descriptor_table_protodef_obstacle_5favoidance_5fserver_2fobstacle_5f
   "verB\034ObstacleAvoidanceServerProtob\006proto"
   "3"
   ;
-static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto_deps[1] = {
-};
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto_sccs[3] = {
-  &scc_info_Control_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto.base,
-  &scc_info_ControlResponse_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto.base,
-  &scc_info_SubscribeControlRequest_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto.base,
-};
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto = {
-  false, false, descriptor_table_protodef_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto, "obstacle_avoidance_server/obstacle_avoidance_server.proto", 721,
-  &descriptor_table_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto_once, descriptor_table_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto_sccs, descriptor_table_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto_deps, 3, 0,
+  false, false, 721, descriptor_table_protodef_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto, "obstacle_avoidance_server/obstacle_avoidance_server.proto", 
+  &descriptor_table_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto_once, nullptr, 0, 3,
   schemas, file_default_instances, TableStruct_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto::offsets,
-  file_level_metadata_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto, 3, file_level_enum_descriptors_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto, file_level_service_descriptors_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto,
+  file_level_metadata_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto, file_level_enum_descriptors_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto, file_level_service_descriptors_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto,
 };
+PROTOBUF_ATTRIBUTE_WEAK ::PROTOBUF_NAMESPACE_ID::Metadata
+descriptor_table_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto_metadata_getter(int index) {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto);
+  return descriptor_table_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto.file_level_metadata[index];
+}
 
 // Force running AddDescriptors() at dynamic initialization time.
-static bool dynamic_init_dummy_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto = (static_cast<void>(::PROTOBUF_NAMESPACE_ID::internal::AddDescriptors(&descriptor_table_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto)), true);
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY static ::PROTOBUF_NAMESPACE_ID::internal::AddDescriptorsRunner dynamic_init_dummy_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto(&descriptor_table_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto);
 namespace mavsdk {
 namespace rpc {
 namespace obstacle_avoidance_server {
@@ -184,8 +164,6 @@ constexpr int Control::ControlType_ARRAYSIZE;
 
 // ===================================================================
 
-void SubscribeControlRequest::InitAsDefaultInstance() {
-}
 class SubscribeControlRequest::_Internal {
  public:
 };
@@ -224,11 +202,6 @@ void SubscribeControlRequest::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*)
 void SubscribeControlRequest::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const SubscribeControlRequest& SubscribeControlRequest::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_SubscribeControlRequest_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto.base);
-  return *internal_default_instance();
-}
-
 
 void SubscribeControlRequest::Clear() {
 // @@protoc_insertion_point(message_clear_start:mavsdk.rpc.obstacle_avoidance_server.SubscribeControlRequest)
@@ -241,7 +214,6 @@ void SubscribeControlRequest::Clear() {
 
 const char* SubscribeControlRequest::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  ::PROTOBUF_NAMESPACE_ID::Arena* arena = GetArena(); (void)arena;
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
@@ -349,10 +321,6 @@ void SubscribeControlRequest::InternalSwap(SubscribeControlRequest* other) {
 
 // ===================================================================
 
-void ControlResponse::InitAsDefaultInstance() {
-  ::mavsdk::rpc::obstacle_avoidance_server::_ControlResponse_default_instance_._instance.get_mutable()->control_ = const_cast< ::mavsdk::rpc::obstacle_avoidance_server::Control*>(
-      ::mavsdk::rpc::obstacle_avoidance_server::Control::internal_default_instance());
-}
 class ControlResponse::_Internal {
  public:
   static const ::mavsdk::rpc::obstacle_avoidance_server::Control& control(const ControlResponse* msg);
@@ -380,8 +348,7 @@ ControlResponse::ControlResponse(const ControlResponse& from)
 }
 
 void ControlResponse::SharedCtor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_ControlResponse_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto.base);
-  control_ = nullptr;
+control_ = nullptr;
 }
 
 ControlResponse::~ControlResponse() {
@@ -404,11 +371,6 @@ void ControlResponse::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
 void ControlResponse::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const ControlResponse& ControlResponse::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_ControlResponse_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto.base);
-  return *internal_default_instance();
-}
-
 
 void ControlResponse::Clear() {
 // @@protoc_insertion_point(message_clear_start:mavsdk.rpc.obstacle_avoidance_server.ControlResponse)
@@ -425,7 +387,6 @@ void ControlResponse::Clear() {
 
 const char* ControlResponse::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  ::PROTOBUF_NAMESPACE_ID::Arena* arena = GetArena(); (void)arena;
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
@@ -564,8 +525,6 @@ void ControlResponse::InternalSwap(ControlResponse* other) {
 
 // ===================================================================
 
-void Control::InitAsDefaultInstance() {
-}
 class Control::_Internal {
  public:
 };
@@ -584,7 +543,7 @@ Control::Control(const Control& from)
 }
 
 void Control::SharedCtor() {
-  control_type_ = 0;
+control_type_ = 0;
 }
 
 Control::~Control() {
@@ -606,11 +565,6 @@ void Control::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
 void Control::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const Control& Control::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_Control_obstacle_5favoidance_5fserver_2fobstacle_5favoidance_5fserver_2eproto.base);
-  return *internal_default_instance();
-}
-
 
 void Control::Clear() {
 // @@protoc_insertion_point(message_clear_start:mavsdk.rpc.obstacle_avoidance_server.Control)
@@ -624,7 +578,6 @@ void Control::Clear() {
 
 const char* Control::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  ::PROTOBUF_NAMESPACE_ID::Arena* arena = GetArena(); (void)arena;
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
