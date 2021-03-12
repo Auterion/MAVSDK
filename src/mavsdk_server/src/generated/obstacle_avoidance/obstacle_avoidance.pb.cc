@@ -14,216 +14,143 @@
 #include <google/protobuf/wire_format.h>
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
-extern PROTOBUF_INTERNAL_EXPORT_obstacle_5favoidance_2fobstacle_5favoidance_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_ObstacleAvoidanceResult_obstacle_5favoidance_2fobstacle_5favoidance_2eproto;
+
+PROTOBUF_PRAGMA_INIT_SEG
 namespace mavsdk {
 namespace rpc {
 namespace obstacle_avoidance {
-class StartRequestDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<StartRequest> _instance;
-} _StartRequest_default_instance_;
-class StartResponseDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<StartResponse> _instance;
-} _StartResponse_default_instance_;
-class StopRequestDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<StopRequest> _instance;
-} _StopRequest_default_instance_;
-class StopResponseDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<StopResponse> _instance;
-} _StopResponse_default_instance_;
-class RestartRequestDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<RestartRequest> _instance;
-} _RestartRequest_default_instance_;
-class RestartResponseDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<RestartResponse> _instance;
-} _RestartResponse_default_instance_;
-class StateEnableRequestDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<StateEnableRequest> _instance;
-} _StateEnableRequest_default_instance_;
-class StateEnableResponseDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<StateEnableResponse> _instance;
-} _StateEnableResponse_default_instance_;
-class StateDisableRequestDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<StateDisableRequest> _instance;
-} _StateDisableRequest_default_instance_;
-class StateDisableResponseDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<StateDisableResponse> _instance;
-} _StateDisableResponse_default_instance_;
-class ObstacleAvoidanceResultDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<ObstacleAvoidanceResult> _instance;
-} _ObstacleAvoidanceResult_default_instance_;
+constexpr StartRequest::StartRequest(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized){}
+struct StartRequestDefaultTypeInternal {
+  constexpr StartRequestDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~StartRequestDefaultTypeInternal() {}
+  union {
+    StartRequest _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT StartRequestDefaultTypeInternal _StartRequest_default_instance_;
+constexpr StartResponse::StartResponse(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : obstacle_avoidance_result_(nullptr){}
+struct StartResponseDefaultTypeInternal {
+  constexpr StartResponseDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~StartResponseDefaultTypeInternal() {}
+  union {
+    StartResponse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT StartResponseDefaultTypeInternal _StartResponse_default_instance_;
+constexpr StopRequest::StopRequest(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized){}
+struct StopRequestDefaultTypeInternal {
+  constexpr StopRequestDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~StopRequestDefaultTypeInternal() {}
+  union {
+    StopRequest _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT StopRequestDefaultTypeInternal _StopRequest_default_instance_;
+constexpr StopResponse::StopResponse(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : obstacle_avoidance_result_(nullptr){}
+struct StopResponseDefaultTypeInternal {
+  constexpr StopResponseDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~StopResponseDefaultTypeInternal() {}
+  union {
+    StopResponse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT StopResponseDefaultTypeInternal _StopResponse_default_instance_;
+constexpr RestartRequest::RestartRequest(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized){}
+struct RestartRequestDefaultTypeInternal {
+  constexpr RestartRequestDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~RestartRequestDefaultTypeInternal() {}
+  union {
+    RestartRequest _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT RestartRequestDefaultTypeInternal _RestartRequest_default_instance_;
+constexpr RestartResponse::RestartResponse(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : obstacle_avoidance_result_(nullptr){}
+struct RestartResponseDefaultTypeInternal {
+  constexpr RestartResponseDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~RestartResponseDefaultTypeInternal() {}
+  union {
+    RestartResponse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT RestartResponseDefaultTypeInternal _RestartResponse_default_instance_;
+constexpr StateEnableRequest::StateEnableRequest(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized){}
+struct StateEnableRequestDefaultTypeInternal {
+  constexpr StateEnableRequestDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~StateEnableRequestDefaultTypeInternal() {}
+  union {
+    StateEnableRequest _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT StateEnableRequestDefaultTypeInternal _StateEnableRequest_default_instance_;
+constexpr StateEnableResponse::StateEnableResponse(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : obstacle_avoidance_result_(nullptr){}
+struct StateEnableResponseDefaultTypeInternal {
+  constexpr StateEnableResponseDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~StateEnableResponseDefaultTypeInternal() {}
+  union {
+    StateEnableResponse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT StateEnableResponseDefaultTypeInternal _StateEnableResponse_default_instance_;
+constexpr StateDisableRequest::StateDisableRequest(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized){}
+struct StateDisableRequestDefaultTypeInternal {
+  constexpr StateDisableRequestDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~StateDisableRequestDefaultTypeInternal() {}
+  union {
+    StateDisableRequest _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT StateDisableRequestDefaultTypeInternal _StateDisableRequest_default_instance_;
+constexpr StateDisableResponse::StateDisableResponse(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : obstacle_avoidance_result_(nullptr){}
+struct StateDisableResponseDefaultTypeInternal {
+  constexpr StateDisableResponseDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~StateDisableResponseDefaultTypeInternal() {}
+  union {
+    StateDisableResponse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT StateDisableResponseDefaultTypeInternal _StateDisableResponse_default_instance_;
+constexpr ObstacleAvoidanceResult::ObstacleAvoidanceResult(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : result_str_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , result_(0)
+{}
+struct ObstacleAvoidanceResultDefaultTypeInternal {
+  constexpr ObstacleAvoidanceResultDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~ObstacleAvoidanceResultDefaultTypeInternal() {}
+  union {
+    ObstacleAvoidanceResult _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT ObstacleAvoidanceResultDefaultTypeInternal _ObstacleAvoidanceResult_default_instance_;
 }  // namespace obstacle_avoidance
 }  // namespace rpc
 }  // namespace mavsdk
-static void InitDefaultsscc_info_ObstacleAvoidanceResult_obstacle_5favoidance_2fobstacle_5favoidance_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::mavsdk::rpc::obstacle_avoidance::_ObstacleAvoidanceResult_default_instance_;
-    new (ptr) ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-  ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult::InitAsDefaultInstance();
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_ObstacleAvoidanceResult_obstacle_5favoidance_2fobstacle_5favoidance_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_ObstacleAvoidanceResult_obstacle_5favoidance_2fobstacle_5favoidance_2eproto}, {}};
-
-static void InitDefaultsscc_info_RestartRequest_obstacle_5favoidance_2fobstacle_5favoidance_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::mavsdk::rpc::obstacle_avoidance::_RestartRequest_default_instance_;
-    new (ptr) ::mavsdk::rpc::obstacle_avoidance::RestartRequest();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-  ::mavsdk::rpc::obstacle_avoidance::RestartRequest::InitAsDefaultInstance();
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_RestartRequest_obstacle_5favoidance_2fobstacle_5favoidance_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_RestartRequest_obstacle_5favoidance_2fobstacle_5favoidance_2eproto}, {}};
-
-static void InitDefaultsscc_info_RestartResponse_obstacle_5favoidance_2fobstacle_5favoidance_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::mavsdk::rpc::obstacle_avoidance::_RestartResponse_default_instance_;
-    new (ptr) ::mavsdk::rpc::obstacle_avoidance::RestartResponse();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-  ::mavsdk::rpc::obstacle_avoidance::RestartResponse::InitAsDefaultInstance();
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_RestartResponse_obstacle_5favoidance_2fobstacle_5favoidance_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_RestartResponse_obstacle_5favoidance_2fobstacle_5favoidance_2eproto}, {
-      &scc_info_ObstacleAvoidanceResult_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base,}};
-
-static void InitDefaultsscc_info_StartRequest_obstacle_5favoidance_2fobstacle_5favoidance_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::mavsdk::rpc::obstacle_avoidance::_StartRequest_default_instance_;
-    new (ptr) ::mavsdk::rpc::obstacle_avoidance::StartRequest();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-  ::mavsdk::rpc::obstacle_avoidance::StartRequest::InitAsDefaultInstance();
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_StartRequest_obstacle_5favoidance_2fobstacle_5favoidance_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_StartRequest_obstacle_5favoidance_2fobstacle_5favoidance_2eproto}, {}};
-
-static void InitDefaultsscc_info_StartResponse_obstacle_5favoidance_2fobstacle_5favoidance_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::mavsdk::rpc::obstacle_avoidance::_StartResponse_default_instance_;
-    new (ptr) ::mavsdk::rpc::obstacle_avoidance::StartResponse();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-  ::mavsdk::rpc::obstacle_avoidance::StartResponse::InitAsDefaultInstance();
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_StartResponse_obstacle_5favoidance_2fobstacle_5favoidance_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_StartResponse_obstacle_5favoidance_2fobstacle_5favoidance_2eproto}, {
-      &scc_info_ObstacleAvoidanceResult_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base,}};
-
-static void InitDefaultsscc_info_StateDisableRequest_obstacle_5favoidance_2fobstacle_5favoidance_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::mavsdk::rpc::obstacle_avoidance::_StateDisableRequest_default_instance_;
-    new (ptr) ::mavsdk::rpc::obstacle_avoidance::StateDisableRequest();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-  ::mavsdk::rpc::obstacle_avoidance::StateDisableRequest::InitAsDefaultInstance();
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_StateDisableRequest_obstacle_5favoidance_2fobstacle_5favoidance_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_StateDisableRequest_obstacle_5favoidance_2fobstacle_5favoidance_2eproto}, {}};
-
-static void InitDefaultsscc_info_StateDisableResponse_obstacle_5favoidance_2fobstacle_5favoidance_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::mavsdk::rpc::obstacle_avoidance::_StateDisableResponse_default_instance_;
-    new (ptr) ::mavsdk::rpc::obstacle_avoidance::StateDisableResponse();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-  ::mavsdk::rpc::obstacle_avoidance::StateDisableResponse::InitAsDefaultInstance();
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_StateDisableResponse_obstacle_5favoidance_2fobstacle_5favoidance_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_StateDisableResponse_obstacle_5favoidance_2fobstacle_5favoidance_2eproto}, {
-      &scc_info_ObstacleAvoidanceResult_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base,}};
-
-static void InitDefaultsscc_info_StateEnableRequest_obstacle_5favoidance_2fobstacle_5favoidance_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::mavsdk::rpc::obstacle_avoidance::_StateEnableRequest_default_instance_;
-    new (ptr) ::mavsdk::rpc::obstacle_avoidance::StateEnableRequest();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-  ::mavsdk::rpc::obstacle_avoidance::StateEnableRequest::InitAsDefaultInstance();
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_StateEnableRequest_obstacle_5favoidance_2fobstacle_5favoidance_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_StateEnableRequest_obstacle_5favoidance_2fobstacle_5favoidance_2eproto}, {}};
-
-static void InitDefaultsscc_info_StateEnableResponse_obstacle_5favoidance_2fobstacle_5favoidance_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::mavsdk::rpc::obstacle_avoidance::_StateEnableResponse_default_instance_;
-    new (ptr) ::mavsdk::rpc::obstacle_avoidance::StateEnableResponse();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-  ::mavsdk::rpc::obstacle_avoidance::StateEnableResponse::InitAsDefaultInstance();
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_StateEnableResponse_obstacle_5favoidance_2fobstacle_5favoidance_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_StateEnableResponse_obstacle_5favoidance_2fobstacle_5favoidance_2eproto}, {
-      &scc_info_ObstacleAvoidanceResult_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base,}};
-
-static void InitDefaultsscc_info_StopRequest_obstacle_5favoidance_2fobstacle_5favoidance_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::mavsdk::rpc::obstacle_avoidance::_StopRequest_default_instance_;
-    new (ptr) ::mavsdk::rpc::obstacle_avoidance::StopRequest();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-  ::mavsdk::rpc::obstacle_avoidance::StopRequest::InitAsDefaultInstance();
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_StopRequest_obstacle_5favoidance_2fobstacle_5favoidance_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_StopRequest_obstacle_5favoidance_2fobstacle_5favoidance_2eproto}, {}};
-
-static void InitDefaultsscc_info_StopResponse_obstacle_5favoidance_2fobstacle_5favoidance_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::mavsdk::rpc::obstacle_avoidance::_StopResponse_default_instance_;
-    new (ptr) ::mavsdk::rpc::obstacle_avoidance::StopResponse();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-  ::mavsdk::rpc::obstacle_avoidance::StopResponse::InitAsDefaultInstance();
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_StopResponse_obstacle_5favoidance_2fobstacle_5favoidance_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_StopResponse_obstacle_5favoidance_2fobstacle_5favoidance_2eproto}, {
-      &scc_info_ObstacleAvoidanceResult_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base,}};
-
 static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_obstacle_5favoidance_2fobstacle_5favoidance_2eproto[11];
 static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_obstacle_5favoidance_2fobstacle_5favoidance_2eproto[1];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_obstacle_5favoidance_2fobstacle_5favoidance_2eproto = nullptr;
@@ -364,31 +291,21 @@ const char descriptor_table_protodef_obstacle_5favoidance_2fobstacle_5favoidance
   "\n\034io.mavsdk.obstacle_avoidanceB\026Obstacle"
   "AvoidanceProtob\006proto3"
   ;
-static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_obstacle_5favoidance_2fobstacle_5favoidance_2eproto_deps[1] = {
-};
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_obstacle_5favoidance_2fobstacle_5favoidance_2eproto_sccs[11] = {
-  &scc_info_ObstacleAvoidanceResult_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base,
-  &scc_info_RestartRequest_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base,
-  &scc_info_RestartResponse_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base,
-  &scc_info_StartRequest_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base,
-  &scc_info_StartResponse_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base,
-  &scc_info_StateDisableRequest_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base,
-  &scc_info_StateDisableResponse_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base,
-  &scc_info_StateEnableRequest_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base,
-  &scc_info_StateEnableResponse_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base,
-  &scc_info_StopRequest_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base,
-  &scc_info_StopResponse_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base,
-};
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_obstacle_5favoidance_2fobstacle_5favoidance_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_obstacle_5favoidance_2fobstacle_5favoidance_2eproto = {
-  false, false, descriptor_table_protodef_obstacle_5favoidance_2fobstacle_5favoidance_2eproto, "obstacle_avoidance/obstacle_avoidance.proto", 1662,
-  &descriptor_table_obstacle_5favoidance_2fobstacle_5favoidance_2eproto_once, descriptor_table_obstacle_5favoidance_2fobstacle_5favoidance_2eproto_sccs, descriptor_table_obstacle_5favoidance_2fobstacle_5favoidance_2eproto_deps, 11, 0,
+  false, false, 1662, descriptor_table_protodef_obstacle_5favoidance_2fobstacle_5favoidance_2eproto, "obstacle_avoidance/obstacle_avoidance.proto", 
+  &descriptor_table_obstacle_5favoidance_2fobstacle_5favoidance_2eproto_once, nullptr, 0, 11,
   schemas, file_default_instances, TableStruct_obstacle_5favoidance_2fobstacle_5favoidance_2eproto::offsets,
-  file_level_metadata_obstacle_5favoidance_2fobstacle_5favoidance_2eproto, 11, file_level_enum_descriptors_obstacle_5favoidance_2fobstacle_5favoidance_2eproto, file_level_service_descriptors_obstacle_5favoidance_2fobstacle_5favoidance_2eproto,
+  file_level_metadata_obstacle_5favoidance_2fobstacle_5favoidance_2eproto, file_level_enum_descriptors_obstacle_5favoidance_2fobstacle_5favoidance_2eproto, file_level_service_descriptors_obstacle_5favoidance_2fobstacle_5favoidance_2eproto,
 };
+PROTOBUF_ATTRIBUTE_WEAK ::PROTOBUF_NAMESPACE_ID::Metadata
+descriptor_table_obstacle_5favoidance_2fobstacle_5favoidance_2eproto_metadata_getter(int index) {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_obstacle_5favoidance_2fobstacle_5favoidance_2eproto);
+  return descriptor_table_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.file_level_metadata[index];
+}
 
 // Force running AddDescriptors() at dynamic initialization time.
-static bool dynamic_init_dummy_obstacle_5favoidance_2fobstacle_5favoidance_2eproto = (static_cast<void>(::PROTOBUF_NAMESPACE_ID::internal::AddDescriptors(&descriptor_table_obstacle_5favoidance_2fobstacle_5favoidance_2eproto)), true);
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY static ::PROTOBUF_NAMESPACE_ID::internal::AddDescriptorsRunner dynamic_init_dummy_obstacle_5favoidance_2fobstacle_5favoidance_2eproto(&descriptor_table_obstacle_5favoidance_2fobstacle_5favoidance_2eproto);
 namespace mavsdk {
 namespace rpc {
 namespace obstacle_avoidance {
@@ -426,8 +343,6 @@ constexpr int ObstacleAvoidanceResult::Result_ARRAYSIZE;
 
 // ===================================================================
 
-void StartRequest::InitAsDefaultInstance() {
-}
 class StartRequest::_Internal {
  public:
 };
@@ -466,11 +381,6 @@ void StartRequest::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
 void StartRequest::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const StartRequest& StartRequest::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_StartRequest_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base);
-  return *internal_default_instance();
-}
-
 
 void StartRequest::Clear() {
 // @@protoc_insertion_point(message_clear_start:mavsdk.rpc.obstacle_avoidance.StartRequest)
@@ -483,7 +393,6 @@ void StartRequest::Clear() {
 
 const char* StartRequest::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  ::PROTOBUF_NAMESPACE_ID::Arena* arena = GetArena(); (void)arena;
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
@@ -591,10 +500,6 @@ void StartRequest::InternalSwap(StartRequest* other) {
 
 // ===================================================================
 
-void StartResponse::InitAsDefaultInstance() {
-  ::mavsdk::rpc::obstacle_avoidance::_StartResponse_default_instance_._instance.get_mutable()->obstacle_avoidance_result_ = const_cast< ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult*>(
-      ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult::internal_default_instance());
-}
 class StartResponse::_Internal {
  public:
   static const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& obstacle_avoidance_result(const StartResponse* msg);
@@ -622,8 +527,7 @@ StartResponse::StartResponse(const StartResponse& from)
 }
 
 void StartResponse::SharedCtor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_StartResponse_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base);
-  obstacle_avoidance_result_ = nullptr;
+obstacle_avoidance_result_ = nullptr;
 }
 
 StartResponse::~StartResponse() {
@@ -646,11 +550,6 @@ void StartResponse::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
 void StartResponse::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const StartResponse& StartResponse::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_StartResponse_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base);
-  return *internal_default_instance();
-}
-
 
 void StartResponse::Clear() {
 // @@protoc_insertion_point(message_clear_start:mavsdk.rpc.obstacle_avoidance.StartResponse)
@@ -667,7 +566,6 @@ void StartResponse::Clear() {
 
 const char* StartResponse::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  ::PROTOBUF_NAMESPACE_ID::Arena* arena = GetArena(); (void)arena;
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
@@ -806,8 +704,6 @@ void StartResponse::InternalSwap(StartResponse* other) {
 
 // ===================================================================
 
-void StopRequest::InitAsDefaultInstance() {
-}
 class StopRequest::_Internal {
  public:
 };
@@ -846,11 +742,6 @@ void StopRequest::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
 void StopRequest::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const StopRequest& StopRequest::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_StopRequest_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base);
-  return *internal_default_instance();
-}
-
 
 void StopRequest::Clear() {
 // @@protoc_insertion_point(message_clear_start:mavsdk.rpc.obstacle_avoidance.StopRequest)
@@ -863,7 +754,6 @@ void StopRequest::Clear() {
 
 const char* StopRequest::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  ::PROTOBUF_NAMESPACE_ID::Arena* arena = GetArena(); (void)arena;
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
@@ -971,10 +861,6 @@ void StopRequest::InternalSwap(StopRequest* other) {
 
 // ===================================================================
 
-void StopResponse::InitAsDefaultInstance() {
-  ::mavsdk::rpc::obstacle_avoidance::_StopResponse_default_instance_._instance.get_mutable()->obstacle_avoidance_result_ = const_cast< ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult*>(
-      ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult::internal_default_instance());
-}
 class StopResponse::_Internal {
  public:
   static const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& obstacle_avoidance_result(const StopResponse* msg);
@@ -1002,8 +888,7 @@ StopResponse::StopResponse(const StopResponse& from)
 }
 
 void StopResponse::SharedCtor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_StopResponse_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base);
-  obstacle_avoidance_result_ = nullptr;
+obstacle_avoidance_result_ = nullptr;
 }
 
 StopResponse::~StopResponse() {
@@ -1026,11 +911,6 @@ void StopResponse::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
 void StopResponse::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const StopResponse& StopResponse::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_StopResponse_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base);
-  return *internal_default_instance();
-}
-
 
 void StopResponse::Clear() {
 // @@protoc_insertion_point(message_clear_start:mavsdk.rpc.obstacle_avoidance.StopResponse)
@@ -1047,7 +927,6 @@ void StopResponse::Clear() {
 
 const char* StopResponse::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  ::PROTOBUF_NAMESPACE_ID::Arena* arena = GetArena(); (void)arena;
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
@@ -1186,8 +1065,6 @@ void StopResponse::InternalSwap(StopResponse* other) {
 
 // ===================================================================
 
-void RestartRequest::InitAsDefaultInstance() {
-}
 class RestartRequest::_Internal {
  public:
 };
@@ -1226,11 +1103,6 @@ void RestartRequest::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
 void RestartRequest::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const RestartRequest& RestartRequest::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_RestartRequest_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base);
-  return *internal_default_instance();
-}
-
 
 void RestartRequest::Clear() {
 // @@protoc_insertion_point(message_clear_start:mavsdk.rpc.obstacle_avoidance.RestartRequest)
@@ -1243,7 +1115,6 @@ void RestartRequest::Clear() {
 
 const char* RestartRequest::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  ::PROTOBUF_NAMESPACE_ID::Arena* arena = GetArena(); (void)arena;
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
@@ -1351,10 +1222,6 @@ void RestartRequest::InternalSwap(RestartRequest* other) {
 
 // ===================================================================
 
-void RestartResponse::InitAsDefaultInstance() {
-  ::mavsdk::rpc::obstacle_avoidance::_RestartResponse_default_instance_._instance.get_mutable()->obstacle_avoidance_result_ = const_cast< ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult*>(
-      ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult::internal_default_instance());
-}
 class RestartResponse::_Internal {
  public:
   static const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& obstacle_avoidance_result(const RestartResponse* msg);
@@ -1382,8 +1249,7 @@ RestartResponse::RestartResponse(const RestartResponse& from)
 }
 
 void RestartResponse::SharedCtor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_RestartResponse_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base);
-  obstacle_avoidance_result_ = nullptr;
+obstacle_avoidance_result_ = nullptr;
 }
 
 RestartResponse::~RestartResponse() {
@@ -1406,11 +1272,6 @@ void RestartResponse::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
 void RestartResponse::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const RestartResponse& RestartResponse::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_RestartResponse_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base);
-  return *internal_default_instance();
-}
-
 
 void RestartResponse::Clear() {
 // @@protoc_insertion_point(message_clear_start:mavsdk.rpc.obstacle_avoidance.RestartResponse)
@@ -1427,7 +1288,6 @@ void RestartResponse::Clear() {
 
 const char* RestartResponse::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  ::PROTOBUF_NAMESPACE_ID::Arena* arena = GetArena(); (void)arena;
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
@@ -1566,8 +1426,6 @@ void RestartResponse::InternalSwap(RestartResponse* other) {
 
 // ===================================================================
 
-void StateEnableRequest::InitAsDefaultInstance() {
-}
 class StateEnableRequest::_Internal {
  public:
 };
@@ -1606,11 +1464,6 @@ void StateEnableRequest::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
 void StateEnableRequest::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const StateEnableRequest& StateEnableRequest::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_StateEnableRequest_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base);
-  return *internal_default_instance();
-}
-
 
 void StateEnableRequest::Clear() {
 // @@protoc_insertion_point(message_clear_start:mavsdk.rpc.obstacle_avoidance.StateEnableRequest)
@@ -1623,7 +1476,6 @@ void StateEnableRequest::Clear() {
 
 const char* StateEnableRequest::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  ::PROTOBUF_NAMESPACE_ID::Arena* arena = GetArena(); (void)arena;
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
@@ -1731,10 +1583,6 @@ void StateEnableRequest::InternalSwap(StateEnableRequest* other) {
 
 // ===================================================================
 
-void StateEnableResponse::InitAsDefaultInstance() {
-  ::mavsdk::rpc::obstacle_avoidance::_StateEnableResponse_default_instance_._instance.get_mutable()->obstacle_avoidance_result_ = const_cast< ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult*>(
-      ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult::internal_default_instance());
-}
 class StateEnableResponse::_Internal {
  public:
   static const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& obstacle_avoidance_result(const StateEnableResponse* msg);
@@ -1762,8 +1610,7 @@ StateEnableResponse::StateEnableResponse(const StateEnableResponse& from)
 }
 
 void StateEnableResponse::SharedCtor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_StateEnableResponse_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base);
-  obstacle_avoidance_result_ = nullptr;
+obstacle_avoidance_result_ = nullptr;
 }
 
 StateEnableResponse::~StateEnableResponse() {
@@ -1786,11 +1633,6 @@ void StateEnableResponse::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
 void StateEnableResponse::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const StateEnableResponse& StateEnableResponse::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_StateEnableResponse_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base);
-  return *internal_default_instance();
-}
-
 
 void StateEnableResponse::Clear() {
 // @@protoc_insertion_point(message_clear_start:mavsdk.rpc.obstacle_avoidance.StateEnableResponse)
@@ -1807,7 +1649,6 @@ void StateEnableResponse::Clear() {
 
 const char* StateEnableResponse::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  ::PROTOBUF_NAMESPACE_ID::Arena* arena = GetArena(); (void)arena;
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
@@ -1946,8 +1787,6 @@ void StateEnableResponse::InternalSwap(StateEnableResponse* other) {
 
 // ===================================================================
 
-void StateDisableRequest::InitAsDefaultInstance() {
-}
 class StateDisableRequest::_Internal {
  public:
 };
@@ -1986,11 +1825,6 @@ void StateDisableRequest::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
 void StateDisableRequest::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const StateDisableRequest& StateDisableRequest::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_StateDisableRequest_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base);
-  return *internal_default_instance();
-}
-
 
 void StateDisableRequest::Clear() {
 // @@protoc_insertion_point(message_clear_start:mavsdk.rpc.obstacle_avoidance.StateDisableRequest)
@@ -2003,7 +1837,6 @@ void StateDisableRequest::Clear() {
 
 const char* StateDisableRequest::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  ::PROTOBUF_NAMESPACE_ID::Arena* arena = GetArena(); (void)arena;
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
@@ -2111,10 +1944,6 @@ void StateDisableRequest::InternalSwap(StateDisableRequest* other) {
 
 // ===================================================================
 
-void StateDisableResponse::InitAsDefaultInstance() {
-  ::mavsdk::rpc::obstacle_avoidance::_StateDisableResponse_default_instance_._instance.get_mutable()->obstacle_avoidance_result_ = const_cast< ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult*>(
-      ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult::internal_default_instance());
-}
 class StateDisableResponse::_Internal {
  public:
   static const ::mavsdk::rpc::obstacle_avoidance::ObstacleAvoidanceResult& obstacle_avoidance_result(const StateDisableResponse* msg);
@@ -2142,8 +1971,7 @@ StateDisableResponse::StateDisableResponse(const StateDisableResponse& from)
 }
 
 void StateDisableResponse::SharedCtor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_StateDisableResponse_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base);
-  obstacle_avoidance_result_ = nullptr;
+obstacle_avoidance_result_ = nullptr;
 }
 
 StateDisableResponse::~StateDisableResponse() {
@@ -2166,11 +1994,6 @@ void StateDisableResponse::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
 void StateDisableResponse::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const StateDisableResponse& StateDisableResponse::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_StateDisableResponse_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base);
-  return *internal_default_instance();
-}
-
 
 void StateDisableResponse::Clear() {
 // @@protoc_insertion_point(message_clear_start:mavsdk.rpc.obstacle_avoidance.StateDisableResponse)
@@ -2187,7 +2010,6 @@ void StateDisableResponse::Clear() {
 
 const char* StateDisableResponse::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  ::PROTOBUF_NAMESPACE_ID::Arena* arena = GetArena(); (void)arena;
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
@@ -2326,8 +2148,6 @@ void StateDisableResponse::InternalSwap(StateDisableResponse* other) {
 
 // ===================================================================
 
-void ObstacleAvoidanceResult::InitAsDefaultInstance() {
-}
 class ObstacleAvoidanceResult::_Internal {
  public:
 };
@@ -2343,7 +2163,7 @@ ObstacleAvoidanceResult::ObstacleAvoidanceResult(const ObstacleAvoidanceResult& 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   result_str_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (!from._internal_result_str().empty()) {
-    result_str_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from._internal_result_str(),
+    result_str_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_result_str(), 
       GetArena());
   }
   result_ = from.result_;
@@ -2351,9 +2171,8 @@ ObstacleAvoidanceResult::ObstacleAvoidanceResult(const ObstacleAvoidanceResult& 
 }
 
 void ObstacleAvoidanceResult::SharedCtor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_ObstacleAvoidanceResult_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base);
-  result_str_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  result_ = 0;
+result_str_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+result_ = 0;
 }
 
 ObstacleAvoidanceResult::~ObstacleAvoidanceResult() {
@@ -2376,11 +2195,6 @@ void ObstacleAvoidanceResult::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*)
 void ObstacleAvoidanceResult::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const ObstacleAvoidanceResult& ObstacleAvoidanceResult::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_ObstacleAvoidanceResult_obstacle_5favoidance_2fobstacle_5favoidance_2eproto.base);
-  return *internal_default_instance();
-}
-
 
 void ObstacleAvoidanceResult::Clear() {
 // @@protoc_insertion_point(message_clear_start:mavsdk.rpc.obstacle_avoidance.ObstacleAvoidanceResult)
@@ -2388,14 +2202,13 @@ void ObstacleAvoidanceResult::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  result_str_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+  result_str_.ClearToEmpty();
   result_ = 0;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
 const char* ObstacleAvoidanceResult::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  ::PROTOBUF_NAMESPACE_ID::Arena* arena = GetArena(); (void)arena;
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);

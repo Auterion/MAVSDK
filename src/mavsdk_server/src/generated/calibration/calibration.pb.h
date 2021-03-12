@@ -2302,14 +2302,14 @@ inline void CalibrateGyroResponse::unsafe_arena_set_allocated_calibration_result
   }
   calibration_result_ = calibration_result;
   if (calibration_result) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:mavsdk.rpc.calibration.CalibrateGyroResponse.calibration_result)
 }
 inline ::mavsdk::rpc::calibration::CalibrationResult* CalibrateGyroResponse::release_calibration_result() {
-
+  
   ::mavsdk::rpc::calibration::CalibrationResult* temp = calibration_result_;
   calibration_result_ = nullptr;
   if (GetArena() != nullptr) {
@@ -2319,13 +2319,13 @@ inline ::mavsdk::rpc::calibration::CalibrationResult* CalibrateGyroResponse::rel
 }
 inline ::mavsdk::rpc::calibration::CalibrationResult* CalibrateGyroResponse::unsafe_arena_release_calibration_result() {
   // @@protoc_insertion_point(field_release:mavsdk.rpc.calibration.CalibrateGyroResponse.calibration_result)
-
+  
   ::mavsdk::rpc::calibration::CalibrationResult* temp = calibration_result_;
   calibration_result_ = nullptr;
   return temp;
 }
 inline ::mavsdk::rpc::calibration::CalibrationResult* CalibrateGyroResponse::_internal_mutable_calibration_result() {
-
+  
   if (calibration_result_ == nullptr) {
     auto* p = CreateMaybeMessage<::mavsdk::rpc::calibration::CalibrationResult>(GetArena());
     calibration_result_ = p;
@@ -2348,9 +2348,9 @@ inline void CalibrateGyroResponse::set_allocated_calibration_result(::mavsdk::rp
       calibration_result = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, calibration_result, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   calibration_result_ = calibration_result;
   // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.calibration.CalibrateGyroResponse.calibration_result)
@@ -2385,14 +2385,14 @@ inline void CalibrateGyroResponse::unsafe_arena_set_allocated_progress_data(
   }
   progress_data_ = progress_data;
   if (progress_data) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:mavsdk.rpc.calibration.CalibrateGyroResponse.progress_data)
 }
 inline ::mavsdk::rpc::calibration::ProgressData* CalibrateGyroResponse::release_progress_data() {
-
+  
   ::mavsdk::rpc::calibration::ProgressData* temp = progress_data_;
   progress_data_ = nullptr;
   if (GetArena() != nullptr) {
@@ -2402,13 +2402,13 @@ inline ::mavsdk::rpc::calibration::ProgressData* CalibrateGyroResponse::release_
 }
 inline ::mavsdk::rpc::calibration::ProgressData* CalibrateGyroResponse::unsafe_arena_release_progress_data() {
   // @@protoc_insertion_point(field_release:mavsdk.rpc.calibration.CalibrateGyroResponse.progress_data)
-
+  
   ::mavsdk::rpc::calibration::ProgressData* temp = progress_data_;
   progress_data_ = nullptr;
   return temp;
 }
 inline ::mavsdk::rpc::calibration::ProgressData* CalibrateGyroResponse::_internal_mutable_progress_data() {
-
+  
   if (progress_data_ == nullptr) {
     auto* p = CreateMaybeMessage<::mavsdk::rpc::calibration::ProgressData>(GetArena());
     progress_data_ = p;
@@ -2431,9 +2431,9 @@ inline void CalibrateGyroResponse::set_allocated_progress_data(::mavsdk::rpc::ca
       progress_data = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, progress_data, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   progress_data_ = progress_data;
   // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.calibration.CalibrateGyroResponse.progress_data)
@@ -2476,14 +2476,14 @@ inline void CalibrateAccelerometerResponse::unsafe_arena_set_allocated_calibrati
   }
   calibration_result_ = calibration_result;
   if (calibration_result) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:mavsdk.rpc.calibration.CalibrateAccelerometerResponse.calibration_result)
 }
 inline ::mavsdk::rpc::calibration::CalibrationResult* CalibrateAccelerometerResponse::release_calibration_result() {
-
+  
   ::mavsdk::rpc::calibration::CalibrationResult* temp = calibration_result_;
   calibration_result_ = nullptr;
   if (GetArena() != nullptr) {
@@ -2493,13 +2493,13 @@ inline ::mavsdk::rpc::calibration::CalibrationResult* CalibrateAccelerometerResp
 }
 inline ::mavsdk::rpc::calibration::CalibrationResult* CalibrateAccelerometerResponse::unsafe_arena_release_calibration_result() {
   // @@protoc_insertion_point(field_release:mavsdk.rpc.calibration.CalibrateAccelerometerResponse.calibration_result)
-
+  
   ::mavsdk::rpc::calibration::CalibrationResult* temp = calibration_result_;
   calibration_result_ = nullptr;
   return temp;
 }
 inline ::mavsdk::rpc::calibration::CalibrationResult* CalibrateAccelerometerResponse::_internal_mutable_calibration_result() {
-
+  
   if (calibration_result_ == nullptr) {
     auto* p = CreateMaybeMessage<::mavsdk::rpc::calibration::CalibrationResult>(GetArena());
     calibration_result_ = p;
@@ -2522,9 +2522,9 @@ inline void CalibrateAccelerometerResponse::set_allocated_calibration_result(::m
       calibration_result = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, calibration_result, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   calibration_result_ = calibration_result;
   // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.calibration.CalibrateAccelerometerResponse.calibration_result)
@@ -2559,14 +2559,14 @@ inline void CalibrateAccelerometerResponse::unsafe_arena_set_allocated_progress_
   }
   progress_data_ = progress_data;
   if (progress_data) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:mavsdk.rpc.calibration.CalibrateAccelerometerResponse.progress_data)
 }
 inline ::mavsdk::rpc::calibration::ProgressData* CalibrateAccelerometerResponse::release_progress_data() {
-
+  
   ::mavsdk::rpc::calibration::ProgressData* temp = progress_data_;
   progress_data_ = nullptr;
   if (GetArena() != nullptr) {
@@ -2576,13 +2576,13 @@ inline ::mavsdk::rpc::calibration::ProgressData* CalibrateAccelerometerResponse:
 }
 inline ::mavsdk::rpc::calibration::ProgressData* CalibrateAccelerometerResponse::unsafe_arena_release_progress_data() {
   // @@protoc_insertion_point(field_release:mavsdk.rpc.calibration.CalibrateAccelerometerResponse.progress_data)
-
+  
   ::mavsdk::rpc::calibration::ProgressData* temp = progress_data_;
   progress_data_ = nullptr;
   return temp;
 }
 inline ::mavsdk::rpc::calibration::ProgressData* CalibrateAccelerometerResponse::_internal_mutable_progress_data() {
-
+  
   if (progress_data_ == nullptr) {
     auto* p = CreateMaybeMessage<::mavsdk::rpc::calibration::ProgressData>(GetArena());
     progress_data_ = p;
@@ -2605,9 +2605,9 @@ inline void CalibrateAccelerometerResponse::set_allocated_progress_data(::mavsdk
       progress_data = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, progress_data, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   progress_data_ = progress_data;
   // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.calibration.CalibrateAccelerometerResponse.progress_data)
@@ -2650,14 +2650,14 @@ inline void CalibrateMagnetometerResponse::unsafe_arena_set_allocated_calibratio
   }
   calibration_result_ = calibration_result;
   if (calibration_result) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:mavsdk.rpc.calibration.CalibrateMagnetometerResponse.calibration_result)
 }
 inline ::mavsdk::rpc::calibration::CalibrationResult* CalibrateMagnetometerResponse::release_calibration_result() {
-
+  
   ::mavsdk::rpc::calibration::CalibrationResult* temp = calibration_result_;
   calibration_result_ = nullptr;
   if (GetArena() != nullptr) {
@@ -2667,13 +2667,13 @@ inline ::mavsdk::rpc::calibration::CalibrationResult* CalibrateMagnetometerRespo
 }
 inline ::mavsdk::rpc::calibration::CalibrationResult* CalibrateMagnetometerResponse::unsafe_arena_release_calibration_result() {
   // @@protoc_insertion_point(field_release:mavsdk.rpc.calibration.CalibrateMagnetometerResponse.calibration_result)
-
+  
   ::mavsdk::rpc::calibration::CalibrationResult* temp = calibration_result_;
   calibration_result_ = nullptr;
   return temp;
 }
 inline ::mavsdk::rpc::calibration::CalibrationResult* CalibrateMagnetometerResponse::_internal_mutable_calibration_result() {
-
+  
   if (calibration_result_ == nullptr) {
     auto* p = CreateMaybeMessage<::mavsdk::rpc::calibration::CalibrationResult>(GetArena());
     calibration_result_ = p;
@@ -2696,9 +2696,9 @@ inline void CalibrateMagnetometerResponse::set_allocated_calibration_result(::ma
       calibration_result = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, calibration_result, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   calibration_result_ = calibration_result;
   // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.calibration.CalibrateMagnetometerResponse.calibration_result)
@@ -2733,14 +2733,14 @@ inline void CalibrateMagnetometerResponse::unsafe_arena_set_allocated_progress_d
   }
   progress_data_ = progress_data;
   if (progress_data) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:mavsdk.rpc.calibration.CalibrateMagnetometerResponse.progress_data)
 }
 inline ::mavsdk::rpc::calibration::ProgressData* CalibrateMagnetometerResponse::release_progress_data() {
-
+  
   ::mavsdk::rpc::calibration::ProgressData* temp = progress_data_;
   progress_data_ = nullptr;
   if (GetArena() != nullptr) {
@@ -2750,13 +2750,13 @@ inline ::mavsdk::rpc::calibration::ProgressData* CalibrateMagnetometerResponse::
 }
 inline ::mavsdk::rpc::calibration::ProgressData* CalibrateMagnetometerResponse::unsafe_arena_release_progress_data() {
   // @@protoc_insertion_point(field_release:mavsdk.rpc.calibration.CalibrateMagnetometerResponse.progress_data)
-
+  
   ::mavsdk::rpc::calibration::ProgressData* temp = progress_data_;
   progress_data_ = nullptr;
   return temp;
 }
 inline ::mavsdk::rpc::calibration::ProgressData* CalibrateMagnetometerResponse::_internal_mutable_progress_data() {
-
+  
   if (progress_data_ == nullptr) {
     auto* p = CreateMaybeMessage<::mavsdk::rpc::calibration::ProgressData>(GetArena());
     progress_data_ = p;
@@ -2779,9 +2779,9 @@ inline void CalibrateMagnetometerResponse::set_allocated_progress_data(::mavsdk:
       progress_data = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, progress_data, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   progress_data_ = progress_data;
   // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.calibration.CalibrateMagnetometerResponse.progress_data)
@@ -2824,14 +2824,14 @@ inline void CalibrateLevelHorizonResponse::unsafe_arena_set_allocated_calibratio
   }
   calibration_result_ = calibration_result;
   if (calibration_result) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:mavsdk.rpc.calibration.CalibrateLevelHorizonResponse.calibration_result)
 }
 inline ::mavsdk::rpc::calibration::CalibrationResult* CalibrateLevelHorizonResponse::release_calibration_result() {
-
+  
   ::mavsdk::rpc::calibration::CalibrationResult* temp = calibration_result_;
   calibration_result_ = nullptr;
   if (GetArena() != nullptr) {
@@ -2841,13 +2841,13 @@ inline ::mavsdk::rpc::calibration::CalibrationResult* CalibrateLevelHorizonRespo
 }
 inline ::mavsdk::rpc::calibration::CalibrationResult* CalibrateLevelHorizonResponse::unsafe_arena_release_calibration_result() {
   // @@protoc_insertion_point(field_release:mavsdk.rpc.calibration.CalibrateLevelHorizonResponse.calibration_result)
-
+  
   ::mavsdk::rpc::calibration::CalibrationResult* temp = calibration_result_;
   calibration_result_ = nullptr;
   return temp;
 }
 inline ::mavsdk::rpc::calibration::CalibrationResult* CalibrateLevelHorizonResponse::_internal_mutable_calibration_result() {
-
+  
   if (calibration_result_ == nullptr) {
     auto* p = CreateMaybeMessage<::mavsdk::rpc::calibration::CalibrationResult>(GetArena());
     calibration_result_ = p;
@@ -2870,9 +2870,9 @@ inline void CalibrateLevelHorizonResponse::set_allocated_calibration_result(::ma
       calibration_result = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, calibration_result, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   calibration_result_ = calibration_result;
   // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.calibration.CalibrateLevelHorizonResponse.calibration_result)
@@ -2907,14 +2907,14 @@ inline void CalibrateLevelHorizonResponse::unsafe_arena_set_allocated_progress_d
   }
   progress_data_ = progress_data;
   if (progress_data) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:mavsdk.rpc.calibration.CalibrateLevelHorizonResponse.progress_data)
 }
 inline ::mavsdk::rpc::calibration::ProgressData* CalibrateLevelHorizonResponse::release_progress_data() {
-
+  
   ::mavsdk::rpc::calibration::ProgressData* temp = progress_data_;
   progress_data_ = nullptr;
   if (GetArena() != nullptr) {
@@ -2924,13 +2924,13 @@ inline ::mavsdk::rpc::calibration::ProgressData* CalibrateLevelHorizonResponse::
 }
 inline ::mavsdk::rpc::calibration::ProgressData* CalibrateLevelHorizonResponse::unsafe_arena_release_progress_data() {
   // @@protoc_insertion_point(field_release:mavsdk.rpc.calibration.CalibrateLevelHorizonResponse.progress_data)
-
+  
   ::mavsdk::rpc::calibration::ProgressData* temp = progress_data_;
   progress_data_ = nullptr;
   return temp;
 }
 inline ::mavsdk::rpc::calibration::ProgressData* CalibrateLevelHorizonResponse::_internal_mutable_progress_data() {
-
+  
   if (progress_data_ == nullptr) {
     auto* p = CreateMaybeMessage<::mavsdk::rpc::calibration::ProgressData>(GetArena());
     progress_data_ = p;
@@ -2953,9 +2953,9 @@ inline void CalibrateLevelHorizonResponse::set_allocated_progress_data(::mavsdk:
       progress_data = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, progress_data, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   progress_data_ = progress_data;
   // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.calibration.CalibrateLevelHorizonResponse.progress_data)
@@ -2998,14 +2998,14 @@ inline void CalibrateGimbalAccelerometerResponse::unsafe_arena_set_allocated_cal
   }
   calibration_result_ = calibration_result;
   if (calibration_result) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:mavsdk.rpc.calibration.CalibrateGimbalAccelerometerResponse.calibration_result)
 }
 inline ::mavsdk::rpc::calibration::CalibrationResult* CalibrateGimbalAccelerometerResponse::release_calibration_result() {
-
+  
   ::mavsdk::rpc::calibration::CalibrationResult* temp = calibration_result_;
   calibration_result_ = nullptr;
   if (GetArena() != nullptr) {
@@ -3015,13 +3015,13 @@ inline ::mavsdk::rpc::calibration::CalibrationResult* CalibrateGimbalAcceleromet
 }
 inline ::mavsdk::rpc::calibration::CalibrationResult* CalibrateGimbalAccelerometerResponse::unsafe_arena_release_calibration_result() {
   // @@protoc_insertion_point(field_release:mavsdk.rpc.calibration.CalibrateGimbalAccelerometerResponse.calibration_result)
-
+  
   ::mavsdk::rpc::calibration::CalibrationResult* temp = calibration_result_;
   calibration_result_ = nullptr;
   return temp;
 }
 inline ::mavsdk::rpc::calibration::CalibrationResult* CalibrateGimbalAccelerometerResponse::_internal_mutable_calibration_result() {
-
+  
   if (calibration_result_ == nullptr) {
     auto* p = CreateMaybeMessage<::mavsdk::rpc::calibration::CalibrationResult>(GetArena());
     calibration_result_ = p;
@@ -3044,9 +3044,9 @@ inline void CalibrateGimbalAccelerometerResponse::set_allocated_calibration_resu
       calibration_result = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, calibration_result, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   calibration_result_ = calibration_result;
   // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.calibration.CalibrateGimbalAccelerometerResponse.calibration_result)
@@ -3081,14 +3081,14 @@ inline void CalibrateGimbalAccelerometerResponse::unsafe_arena_set_allocated_pro
   }
   progress_data_ = progress_data;
   if (progress_data) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:mavsdk.rpc.calibration.CalibrateGimbalAccelerometerResponse.progress_data)
 }
 inline ::mavsdk::rpc::calibration::ProgressData* CalibrateGimbalAccelerometerResponse::release_progress_data() {
-
+  
   ::mavsdk::rpc::calibration::ProgressData* temp = progress_data_;
   progress_data_ = nullptr;
   if (GetArena() != nullptr) {
@@ -3098,13 +3098,13 @@ inline ::mavsdk::rpc::calibration::ProgressData* CalibrateGimbalAccelerometerRes
 }
 inline ::mavsdk::rpc::calibration::ProgressData* CalibrateGimbalAccelerometerResponse::unsafe_arena_release_progress_data() {
   // @@protoc_insertion_point(field_release:mavsdk.rpc.calibration.CalibrateGimbalAccelerometerResponse.progress_data)
-
+  
   ::mavsdk::rpc::calibration::ProgressData* temp = progress_data_;
   progress_data_ = nullptr;
   return temp;
 }
 inline ::mavsdk::rpc::calibration::ProgressData* CalibrateGimbalAccelerometerResponse::_internal_mutable_progress_data() {
-
+  
   if (progress_data_ == nullptr) {
     auto* p = CreateMaybeMessage<::mavsdk::rpc::calibration::ProgressData>(GetArena());
     progress_data_ = p;
@@ -3127,9 +3127,9 @@ inline void CalibrateGimbalAccelerometerResponse::set_allocated_progress_data(::
       progress_data = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, progress_data, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   progress_data_ = progress_data;
   // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.calibration.CalibrateGimbalAccelerometerResponse.progress_data)
@@ -3172,14 +3172,14 @@ inline void CancelResponse::unsafe_arena_set_allocated_calibration_result(
   }
   calibration_result_ = calibration_result;
   if (calibration_result) {
-
+    
   } else {
-
+    
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:mavsdk.rpc.calibration.CancelResponse.calibration_result)
 }
 inline ::mavsdk::rpc::calibration::CalibrationResult* CancelResponse::release_calibration_result() {
-
+  
   ::mavsdk::rpc::calibration::CalibrationResult* temp = calibration_result_;
   calibration_result_ = nullptr;
   if (GetArena() != nullptr) {
@@ -3189,13 +3189,13 @@ inline ::mavsdk::rpc::calibration::CalibrationResult* CancelResponse::release_ca
 }
 inline ::mavsdk::rpc::calibration::CalibrationResult* CancelResponse::unsafe_arena_release_calibration_result() {
   // @@protoc_insertion_point(field_release:mavsdk.rpc.calibration.CancelResponse.calibration_result)
-
+  
   ::mavsdk::rpc::calibration::CalibrationResult* temp = calibration_result_;
   calibration_result_ = nullptr;
   return temp;
 }
 inline ::mavsdk::rpc::calibration::CalibrationResult* CancelResponse::_internal_mutable_calibration_result() {
-
+  
   if (calibration_result_ == nullptr) {
     auto* p = CreateMaybeMessage<::mavsdk::rpc::calibration::CalibrationResult>(GetArena());
     calibration_result_ = p;
@@ -3218,9 +3218,9 @@ inline void CancelResponse::set_allocated_calibration_result(::mavsdk::rpc::cali
       calibration_result = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, calibration_result, submessage_arena);
     }
-
+    
   } else {
-
+    
   }
   calibration_result_ = calibration_result;
   // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.calibration.CancelResponse.calibration_result)
@@ -3242,7 +3242,7 @@ inline ::mavsdk::rpc::calibration::CalibrationResult_Result CalibrationResult::r
   return _internal_result();
 }
 inline void CalibrationResult::_internal_set_result(::mavsdk::rpc::calibration::CalibrationResult_Result value) {
-
+  
   result_ = value;
 }
 inline void CalibrationResult::set_result(::mavsdk::rpc::calibration::CalibrationResult_Result value) {
@@ -3270,30 +3270,30 @@ inline const std::string& CalibrationResult::_internal_result_str() const {
   return result_str_.Get();
 }
 inline void CalibrationResult::_internal_set_result_str(const std::string& value) {
-
+  
   result_str_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArena());
 }
 inline void CalibrationResult::set_result_str(std::string&& value) {
-
+  
   result_str_.Set(
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::move(value), GetArena());
   // @@protoc_insertion_point(field_set_rvalue:mavsdk.rpc.calibration.CalibrationResult.result_str)
 }
 inline void CalibrationResult::set_result_str(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-
+  
   result_str_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::string(value), GetArena());
   // @@protoc_insertion_point(field_set_char:mavsdk.rpc.calibration.CalibrationResult.result_str)
 }
 inline void CalibrationResult::set_result_str(const char* value,
     size_t size) {
-
+  
   result_str_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::string(
       reinterpret_cast<const char*>(value), size), GetArena());
   // @@protoc_insertion_point(field_set_pointer:mavsdk.rpc.calibration.CalibrationResult.result_str)
 }
 inline std::string* CalibrationResult::_internal_mutable_result_str() {
-
+  
   return result_str_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArena());
 }
 inline std::string* CalibrationResult::release_result_str() {
@@ -3302,9 +3302,9 @@ inline std::string* CalibrationResult::release_result_str() {
 }
 inline void CalibrationResult::set_allocated_result_str(std::string* result_str) {
   if (result_str != nullptr) {
-
+    
   } else {
-
+    
   }
   result_str_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), result_str,
       GetArena());
@@ -3327,7 +3327,7 @@ inline bool ProgressData::has_progress() const {
   return _internal_has_progress();
 }
 inline void ProgressData::_internal_set_has_progress(bool value) {
-
+  
   has_progress_ = value;
 }
 inline void ProgressData::set_has_progress(bool value) {
@@ -3347,7 +3347,7 @@ inline float ProgressData::progress() const {
   return _internal_progress();
 }
 inline void ProgressData::_internal_set_progress(float value) {
-
+  
   progress_ = value;
 }
 inline void ProgressData::set_progress(float value) {
@@ -3367,7 +3367,7 @@ inline bool ProgressData::has_status_text() const {
   return _internal_has_status_text();
 }
 inline void ProgressData::_internal_set_has_status_text(bool value) {
-
+  
   has_status_text_ = value;
 }
 inline void ProgressData::set_has_status_text(bool value) {
@@ -3395,30 +3395,30 @@ inline const std::string& ProgressData::_internal_status_text() const {
   return status_text_.Get();
 }
 inline void ProgressData::_internal_set_status_text(const std::string& value) {
-
+  
   status_text_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArena());
 }
 inline void ProgressData::set_status_text(std::string&& value) {
-
+  
   status_text_.Set(
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::move(value), GetArena());
   // @@protoc_insertion_point(field_set_rvalue:mavsdk.rpc.calibration.ProgressData.status_text)
 }
 inline void ProgressData::set_status_text(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-
+  
   status_text_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::string(value), GetArena());
   // @@protoc_insertion_point(field_set_char:mavsdk.rpc.calibration.ProgressData.status_text)
 }
 inline void ProgressData::set_status_text(const char* value,
     size_t size) {
-
+  
   status_text_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, ::std::string(
       reinterpret_cast<const char*>(value), size), GetArena());
   // @@protoc_insertion_point(field_set_pointer:mavsdk.rpc.calibration.ProgressData.status_text)
 }
 inline std::string* ProgressData::_internal_mutable_status_text() {
-
+  
   return status_text_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArena());
 }
 inline std::string* ProgressData::release_status_text() {
@@ -3427,9 +3427,9 @@ inline std::string* ProgressData::release_status_text() {
 }
 inline void ProgressData::set_allocated_status_text(std::string* status_text) {
   if (status_text != nullptr) {
-
+    
   } else {
-
+    
   }
   status_text_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), status_text,
       GetArena());
