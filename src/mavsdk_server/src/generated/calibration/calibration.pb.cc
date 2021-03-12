@@ -2641,10 +2641,6 @@ CancelResponse::CancelResponse(const CancelResponse& from)
 
 inline void CancelResponse::SharedCtor() {
 calibration_result_ = nullptr;
-=======
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_CancelResponse_calibration_2fcalibration_2eproto.base);
-  calibration_result_ = nullptr;
->>>>>>> fix calibration API due to proto update
 }
 
 CancelResponse::~CancelResponse() {
