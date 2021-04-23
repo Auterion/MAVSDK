@@ -312,29 +312,30 @@ public:
         register_stream_stop_promise(stream_closed_promise);
 
         auto is_finished = std::make_shared<bool>(false);
-
-        std::mutex subscribe_mutex{};
+        auto subscribe_mutex = std::make_shared<std::mutex>();
 
         _custom_action.subscribe_custom_action(
-            [this, &writer, &stream_closed_promise, is_finished, &subscribe_mutex](
+            [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex](
                 const mavsdk::CustomAction::ActionToExecute custom_action) {
                 rpc::custom_action::CustomActionResponse rpc_response;
 
                 rpc_response.set_allocated_action_to_execute(
                     translateToRpcActionToExecute(custom_action).release());
 
-                std::unique_lock<std::mutex> lock(subscribe_mutex);
+                std::unique_lock<std::mutex> lock(*subscribe_mutex);
                 if (!*is_finished && !writer->Write(rpc_response)) {
                     _custom_action.subscribe_custom_action(nullptr);
 
                     *is_finished = true;
                     unregister_stream_stop_promise(stream_closed_promise);
-                    lock.unlock();
                     stream_closed_promise->set_value();
                 }
             });
 
         stream_closed_future.wait();
+        std::unique_lock<std::mutex> lock(*subscribe_mutex);
+        *is_finished = true;
+
         return grpc::Status::OK;
     }
 
@@ -348,28 +349,29 @@ public:
         register_stream_stop_promise(stream_closed_promise);
 
         auto is_finished = std::make_shared<bool>(false);
-
-        std::mutex subscribe_mutex{};
+        auto subscribe_mutex = std::make_shared<std::mutex>();
 
         _custom_action.subscribe_custom_action_cancellation(
-            [this, &writer, &stream_closed_promise, is_finished, &subscribe_mutex](
+            [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex](
                 const bool custom_action_cancellation) {
                 rpc::custom_action::CustomActionCancellationResponse rpc_response;
 
                 rpc_response.set_cancel(custom_action_cancellation);
 
-                std::unique_lock<std::mutex> lock(subscribe_mutex);
+                std::unique_lock<std::mutex> lock(*subscribe_mutex);
                 if (!*is_finished && !writer->Write(rpc_response)) {
                     _custom_action.subscribe_custom_action_cancellation(nullptr);
 
                     *is_finished = true;
                     unregister_stream_stop_promise(stream_closed_promise);
-                    lock.unlock();
                     stream_closed_promise->set_value();
                 }
             });
 
         stream_closed_future.wait();
+        std::unique_lock<std::mutex> lock(*subscribe_mutex);
+        *is_finished = true;
+
         return grpc::Status::OK;
     }
 
