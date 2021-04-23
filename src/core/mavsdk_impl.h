@@ -72,7 +72,7 @@ public:
     void notify_on_discover(uint64_t uuid);
     void notify_on_timeout(uint64_t uuid);
 
-    void start_sending_heartbeat();
+    void start_stop_sending_heartbeats();
 
     TimeoutHandler timeout_handler;
     CallEveryHandler call_every_handler;
@@ -134,8 +134,7 @@ private:
     bool _callback_debugging{false};
 
     static constexpr double _HEARTBEAT_SEND_INTERVAL_S = 1.0;
-    std::atomic<bool> _sending_heartbeats{false};
-    void* _heartbeat_send_cookie = nullptr;
+    void* _heartbeat_send_cookie{nullptr};
 
     std::atomic<bool> _should_exit = {false};
 };
