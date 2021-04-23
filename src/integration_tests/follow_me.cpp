@@ -15,7 +15,10 @@ using namespace std::this_thread;
 
 void print(const FollowMe::Config& config);
 void send_location_updates(
-    std::shared_ptr<FollowMe> follow_me, size_t count = 25ul, float rate = 2.f);
+    std::shared_ptr<FollowMe> follow_me,
+    const Telemetry::Position& home,
+    size_t count = 25ul,
+    float rate = 2.f);
 
 const size_t N_LOCATIONS = 100ul;
 
