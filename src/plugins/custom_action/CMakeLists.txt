@@ -1,4 +1,4 @@
-find_package(JsonCpp REQUIRED)
+find_package(jsoncpp REQUIRED)
 
 add_library(mavsdk_custom_action
     custom_action.cpp
@@ -9,7 +9,7 @@ target_link_libraries(mavsdk_custom_action
     PUBLIC
     mavsdk
     PRIVATE
-    JsonCpp::jsoncpp
+    JsonCpp::JsonCpp
 )
 
 set_target_properties(mavsdk_custom_action
