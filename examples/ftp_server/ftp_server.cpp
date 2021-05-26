@@ -11,6 +11,10 @@
 #include <string>
 #include <thread>
 
+#define DEFAULT_SYSTEM_ID 1
+#define MAV_COMP_ID_ONBOARD_COMPUTER4 194
+#define FTP_SERVER_DESCRIPTION "ftp server"
+
 using namespace mavsdk;
 
 void usage(const std::string& bin_name)
@@ -29,7 +33,8 @@ int main(int argc, char** argv)
     }
 
     Mavsdk mavsdk;
-    Mavsdk::Configuration configuration(Mavsdk::Configuration::UsageType::CompanionComputer);
+    Mavsdk::Configuration configuration(DEFAULT_SYSTEM_ID, MAV_COMP_ID_ONBOARD_COMPUTER4, true);
+    configuration.set_component_description(FTP_SERVER_DESCRIPTION);
     mavsdk.set_configuration(configuration);
     ConnectionResult connection_result = mavsdk.setup_udp_remote(argv[1], std::stoi(argv[2]));
     if (connection_result != ConnectionResult::Success) {
