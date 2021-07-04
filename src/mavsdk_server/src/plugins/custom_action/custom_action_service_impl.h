@@ -6,6 +6,8 @@
 #include "custom_action/custom_action.grpc.pb.h"
 #include "plugins/custom_action/custom_action.h"
 
+#include "mavsdk.h"
+#include "lazy_plugin.h"
 #include "log.h"
 #include <atomic>
 #include <cmath>
@@ -18,10 +20,10 @@
 namespace mavsdk {
 namespace mavsdk_server {
 
-template<typename CustomAction = CustomAction>
+template<typename CustomAction = CustomAction, typename LazyPlugin = LazyPlugin<CustomAction>>
 class CustomActionServiceImpl final : public rpc::custom_action::CustomActionService::Service {
 public:
-    CustomActionServiceImpl(CustomAction& custom_action) : _custom_action(custom_action) {}
+    CustomActionServiceImpl(LazyPlugin& lazy_plugin) : _lazy_plugin(lazy_plugin) {}
 
     template<typename ResponseType>
     void fillResponseWithResult(ResponseType* response, mavsdk::CustomAction::Result& result) const
@@ -287,12 +289,21 @@ public:
         const rpc::custom_action::SetCustomActionRequest* request,
         rpc::custom_action::SetCustomActionResponse* response) override
     {
+        if (_lazy_plugin.maybe_plugin() == nullptr) {
+            if (response != nullptr) {
+                auto result = mavsdk::CustomAction::Result::NoSystem;
+                fillResponseWithResult(response, result);
+            }
+
+            return grpc::Status::OK;
+        }
+
         if (request == nullptr) {
             LogWarn() << "SetCustomAction sent with a null request! Ignoring...";
             return grpc::Status::OK;
         }
 
-        auto result = _custom_action.set_custom_action(
+        auto result = _lazy_plugin.maybe_plugin()->set_custom_action(
             translateFromRpcActionToExecute(request->action_to_execute()));
 
         if (response != nullptr) {
@@ -307,6 +318,10 @@ public:
         const mavsdk::rpc::custom_action::SubscribeCustomActionRequest* /* request */,
         grpc::ServerWriter<rpc::custom_action::CustomActionResponse>* writer) override
     {
+        if (_lazy_plugin.maybe_plugin() == nullptr) {
+            return grpc::Status::OK;
+        }
+
         auto stream_closed_promise = std::make_shared<std::promise<void>>();
         auto stream_closed_future = stream_closed_promise->get_future();
         register_stream_stop_promise(stream_closed_promise);
@@ -314,7 +329,7 @@ public:
         auto is_finished = std::make_shared<bool>(false);
         auto subscribe_mutex = std::make_shared<std::mutex>();
 
-        _custom_action.subscribe_custom_action(
+        _lazy_plugin.maybe_plugin()->subscribe_custom_action(
             [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex](
                 const mavsdk::CustomAction::ActionToExecute custom_action) {
                 rpc::custom_action::CustomActionResponse rpc_response;
@@ -324,7 +339,7 @@ public:
 
                 std::unique_lock<std::mutex> lock(*subscribe_mutex);
                 if (!*is_finished && !writer->Write(rpc_response)) {
-                    _custom_action.subscribe_custom_action(nullptr);
+                    _lazy_plugin.maybe_plugin()->subscribe_custom_action(nullptr);
 
                     *is_finished = true;
                     unregister_stream_stop_promise(stream_closed_promise);
@@ -344,6 +359,10 @@ public:
         const mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest* /* request */,
         grpc::ServerWriter<rpc::custom_action::CustomActionCancellationResponse>* writer) override
     {
+        if (_lazy_plugin.maybe_plugin() == nullptr) {
+            return grpc::Status::OK;
+        }
+
         auto stream_closed_promise = std::make_shared<std::promise<void>>();
         auto stream_closed_future = stream_closed_promise->get_future();
         register_stream_stop_promise(stream_closed_promise);
@@ -351,7 +370,7 @@ public:
         auto is_finished = std::make_shared<bool>(false);
         auto subscribe_mutex = std::make_shared<std::mutex>();
 
-        _custom_action.subscribe_custom_action_cancellation(
+        _lazy_plugin.maybe_plugin()->subscribe_custom_action_cancellation(
             [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex](
                 const bool custom_action_cancellation) {
                 rpc::custom_action::CustomActionCancellationResponse rpc_response;
@@ -360,7 +379,7 @@ public:
 
                 std::unique_lock<std::mutex> lock(*subscribe_mutex);
                 if (!*is_finished && !writer->Write(rpc_response)) {
-                    _custom_action.subscribe_custom_action_cancellation(nullptr);
+                    _lazy_plugin.maybe_plugin()->subscribe_custom_action_cancellation(nullptr);
 
                     *is_finished = true;
                     unregister_stream_stop_promise(stream_closed_promise);
@@ -380,12 +399,21 @@ public:
         const rpc::custom_action::RespondCustomActionRequest* request,
         rpc::custom_action::RespondCustomActionResponse* response) override
     {
+        if (_lazy_plugin.maybe_plugin() == nullptr) {
+            if (response != nullptr) {
+                auto result = mavsdk::CustomAction::Result::NoSystem;
+                fillResponseWithResult(response, result);
+            }
+
+            return grpc::Status::OK;
+        }
+
         if (request == nullptr) {
             LogWarn() << "RespondCustomAction sent with a null request! Ignoring...";
             return grpc::Status::OK;
         }
 
-        auto result = _custom_action.respond_custom_action(
+        auto result = _lazy_plugin.maybe_plugin()->respond_custom_action(
             translateFromRpcActionToExecute(request->action_to_execute()),
             translateFromRpcCustomActionResult(request->custom_action_result()));
 
@@ -401,12 +429,21 @@ public:
         const rpc::custom_action::CustomActionMetadataRequest* request,
         rpc::custom_action::CustomActionMetadataResponse* response) override
     {
+        if (_lazy_plugin.maybe_plugin() == nullptr) {
+            if (response != nullptr) {
+                auto result = mavsdk::CustomAction::Result::NoSystem;
+                fillResponseWithResult(response, result);
+            }
+
+            return grpc::Status::OK;
+        }
+
         if (request == nullptr) {
             LogWarn() << "CustomActionMetadata sent with a null request! Ignoring...";
             return grpc::Status::OK;
         }
 
-        auto result = _custom_action.custom_action_metadata(
+        auto result = _lazy_plugin.maybe_plugin()->custom_action_metadata(
             translateFromRpcActionToExecute(request->action_to_execute()), request->file_path());
 
         if (response != nullptr) {
@@ -424,13 +461,22 @@ public:
         const rpc::custom_action::ExecuteCustomActionStageRequest* request,
         rpc::custom_action::ExecuteCustomActionStageResponse* response) override
     {
+        if (_lazy_plugin.maybe_plugin() == nullptr) {
+            if (response != nullptr) {
+                auto result = mavsdk::CustomAction::Result::NoSystem;
+                fillResponseWithResult(response, result);
+            }
+
+            return grpc::Status::OK;
+        }
+
         if (request == nullptr) {
             LogWarn() << "ExecuteCustomActionStage sent with a null request! Ignoring...";
             return grpc::Status::OK;
         }
 
-        auto result =
-            _custom_action.execute_custom_action_stage(translateFromRpcStage(request->stage()));
+        auto result = _lazy_plugin.maybe_plugin()->execute_custom_action_stage(
+            translateFromRpcStage(request->stage()));
 
         if (response != nullptr) {
             fillResponseWithResult(response, result);
@@ -444,12 +490,22 @@ public:
         const rpc::custom_action::ExecuteCustomActionGlobalScriptRequest* request,
         rpc::custom_action::ExecuteCustomActionGlobalScriptResponse* response) override
     {
+        if (_lazy_plugin.maybe_plugin() == nullptr) {
+            if (response != nullptr) {
+                auto result = mavsdk::CustomAction::Result::NoSystem;
+                fillResponseWithResult(response, result);
+            }
+
+            return grpc::Status::OK;
+        }
+
         if (request == nullptr) {
             LogWarn() << "ExecuteCustomActionGlobalScript sent with a null request! Ignoring...";
             return grpc::Status::OK;
         }
 
-        auto result = _custom_action.execute_custom_action_global_script(request->global_script());
+        auto result = _lazy_plugin.maybe_plugin()->execute_custom_action_global_script(
+            request->global_script());
 
         if (response != nullptr) {
             fillResponseWithResult(response, result);
@@ -493,7 +549,7 @@ private:
         }
     }
 
-    CustomAction& _custom_action;
+    LazyPlugin& _lazy_plugin;
     std::atomic<bool> _stopped{false};
     std::vector<std::weak_ptr<std::promise<void>>> _stream_stop_promises{};
 };
