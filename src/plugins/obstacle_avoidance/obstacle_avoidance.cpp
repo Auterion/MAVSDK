@@ -12,12 +12,12 @@ namespace mavsdk {
 
 ObstacleAvoidance::ObstacleAvoidance(System& system) :
     PluginBase(),
-    _impl{new ObstacleAvoidanceImpl(system)}
+    _impl{std::make_unique<ObstacleAvoidanceImpl>(system)}
 {}
 
 ObstacleAvoidance::ObstacleAvoidance(std::shared_ptr<System> system) :
     PluginBase(),
-    _impl{new ObstacleAvoidanceImpl(system)}
+    _impl{std::make_unique<ObstacleAvoidanceImpl>(system)}
 {}
 
 ObstacleAvoidance::~ObstacleAvoidance() {}

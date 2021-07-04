@@ -6,6 +6,8 @@
 #include "obstacle_avoidance/obstacle_avoidance.grpc.pb.h"
 #include "plugins/obstacle_avoidance/obstacle_avoidance.h"
 
+#include "mavsdk.h"
+#include "lazy_plugin.h"
 #include "log.h"
 #include <atomic>
 #include <cmath>
@@ -18,13 +20,13 @@
 namespace mavsdk {
 namespace mavsdk_server {
 
-template<typename ObstacleAvoidance = ObstacleAvoidance>
+template<
+    typename ObstacleAvoidance = ObstacleAvoidance,
+    typename LazyPlugin = LazyPlugin<ObstacleAvoidance>>
 class ObstacleAvoidanceServiceImpl final
     : public rpc::obstacle_avoidance::ObstacleAvoidanceService::Service {
 public:
-    ObstacleAvoidanceServiceImpl(ObstacleAvoidance& obstacle_avoidance) :
-        _obstacle_avoidance(obstacle_avoidance)
-    {}
+    ObstacleAvoidanceServiceImpl(LazyPlugin& lazy_plugin) : _lazy_plugin(lazy_plugin) {}
 
     template<typename ResponseType>
     void
@@ -97,7 +99,16 @@ public:
         const rpc::obstacle_avoidance::StartRequest* /* request */,
         rpc::obstacle_avoidance::StartResponse* response) override
     {
-        auto result = _obstacle_avoidance.start();
+        if (_lazy_plugin.maybe_plugin() == nullptr) {
+            if (response != nullptr) {
+                auto result = mavsdk::ObstacleAvoidance::Result::NoSystem;
+                fillResponseWithResult(response, result);
+            }
+
+            return grpc::Status::OK;
+        }
+
+        auto result = _lazy_plugin.maybe_plugin()->start();
 
         if (response != nullptr) {
             fillResponseWithResult(response, result);
@@ -111,7 +122,16 @@ public:
         const rpc::obstacle_avoidance::StopRequest* /* request */,
         rpc::obstacle_avoidance::StopResponse* response) override
     {
-        auto result = _obstacle_avoidance.stop();
+        if (_lazy_plugin.maybe_plugin() == nullptr) {
+            if (response != nullptr) {
+                auto result = mavsdk::ObstacleAvoidance::Result::NoSystem;
+                fillResponseWithResult(response, result);
+            }
+
+            return grpc::Status::OK;
+        }
+
+        auto result = _lazy_plugin.maybe_plugin()->stop();
 
         if (response != nullptr) {
             fillResponseWithResult(response, result);
@@ -125,7 +145,16 @@ public:
         const rpc::obstacle_avoidance::RestartRequest* /* request */,
         rpc::obstacle_avoidance::RestartResponse* response) override
     {
-        auto result = _obstacle_avoidance.restart();
+        if (_lazy_plugin.maybe_plugin() == nullptr) {
+            if (response != nullptr) {
+                auto result = mavsdk::ObstacleAvoidance::Result::NoSystem;
+                fillResponseWithResult(response, result);
+            }
+
+            return grpc::Status::OK;
+        }
+
+        auto result = _lazy_plugin.maybe_plugin()->restart();
 
         if (response != nullptr) {
             fillResponseWithResult(response, result);
@@ -139,7 +168,16 @@ public:
         const rpc::obstacle_avoidance::StateEnableRequest* /* request */,
         rpc::obstacle_avoidance::StateEnableResponse* response) override
     {
-        auto result = _obstacle_avoidance.state_enable();
+        if (_lazy_plugin.maybe_plugin() == nullptr) {
+            if (response != nullptr) {
+                auto result = mavsdk::ObstacleAvoidance::Result::NoSystem;
+                fillResponseWithResult(response, result);
+            }
+
+            return grpc::Status::OK;
+        }
+
+        auto result = _lazy_plugin.maybe_plugin()->state_enable();
 
         if (response != nullptr) {
             fillResponseWithResult(response, result);
@@ -153,7 +191,16 @@ public:
         const rpc::obstacle_avoidance::StateDisableRequest* /* request */,
         rpc::obstacle_avoidance::StateDisableResponse* response) override
     {
-        auto result = _obstacle_avoidance.state_disable();
+        if (_lazy_plugin.maybe_plugin() == nullptr) {
+            if (response != nullptr) {
+                auto result = mavsdk::ObstacleAvoidance::Result::NoSystem;
+                fillResponseWithResult(response, result);
+            }
+
+            return grpc::Status::OK;
+        }
+
+        auto result = _lazy_plugin.maybe_plugin()->state_disable();
 
         if (response != nullptr) {
             fillResponseWithResult(response, result);
@@ -197,7 +244,7 @@ private:
         }
     }
 
-    ObstacleAvoidance& _obstacle_avoidance;
+    LazyPlugin& _lazy_plugin;
     std::atomic<bool> _stopped{false};
     std::vector<std::weak_ptr<std::promise<void>>> _stream_stop_promises{};
 };

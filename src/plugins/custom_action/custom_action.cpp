@@ -15,11 +15,14 @@ using Command = CustomAction::Command;
 using Stage = CustomAction::Stage;
 using ActionMetadata = CustomAction::ActionMetadata;
 
-CustomAction::CustomAction(System& system) : PluginBase(), _impl{new CustomActionImpl(system)} {}
+CustomAction::CustomAction(System& system) :
+    PluginBase(),
+    _impl{std::make_unique<CustomActionImpl>(system)}
+{}
 
 CustomAction::CustomAction(std::shared_ptr<System> system) :
     PluginBase(),
-    _impl{new CustomActionImpl(system)}
+    _impl{std::make_unique<CustomActionImpl>(system)}
 {}
 
 CustomAction::~CustomAction() {}

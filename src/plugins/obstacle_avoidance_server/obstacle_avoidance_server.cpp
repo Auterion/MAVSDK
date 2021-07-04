@@ -14,12 +14,12 @@ using Control = ObstacleAvoidanceServer::Control;
 
 ObstacleAvoidanceServer::ObstacleAvoidanceServer(System& system) :
     PluginBase(),
-    _impl{new ObstacleAvoidanceServerImpl(system)}
+    _impl{std::make_unique<ObstacleAvoidanceServerImpl>(system)}
 {}
 
 ObstacleAvoidanceServer::ObstacleAvoidanceServer(std::shared_ptr<System> system) :
     PluginBase(),
-    _impl{new ObstacleAvoidanceServerImpl(system)}
+    _impl{std::make_unique<ObstacleAvoidanceServerImpl>(system)}
 {}
 
 ObstacleAvoidanceServer::~ObstacleAvoidanceServer() {}
