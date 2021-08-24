@@ -474,7 +474,7 @@ uint8_t MavsdkImpl::get_mav_type() const
 {
     switch (_configuration.get_usage_type()) {
         case Mavsdk::Configuration::UsageType::Autopilot:
-            return MAV_TYPE_GENERIC;
+            return MAV_TYPE_QUADROTOR;
 
         case Mavsdk::Configuration::UsageType::GroundStation:
             return MAV_TYPE_GCS;
@@ -694,7 +694,7 @@ void MavsdkImpl::send_heartbeat()
         get_own_component_id(),
         &message,
         get_mav_type(),
-        get_own_component_id() == MAV_COMP_ID_AUTOPILOT1 ? MAV_AUTOPILOT_GENERIC :
+        get_own_component_id() == MAV_COMP_ID_AUTOPILOT1 ? MAV_AUTOPILOT_PX4 :
                                                            MAV_AUTOPILOT_INVALID,
         0,
         0,
