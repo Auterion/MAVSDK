@@ -35,29 +35,29 @@ static const char* CustomActionService_method_names[] = {
 
 std::unique_ptr< CustomActionService::Stub> CustomActionService::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
   (void)options;
-  std::unique_ptr< CustomActionService::Stub> stub(new CustomActionService::Stub(channel));
+  std::unique_ptr< CustomActionService::Stub> stub(new CustomActionService::Stub(channel, options));
   return stub;
 }
 
-CustomActionService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel)
-  : channel_(channel), rpcmethod_SetCustomAction_(CustomActionService_method_names[0], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_SubscribeCustomAction_(CustomActionService_method_names[1], ::grpc::internal::RpcMethod::SERVER_STREAMING, channel)
-  , rpcmethod_SubscribeCustomActionCancellation_(CustomActionService_method_names[2], ::grpc::internal::RpcMethod::SERVER_STREAMING, channel)
-  , rpcmethod_RespondCustomAction_(CustomActionService_method_names[3], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_CustomActionMetadata_(CustomActionService_method_names[4], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_ExecuteCustomActionStage_(CustomActionService_method_names[5], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_ExecuteCustomActionGlobalScript_(CustomActionService_method_names[6], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+CustomActionService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options)
+  : channel_(channel), rpcmethod_SetCustomAction_(CustomActionService_method_names[0], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_SubscribeCustomAction_(CustomActionService_method_names[1], options.suffix_for_stats(),::grpc::internal::RpcMethod::SERVER_STREAMING, channel)
+  , rpcmethod_SubscribeCustomActionCancellation_(CustomActionService_method_names[2], options.suffix_for_stats(),::grpc::internal::RpcMethod::SERVER_STREAMING, channel)
+  , rpcmethod_RespondCustomAction_(CustomActionService_method_names[3], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_CustomActionMetadata_(CustomActionService_method_names[4], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_ExecuteCustomActionStage_(CustomActionService_method_names[5], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_ExecuteCustomActionGlobalScript_(CustomActionService_method_names[6], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status CustomActionService::Stub::SetCustomAction(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::SetCustomActionRequest& request, ::mavsdk::rpc::custom_action::SetCustomActionResponse* response) {
   return ::grpc::internal::BlockingUnaryCall< ::mavsdk::rpc::custom_action::SetCustomActionRequest, ::mavsdk::rpc::custom_action::SetCustomActionResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_SetCustomAction_, context, request, response);
 }
 
-void CustomActionService::Stub::experimental_async::SetCustomAction(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::SetCustomActionRequest* request, ::mavsdk::rpc::custom_action::SetCustomActionResponse* response, std::function<void(::grpc::Status)> f) {
+void CustomActionService::Stub::async::SetCustomAction(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::SetCustomActionRequest* request, ::mavsdk::rpc::custom_action::SetCustomActionResponse* response, std::function<void(::grpc::Status)> f) {
   ::grpc::internal::CallbackUnaryCall< ::mavsdk::rpc::custom_action::SetCustomActionRequest, ::mavsdk::rpc::custom_action::SetCustomActionResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_SetCustomAction_, context, request, response, std::move(f));
 }
 
-void CustomActionService::Stub::experimental_async::SetCustomAction(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::SetCustomActionRequest* request, ::mavsdk::rpc::custom_action::SetCustomActionResponse* response, ::grpc::experimental::ClientUnaryReactor* reactor) {
+void CustomActionService::Stub::async::SetCustomAction(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::SetCustomActionRequest* request, ::mavsdk::rpc::custom_action::SetCustomActionResponse* response, ::grpc::ClientUnaryReactor* reactor) {
   ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_SetCustomAction_, context, request, response, reactor);
 }
 
@@ -76,7 +76,7 @@ void CustomActionService::Stub::experimental_async::SetCustomAction(::grpc::Clie
   return ::grpc::internal::ClientReaderFactory< ::mavsdk::rpc::custom_action::CustomActionResponse>::Create(channel_.get(), rpcmethod_SubscribeCustomAction_, context, request);
 }
 
-void CustomActionService::Stub::experimental_async::SubscribeCustomAction(::grpc::ClientContext* context, ::mavsdk::rpc::custom_action::SubscribeCustomActionRequest* request, ::grpc::experimental::ClientReadReactor< ::mavsdk::rpc::custom_action::CustomActionResponse>* reactor) {
+void CustomActionService::Stub::async::SubscribeCustomAction(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::SubscribeCustomActionRequest* request, ::grpc::ClientReadReactor< ::mavsdk::rpc::custom_action::CustomActionResponse>* reactor) {
   ::grpc::internal::ClientCallbackReaderFactory< ::mavsdk::rpc::custom_action::CustomActionResponse>::Create(stub_->channel_.get(), stub_->rpcmethod_SubscribeCustomAction_, context, request, reactor);
 }
 
@@ -92,7 +92,7 @@ void CustomActionService::Stub::experimental_async::SubscribeCustomAction(::grpc
   return ::grpc::internal::ClientReaderFactory< ::mavsdk::rpc::custom_action::CustomActionCancellationResponse>::Create(channel_.get(), rpcmethod_SubscribeCustomActionCancellation_, context, request);
 }
 
-void CustomActionService::Stub::experimental_async::SubscribeCustomActionCancellation(::grpc::ClientContext* context, ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest* request, ::grpc::experimental::ClientReadReactor< ::mavsdk::rpc::custom_action::CustomActionCancellationResponse>* reactor) {
+void CustomActionService::Stub::async::SubscribeCustomActionCancellation(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::SubscribeCustomActionCancellationRequest* request, ::grpc::ClientReadReactor< ::mavsdk::rpc::custom_action::CustomActionCancellationResponse>* reactor) {
   ::grpc::internal::ClientCallbackReaderFactory< ::mavsdk::rpc::custom_action::CustomActionCancellationResponse>::Create(stub_->channel_.get(), stub_->rpcmethod_SubscribeCustomActionCancellation_, context, request, reactor);
 }
 
@@ -108,11 +108,11 @@ void CustomActionService::Stub::experimental_async::SubscribeCustomActionCancell
   return ::grpc::internal::BlockingUnaryCall< ::mavsdk::rpc::custom_action::RespondCustomActionRequest, ::mavsdk::rpc::custom_action::RespondCustomActionResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_RespondCustomAction_, context, request, response);
 }
 
-void CustomActionService::Stub::experimental_async::RespondCustomAction(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::RespondCustomActionRequest* request, ::mavsdk::rpc::custom_action::RespondCustomActionResponse* response, std::function<void(::grpc::Status)> f) {
+void CustomActionService::Stub::async::RespondCustomAction(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::RespondCustomActionRequest* request, ::mavsdk::rpc::custom_action::RespondCustomActionResponse* response, std::function<void(::grpc::Status)> f) {
   ::grpc::internal::CallbackUnaryCall< ::mavsdk::rpc::custom_action::RespondCustomActionRequest, ::mavsdk::rpc::custom_action::RespondCustomActionResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_RespondCustomAction_, context, request, response, std::move(f));
 }
 
-void CustomActionService::Stub::experimental_async::RespondCustomAction(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::RespondCustomActionRequest* request, ::mavsdk::rpc::custom_action::RespondCustomActionResponse* response, ::grpc::experimental::ClientUnaryReactor* reactor) {
+void CustomActionService::Stub::async::RespondCustomAction(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::RespondCustomActionRequest* request, ::mavsdk::rpc::custom_action::RespondCustomActionResponse* response, ::grpc::ClientUnaryReactor* reactor) {
   ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_RespondCustomAction_, context, request, response, reactor);
 }
 
@@ -131,11 +131,11 @@ void CustomActionService::Stub::experimental_async::RespondCustomAction(::grpc::
   return ::grpc::internal::BlockingUnaryCall< ::mavsdk::rpc::custom_action::CustomActionMetadataRequest, ::mavsdk::rpc::custom_action::CustomActionMetadataResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_CustomActionMetadata_, context, request, response);
 }
 
-void CustomActionService::Stub::experimental_async::CustomActionMetadata(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::CustomActionMetadataRequest* request, ::mavsdk::rpc::custom_action::CustomActionMetadataResponse* response, std::function<void(::grpc::Status)> f) {
+void CustomActionService::Stub::async::CustomActionMetadata(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::CustomActionMetadataRequest* request, ::mavsdk::rpc::custom_action::CustomActionMetadataResponse* response, std::function<void(::grpc::Status)> f) {
   ::grpc::internal::CallbackUnaryCall< ::mavsdk::rpc::custom_action::CustomActionMetadataRequest, ::mavsdk::rpc::custom_action::CustomActionMetadataResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_CustomActionMetadata_, context, request, response, std::move(f));
 }
 
-void CustomActionService::Stub::experimental_async::CustomActionMetadata(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::CustomActionMetadataRequest* request, ::mavsdk::rpc::custom_action::CustomActionMetadataResponse* response, ::grpc::experimental::ClientUnaryReactor* reactor) {
+void CustomActionService::Stub::async::CustomActionMetadata(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::CustomActionMetadataRequest* request, ::mavsdk::rpc::custom_action::CustomActionMetadataResponse* response, ::grpc::ClientUnaryReactor* reactor) {
   ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_CustomActionMetadata_, context, request, response, reactor);
 }
 
@@ -154,11 +154,11 @@ void CustomActionService::Stub::experimental_async::CustomActionMetadata(::grpc:
   return ::grpc::internal::BlockingUnaryCall< ::mavsdk::rpc::custom_action::ExecuteCustomActionStageRequest, ::mavsdk::rpc::custom_action::ExecuteCustomActionStageResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_ExecuteCustomActionStage_, context, request, response);
 }
 
-void CustomActionService::Stub::experimental_async::ExecuteCustomActionStage(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::ExecuteCustomActionStageRequest* request, ::mavsdk::rpc::custom_action::ExecuteCustomActionStageResponse* response, std::function<void(::grpc::Status)> f) {
+void CustomActionService::Stub::async::ExecuteCustomActionStage(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::ExecuteCustomActionStageRequest* request, ::mavsdk::rpc::custom_action::ExecuteCustomActionStageResponse* response, std::function<void(::grpc::Status)> f) {
   ::grpc::internal::CallbackUnaryCall< ::mavsdk::rpc::custom_action::ExecuteCustomActionStageRequest, ::mavsdk::rpc::custom_action::ExecuteCustomActionStageResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_ExecuteCustomActionStage_, context, request, response, std::move(f));
 }
 
-void CustomActionService::Stub::experimental_async::ExecuteCustomActionStage(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::ExecuteCustomActionStageRequest* request, ::mavsdk::rpc::custom_action::ExecuteCustomActionStageResponse* response, ::grpc::experimental::ClientUnaryReactor* reactor) {
+void CustomActionService::Stub::async::ExecuteCustomActionStage(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::ExecuteCustomActionStageRequest* request, ::mavsdk::rpc::custom_action::ExecuteCustomActionStageResponse* response, ::grpc::ClientUnaryReactor* reactor) {
   ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_ExecuteCustomActionStage_, context, request, response, reactor);
 }
 
@@ -177,11 +177,11 @@ void CustomActionService::Stub::experimental_async::ExecuteCustomActionStage(::g
   return ::grpc::internal::BlockingUnaryCall< ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptRequest, ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_ExecuteCustomActionGlobalScript_, context, request, response);
 }
 
-void CustomActionService::Stub::experimental_async::ExecuteCustomActionGlobalScript(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptRequest* request, ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptResponse* response, std::function<void(::grpc::Status)> f) {
+void CustomActionService::Stub::async::ExecuteCustomActionGlobalScript(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptRequest* request, ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptResponse* response, std::function<void(::grpc::Status)> f) {
   ::grpc::internal::CallbackUnaryCall< ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptRequest, ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_ExecuteCustomActionGlobalScript_, context, request, response, std::move(f));
 }
 
-void CustomActionService::Stub::experimental_async::ExecuteCustomActionGlobalScript(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptRequest* request, ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptResponse* response, ::grpc::experimental::ClientUnaryReactor* reactor) {
+void CustomActionService::Stub::async::ExecuteCustomActionGlobalScript(::grpc::ClientContext* context, const ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptRequest* request, ::mavsdk::rpc::custom_action::ExecuteCustomActionGlobalScriptResponse* response, ::grpc::ClientUnaryReactor* reactor) {
   ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_ExecuteCustomActionGlobalScript_, context, request, response, reactor);
 }
 
