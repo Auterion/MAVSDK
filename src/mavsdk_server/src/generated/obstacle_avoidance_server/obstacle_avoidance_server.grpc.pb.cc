@@ -29,19 +29,19 @@ static const char* ObstacleAvoidanceServerService_method_names[] = {
 
 std::unique_ptr< ObstacleAvoidanceServerService::Stub> ObstacleAvoidanceServerService::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
   (void)options;
-  std::unique_ptr< ObstacleAvoidanceServerService::Stub> stub(new ObstacleAvoidanceServerService::Stub(channel));
+  std::unique_ptr< ObstacleAvoidanceServerService::Stub> stub(new ObstacleAvoidanceServerService::Stub(channel, options));
   return stub;
 }
 
-ObstacleAvoidanceServerService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel)
-  : channel_(channel), rpcmethod_SubscribeControl_(ObstacleAvoidanceServerService_method_names[0], ::grpc::internal::RpcMethod::SERVER_STREAMING, channel)
+ObstacleAvoidanceServerService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options)
+  : channel_(channel), rpcmethod_SubscribeControl_(ObstacleAvoidanceServerService_method_names[0], options.suffix_for_stats(),::grpc::internal::RpcMethod::SERVER_STREAMING, channel)
   {}
 
 ::grpc::ClientReader< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>* ObstacleAvoidanceServerService::Stub::SubscribeControlRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest& request) {
   return ::grpc::internal::ClientReaderFactory< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>::Create(channel_.get(), rpcmethod_SubscribeControl_, context, request);
 }
 
-void ObstacleAvoidanceServerService::Stub::experimental_async::SubscribeControl(::grpc::ClientContext* context, ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* request, ::grpc::experimental::ClientReadReactor< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>* reactor) {
+void ObstacleAvoidanceServerService::Stub::async::SubscribeControl(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance_server::SubscribeControlRequest* request, ::grpc::ClientReadReactor< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>* reactor) {
   ::grpc::internal::ClientCallbackReaderFactory< ::mavsdk::rpc::obstacle_avoidance_server::ControlResponse>::Create(stub_->channel_.get(), stub_->rpcmethod_SubscribeControl_, context, request, reactor);
 }
 
