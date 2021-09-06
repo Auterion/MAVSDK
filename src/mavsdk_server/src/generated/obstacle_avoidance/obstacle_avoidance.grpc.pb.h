@@ -7,7 +7,6 @@
 #include "obstacle_avoidance/obstacle_avoidance.pb.h"
 
 #include <functional>
-#include <grpc/impl/codegen/port_platform.h>
 #include <grpcpp/impl/codegen/async_generic_service.h>
 #include <grpcpp/impl/codegen/async_stream.h>
 #include <grpcpp/impl/codegen/async_unary_call.h>
@@ -91,57 +90,33 @@ class ObstacleAvoidanceService final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::mavsdk::rpc::obstacle_avoidance::StateDisableResponse>> PrepareAsyncStateDisable(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StateDisableRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::mavsdk::rpc::obstacle_avoidance::StateDisableResponse>>(PrepareAsyncStateDisableRaw(context, request, cq));
     }
-    class experimental_async_interface {
+    class async_interface {
      public:
-      virtual ~experimental_async_interface() {}
+      virtual ~async_interface() {}
       //
       // Start obstacle avoidance service.
       virtual void Start(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StartRequest* request, ::mavsdk::rpc::obstacle_avoidance::StartResponse* response, std::function<void(::grpc::Status)>) = 0;
-      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
       virtual void Start(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StartRequest* request, ::mavsdk::rpc::obstacle_avoidance::StartResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
-      #else
-      virtual void Start(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StartRequest* request, ::mavsdk::rpc::obstacle_avoidance::StartResponse* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
-      #endif
       //
       // Stop obstacle avoidance service.
       virtual void Stop(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StopRequest* request, ::mavsdk::rpc::obstacle_avoidance::StopResponse* response, std::function<void(::grpc::Status)>) = 0;
-      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
       virtual void Stop(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StopRequest* request, ::mavsdk::rpc::obstacle_avoidance::StopResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
-      #else
-      virtual void Stop(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StopRequest* request, ::mavsdk::rpc::obstacle_avoidance::StopResponse* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
-      #endif
       //
       // Restart obstacle avoidance service.
       virtual void Restart(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::RestartRequest* request, ::mavsdk::rpc::obstacle_avoidance::RestartResponse* response, std::function<void(::grpc::Status)>) = 0;
-      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
       virtual void Restart(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::RestartRequest* request, ::mavsdk::rpc::obstacle_avoidance::RestartResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
-      #else
-      virtual void Restart(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::RestartRequest* request, ::mavsdk::rpc::obstacle_avoidance::RestartResponse* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
-      #endif
       //
       // Enable obstacle avoidance service (switch from idle to active state).
       virtual void StateEnable(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StateEnableRequest* request, ::mavsdk::rpc::obstacle_avoidance::StateEnableResponse* response, std::function<void(::grpc::Status)>) = 0;
-      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
       virtual void StateEnable(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StateEnableRequest* request, ::mavsdk::rpc::obstacle_avoidance::StateEnableResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
-      #else
-      virtual void StateEnable(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StateEnableRequest* request, ::mavsdk::rpc::obstacle_avoidance::StateEnableResponse* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
-      #endif
       //
       // Disable obstacle avoidance service (switch from active to idle state).
       virtual void StateDisable(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StateDisableRequest* request, ::mavsdk::rpc::obstacle_avoidance::StateDisableResponse* response, std::function<void(::grpc::Status)>) = 0;
-      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
       virtual void StateDisable(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StateDisableRequest* request, ::mavsdk::rpc::obstacle_avoidance::StateDisableResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
-      #else
-      virtual void StateDisable(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StateDisableRequest* request, ::mavsdk::rpc::obstacle_avoidance::StateDisableResponse* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
-      #endif
     };
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-    typedef class experimental_async_interface async_interface;
-    #endif
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-    async_interface* async() { return experimental_async(); }
-    #endif
-    virtual class experimental_async_interface* experimental_async() { return nullptr; }
+    typedef class async_interface experimental_async_interface;
+    virtual class async_interface* async() { return nullptr; }
+    class async_interface* experimental_async() { return async(); }
   private:
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::mavsdk::rpc::obstacle_avoidance::StartResponse>* AsyncStartRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StartRequest& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::mavsdk::rpc::obstacle_avoidance::StartResponse>* PrepareAsyncStartRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StartRequest& request, ::grpc::CompletionQueue* cq) = 0;
@@ -156,7 +131,7 @@ class ObstacleAvoidanceService final {
   };
   class Stub final : public StubInterface {
    public:
-    Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel);
+    Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
     ::grpc::Status Start(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StartRequest& request, ::mavsdk::rpc::obstacle_avoidance::StartResponse* response) override;
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::mavsdk::rpc::obstacle_avoidance::StartResponse>> AsyncStart(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StartRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::mavsdk::rpc::obstacle_avoidance::StartResponse>>(AsyncStartRaw(context, request, cq));
@@ -192,50 +167,30 @@ class ObstacleAvoidanceService final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::mavsdk::rpc::obstacle_avoidance::StateDisableResponse>> PrepareAsyncStateDisable(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StateDisableRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::mavsdk::rpc::obstacle_avoidance::StateDisableResponse>>(PrepareAsyncStateDisableRaw(context, request, cq));
     }
-    class experimental_async final :
-      public StubInterface::experimental_async_interface {
+    class async final :
+      public StubInterface::async_interface {
      public:
       void Start(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StartRequest* request, ::mavsdk::rpc::obstacle_avoidance::StartResponse* response, std::function<void(::grpc::Status)>) override;
-      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
       void Start(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StartRequest* request, ::mavsdk::rpc::obstacle_avoidance::StartResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
-      #else
-      void Start(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StartRequest* request, ::mavsdk::rpc::obstacle_avoidance::StartResponse* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
-      #endif
       void Stop(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StopRequest* request, ::mavsdk::rpc::obstacle_avoidance::StopResponse* response, std::function<void(::grpc::Status)>) override;
-      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
       void Stop(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StopRequest* request, ::mavsdk::rpc::obstacle_avoidance::StopResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
-      #else
-      void Stop(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StopRequest* request, ::mavsdk::rpc::obstacle_avoidance::StopResponse* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
-      #endif
       void Restart(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::RestartRequest* request, ::mavsdk::rpc::obstacle_avoidance::RestartResponse* response, std::function<void(::grpc::Status)>) override;
-      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
       void Restart(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::RestartRequest* request, ::mavsdk::rpc::obstacle_avoidance::RestartResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
-      #else
-      void Restart(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::RestartRequest* request, ::mavsdk::rpc::obstacle_avoidance::RestartResponse* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
-      #endif
       void StateEnable(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StateEnableRequest* request, ::mavsdk::rpc::obstacle_avoidance::StateEnableResponse* response, std::function<void(::grpc::Status)>) override;
-      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
       void StateEnable(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StateEnableRequest* request, ::mavsdk::rpc::obstacle_avoidance::StateEnableResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
-      #else
-      void StateEnable(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StateEnableRequest* request, ::mavsdk::rpc::obstacle_avoidance::StateEnableResponse* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
-      #endif
       void StateDisable(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StateDisableRequest* request, ::mavsdk::rpc::obstacle_avoidance::StateDisableResponse* response, std::function<void(::grpc::Status)>) override;
-      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
       void StateDisable(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StateDisableRequest* request, ::mavsdk::rpc::obstacle_avoidance::StateDisableResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
-      #else
-      void StateDisable(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StateDisableRequest* request, ::mavsdk::rpc::obstacle_avoidance::StateDisableResponse* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
-      #endif
      private:
       friend class Stub;
-      explicit experimental_async(Stub* stub): stub_(stub) { }
+      explicit async(Stub* stub): stub_(stub) { }
       Stub* stub() { return stub_; }
       Stub* stub_;
     };
-    class experimental_async_interface* experimental_async() override { return &async_stub_; }
+    class async* async() override { return &async_stub_; }
 
    private:
     std::shared_ptr< ::grpc::ChannelInterface> channel_;
-    class experimental_async async_stub_{this};
+    class async async_stub_{this};
     ::grpc::ClientAsyncResponseReader< ::mavsdk::rpc::obstacle_avoidance::StartResponse>* AsyncStartRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StartRequest& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::mavsdk::rpc::obstacle_avoidance::StartResponse>* PrepareAsyncStartRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StartRequest& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::mavsdk::rpc::obstacle_avoidance::StopResponse>* AsyncStopRaw(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StopRequest& request, ::grpc::CompletionQueue* cq) override;
@@ -376,36 +331,22 @@ class ObstacleAvoidanceService final {
   };
   typedef WithAsyncMethod_Start<WithAsyncMethod_Stop<WithAsyncMethod_Restart<WithAsyncMethod_StateEnable<WithAsyncMethod_StateDisable<Service > > > > > AsyncService;
   template <class BaseClass>
-  class ExperimentalWithCallbackMethod_Start : public BaseClass {
+  class WithCallbackMethod_Start : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    ExperimentalWithCallbackMethod_Start() {
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      ::grpc::Service::
-    #else
-      ::grpc::Service::experimental().
-    #endif
-        MarkMethodCallback(0,
+    WithCallbackMethod_Start() {
+      ::grpc::Service::MarkMethodCallback(0,
           new ::grpc::internal::CallbackUnaryHandler< ::mavsdk::rpc::obstacle_avoidance::StartRequest, ::mavsdk::rpc::obstacle_avoidance::StartResponse>(
             [this](
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-                   ::grpc::CallbackServerContext*
-    #else
-                   ::grpc::experimental::CallbackServerContext*
-    #endif
-                     context, const ::mavsdk::rpc::obstacle_avoidance::StartRequest* request, ::mavsdk::rpc::obstacle_avoidance::StartResponse* response) { return this->Start(context, request, response); }));}
+                   ::grpc::CallbackServerContext* context, const ::mavsdk::rpc::obstacle_avoidance::StartRequest* request, ::mavsdk::rpc::obstacle_avoidance::StartResponse* response) { return this->Start(context, request, response); }));}
     void SetMessageAllocatorFor_Start(
-        ::grpc::experimental::MessageAllocator< ::mavsdk::rpc::obstacle_avoidance::StartRequest, ::mavsdk::rpc::obstacle_avoidance::StartResponse>* allocator) {
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+        ::grpc::MessageAllocator< ::mavsdk::rpc::obstacle_avoidance::StartRequest, ::mavsdk::rpc::obstacle_avoidance::StartResponse>* allocator) {
       ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(0);
-    #else
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(0);
-    #endif
       static_cast<::grpc::internal::CallbackUnaryHandler< ::mavsdk::rpc::obstacle_avoidance::StartRequest, ::mavsdk::rpc::obstacle_avoidance::StartResponse>*>(handler)
               ->SetMessageAllocator(allocator);
     }
-    ~ExperimentalWithCallbackMethod_Start() override {
+    ~WithCallbackMethod_Start() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
@@ -413,46 +354,26 @@ class ObstacleAvoidanceService final {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
     virtual ::grpc::ServerUnaryReactor* Start(
-      ::grpc::CallbackServerContext* /*context*/, const ::mavsdk::rpc::obstacle_avoidance::StartRequest* /*request*/, ::mavsdk::rpc::obstacle_avoidance::StartResponse* /*response*/)
-    #else
-    virtual ::grpc::experimental::ServerUnaryReactor* Start(
-      ::grpc::experimental::CallbackServerContext* /*context*/, const ::mavsdk::rpc::obstacle_avoidance::StartRequest* /*request*/, ::mavsdk::rpc::obstacle_avoidance::StartResponse* /*response*/)
-    #endif
-      { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::mavsdk::rpc::obstacle_avoidance::StartRequest* /*request*/, ::mavsdk::rpc::obstacle_avoidance::StartResponse* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
-  class ExperimentalWithCallbackMethod_Stop : public BaseClass {
+  class WithCallbackMethod_Stop : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    ExperimentalWithCallbackMethod_Stop() {
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      ::grpc::Service::
-    #else
-      ::grpc::Service::experimental().
-    #endif
-        MarkMethodCallback(1,
+    WithCallbackMethod_Stop() {
+      ::grpc::Service::MarkMethodCallback(1,
           new ::grpc::internal::CallbackUnaryHandler< ::mavsdk::rpc::obstacle_avoidance::StopRequest, ::mavsdk::rpc::obstacle_avoidance::StopResponse>(
             [this](
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-                   ::grpc::CallbackServerContext*
-    #else
-                   ::grpc::experimental::CallbackServerContext*
-    #endif
-                     context, const ::mavsdk::rpc::obstacle_avoidance::StopRequest* request, ::mavsdk::rpc::obstacle_avoidance::StopResponse* response) { return this->Stop(context, request, response); }));}
+                   ::grpc::CallbackServerContext* context, const ::mavsdk::rpc::obstacle_avoidance::StopRequest* request, ::mavsdk::rpc::obstacle_avoidance::StopResponse* response) { return this->Stop(context, request, response); }));}
     void SetMessageAllocatorFor_Stop(
-        ::grpc::experimental::MessageAllocator< ::mavsdk::rpc::obstacle_avoidance::StopRequest, ::mavsdk::rpc::obstacle_avoidance::StopResponse>* allocator) {
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+        ::grpc::MessageAllocator< ::mavsdk::rpc::obstacle_avoidance::StopRequest, ::mavsdk::rpc::obstacle_avoidance::StopResponse>* allocator) {
       ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(1);
-    #else
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(1);
-    #endif
       static_cast<::grpc::internal::CallbackUnaryHandler< ::mavsdk::rpc::obstacle_avoidance::StopRequest, ::mavsdk::rpc::obstacle_avoidance::StopResponse>*>(handler)
               ->SetMessageAllocator(allocator);
     }
-    ~ExperimentalWithCallbackMethod_Stop() override {
+    ~WithCallbackMethod_Stop() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
@@ -460,46 +381,26 @@ class ObstacleAvoidanceService final {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
     virtual ::grpc::ServerUnaryReactor* Stop(
-      ::grpc::CallbackServerContext* /*context*/, const ::mavsdk::rpc::obstacle_avoidance::StopRequest* /*request*/, ::mavsdk::rpc::obstacle_avoidance::StopResponse* /*response*/)
-    #else
-    virtual ::grpc::experimental::ServerUnaryReactor* Stop(
-      ::grpc::experimental::CallbackServerContext* /*context*/, const ::mavsdk::rpc::obstacle_avoidance::StopRequest* /*request*/, ::mavsdk::rpc::obstacle_avoidance::StopResponse* /*response*/)
-    #endif
-      { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::mavsdk::rpc::obstacle_avoidance::StopRequest* /*request*/, ::mavsdk::rpc::obstacle_avoidance::StopResponse* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
-  class ExperimentalWithCallbackMethod_Restart : public BaseClass {
+  class WithCallbackMethod_Restart : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    ExperimentalWithCallbackMethod_Restart() {
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      ::grpc::Service::
-    #else
-      ::grpc::Service::experimental().
-    #endif
-        MarkMethodCallback(2,
+    WithCallbackMethod_Restart() {
+      ::grpc::Service::MarkMethodCallback(2,
           new ::grpc::internal::CallbackUnaryHandler< ::mavsdk::rpc::obstacle_avoidance::RestartRequest, ::mavsdk::rpc::obstacle_avoidance::RestartResponse>(
             [this](
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-                   ::grpc::CallbackServerContext*
-    #else
-                   ::grpc::experimental::CallbackServerContext*
-    #endif
-                     context, const ::mavsdk::rpc::obstacle_avoidance::RestartRequest* request, ::mavsdk::rpc::obstacle_avoidance::RestartResponse* response) { return this->Restart(context, request, response); }));}
+                   ::grpc::CallbackServerContext* context, const ::mavsdk::rpc::obstacle_avoidance::RestartRequest* request, ::mavsdk::rpc::obstacle_avoidance::RestartResponse* response) { return this->Restart(context, request, response); }));}
     void SetMessageAllocatorFor_Restart(
-        ::grpc::experimental::MessageAllocator< ::mavsdk::rpc::obstacle_avoidance::RestartRequest, ::mavsdk::rpc::obstacle_avoidance::RestartResponse>* allocator) {
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+        ::grpc::MessageAllocator< ::mavsdk::rpc::obstacle_avoidance::RestartRequest, ::mavsdk::rpc::obstacle_avoidance::RestartResponse>* allocator) {
       ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(2);
-    #else
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(2);
-    #endif
       static_cast<::grpc::internal::CallbackUnaryHandler< ::mavsdk::rpc::obstacle_avoidance::RestartRequest, ::mavsdk::rpc::obstacle_avoidance::RestartResponse>*>(handler)
               ->SetMessageAllocator(allocator);
     }
-    ~ExperimentalWithCallbackMethod_Restart() override {
+    ~WithCallbackMethod_Restart() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
@@ -507,46 +408,26 @@ class ObstacleAvoidanceService final {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
     virtual ::grpc::ServerUnaryReactor* Restart(
-      ::grpc::CallbackServerContext* /*context*/, const ::mavsdk::rpc::obstacle_avoidance::RestartRequest* /*request*/, ::mavsdk::rpc::obstacle_avoidance::RestartResponse* /*response*/)
-    #else
-    virtual ::grpc::experimental::ServerUnaryReactor* Restart(
-      ::grpc::experimental::CallbackServerContext* /*context*/, const ::mavsdk::rpc::obstacle_avoidance::RestartRequest* /*request*/, ::mavsdk::rpc::obstacle_avoidance::RestartResponse* /*response*/)
-    #endif
-      { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::mavsdk::rpc::obstacle_avoidance::RestartRequest* /*request*/, ::mavsdk::rpc::obstacle_avoidance::RestartResponse* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
-  class ExperimentalWithCallbackMethod_StateEnable : public BaseClass {
+  class WithCallbackMethod_StateEnable : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    ExperimentalWithCallbackMethod_StateEnable() {
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      ::grpc::Service::
-    #else
-      ::grpc::Service::experimental().
-    #endif
-        MarkMethodCallback(3,
+    WithCallbackMethod_StateEnable() {
+      ::grpc::Service::MarkMethodCallback(3,
           new ::grpc::internal::CallbackUnaryHandler< ::mavsdk::rpc::obstacle_avoidance::StateEnableRequest, ::mavsdk::rpc::obstacle_avoidance::StateEnableResponse>(
             [this](
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-                   ::grpc::CallbackServerContext*
-    #else
-                   ::grpc::experimental::CallbackServerContext*
-    #endif
-                     context, const ::mavsdk::rpc::obstacle_avoidance::StateEnableRequest* request, ::mavsdk::rpc::obstacle_avoidance::StateEnableResponse* response) { return this->StateEnable(context, request, response); }));}
+                   ::grpc::CallbackServerContext* context, const ::mavsdk::rpc::obstacle_avoidance::StateEnableRequest* request, ::mavsdk::rpc::obstacle_avoidance::StateEnableResponse* response) { return this->StateEnable(context, request, response); }));}
     void SetMessageAllocatorFor_StateEnable(
-        ::grpc::experimental::MessageAllocator< ::mavsdk::rpc::obstacle_avoidance::StateEnableRequest, ::mavsdk::rpc::obstacle_avoidance::StateEnableResponse>* allocator) {
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+        ::grpc::MessageAllocator< ::mavsdk::rpc::obstacle_avoidance::StateEnableRequest, ::mavsdk::rpc::obstacle_avoidance::StateEnableResponse>* allocator) {
       ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(3);
-    #else
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(3);
-    #endif
       static_cast<::grpc::internal::CallbackUnaryHandler< ::mavsdk::rpc::obstacle_avoidance::StateEnableRequest, ::mavsdk::rpc::obstacle_avoidance::StateEnableResponse>*>(handler)
               ->SetMessageAllocator(allocator);
     }
-    ~ExperimentalWithCallbackMethod_StateEnable() override {
+    ~WithCallbackMethod_StateEnable() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
@@ -554,46 +435,26 @@ class ObstacleAvoidanceService final {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
     virtual ::grpc::ServerUnaryReactor* StateEnable(
-      ::grpc::CallbackServerContext* /*context*/, const ::mavsdk::rpc::obstacle_avoidance::StateEnableRequest* /*request*/, ::mavsdk::rpc::obstacle_avoidance::StateEnableResponse* /*response*/)
-    #else
-    virtual ::grpc::experimental::ServerUnaryReactor* StateEnable(
-      ::grpc::experimental::CallbackServerContext* /*context*/, const ::mavsdk::rpc::obstacle_avoidance::StateEnableRequest* /*request*/, ::mavsdk::rpc::obstacle_avoidance::StateEnableResponse* /*response*/)
-    #endif
-      { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::mavsdk::rpc::obstacle_avoidance::StateEnableRequest* /*request*/, ::mavsdk::rpc::obstacle_avoidance::StateEnableResponse* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
-  class ExperimentalWithCallbackMethod_StateDisable : public BaseClass {
+  class WithCallbackMethod_StateDisable : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    ExperimentalWithCallbackMethod_StateDisable() {
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      ::grpc::Service::
-    #else
-      ::grpc::Service::experimental().
-    #endif
-        MarkMethodCallback(4,
+    WithCallbackMethod_StateDisable() {
+      ::grpc::Service::MarkMethodCallback(4,
           new ::grpc::internal::CallbackUnaryHandler< ::mavsdk::rpc::obstacle_avoidance::StateDisableRequest, ::mavsdk::rpc::obstacle_avoidance::StateDisableResponse>(
             [this](
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-                   ::grpc::CallbackServerContext*
-    #else
-                   ::grpc::experimental::CallbackServerContext*
-    #endif
-                     context, const ::mavsdk::rpc::obstacle_avoidance::StateDisableRequest* request, ::mavsdk::rpc::obstacle_avoidance::StateDisableResponse* response) { return this->StateDisable(context, request, response); }));}
+                   ::grpc::CallbackServerContext* context, const ::mavsdk::rpc::obstacle_avoidance::StateDisableRequest* request, ::mavsdk::rpc::obstacle_avoidance::StateDisableResponse* response) { return this->StateDisable(context, request, response); }));}
     void SetMessageAllocatorFor_StateDisable(
-        ::grpc::experimental::MessageAllocator< ::mavsdk::rpc::obstacle_avoidance::StateDisableRequest, ::mavsdk::rpc::obstacle_avoidance::StateDisableResponse>* allocator) {
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+        ::grpc::MessageAllocator< ::mavsdk::rpc::obstacle_avoidance::StateDisableRequest, ::mavsdk::rpc::obstacle_avoidance::StateDisableResponse>* allocator) {
       ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(4);
-    #else
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(4);
-    #endif
       static_cast<::grpc::internal::CallbackUnaryHandler< ::mavsdk::rpc::obstacle_avoidance::StateDisableRequest, ::mavsdk::rpc::obstacle_avoidance::StateDisableResponse>*>(handler)
               ->SetMessageAllocator(allocator);
     }
-    ~ExperimentalWithCallbackMethod_StateDisable() override {
+    ~WithCallbackMethod_StateDisable() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
@@ -601,20 +462,11 @@ class ObstacleAvoidanceService final {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
     virtual ::grpc::ServerUnaryReactor* StateDisable(
-      ::grpc::CallbackServerContext* /*context*/, const ::mavsdk::rpc::obstacle_avoidance::StateDisableRequest* /*request*/, ::mavsdk::rpc::obstacle_avoidance::StateDisableResponse* /*response*/)
-    #else
-    virtual ::grpc::experimental::ServerUnaryReactor* StateDisable(
-      ::grpc::experimental::CallbackServerContext* /*context*/, const ::mavsdk::rpc::obstacle_avoidance::StateDisableRequest* /*request*/, ::mavsdk::rpc::obstacle_avoidance::StateDisableResponse* /*response*/)
-    #endif
-      { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::mavsdk::rpc::obstacle_avoidance::StateDisableRequest* /*request*/, ::mavsdk::rpc::obstacle_avoidance::StateDisableResponse* /*response*/)  { return nullptr; }
   };
-  #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-  typedef ExperimentalWithCallbackMethod_Start<ExperimentalWithCallbackMethod_Stop<ExperimentalWithCallbackMethod_Restart<ExperimentalWithCallbackMethod_StateEnable<ExperimentalWithCallbackMethod_StateDisable<Service > > > > > CallbackService;
-  #endif
-
-  typedef ExperimentalWithCallbackMethod_Start<ExperimentalWithCallbackMethod_Stop<ExperimentalWithCallbackMethod_Restart<ExperimentalWithCallbackMethod_StateEnable<ExperimentalWithCallbackMethod_StateDisable<Service > > > > > ExperimentalCallbackService;
+  typedef WithCallbackMethod_Start<WithCallbackMethod_Stop<WithCallbackMethod_Restart<WithCallbackMethod_StateEnable<WithCallbackMethod_StateDisable<Service > > > > > CallbackService;
+  typedef CallbackService ExperimentalCallbackService;
   template <class BaseClass>
   class WithGenericMethod_Start : public BaseClass {
    private:
@@ -801,27 +653,17 @@ class ObstacleAvoidanceService final {
     }
   };
   template <class BaseClass>
-  class ExperimentalWithRawCallbackMethod_Start : public BaseClass {
+  class WithRawCallbackMethod_Start : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    ExperimentalWithRawCallbackMethod_Start() {
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      ::grpc::Service::
-    #else
-      ::grpc::Service::experimental().
-    #endif
-        MarkMethodRawCallback(0,
+    WithRawCallbackMethod_Start() {
+      ::grpc::Service::MarkMethodRawCallback(0,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-                   ::grpc::CallbackServerContext*
-    #else
-                   ::grpc::experimental::CallbackServerContext*
-    #endif
-                     context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->Start(context, request, response); }));
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->Start(context, request, response); }));
     }
-    ~ExperimentalWithRawCallbackMethod_Start() override {
+    ~WithRawCallbackMethod_Start() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
@@ -829,37 +671,21 @@ class ObstacleAvoidanceService final {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
     virtual ::grpc::ServerUnaryReactor* Start(
-      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
-    #else
-    virtual ::grpc::experimental::ServerUnaryReactor* Start(
-      ::grpc::experimental::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
-    #endif
-      { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
-  class ExperimentalWithRawCallbackMethod_Stop : public BaseClass {
+  class WithRawCallbackMethod_Stop : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    ExperimentalWithRawCallbackMethod_Stop() {
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      ::grpc::Service::
-    #else
-      ::grpc::Service::experimental().
-    #endif
-        MarkMethodRawCallback(1,
+    WithRawCallbackMethod_Stop() {
+      ::grpc::Service::MarkMethodRawCallback(1,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-                   ::grpc::CallbackServerContext*
-    #else
-                   ::grpc::experimental::CallbackServerContext*
-    #endif
-                     context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->Stop(context, request, response); }));
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->Stop(context, request, response); }));
     }
-    ~ExperimentalWithRawCallbackMethod_Stop() override {
+    ~WithRawCallbackMethod_Stop() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
@@ -867,37 +693,21 @@ class ObstacleAvoidanceService final {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
     virtual ::grpc::ServerUnaryReactor* Stop(
-      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
-    #else
-    virtual ::grpc::experimental::ServerUnaryReactor* Stop(
-      ::grpc::experimental::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
-    #endif
-      { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
-  class ExperimentalWithRawCallbackMethod_Restart : public BaseClass {
+  class WithRawCallbackMethod_Restart : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    ExperimentalWithRawCallbackMethod_Restart() {
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      ::grpc::Service::
-    #else
-      ::grpc::Service::experimental().
-    #endif
-        MarkMethodRawCallback(2,
+    WithRawCallbackMethod_Restart() {
+      ::grpc::Service::MarkMethodRawCallback(2,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-                   ::grpc::CallbackServerContext*
-    #else
-                   ::grpc::experimental::CallbackServerContext*
-    #endif
-                     context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->Restart(context, request, response); }));
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->Restart(context, request, response); }));
     }
-    ~ExperimentalWithRawCallbackMethod_Restart() override {
+    ~WithRawCallbackMethod_Restart() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
@@ -905,37 +715,21 @@ class ObstacleAvoidanceService final {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
     virtual ::grpc::ServerUnaryReactor* Restart(
-      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
-    #else
-    virtual ::grpc::experimental::ServerUnaryReactor* Restart(
-      ::grpc::experimental::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
-    #endif
-      { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
-  class ExperimentalWithRawCallbackMethod_StateEnable : public BaseClass {
+  class WithRawCallbackMethod_StateEnable : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    ExperimentalWithRawCallbackMethod_StateEnable() {
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      ::grpc::Service::
-    #else
-      ::grpc::Service::experimental().
-    #endif
-        MarkMethodRawCallback(3,
+    WithRawCallbackMethod_StateEnable() {
+      ::grpc::Service::MarkMethodRawCallback(3,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-                   ::grpc::CallbackServerContext*
-    #else
-                   ::grpc::experimental::CallbackServerContext*
-    #endif
-                     context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->StateEnable(context, request, response); }));
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->StateEnable(context, request, response); }));
     }
-    ~ExperimentalWithRawCallbackMethod_StateEnable() override {
+    ~WithRawCallbackMethod_StateEnable() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
@@ -943,37 +737,21 @@ class ObstacleAvoidanceService final {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
     virtual ::grpc::ServerUnaryReactor* StateEnable(
-      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
-    #else
-    virtual ::grpc::experimental::ServerUnaryReactor* StateEnable(
-      ::grpc::experimental::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
-    #endif
-      { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
-  class ExperimentalWithRawCallbackMethod_StateDisable : public BaseClass {
+  class WithRawCallbackMethod_StateDisable : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    ExperimentalWithRawCallbackMethod_StateDisable() {
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      ::grpc::Service::
-    #else
-      ::grpc::Service::experimental().
-    #endif
-        MarkMethodRawCallback(4,
+    WithRawCallbackMethod_StateDisable() {
+      ::grpc::Service::MarkMethodRawCallback(4,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-                   ::grpc::CallbackServerContext*
-    #else
-                   ::grpc::experimental::CallbackServerContext*
-    #endif
-                     context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->StateDisable(context, request, response); }));
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->StateDisable(context, request, response); }));
     }
-    ~ExperimentalWithRawCallbackMethod_StateDisable() override {
+    ~WithRawCallbackMethod_StateDisable() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
@@ -981,14 +759,8 @@ class ObstacleAvoidanceService final {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
     virtual ::grpc::ServerUnaryReactor* StateDisable(
-      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
-    #else
-    virtual ::grpc::experimental::ServerUnaryReactor* StateDisable(
-      ::grpc::experimental::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
-    #endif
-      { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
   class WithStreamedUnaryMethod_Start : public BaseClass {
