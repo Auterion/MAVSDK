@@ -33,27 +33,27 @@ static const char* ObstacleAvoidanceService_method_names[] = {
 
 std::unique_ptr< ObstacleAvoidanceService::Stub> ObstacleAvoidanceService::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
   (void)options;
-  std::unique_ptr< ObstacleAvoidanceService::Stub> stub(new ObstacleAvoidanceService::Stub(channel));
+  std::unique_ptr< ObstacleAvoidanceService::Stub> stub(new ObstacleAvoidanceService::Stub(channel, options));
   return stub;
 }
 
-ObstacleAvoidanceService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel)
-  : channel_(channel), rpcmethod_Start_(ObstacleAvoidanceService_method_names[0], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_Stop_(ObstacleAvoidanceService_method_names[1], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_Restart_(ObstacleAvoidanceService_method_names[2], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_StateEnable_(ObstacleAvoidanceService_method_names[3], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_StateDisable_(ObstacleAvoidanceService_method_names[4], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+ObstacleAvoidanceService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options)
+  : channel_(channel), rpcmethod_Start_(ObstacleAvoidanceService_method_names[0], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_Stop_(ObstacleAvoidanceService_method_names[1], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_Restart_(ObstacleAvoidanceService_method_names[2], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_StateEnable_(ObstacleAvoidanceService_method_names[3], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_StateDisable_(ObstacleAvoidanceService_method_names[4], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status ObstacleAvoidanceService::Stub::Start(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StartRequest& request, ::mavsdk::rpc::obstacle_avoidance::StartResponse* response) {
   return ::grpc::internal::BlockingUnaryCall< ::mavsdk::rpc::obstacle_avoidance::StartRequest, ::mavsdk::rpc::obstacle_avoidance::StartResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_Start_, context, request, response);
 }
 
-void ObstacleAvoidanceService::Stub::experimental_async::Start(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StartRequest* request, ::mavsdk::rpc::obstacle_avoidance::StartResponse* response, std::function<void(::grpc::Status)> f) {
+void ObstacleAvoidanceService::Stub::async::Start(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StartRequest* request, ::mavsdk::rpc::obstacle_avoidance::StartResponse* response, std::function<void(::grpc::Status)> f) {
   ::grpc::internal::CallbackUnaryCall< ::mavsdk::rpc::obstacle_avoidance::StartRequest, ::mavsdk::rpc::obstacle_avoidance::StartResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Start_, context, request, response, std::move(f));
 }
 
-void ObstacleAvoidanceService::Stub::experimental_async::Start(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StartRequest* request, ::mavsdk::rpc::obstacle_avoidance::StartResponse* response, ::grpc::experimental::ClientUnaryReactor* reactor) {
+void ObstacleAvoidanceService::Stub::async::Start(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StartRequest* request, ::mavsdk::rpc::obstacle_avoidance::StartResponse* response, ::grpc::ClientUnaryReactor* reactor) {
   ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Start_, context, request, response, reactor);
 }
 
@@ -72,11 +72,11 @@ void ObstacleAvoidanceService::Stub::experimental_async::Start(::grpc::ClientCon
   return ::grpc::internal::BlockingUnaryCall< ::mavsdk::rpc::obstacle_avoidance::StopRequest, ::mavsdk::rpc::obstacle_avoidance::StopResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_Stop_, context, request, response);
 }
 
-void ObstacleAvoidanceService::Stub::experimental_async::Stop(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StopRequest* request, ::mavsdk::rpc::obstacle_avoidance::StopResponse* response, std::function<void(::grpc::Status)> f) {
+void ObstacleAvoidanceService::Stub::async::Stop(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StopRequest* request, ::mavsdk::rpc::obstacle_avoidance::StopResponse* response, std::function<void(::grpc::Status)> f) {
   ::grpc::internal::CallbackUnaryCall< ::mavsdk::rpc::obstacle_avoidance::StopRequest, ::mavsdk::rpc::obstacle_avoidance::StopResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Stop_, context, request, response, std::move(f));
 }
 
-void ObstacleAvoidanceService::Stub::experimental_async::Stop(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StopRequest* request, ::mavsdk::rpc::obstacle_avoidance::StopResponse* response, ::grpc::experimental::ClientUnaryReactor* reactor) {
+void ObstacleAvoidanceService::Stub::async::Stop(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StopRequest* request, ::mavsdk::rpc::obstacle_avoidance::StopResponse* response, ::grpc::ClientUnaryReactor* reactor) {
   ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Stop_, context, request, response, reactor);
 }
 
@@ -95,11 +95,11 @@ void ObstacleAvoidanceService::Stub::experimental_async::Stop(::grpc::ClientCont
   return ::grpc::internal::BlockingUnaryCall< ::mavsdk::rpc::obstacle_avoidance::RestartRequest, ::mavsdk::rpc::obstacle_avoidance::RestartResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_Restart_, context, request, response);
 }
 
-void ObstacleAvoidanceService::Stub::experimental_async::Restart(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::RestartRequest* request, ::mavsdk::rpc::obstacle_avoidance::RestartResponse* response, std::function<void(::grpc::Status)> f) {
+void ObstacleAvoidanceService::Stub::async::Restart(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::RestartRequest* request, ::mavsdk::rpc::obstacle_avoidance::RestartResponse* response, std::function<void(::grpc::Status)> f) {
   ::grpc::internal::CallbackUnaryCall< ::mavsdk::rpc::obstacle_avoidance::RestartRequest, ::mavsdk::rpc::obstacle_avoidance::RestartResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Restart_, context, request, response, std::move(f));
 }
 
-void ObstacleAvoidanceService::Stub::experimental_async::Restart(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::RestartRequest* request, ::mavsdk::rpc::obstacle_avoidance::RestartResponse* response, ::grpc::experimental::ClientUnaryReactor* reactor) {
+void ObstacleAvoidanceService::Stub::async::Restart(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::RestartRequest* request, ::mavsdk::rpc::obstacle_avoidance::RestartResponse* response, ::grpc::ClientUnaryReactor* reactor) {
   ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Restart_, context, request, response, reactor);
 }
 
@@ -118,11 +118,11 @@ void ObstacleAvoidanceService::Stub::experimental_async::Restart(::grpc::ClientC
   return ::grpc::internal::BlockingUnaryCall< ::mavsdk::rpc::obstacle_avoidance::StateEnableRequest, ::mavsdk::rpc::obstacle_avoidance::StateEnableResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_StateEnable_, context, request, response);
 }
 
-void ObstacleAvoidanceService::Stub::experimental_async::StateEnable(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StateEnableRequest* request, ::mavsdk::rpc::obstacle_avoidance::StateEnableResponse* response, std::function<void(::grpc::Status)> f) {
+void ObstacleAvoidanceService::Stub::async::StateEnable(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StateEnableRequest* request, ::mavsdk::rpc::obstacle_avoidance::StateEnableResponse* response, std::function<void(::grpc::Status)> f) {
   ::grpc::internal::CallbackUnaryCall< ::mavsdk::rpc::obstacle_avoidance::StateEnableRequest, ::mavsdk::rpc::obstacle_avoidance::StateEnableResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_StateEnable_, context, request, response, std::move(f));
 }
 
-void ObstacleAvoidanceService::Stub::experimental_async::StateEnable(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StateEnableRequest* request, ::mavsdk::rpc::obstacle_avoidance::StateEnableResponse* response, ::grpc::experimental::ClientUnaryReactor* reactor) {
+void ObstacleAvoidanceService::Stub::async::StateEnable(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StateEnableRequest* request, ::mavsdk::rpc::obstacle_avoidance::StateEnableResponse* response, ::grpc::ClientUnaryReactor* reactor) {
   ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_StateEnable_, context, request, response, reactor);
 }
 
@@ -141,11 +141,11 @@ void ObstacleAvoidanceService::Stub::experimental_async::StateEnable(::grpc::Cli
   return ::grpc::internal::BlockingUnaryCall< ::mavsdk::rpc::obstacle_avoidance::StateDisableRequest, ::mavsdk::rpc::obstacle_avoidance::StateDisableResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_StateDisable_, context, request, response);
 }
 
-void ObstacleAvoidanceService::Stub::experimental_async::StateDisable(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StateDisableRequest* request, ::mavsdk::rpc::obstacle_avoidance::StateDisableResponse* response, std::function<void(::grpc::Status)> f) {
+void ObstacleAvoidanceService::Stub::async::StateDisable(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StateDisableRequest* request, ::mavsdk::rpc::obstacle_avoidance::StateDisableResponse* response, std::function<void(::grpc::Status)> f) {
   ::grpc::internal::CallbackUnaryCall< ::mavsdk::rpc::obstacle_avoidance::StateDisableRequest, ::mavsdk::rpc::obstacle_avoidance::StateDisableResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_StateDisable_, context, request, response, std::move(f));
 }
 
-void ObstacleAvoidanceService::Stub::experimental_async::StateDisable(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StateDisableRequest* request, ::mavsdk::rpc::obstacle_avoidance::StateDisableResponse* response, ::grpc::experimental::ClientUnaryReactor* reactor) {
+void ObstacleAvoidanceService::Stub::async::StateDisable(::grpc::ClientContext* context, const ::mavsdk::rpc::obstacle_avoidance::StateDisableRequest* request, ::mavsdk::rpc::obstacle_avoidance::StateDisableResponse* response, ::grpc::ClientUnaryReactor* reactor) {
   ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_StateDisable_, context, request, response, reactor);
 }
 
