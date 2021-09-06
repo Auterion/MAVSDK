@@ -223,7 +223,7 @@ CustomActionImpl::set_custom_action(CustomAction::ActionToExecute& action) const
 void CustomActionImpl::set_custom_action_async(
     CustomAction::ActionToExecute& action, const CustomAction::ResultCallback& callback) const
 {
-    MavlinkCommandSender::CommandLong command{};
+    MavlinkCommandSender::CommandLong command{*_parent};
 
     command.command = MAV_CMD_WAYPOINT_USER_1; // TODO: use MAV_CMD_CUSTOM_ACTION when it is merged
                                                // in upstream MAVLink
@@ -410,7 +410,7 @@ void CustomActionImpl::execute_custom_action_stage_async(
         }
     } else { // Process command
         if (stage.command.type == CustomAction::Command::CommandType::Long) { // LONG
-            MavlinkCommandSender::CommandLong command{};
+            MavlinkCommandSender::CommandLong command{*_parent};
             command.target_system_id = stage.command.target_system_id;
             command.target_component_id = stage.command.target_component_id;
             command.command = stage.command.command;
