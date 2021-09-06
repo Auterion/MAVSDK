@@ -28,7 +28,7 @@ void ObstacleAvoidanceImpl::disable() {}
 
 void ObstacleAvoidanceImpl::start_async(const ObstacleAvoidance::ResultCallback callback)
 {
-    MavlinkCommandSender::CommandLong command{};
+    MavlinkCommandSender::CommandLong command{*_parent};
 
     command.command = MAV_CMD_COMPONENT_CONTROL;
     command.params.param1 = MAV_COMP_ID_OBSTACLE_AVOIDANCE;
@@ -53,7 +53,7 @@ ObstacleAvoidance::Result ObstacleAvoidanceImpl::start()
 
 void ObstacleAvoidanceImpl::stop_async(const ObstacleAvoidance::ResultCallback callback)
 {
-    MavlinkCommandSender::CommandLong command{};
+    MavlinkCommandSender::CommandLong command{*_parent};
 
     command.command = MAV_CMD_COMPONENT_CONTROL;
     command.params.param1 = MAV_COMP_ID_OBSTACLE_AVOIDANCE;
@@ -78,7 +78,7 @@ ObstacleAvoidance::Result ObstacleAvoidanceImpl::stop()
 
 void ObstacleAvoidanceImpl::restart_async(const ObstacleAvoidance::ResultCallback callback)
 {
-    MavlinkCommandSender::CommandLong command{};
+    MavlinkCommandSender::CommandLong command{*_parent};
 
     command.command = MAV_CMD_COMPONENT_CONTROL;
     command.params.param1 = MAV_COMP_ID_OBSTACLE_AVOIDANCE;
@@ -103,7 +103,7 @@ ObstacleAvoidance::Result ObstacleAvoidanceImpl::restart()
 
 void ObstacleAvoidanceImpl::state_enable_async(const ObstacleAvoidance::ResultCallback callback)
 {
-    MavlinkCommandSender::CommandLong command{};
+    MavlinkCommandSender::CommandLong command{*_parent};
 
     command.command = MAV_CMD_COMPONENT_CONTROL;
     command.params.param1 = MAV_COMP_ID_OBSTACLE_AVOIDANCE;
@@ -128,7 +128,7 @@ ObstacleAvoidance::Result ObstacleAvoidanceImpl::state_enable()
 
 void ObstacleAvoidanceImpl::state_disable_async(const ObstacleAvoidance::ResultCallback callback)
 {
-    MavlinkCommandSender::CommandLong command{};
+    MavlinkCommandSender::CommandLong command{*_parent};
 
     command.command = MAV_CMD_COMPONENT_CONTROL;
     command.params.param1 = MAV_COMP_ID_OBSTACLE_AVOIDANCE;
