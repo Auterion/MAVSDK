@@ -141,23 +141,85 @@ public:
     friend std::ostream& operator<<(std::ostream& str, CustomAction::Command const& command);
 
     /**
+     * @brief Used to define a parameter to be set by the MAVSDK available API.
+     */
+    struct Parameter {
+        /**
+         * @brief Parameter type enumeration.
+         */
+        enum class ParameterType {
+            Int, /**< @brief MAV_PARAM_TYPE_ intenger types.. */
+            Float, /**< @brief MAV_PARAM_TYPE_ floating point types.. */
+        };
+
+        /**
+         * @brief Stream operator to print information about a `CustomAction::ParameterType`.
+         *
+         * @return A reference to the stream.
+         */
+        friend std::ostream&
+        operator<<(std::ostream& str, CustomAction::Parameter::ParameterType const& parameter_type);
+
+        ParameterType type{}; /**< @brief Type enum value. INT or FLOAT. */
+        std::string name{}; /**< @brief Parameter name. */
+        float value{}; /**< @brief Parameter value. Defaults to float, but can be truncated to an
+                          int. */
+    };
+
+    /**
+     * @brief Equal operator to compare two `CustomAction::Parameter` objects.
+     *
+     * @return `true` if items are equal.
+     */
+    friend bool operator==(const CustomAction::Parameter& lhs, const CustomAction::Parameter& rhs);
+
+    /**
+     * @brief Stream operator to print information about a `CustomAction::Parameter`.
+     *
+     * @return A reference to the stream.
+     */
+    friend std::ostream& operator<<(std::ostream& str, CustomAction::Parameter const& parameter);
+
+    /**
      * @brief Defines totally or partially a custom action. Can be a MAVLink command or a
      * script (with full or relative path).
-     *
-     * The timestamps are relative to the start of the action. This is rather useful
-     * if one has a state machine on the Companion/Mission Computer to process this.
-     * In the other hand, one does not have to consume these timestamps by just
-     * defining the trigger times manually on the state machine.
-     *
-     * @note it is considered that a timestamp_start of 0 and timestamp_stop > 0,
-     * then timestamp_stop is used as a timeout to the stage, forcing the action
-     * to the next stage, if available, or to complete.
      */
     struct Stage {
-        Command command{}; /**< @brief Command to run in the stage (if applicable) */
+        /**
+         * @brief State transition condition enumeration.
+         */
+        enum class StateTransitionCondition {
+            OnResultSuccess, /**< @brief Transitions to the next stage case the script/command is
+                                successful.. */
+            OnTimeout, /**< @brief Transitions to the next stage after a defined time.. */
+            OnLandingComplete, /**< @brief Transitions to the next stage after the vehicle is
+                                  landed.. */
+            OnTakeoffComplete, /**< @brief Transitions to the next stage after the vehicle finishes
+                                  takeoff.. */
+            OnModeChange, /**< @brief Transitions to the next stage after the vehicle changes from
+                             one user-specified fligght mode to another.. */
+            OnCustomConditionTrue, /**< @brief Transitions to the next stage after a user-specified
+                                      condition is true.. */
+            OnCustomConditionFalse, /**< @brief Transitions to the next stage after a user-specified
+                                       condition is false.. */
+        };
+
+        /**
+         * @brief Stream operator to print information about a
+         * `CustomAction::StateTransitionCondition`.
+         *
+         * @return A reference to the stream.
+         */
+        friend std::ostream& operator<<(
+            std::ostream& str,
+            CustomAction::Stage::StateTransitionCondition const& state_transition_condition);
+
+        Command command{}; /**< @brief Command to run in the stage (if applicable). */
         std::string script{}; /**< @brief Script to run in that stage (if applicable). */
-        double timestamp_start{}; /**< @brief Timestamp in usec when to start the stage */
-        double timestamp_stop{}; /**< @brief Timestamp in usec when the stage should stop */
+        Parameter parameter_set{}; /**< @brief Parameter to set in the stage (if applicable). */
+        StateTransitionCondition
+            state_transition_condition{}; /**< @brief State transition condition enum value. */
+        double timeout{}; /**< @brief Time in seconds when the stage should stop. */
     };
 
     /**
@@ -178,15 +240,41 @@ public:
      * @brief Metadata that describes the custom action and defines its stages.
      */
     struct ActionMetadata {
+        /**
+         * @brief State transition condition enumeration.
+         */
+        enum class ActionCompleteCondition {
+            OnLastStageComplete, /**< @brief Action is complete when the last stage is complete.. */
+            OnTimeout, /**< @brief Action is complete when a defined time as passed.. */
+            OnResultSuccess, /**< @brief Action is complete when the script/command is successful..
+                              */
+            OnCustomConditionTrue, /**< @brief Action is complete when user-specified condition is
+                                      true.. */
+            OnCustomConditionFalse, /**< @brief Action is complete whenr a user-specified condition
+                                       is false.. */
+        };
+
+        /**
+         * @brief Stream operator to print information about a
+         * `CustomAction::ActionCompleteCondition`.
+         *
+         * @return A reference to the stream.
+         */
+        friend std::ostream& operator<<(
+            std::ostream& str,
+            CustomAction::ActionMetadata::ActionCompleteCondition const& action_complete_condition);
+
         uint32_t id{}; /**< @brief ID of the action */
         std::string action_name{}; /**< @brief Name of the action */
         std::string action_description{}; /**< @brief Description of the action */
         std::string global_script{}; /**< @brief Script to run for this specific action. Runs
                                         instead of the stages. */
-        double global_timeout{}; /**< @brief Timeout for the action. If a global script is set, it
-                                    is used as a timeout for the script. Otherwise, for a staged
-                                    action, defines the global timeout for the action. independently
-                                    of the state of the stage processing. */
+        double global_timeout{}; /**< @brief Timeout for the action in seconds. If a global script
+                                    is set, it is used as a timeout for the script. Otherwise, for a
+                                    staged action, defines the global timeout for the action.
+                                    independently of the state of the stage processing. */
+        ActionCompleteCondition
+            action_complete_condition{}; /**< @brief Action complete condition enum value */
         std::vector<Stage>
             stages{}; /**< @brief Timestamped ordered stages. Runs instead of the global script. */
     };

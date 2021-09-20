@@ -41,6 +41,7 @@ static std::atomic<bool> _mission_finished{false};
 static std::atomic<bool> _action_stopped{false};
 static std::atomic<bool> _new_action{false};
 static std::atomic<bool> _new_actions_check_int{false};
+static std::atomic<bool> _in_air{false};
 
 static std::vector<CustomAction::ActionToExecute> _actions;
 static std::vector<double> _actions_progress;
@@ -62,6 +63,8 @@ static void send_progress_status(
 static void process_custom_action(CustomAction::ActionToExecute action);
 static void execute_custom_action(
     CustomAction::ActionMetadata action_metadata, std::shared_ptr<CustomAction> custom_action);
+static void update_action_progress_from_stage(
+    const unsigned& stage_idx, const CustomAction::ActionMetadata& action_metadata);
 
 TEST_F(SitlTest, CustomActionMission)
 {
@@ -79,8 +82,10 @@ TEST_F(SitlTest, CustomActionMission)
 
         mavsdk_gcs.subscribe_on_new_system([&prom, &mavsdk_gcs, &system_to_gcs]() {
             for (auto& system : mavsdk_gcs.systems()) {
-                if (system->has_autopilot()) {
+                if (system->has_autopilot() && system->is_connected()) {
                     system_to_gcs = system;
+                    // Unsubscribe again as we only want to find one system.
+                    mavsdk_gcs.subscribe_on_new_system(nullptr);
                     prom.set_value();
                     break;
                 }
@@ -119,8 +124,10 @@ TEST_F(SitlTest, CustomActionMission)
         mavsdk_companion.subscribe_on_new_system(
             [&prom, &mavsdk_companion, &system_to_companion]() {
                 for (auto& system : mavsdk_companion.systems()) {
-                    if (system->has_autopilot()) {
+                    if (system->has_autopilot() && system->is_connected()) {
                         system_to_companion = system;
+                        // Unsubscribe again as we only want to find one system.
+                        mavsdk_companion.subscribe_on_new_system(nullptr);
                         prom.set_value();
                         break;
                     }
@@ -298,6 +305,9 @@ void test_mission(
         ASSERT_EQ(status, std::future_status::ready);
         fut.get();
     }
+
+    // Get the in-air state
+    telemetry->subscribe_in_air([](bool in_air) { _in_air = in_air; });
 
     LogInfo() << "Arming...";
     const Action::Result arm_result = action->arm();
@@ -498,50 +508,94 @@ void process_custom_action(CustomAction::ActionToExecute action)
     _progress_threads.back().join();
 }
 
+void update_action_progress_from_stage(
+    const unsigned& stage_idx, const CustomAction::ActionMetadata& action_metadata)
+{
+    if (!_action_stopped.load()) {
+        _actions_progress.back() = (stage_idx + 1.0) / action_metadata.stages.size() * 100.0;
+
+        if (_actions_progress.back() != 100.0) {
+            _actions_result.back() = CustomAction::Result::InProgress;
+            LogInfo() << "Custom action #" << _actions_metadata.back().id
+                      << " current progress: " << _actions_progress.back() << "%";
+        } else {
+            _actions_result.back() = CustomAction::Result::Success;
+        }
+    }
+}
+
 void execute_custom_action(
     CustomAction::ActionMetadata action_metadata, std::shared_ptr<CustomAction> custom_action)
 {
     if (!action_metadata.stages.empty()) {
         for (unsigned i = 0; i < action_metadata.stages.size(); i++) {
+            CustomAction::Result stage_res = CustomAction::Result::Unknown;
+
             if (!_action_stopped.load()) {
-                CustomAction::Result stage_res =
-                    custom_action->execute_custom_action_stage(action_metadata.stages[i]);
+                stage_res = custom_action->execute_custom_action_stage(action_metadata.stages[i]);
                 EXPECT_EQ(stage_res, CustomAction::Result::Success);
             }
 
-            auto wait_time = action_metadata.stages[i].timestamp_stop * 1s;
-            std::unique_lock<std::mutex> lock(cancel_mtx);
-            cancel_signal.wait_for(lock, wait_time, []() { return _action_stopped.load(); });
-
-            if (!_action_stopped.load()) {
-                _actions_progress.back() = (i + 1.0) / action_metadata.stages.size() * 100.0;
-
-                if (_actions_progress.back() != 100.0) {
-                    _actions_result.back() = CustomAction::Result::InProgress;
-                    LogInfo() << "Custom action #" << _actions_metadata.back().id
-                              << " current progress: " << _actions_progress.back() << "%";
-                } else {
-                    _actions_result.back() = CustomAction::Result::Success;
+            if (action_metadata.stages[i].state_transition_condition ==
+                CustomAction::Stage::StateTransitionCondition::OnResultSuccess) {
+                if (stage_res == CustomAction::Result::Success) {
+                    update_action_progress_from_stage(i, action_metadata);
                 }
+            } else if (
+                action_metadata.stages[i].state_transition_condition ==
+                CustomAction::Stage::StateTransitionCondition::OnTimeout) {
+                auto wait_time = action_metadata.stages[i].timeout * 1s;
+                std::unique_lock<std::mutex> lock(cancel_mtx);
+                cancel_signal.wait_for(lock, wait_time, []() { return _action_stopped.load(); });
+
+                update_action_progress_from_stage(i, action_metadata);
+            } else if (
+                action_metadata.stages[i].state_transition_condition ==
+                CustomAction::Stage::StateTransitionCondition::OnLandingComplete) {
+                // Wait for the vehicle to be landed
+                while (!_action_stopped.load() && !_in_air) {
+                    std::this_thread::sleep_for(std::chrono::seconds(1));
+                }
+
+                update_action_progress_from_stage(i, action_metadata);
+            } else if (
+                action_metadata.stages[i].state_transition_condition ==
+                CustomAction::Stage::StateTransitionCondition::OnTakeoffComplete) {
+                // Wait for the vehicle to be in-air
+                while (!_action_stopped.load() && _in_air) {
+                    std::this_thread::sleep_for(std::chrono::seconds(1));
+                }
+
+                update_action_progress_from_stage(i, action_metadata);
             }
         }
 
     } else if (action_metadata.global_script != "") {
         if (!_action_stopped.load()) {
-            std::promise<CustomAction::Result> prom;
-            std::future<CustomAction::Result> fut = prom.get_future();
-            custom_action->execute_custom_action_global_script_async(
-                action_metadata.global_script,
-                [&prom](CustomAction::Result script_result) { prom.set_value(script_result); });
-
             CustomAction::Result result = CustomAction::Result::Unknown;
-            if (!std::isnan(action_metadata.global_timeout)) {
+
+            if (action_metadata.action_complete_condition ==
+                CustomAction::ActionMetadata::ActionCompleteCondition::OnResultSuccess) {
+                if (!_action_stopped.load()) {
+                    result = custom_action->execute_custom_action_global_script(
+                        action_metadata.global_script);
+                    EXPECT_EQ(result, CustomAction::Result::Success);
+                }
+            } else if (
+                action_metadata.action_complete_condition ==
+                CustomAction::ActionMetadata::ActionCompleteCondition::OnTimeout) {
+                std::promise<CustomAction::Result> prom;
+                std::future<CustomAction::Result> fut = prom.get_future();
+                custom_action->execute_custom_action_global_script_async(
+                    action_metadata.global_script,
+                    [&prom](CustomAction::Result script_result) { prom.set_value(script_result); });
+
                 std::chrono::seconds timeout(static_cast<long int>(action_metadata.global_timeout));
                 EXPECT_EQ(fut.wait_for(timeout), std::future_status::ready);
-            }
 
-            result = fut.get();
-            EXPECT_EQ(result, CustomAction::Result::Success);
+                result = fut.get();
+                EXPECT_EQ(result, CustomAction::Result::Success);
+            }
 
             _actions_result.back() = result;
 
