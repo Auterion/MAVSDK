@@ -575,8 +575,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: recursive
-      - name: test
-        run: PX4_VERSION=${{ matrix.px4_version }} tools/run-sitl-tests.sh /home/user/Firmware
       - name: Docker Login
         uses: Azure/docker-login@v1
         with:
