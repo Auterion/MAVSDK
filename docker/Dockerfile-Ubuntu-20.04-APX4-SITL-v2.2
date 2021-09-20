@@ -1,6 +1,6 @@
 #
 # Auterion PX4 v2.2 SITL testing environment for MAVSDK based on Ubuntu 20.04.
-# Author: Julian Oes <julian@oes.ch>
+# Author: Nuno Marques <nuno@auterion.com>
 #
 FROM mavsdk/mavsdk-ubuntu-20.04 as intermediate
 LABEL stage=intermediate
@@ -18,12 +18,12 @@ RUN apt-get update && \
 # add credentials on build
 ARG SSH_PRIVATE_KEY
 RUN mkdir /root/.ssh/
-RUN echo "${SSH_PRIVATE_KEY}" > /root/.ssh/id_rsa
-RUN chmod 600 /root/.ssh/id_rsa
+RUN echo "${SSH_PRIVATE_KEY}" > /root/.ssh/id_ed25519
+RUN chmod 600 /root/.ssh/id_ed25519
 
 # make sure the domain is accepted
 RUN mkdir -p $/root/.ssh/ && \
-    echo "$SSH_PRIVATE_KEY" > /root/.ssh/id_rsa && \
+    echo "$SSH_PRIVATE_KEY" > /root/.ssh/id_ed25519 && \
     ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
 
 RUN git clone git@github.com:Auterion/PX4_firmware_private.git ${FIRMWARE_DIR}
