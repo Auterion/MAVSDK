@@ -15,12 +15,20 @@ using namespace std::chrono_literals;
 static std::atomic<bool> _received_custom_action{false};
 static std::atomic<double> _action_progress{0};
 static std::atomic<CustomAction::Result> _action_result;
+static std::atomic<bool> in_air{false};
+static std::atomic<bool> on_ground{false};
+
+static std::pair<Param::Result, float> get_com_disarm_land{};
 
 static void send_progress_status(std::shared_ptr<CustomAction> custom_action);
 static void process_custom_action(
-    CustomAction::ActionToExecute action, std::shared_ptr<CustomAction> custom_action);
+    CustomAction::ActionToExecute action,
+    std::shared_ptr<CustomAction> custom_action,
+    std::shared_ptr<Param> param);
 static void execute_stages(
-    CustomAction::ActionMetadata action_metadata, std::shared_ptr<CustomAction> custom_action);
+    CustomAction::ActionMetadata action_metadata,
+    std::shared_ptr<CustomAction> custom_action,
+    std::shared_ptr<Param> param);
 
 TEST_F(SitlTest, CustomAction)
 {
@@ -38,8 +46,10 @@ TEST_F(SitlTest, CustomAction)
 
         mavsdk_gcs.subscribe_on_new_system([&prom, &mavsdk_gcs, &system_to_gcs]() {
             for (auto& system : mavsdk_gcs.systems()) {
-                if (system->has_autopilot()) {
+                if (system->has_autopilot() && system->is_connected()) {
                     system_to_gcs = system;
+                    // Unsubscribe again as we only want to find one system.
+                    mavsdk_gcs.subscribe_on_new_system(nullptr);
                     prom.set_value();
                     break;
                 }
@@ -63,8 +73,8 @@ TEST_F(SitlTest, CustomAction)
     Mavsdk mavsdk_companion;
 
     // Change configuration so the instance is treated as a mission computer
-    Mavsdk::Configuration config_cc(Mavsdk::Configuration::UsageType::CompanionComputer);
-    mavsdk_companion.set_configuration(config_cc);
+    mavsdk::Mavsdk::Configuration configuration(1, 193, true);
+    mavsdk_companion.set_configuration(configuration);
 
     ConnectionResult ret_comp = mavsdk_companion.add_udp_connection(14540);
     ASSERT_EQ(ret_comp, ConnectionResult::Success);
@@ -78,8 +88,10 @@ TEST_F(SitlTest, CustomAction)
         mavsdk_companion.subscribe_on_new_system(
             [&prom, &mavsdk_companion, &system_to_companion]() {
                 for (auto& system : mavsdk_companion.systems()) {
-                    if (system->has_autopilot()) {
+                    if (system->has_autopilot() && system->is_connected()) {
                         system_to_companion = system;
+                        // Unsubscribe again as we only want to find one system.
+                        mavsdk_companion.subscribe_on_new_system(nullptr);
                         prom.set_value();
                         break;
                     }
@@ -88,6 +100,7 @@ TEST_F(SitlTest, CustomAction)
 
         ASSERT_EQ(fut.wait_for(std::chrono::seconds(10)), std::future_status::ready);
     }
+    std::this_thread::sleep_for(std::chrono::seconds(1));
     ASSERT_TRUE(system_to_companion->is_connected());
     ASSERT_TRUE(system_to_companion->has_autopilot());
 
@@ -96,20 +109,10 @@ TEST_F(SitlTest, CustomAction)
     auto param = std::make_shared<Param>(system_to_companion);
 
     // Get COM_DISARM_LAND current value.
-    std::pair<Param::Result, float> get_com_disarm_land = param->get_param_float("COM_DISARM_LAND");
+    get_com_disarm_land = param->get_param_float("COM_DISARM_LAND");
     ASSERT_EQ(get_com_disarm_land.first, Param::Result::Success);
 
     std::this_thread::sleep_for(std::chrono::seconds(1));
-
-    // Set COM_DISARM_LAND to 0 for this action.
-    Param::Result set_com_disarm_land = param->set_param_float("COM_DISARM_LAND", 0.0f);
-    EXPECT_EQ(set_com_disarm_land, Param::Result::Success);
-
-    // Verify toggle.
-    std::pair<Param::Result, float> verify_get_com_disarm_land =
-        param->get_param_float("COM_DISARM_LAND");
-    EXPECT_EQ(verify_get_com_disarm_land.first, Param::Result::Success);
-    EXPECT_FLOAT_EQ(verify_get_com_disarm_land.second, 0.0f);
 
     // Start tests
     {
@@ -125,6 +128,9 @@ TEST_F(SitlTest, CustomAction)
         });
         ASSERT_EQ(fut.wait_for(std::chrono::seconds(10)), std::future_status::ready);
     }
+
+    // Get the in-air state
+    telemetry->subscribe_in_air([](bool in_air_state) { in_air = in_air_state; });
 
     {
         LogInfo() << "Arming";
@@ -160,7 +166,7 @@ TEST_F(SitlTest, CustomAction)
         // Send command to start custom action 0
         CustomAction::ActionToExecute action_to_execute{};
         action_to_execute.id = 0;
-        action_to_execute.timeout = 10;
+        action_to_execute.timeout = 20;
 
         custom_action_gcs->set_custom_action_async(
             action_to_execute, [&prom_res](CustomAction::Result result) {
@@ -187,7 +193,7 @@ TEST_F(SitlTest, CustomAction)
         CustomAction::ActionToExecute action_exec = fut_act.get();
 
         // Process the custom action
-        process_custom_action(action_exec, custom_action_comp);
+        process_custom_action(action_exec, custom_action_comp, param);
     }
 
     {
@@ -205,8 +211,8 @@ TEST_F(SitlTest, CustomAction)
         LogInfo() << "Waiting to be landed...";
         std::promise<void> prom;
         std::future<void> fut = prom.get_future();
-        telemetry->subscribe_in_air([&telemetry, &prom](bool in_air) {
-            if (!in_air) {
+        telemetry->subscribe_in_air([&telemetry, &prom](bool in_air_state) {
+            if (!in_air_state) {
                 // Unregister to prevent fulfilling promise twice.
                 telemetry->subscribe_in_air(nullptr);
                 prom.set_value();
@@ -214,15 +220,6 @@ TEST_F(SitlTest, CustomAction)
         });
         EXPECT_EQ(fut.wait_for(std::chrono::seconds(20)), std::future_status::ready);
     }
-
-    // Reset COM_DISARM_LAND back to the initial value.
-    set_com_disarm_land = param->set_param_float("COM_DISARM_LAND", get_com_disarm_land.second);
-    EXPECT_EQ(set_com_disarm_land, Param::Result::Success);
-
-    // Verify COM_DISARM_LAND reset.
-    verify_get_com_disarm_land = param->get_param_float("COM_DISARM_LAND");
-    EXPECT_EQ(verify_get_com_disarm_land.first, Param::Result::Success);
-    EXPECT_FLOAT_EQ(verify_get_com_disarm_land.second, get_com_disarm_land.second);
 
     {
         LogInfo() << "Disarming";
@@ -258,7 +255,9 @@ void send_progress_status(std::shared_ptr<CustomAction> custom_action)
 }
 
 void process_custom_action(
-    CustomAction::ActionToExecute action, std::shared_ptr<CustomAction> custom_action)
+    CustomAction::ActionToExecute action,
+    std::shared_ptr<CustomAction> custom_action,
+    std::shared_ptr<Param> param)
 {
     // Note that this (client) function is not custom action generic, in the sense that
     // it a priori knows the number stages the action being executed is composed of
@@ -292,95 +291,116 @@ void process_custom_action(
     std::thread status_th(send_progress_status, custom_action);
 
     // Start the custom action execution
-    execute_stages(action_metadata, custom_action);
-    EXPECT_DOUBLE_EQ(_action_progress, 100.0);
+    execute_stages(action_metadata, custom_action, param);
+    // EXPECT_DOUBLE_EQ(_action_progress, 100.0);
 
     status_th.join();
 }
 
 void execute_stages(
-    CustomAction::ActionMetadata action_metadata, std::shared_ptr<CustomAction> custom_action)
+    CustomAction::ActionMetadata action_metadata,
+    std::shared_ptr<CustomAction> custom_action,
+    std::shared_ptr<Param> param)
 {
-    // First stage
+    // First stage - Set COM_DISARM_LAND to 0.0
     {
         CustomAction::Result stage_res =
             custom_action->execute_custom_action_stage(action_metadata.stages[0]);
         EXPECT_EQ(stage_res, CustomAction::Result::Success);
 
-        std::this_thread::sleep_for(std::chrono::seconds(10));
+        if (stage_res == CustomAction::Result::Success) {
+            _action_progress.store(25.0, std::memory_order_relaxed);
+            _action_result.store(CustomAction::Result::Success, std::memory_order_relaxed);
+            LogInfo() << "Custom action #" << action_metadata.id
+                      << " current progress: " << _action_progress.load() << "%";
+        }
     }
 
-    _action_progress.store(25.0, std::memory_order_relaxed);
-    _action_result.store(CustomAction::Result::Success, std::memory_order_relaxed);
-    LogInfo() << "Custom action #" << action_metadata.id
-              << " current progress: " << _action_progress.load() << "%";
+    // Verify COM_DISARM_LAND was set to 0.0
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    std::pair<Param::Result, float> verify_get_com_disarm_land =
+        param->get_param_float("COM_DISARM_LAND");
+    EXPECT_EQ(verify_get_com_disarm_land.first, Param::Result::Success);
+    EXPECT_FLOAT_EQ(verify_get_com_disarm_land.second, 0.0f);
 
-    // Second stage
+    // Second stage - Land
     {
         CustomAction::Result stage_res =
             custom_action->execute_custom_action_stage(action_metadata.stages[1]);
         EXPECT_EQ(stage_res, CustomAction::Result::Success);
     }
 
-    // Third stage
+    // Third stage - Trigger safe landing
     {
         CustomAction::Result stage_res =
             custom_action->execute_custom_action_stage(action_metadata.stages[2]);
         EXPECT_EQ(stage_res, CustomAction::Result::Success);
 
-        std::this_thread::sleep_for(std::chrono::seconds(3));
+        // Wait until it is landed
+        while (in_air) {
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+        }
     }
 
-    // Fourth stage
+    // Fourth stage - Open dummy cargo latch
     {
         CustomAction::Result stage_res =
             custom_action->execute_custom_action_stage(action_metadata.stages[3]);
         EXPECT_EQ(stage_res, CustomAction::Result::Success);
 
-        std::this_thread::sleep_for(std::chrono::seconds(5));
+        if (stage_res == CustomAction::Result::Success) {
+            _action_progress.store(50.0, std::memory_order_relaxed);
+            _action_result.store(CustomAction::Result::Success, std::memory_order_relaxed);
+            LogInfo() << "Custom action #" << action_metadata.id
+                      << " current progress: " << _action_progress.load() << "%";
+        }
     }
 
-    _action_progress.store(50.0, std::memory_order_relaxed);
-    _action_result.store(CustomAction::Result::Success, std::memory_order_relaxed);
-    LogInfo() << "Custom action #" << action_metadata.id
-              << " current progress: " << _action_progress.load() << "%";
-
-    // Fifth stage
+    // Fifth stage - Close dummy cargo latch
     {
         CustomAction::Result stage_res =
             custom_action->execute_custom_action_stage(action_metadata.stages[4]);
         EXPECT_EQ(stage_res, CustomAction::Result::Success);
-
-        std::this_thread::sleep_for(std::chrono::seconds(5));
     }
 
-    // Sixth stage
+    // Sixth stage - Set COM_DISARM_LAND to 2.0
     {
         CustomAction::Result stage_res =
             custom_action->execute_custom_action_stage(action_metadata.stages[5]);
         EXPECT_EQ(stage_res, CustomAction::Result::Success);
 
-        std::this_thread::sleep_for(std::chrono::seconds(5));
+        if (stage_res == CustomAction::Result::Success) {
+            _action_progress.store(75.0, std::memory_order_relaxed);
+            _action_result.store(CustomAction::Result::Success, std::memory_order_relaxed);
+            LogInfo() << "Custom action #" << action_metadata.id
+                      << " current progress: " << _action_progress.load() << "%";
+        }
     }
 
-    _action_progress.store(75.0, std::memory_order_relaxed);
-    _action_result.store(CustomAction::Result::Success, std::memory_order_relaxed);
-    LogInfo() << "Custom action #" << action_metadata.id
-              << " current progress: " << _action_progress.load() << "%";
+    // Verify COM_DISARM_LAND reset.
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    verify_get_com_disarm_land = param->get_param_float("COM_DISARM_LAND");
+    EXPECT_EQ(verify_get_com_disarm_land.first, Param::Result::Success);
+    EXPECT_FLOAT_EQ(verify_get_com_disarm_land.second, get_com_disarm_land.second);
 
-    // Seventh stage
+    // Seventh stage - Takeoff
     {
         CustomAction::Result stage_res =
             custom_action->execute_custom_action_stage(action_metadata.stages[6]);
         EXPECT_EQ(stage_res, CustomAction::Result::Success);
 
-        std::this_thread::sleep_for(std::chrono::seconds(10));
-    }
+        // Wait until it is in air
+        while (!in_air) {
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+        }
 
-    _action_progress.store(100.0, std::memory_order_relaxed);
-    _action_result.store(CustomAction::Result::Success, std::memory_order_relaxed);
-    LogInfo() << "Custom action #" << action_metadata.id
-              << " current progress: " << _action_progress.load() << "%";
+        if (stage_res == CustomAction::Result::Success) {
+            _action_progress.store(100.0, std::memory_order_relaxed);
+            _action_result.store(CustomAction::Result::Success, std::memory_order_relaxed);
+            LogInfo() << "Custom action #" << action_metadata.id
+                      << " current progress: " << _action_progress.load() << "%";
+        }
+    }
 
     // End
     {
@@ -388,7 +408,7 @@ void execute_stages(
 
         // Used to stop the threads
         _action_result.store(CustomAction::Result::Unknown, std::memory_order_relaxed);
-    }
 
-    LogInfo() << "Custom action #" << action_metadata.id << " executed!";
+        LogInfo() << "Custom action #" << action_metadata.id << " executed!";
+    }
 }

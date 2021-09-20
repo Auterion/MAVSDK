@@ -9,7 +9,7 @@ def main():
     print("\n - Safe landing started!\n");
     print(" - Executing area verification while descending...\n");
 
-    time.sleep(4)
+    time.sleep(3)
 
     print(" - Safe land executed.\n");
 

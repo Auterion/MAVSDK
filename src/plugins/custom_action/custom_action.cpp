@@ -12,6 +12,7 @@ namespace mavsdk {
 
 using ActionToExecute = CustomAction::ActionToExecute;
 using Command = CustomAction::Command;
+using Parameter = CustomAction::Parameter;
 using Stage = CustomAction::Stage;
 using ActionMetadata = CustomAction::ActionMetadata;
 
@@ -171,13 +172,64 @@ std::ostream& operator<<(std::ostream& str, CustomAction::Command const& command
     return str;
 }
 
+std::ostream&
+operator<<(std::ostream& str, CustomAction::Parameter::ParameterType const& parameter_type)
+{
+    switch (parameter_type) {
+        case CustomAction::Parameter::ParameterType::Int:
+            return str << "Int";
+        case CustomAction::Parameter::ParameterType::Float:
+            return str << "Float";
+        default:
+            return str << "Unknown";
+    }
+}
+bool operator==(const CustomAction::Parameter& lhs, const CustomAction::Parameter& rhs)
+{
+    return (rhs.type == lhs.type) && (rhs.name == lhs.name) &&
+           ((std::isnan(rhs.value) && std::isnan(lhs.value)) || rhs.value == lhs.value);
+}
+
+std::ostream& operator<<(std::ostream& str, CustomAction::Parameter const& parameter)
+{
+    str << std::setprecision(15);
+    str << "parameter:" << '\n' << "{\n";
+    str << "    type: " << parameter.type << '\n';
+    str << "    name: " << parameter.name << '\n';
+    str << "    value: " << parameter.value << '\n';
+    str << '}';
+    return str;
+}
+
+std::ostream& operator<<(
+    std::ostream& str,
+    CustomAction::Stage::StateTransitionCondition const& state_transition_condition)
+{
+    switch (state_transition_condition) {
+        case CustomAction::Stage::StateTransitionCondition::OnResultSuccess:
+            return str << "On Result Success";
+        case CustomAction::Stage::StateTransitionCondition::OnTimeout:
+            return str << "On Timeout";
+        case CustomAction::Stage::StateTransitionCondition::OnLandingComplete:
+            return str << "On Landing Complete";
+        case CustomAction::Stage::StateTransitionCondition::OnTakeoffComplete:
+            return str << "On Takeoff Complete";
+        case CustomAction::Stage::StateTransitionCondition::OnModeChange:
+            return str << "On Mode Change";
+        case CustomAction::Stage::StateTransitionCondition::OnCustomConditionTrue:
+            return str << "On Custom Condition True";
+        case CustomAction::Stage::StateTransitionCondition::OnCustomConditionFalse:
+            return str << "On Custom Condition False";
+        default:
+            return str << "Unknown";
+    }
+}
 bool operator==(const CustomAction::Stage& lhs, const CustomAction::Stage& rhs)
 {
     return (rhs.command == lhs.command) && (rhs.script == lhs.script) &&
-           ((std::isnan(rhs.timestamp_start) && std::isnan(lhs.timestamp_start)) ||
-            rhs.timestamp_start == lhs.timestamp_start) &&
-           ((std::isnan(rhs.timestamp_stop) && std::isnan(lhs.timestamp_stop)) ||
-            rhs.timestamp_stop == lhs.timestamp_stop);
+           (rhs.parameter_set == lhs.parameter_set) &&
+           (rhs.state_transition_condition == lhs.state_transition_condition) &&
+           ((std::isnan(rhs.timeout) && std::isnan(lhs.timeout)) || rhs.timeout == lhs.timeout);
 }
 
 std::ostream& operator<<(std::ostream& str, CustomAction::Stage const& stage)
@@ -186,12 +238,32 @@ std::ostream& operator<<(std::ostream& str, CustomAction::Stage const& stage)
     str << "stage:" << '\n' << "{\n";
     str << "    command: " << stage.command << '\n';
     str << "    script: " << stage.script << '\n';
-    str << "    timestamp_start: " << stage.timestamp_start << '\n';
-    str << "    timestamp_stop: " << stage.timestamp_stop << '\n';
+    str << "    parameter_set: " << stage.parameter_set << '\n';
+    str << "    state_transition_condition: " << stage.state_transition_condition << '\n';
+    str << "    timeout: " << stage.timeout << '\n';
     str << '}';
     return str;
 }
 
+std::ostream& operator<<(
+    std::ostream& str,
+    CustomAction::ActionMetadata::ActionCompleteCondition const& action_complete_condition)
+{
+    switch (action_complete_condition) {
+        case CustomAction::ActionMetadata::ActionCompleteCondition::OnLastStageComplete:
+            return str << "On Last Stage Complete";
+        case CustomAction::ActionMetadata::ActionCompleteCondition::OnTimeout:
+            return str << "On Timeout";
+        case CustomAction::ActionMetadata::ActionCompleteCondition::OnResultSuccess:
+            return str << "On Result Success";
+        case CustomAction::ActionMetadata::ActionCompleteCondition::OnCustomConditionTrue:
+            return str << "On Custom Condition True";
+        case CustomAction::ActionMetadata::ActionCompleteCondition::OnCustomConditionFalse:
+            return str << "On Custom Condition False";
+        default:
+            return str << "Unknown";
+    }
+}
 bool operator==(const CustomAction::ActionMetadata& lhs, const CustomAction::ActionMetadata& rhs)
 {
     return (rhs.id == lhs.id) && (rhs.action_name == lhs.action_name) &&
@@ -199,6 +271,7 @@ bool operator==(const CustomAction::ActionMetadata& lhs, const CustomAction::Act
            (rhs.global_script == lhs.global_script) &&
            ((std::isnan(rhs.global_timeout) && std::isnan(lhs.global_timeout)) ||
             rhs.global_timeout == lhs.global_timeout) &&
+           (rhs.action_complete_condition == lhs.action_complete_condition) &&
            (rhs.stages == lhs.stages);
 }
 
@@ -211,6 +284,7 @@ std::ostream& operator<<(std::ostream& str, CustomAction::ActionMetadata const& 
     str << "    action_description: " << action_metadata.action_description << '\n';
     str << "    global_script: " << action_metadata.global_script << '\n';
     str << "    global_timeout: " << action_metadata.global_timeout << '\n';
+    str << "    action_complete_condition: " << action_metadata.action_complete_condition << '\n';
     str << "    stages: [";
     for (auto it = action_metadata.stages.begin(); it != action_metadata.stages.end(); ++it) {
         str << *it;

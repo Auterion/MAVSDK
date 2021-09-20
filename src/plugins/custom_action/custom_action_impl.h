@@ -71,6 +71,9 @@ public:
 
     static CustomAction::Result custom_action_result_from_script_result(int result);
 
+    static CustomAction::Result
+    custom_action_result_from_mavlink_parameters_result(MAVLinkParameters::Result result);
+
 private:
     static CustomAction::Result
     custom_action_result_from_command_result(MavlinkCommandSender::Result result);
