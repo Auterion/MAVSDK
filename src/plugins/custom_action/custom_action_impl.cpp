@@ -81,8 +81,21 @@ CustomActionImpl::process_custom_action_command(const MavlinkCommandReceiver::Co
             MAV_RESULT_IN_PROGRESS,
             0,
             action_to_exec.id, // Use the action ID in param4 to identify the action/process
+            _parent->get_own_system_id(),
+            _parent->get_autopilot_id());
+    } else {
+        // Send first ACK marking the command as being in progress
+        mavlink_msg_command_ack_pack(
+            _parent->get_own_system_id(),
+            _parent->get_own_component_id(),
+            &command_ack,
+            MAV_CMD_WAYPOINT_USER_1, // TODO: use MAV_CMD_CUSTOM_ACTION when it is merged in
+            // upstream MAVLink
+            MAV_RESULT_TEMPORARILY_REJECTED,
             0,
-            0);
+            action_to_exec.id, // Use the action ID in param4 to identify the action/process
+            _parent->get_own_system_id(),
+            _parent->get_autopilot_id());
     }
 
     // The COMMAND_ACK is sent as a result fo the callback so to be processed and
@@ -118,8 +131,8 @@ void CustomActionImpl::process_command_cancellation(const mavlink_message_t& mes
             MAV_RESULT_CANCELLED,
             0,
             0,
-            0,
-            0);
+            _parent->get_own_system_id(),
+            _parent->get_autopilot_id());
 
         _parent->send_message(command_ack);
     }
@@ -168,8 +181,8 @@ void CustomActionImpl::respond_custom_action_async(
         static_cast<uint8_t>(
             action_to_execute.progress), // Set the command progress when applicable
         action_to_execute.id, // Use the action ID in param4 to identify the action/process
-        0,
-        0);
+        _parent->get_own_system_id(),
+        _parent->get_autopilot_id());
 
     auto msg_result = _parent->send_message(command_ack);
 
