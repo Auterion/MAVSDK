@@ -295,6 +295,47 @@ void CustomActionImpl::custom_action_metadata_async(
     action_metadata.id = action.id;
     action_metadata.action_name = action_root["name"].asString();
     action_metadata.action_description = action_root["description"].asString();
+    if (action_root["action_complete_condition"].asString() != "") {
+        if (action_root["action_complete_condition"].asString() == "ON_LAST_STAGE_COMPLETE") {
+            if (action_root["stages"].size() == 0) {
+                LogErr() << "No stages set for action #" << action.id
+                         << " although \"ON_STAGE_COMPLETE\" is set.";
+                parsing_result = CustomAction::Result::Error;
+            } else {
+                action_metadata.action_complete_condition =
+                    CustomAction::ActionMetadata::ActionCompleteCondition::OnLastStageComplete;
+            }
+        } else if (action_root["action_complete_condition"].asString() == "ON_TIMEOUT") {
+            if (action_root["global_timeout"].isNull()) {
+                LogErr() << "No global timeout set for action #" << action.id;
+                parsing_result = CustomAction::Result::Error;
+            } else {
+                action_metadata.action_complete_condition =
+                    CustomAction::ActionMetadata::ActionCompleteCondition::OnTimeout;
+            }
+        } else if (action_root["action_complete_condition"].asString() == "ON_RESULT_SUCCESS") {
+            action_metadata.action_complete_condition =
+                CustomAction::ActionMetadata::ActionCompleteCondition::OnResultSuccess;
+        } else if (
+            action_root["action_complete_condition"].asString() == "ON_CUSTOM_CONDITION_TRUE") {
+            action_metadata.action_complete_condition =
+                CustomAction::ActionMetadata::ActionCompleteCondition::OnCustomConditionTrue;
+        } else if (
+            action_root["action_complete_condition"].asString() == "ON_CUSTOM_CONDITION_FALSE") {
+            action_metadata.action_complete_condition =
+                CustomAction::ActionMetadata::ActionCompleteCondition::OnCustomConditionFalse;
+        } else {
+            LogErr()
+                << "Uknown condition string for action complete was set for action #" << action.id
+                << ". Valid conditions are \"ON_STAGE_COMPLETE\", \"ON_TIMEOUT\", \"ON_RESULT_SUCCESS\", \"ON_CUSTOM_CONDITION_TRUE\" and \"ON_CUSTOM_CONDITION_FALSE\".";
+            parsing_result = CustomAction::Result::Error;
+        }
+
+    } else {
+        LogErr() << "No condition for action completion was set for action #" << action.id;
+        parsing_result = CustomAction::Result::Error;
+    }
+
     action_metadata.global_timeout = action_root["global_timeout"].isNull() ?
                                          double(NAN) :
                                          action_root["global_timeout"].asDouble();
@@ -316,6 +357,48 @@ void CustomActionImpl::custom_action_metadata_async(
                 if (stage_id["script"].asString() != "") {
                     stage.script = stage_id["script"].asString();
 
+                } else if (
+                    stage_id["parameter_set"]["parameter_name"].asString() !=
+                    "") { // Else, if a parameter is to be set, pass the parameter to the client
+                          // side
+                    CustomAction::Parameter param{};
+
+                    param.name = stage_id["parameter_set"]["parameter_name"].asString();
+
+                    if (stage_id["parameter_set"]["parameter_type"].asString() == "") {
+                        LogErr() << "Parameter "
+                                 << stage_id["parameter_set"]["parameter_name"].asString()
+                                 << " set for stage " << i << " of action #" << action.id
+                                 << " does not contain a type.";
+                        parsing_result = CustomAction::Result::Error;
+                        break;
+                    } else {
+                        if (stage_id["parameter_set"]["parameter_type"].asString() == "INT") {
+                            param.type = CustomAction::Parameter::ParameterType::Int;
+                        } else if (
+                            stage_id["parameter_set"]["parameter_type"].asString() == "FLOAT") {
+                            param.type = CustomAction::Parameter::ParameterType::Float;
+                        } else {
+                            LogErr() << "Invalid parameter type for stage " << i << " of action #"
+                                     << action.id << ". Valid ones are \"INT\" and \"FLOAT\"";
+                            parsing_result = CustomAction::Result::Error;
+                            break;
+                        }
+                    }
+
+                    if (stage_id["parameter_set"]["parameter_value"].asString() == "") {
+                        LogErr() << "Parameter "
+                                 << stage_id["parameter_set"]["parameter_name"].asString()
+                                 << " set for stage " << i << " of action #" << action.id
+                                 << " does not contain a value.";
+                        parsing_result = CustomAction::Result::Error;
+                        break;
+                    } else {
+                        param.value =
+                            std::stof(stage_id["parameter_set"]["parameter_value"].asString());
+                    }
+
+                    stage.parameter_set = param;
                 } else { // Else, pass the command to the client side
                     CustomAction::Command cmd{};
                     if (stage_id["cmd"]["type"].asString() == "LONG") {
@@ -325,6 +408,7 @@ void CustomActionImpl::custom_action_metadata_async(
                     } else {
                         LogErr() << "Invalid command type. Valid ones are \"INT\" and \"LONG\"";
                         parsing_result = CustomAction::Result::Error;
+                        break;
                     }
 
                     cmd.target_system_id = stage_id["cmd"]["target_system"].asInt();
@@ -357,15 +441,61 @@ void CustomActionImpl::custom_action_metadata_async(
                     stage.command = cmd;
                 }
 
-                // The timestamps are optional, as the execution control ideally should
-                // be done by the client. But, if set, they can be used in a state
-                // machine on the client code
-                stage.timestamp_start = stage_id["timestamp_start"].isNull() ?
-                                            double(NAN) :
-                                            stage_id["timestamp_start"].asDouble();
-                stage.timestamp_stop = stage_id["timestamp_stop"].isNull() ?
-                                           double(NAN) :
-                                           stage_id["timestamp_stop"].asDouble();
+                if (stage_id["state_transition_condition"].asString() != "") {
+                    if (stage_id["state_transition_condition"].asString() == "ON_RESULT_SUCCESS") {
+                        stage.state_transition_condition =
+                            CustomAction::Stage::StateTransitionCondition::OnResultSuccess;
+                    } else if (stage_id["state_transition_condition"].asString() == "ON_TIMEOUT") {
+                        if (stage_id["timeout"].isNull()) {
+                            LogErr()
+                                << "No timeout set for stage " << i << " of action #" << action.id;
+                            parsing_result = CustomAction::Result::Error;
+                            break;
+                        }
+
+                        stage.state_transition_condition =
+                            CustomAction::Stage::StateTransitionCondition::OnTimeout;
+                    } else if (
+                        stage_id["state_transition_condition"].asString() ==
+                        "ON_LANDING_COMPLETE") {
+                        stage.state_transition_condition =
+                            CustomAction::Stage::StateTransitionCondition::OnLandingComplete;
+                    } else if (
+                        stage_id["state_transition_condition"].asString() ==
+                        "ON_TAKEOFF_COMPLETE") {
+                        stage.state_transition_condition =
+                            CustomAction::Stage::StateTransitionCondition::OnTakeoffComplete;
+                    } else if (
+                        stage_id["state_transition_condition"].asString() == "ON_MODE_CHANGE") {
+                        stage.state_transition_condition =
+                            CustomAction::Stage::StateTransitionCondition::OnModeChange;
+                    } else if (
+                        stage_id["state_transition_condition"].asString() ==
+                        "ON_CUSTOM_CONDITION_TRUE") {
+                        stage.state_transition_condition =
+                            CustomAction::Stage::StateTransitionCondition::OnCustomConditionTrue;
+                    } else if (
+                        stage_id["state_transition_condition"].asString() ==
+                        "ON_CUSTOM_CONDITION_FALSE") {
+                        stage.state_transition_condition =
+                            CustomAction::Stage::StateTransitionCondition::OnCustomConditionFalse;
+                    } else {
+                        LogErr()
+                            << "Uknown condition string for state transition was set for stage "
+                            << i << " of action #" << action.id
+                            << ". Valid conditions are \"ON_RESULT_SUCCESS\", \"ON_TIMEOUT\", \"ON_LANDING_COMPLETE\", \"ON_TAKEOFF_COMPLETE\", \"ON_MODE_CHANGE\", \"ON_CUSTOM_CONDITION_TRUE\" and \"ON_CUSTOM_CONDITION_FALSE\".";
+                        parsing_result = CustomAction::Result::Error;
+                    }
+
+                } else {
+                    LogErr() << "No condition for state transition was set for stage " << i
+                             << " of action #" << action.id;
+                    parsing_result = CustomAction::Result::Error;
+                    break;
+                }
+
+                stage.timeout =
+                    stage_id["timeout"].isNull() ? double(NAN) : stage_id["timeout"].asDouble();
 
                 action_metadata.stages.push_back(stage);
             }
@@ -408,6 +538,24 @@ void CustomActionImpl::execute_custom_action_stage_async(
             auto temp_callback = callback;
             _parent->call_user_callback([temp_callback, result]() { temp_callback(result); });
         }
+    } else if (stage.parameter_set.name != "") { // Set parameter
+        CustomAction::Result result{};
+        if (stage.parameter_set.type == CustomAction::Parameter::ParameterType::Int) { // INT
+            MAVLinkParameters::Result param_result = _parent->set_param_int(
+                stage.parameter_set.name, static_cast<int>(stage.parameter_set.value));
+            result = custom_action_result_from_mavlink_parameters_result(param_result);
+        } else if (
+            stage.parameter_set.type == CustomAction::Parameter::ParameterType::Float) { // FLOAT
+            MAVLinkParameters::Result param_result =
+                _parent->set_param_float(stage.parameter_set.name, stage.parameter_set.value);
+            result = custom_action_result_from_mavlink_parameters_result(param_result);
+        }
+
+        if (callback) {
+            auto temp_callback = callback;
+            _parent->call_user_callback([temp_callback, result]() { temp_callback(result); });
+        }
+
     } else { // Process command
         if (stage.command.type == CustomAction::Command::CommandType::Long) { // LONG
             MavlinkCommandSender::CommandLong command{*_parent};
@@ -545,12 +693,29 @@ CustomActionImpl::mavlink_command_result_from_custom_action_result(CustomAction:
     }
 }
 
+CustomAction::Result CustomActionImpl::custom_action_result_from_mavlink_parameters_result(
+    MAVLinkParameters::Result result)
+{
+    switch (result) {
+        case MAVLinkParameters::Result::Success:
+            return CustomAction::Result::Success;
+        case MAVLinkParameters::Result::Timeout:
+            return CustomAction::Result::Timeout;
+        case MAVLinkParameters::Result::ParamNameTooLong:
+        case MAVLinkParameters::Result::WrongType:
+        case MAVLinkParameters::Result::ConnectionError:
+        default:
+            return CustomAction::Result::Error;
+    }
+}
+
 CustomAction::Result CustomActionImpl::custom_action_result_from_script_result(int result)
 {
     switch (result) {
         case 0:
             return CustomAction::Result::Success;
         case -1:
+        case 1:
         default:
             return CustomAction::Result::Error;
     }

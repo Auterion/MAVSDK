@@ -163,6 +163,131 @@ public:
         return obj;
     }
 
+    static rpc::custom_action::Parameter::ParameterType translateToRpcParameterType(
+        const mavsdk::CustomAction::Parameter::ParameterType& parameter_type)
+    {
+        switch (parameter_type) {
+            default:
+                LogErr() << "Unknown parameter_type enum value: "
+                         << static_cast<int>(parameter_type);
+            // FALLTHROUGH
+            case mavsdk::CustomAction::Parameter::ParameterType::Int:
+                return rpc::custom_action::Parameter_ParameterType_PARAMETER_TYPE_INT;
+            case mavsdk::CustomAction::Parameter::ParameterType::Float:
+                return rpc::custom_action::Parameter_ParameterType_PARAMETER_TYPE_FLOAT;
+        }
+    }
+
+    static mavsdk::CustomAction::Parameter::ParameterType
+    translateFromRpcParameterType(const rpc::custom_action::Parameter::ParameterType parameter_type)
+    {
+        switch (parameter_type) {
+            default:
+                LogErr() << "Unknown parameter_type enum value: "
+                         << static_cast<int>(parameter_type);
+            // FALLTHROUGH
+            case rpc::custom_action::Parameter_ParameterType_PARAMETER_TYPE_INT:
+                return mavsdk::CustomAction::Parameter::ParameterType::Int;
+            case rpc::custom_action::Parameter_ParameterType_PARAMETER_TYPE_FLOAT:
+                return mavsdk::CustomAction::Parameter::ParameterType::Float;
+        }
+    }
+
+    static std::unique_ptr<rpc::custom_action::Parameter>
+    translateToRpcParameter(const mavsdk::CustomAction::Parameter& parameter)
+    {
+        auto rpc_obj = std::make_unique<rpc::custom_action::Parameter>();
+
+        rpc_obj->set_type(translateToRpcParameterType(parameter.type));
+
+        rpc_obj->set_name(parameter.name);
+
+        rpc_obj->set_value(parameter.value);
+
+        return rpc_obj;
+    }
+
+    static mavsdk::CustomAction::Parameter
+    translateFromRpcParameter(const rpc::custom_action::Parameter& parameter)
+    {
+        mavsdk::CustomAction::Parameter obj;
+
+        obj.type = translateFromRpcParameterType(parameter.type());
+
+        obj.name = parameter.name();
+
+        obj.value = parameter.value();
+
+        return obj;
+    }
+
+    static rpc::custom_action::Stage::StateTransitionCondition
+    translateToRpcStateTransitionCondition(
+        const mavsdk::CustomAction::Stage::StateTransitionCondition& state_transition_condition)
+    {
+        switch (state_transition_condition) {
+            default:
+                LogErr() << "Unknown state_transition_condition enum value: "
+                         << static_cast<int>(state_transition_condition);
+            // FALLTHROUGH
+            case mavsdk::CustomAction::Stage::StateTransitionCondition::OnResultSuccess:
+                return rpc::custom_action::
+                    Stage_StateTransitionCondition_STATE_TRANSITION_CONDITION_ON_RESULT_SUCCESS;
+            case mavsdk::CustomAction::Stage::StateTransitionCondition::OnTimeout:
+                return rpc::custom_action::
+                    Stage_StateTransitionCondition_STATE_TRANSITION_CONDITION_ON_TIMEOUT;
+            case mavsdk::CustomAction::Stage::StateTransitionCondition::OnLandingComplete:
+                return rpc::custom_action::
+                    Stage_StateTransitionCondition_STATE_TRANSITION_CONDITION_ON_LANDING_COMPLETE;
+            case mavsdk::CustomAction::Stage::StateTransitionCondition::OnTakeoffComplete:
+                return rpc::custom_action::
+                    Stage_StateTransitionCondition_STATE_TRANSITION_CONDITION_ON_TAKEOFF_COMPLETE;
+            case mavsdk::CustomAction::Stage::StateTransitionCondition::OnModeChange:
+                return rpc::custom_action::
+                    Stage_StateTransitionCondition_STATE_TRANSITION_CONDITION_ON_MODE_CHANGE;
+            case mavsdk::CustomAction::Stage::StateTransitionCondition::OnCustomConditionTrue:
+                return rpc::custom_action::
+                    Stage_StateTransitionCondition_STATE_TRANSITION_CONDITION_ON_CUSTOM_CONDITION_TRUE;
+            case mavsdk::CustomAction::Stage::StateTransitionCondition::OnCustomConditionFalse:
+                return rpc::custom_action::
+                    Stage_StateTransitionCondition_STATE_TRANSITION_CONDITION_ON_CUSTOM_CONDITION_FALSE;
+        }
+    }
+
+    static mavsdk::CustomAction::Stage::StateTransitionCondition
+    translateFromRpcStateTransitionCondition(
+        const rpc::custom_action::Stage::StateTransitionCondition state_transition_condition)
+    {
+        switch (state_transition_condition) {
+            default:
+                LogErr() << "Unknown state_transition_condition enum value: "
+                         << static_cast<int>(state_transition_condition);
+            // FALLTHROUGH
+            case rpc::custom_action::
+                Stage_StateTransitionCondition_STATE_TRANSITION_CONDITION_ON_RESULT_SUCCESS:
+                return mavsdk::CustomAction::Stage::StateTransitionCondition::OnResultSuccess;
+            case rpc::custom_action::
+                Stage_StateTransitionCondition_STATE_TRANSITION_CONDITION_ON_TIMEOUT:
+                return mavsdk::CustomAction::Stage::StateTransitionCondition::OnTimeout;
+            case rpc::custom_action::
+                Stage_StateTransitionCondition_STATE_TRANSITION_CONDITION_ON_LANDING_COMPLETE:
+                return mavsdk::CustomAction::Stage::StateTransitionCondition::OnLandingComplete;
+            case rpc::custom_action::
+                Stage_StateTransitionCondition_STATE_TRANSITION_CONDITION_ON_TAKEOFF_COMPLETE:
+                return mavsdk::CustomAction::Stage::StateTransitionCondition::OnTakeoffComplete;
+            case rpc::custom_action::
+                Stage_StateTransitionCondition_STATE_TRANSITION_CONDITION_ON_MODE_CHANGE:
+                return mavsdk::CustomAction::Stage::StateTransitionCondition::OnModeChange;
+            case rpc::custom_action::
+                Stage_StateTransitionCondition_STATE_TRANSITION_CONDITION_ON_CUSTOM_CONDITION_TRUE:
+                return mavsdk::CustomAction::Stage::StateTransitionCondition::OnCustomConditionTrue;
+            case rpc::custom_action::
+                Stage_StateTransitionCondition_STATE_TRANSITION_CONDITION_ON_CUSTOM_CONDITION_FALSE:
+                return mavsdk::CustomAction::Stage::StateTransitionCondition::
+                    OnCustomConditionFalse;
+        }
+    }
+
     static std::unique_ptr<rpc::custom_action::Stage>
     translateToRpcStage(const mavsdk::CustomAction::Stage& stage)
     {
@@ -172,9 +297,13 @@ public:
 
         rpc_obj->set_script(stage.script);
 
-        rpc_obj->set_timestamp_start(stage.timestamp_start);
+        rpc_obj->set_allocated_parameter_set(
+            translateToRpcParameter(stage.parameter_set).release());
 
-        rpc_obj->set_timestamp_stop(stage.timestamp_stop);
+        rpc_obj->set_state_transition_condition(
+            translateToRpcStateTransitionCondition(stage.state_transition_condition));
+
+        rpc_obj->set_timeout(stage.timeout);
 
         return rpc_obj;
     }
@@ -187,11 +316,75 @@ public:
 
         obj.script = stage.script();
 
-        obj.timestamp_start = stage.timestamp_start();
+        obj.parameter_set = translateFromRpcParameter(stage.parameter_set());
 
-        obj.timestamp_stop = stage.timestamp_stop();
+        obj.state_transition_condition =
+            translateFromRpcStateTransitionCondition(stage.state_transition_condition());
+
+        obj.timeout = stage.timeout();
 
         return obj;
+    }
+
+    static rpc::custom_action::ActionMetadata::ActionCompleteCondition
+    translateToRpcActionCompleteCondition(
+        const mavsdk::CustomAction::ActionMetadata::ActionCompleteCondition&
+            action_complete_condition)
+    {
+        switch (action_complete_condition) {
+            default:
+                LogErr() << "Unknown action_complete_condition enum value: "
+                         << static_cast<int>(action_complete_condition);
+            // FALLTHROUGH
+            case mavsdk::CustomAction::ActionMetadata::ActionCompleteCondition::OnLastStageComplete:
+                return rpc::custom_action::
+                    ActionMetadata_ActionCompleteCondition_ACTION_COMPLETE_CONDITION_ON_LAST_STAGE_COMPLETE;
+            case mavsdk::CustomAction::ActionMetadata::ActionCompleteCondition::OnTimeout:
+                return rpc::custom_action::
+                    ActionMetadata_ActionCompleteCondition_ACTION_COMPLETE_CONDITION_ON_TIMEOUT;
+            case mavsdk::CustomAction::ActionMetadata::ActionCompleteCondition::OnResultSuccess:
+                return rpc::custom_action::
+                    ActionMetadata_ActionCompleteCondition_ACTION_COMPLETE_CONDITION_ON_RESULT_SUCCESS;
+            case mavsdk::CustomAction::ActionMetadata::ActionCompleteCondition::
+                OnCustomConditionTrue:
+                return rpc::custom_action::
+                    ActionMetadata_ActionCompleteCondition_ACTION_COMPLETE_CONDITION_ON_CUSTOM_CONDITION_TRUE;
+            case mavsdk::CustomAction::ActionMetadata::ActionCompleteCondition::
+                OnCustomConditionFalse:
+                return rpc::custom_action::
+                    ActionMetadata_ActionCompleteCondition_ACTION_COMPLETE_CONDITION_ON_CUSTOM_CONDITION_FALSE;
+        }
+    }
+
+    static mavsdk::CustomAction::ActionMetadata::ActionCompleteCondition
+    translateFromRpcActionCompleteCondition(
+        const rpc::custom_action::ActionMetadata::ActionCompleteCondition action_complete_condition)
+    {
+        switch (action_complete_condition) {
+            default:
+                LogErr() << "Unknown action_complete_condition enum value: "
+                         << static_cast<int>(action_complete_condition);
+            // FALLTHROUGH
+            case rpc::custom_action::
+                ActionMetadata_ActionCompleteCondition_ACTION_COMPLETE_CONDITION_ON_LAST_STAGE_COMPLETE:
+                return mavsdk::CustomAction::ActionMetadata::ActionCompleteCondition::
+                    OnLastStageComplete;
+            case rpc::custom_action::
+                ActionMetadata_ActionCompleteCondition_ACTION_COMPLETE_CONDITION_ON_TIMEOUT:
+                return mavsdk::CustomAction::ActionMetadata::ActionCompleteCondition::OnTimeout;
+            case rpc::custom_action::
+                ActionMetadata_ActionCompleteCondition_ACTION_COMPLETE_CONDITION_ON_RESULT_SUCCESS:
+                return mavsdk::CustomAction::ActionMetadata::ActionCompleteCondition::
+                    OnResultSuccess;
+            case rpc::custom_action::
+                ActionMetadata_ActionCompleteCondition_ACTION_COMPLETE_CONDITION_ON_CUSTOM_CONDITION_TRUE:
+                return mavsdk::CustomAction::ActionMetadata::ActionCompleteCondition::
+                    OnCustomConditionTrue;
+            case rpc::custom_action::
+                ActionMetadata_ActionCompleteCondition_ACTION_COMPLETE_CONDITION_ON_CUSTOM_CONDITION_FALSE:
+                return mavsdk::CustomAction::ActionMetadata::ActionCompleteCondition::
+                    OnCustomConditionFalse;
+        }
     }
 
     static std::unique_ptr<rpc::custom_action::ActionMetadata>
@@ -208,6 +401,9 @@ public:
         rpc_obj->set_global_script(action_metadata.global_script);
 
         rpc_obj->set_global_timeout(action_metadata.global_timeout);
+
+        rpc_obj->set_action_complete_condition(
+            translateToRpcActionCompleteCondition(action_metadata.action_complete_condition));
 
         for (const auto& elem : action_metadata.stages) {
             auto* ptr = rpc_obj->add_stages();
@@ -231,6 +427,9 @@ public:
         obj.global_script = action_metadata.global_script();
 
         obj.global_timeout = action_metadata.global_timeout();
+
+        obj.action_complete_condition =
+            translateFromRpcActionCompleteCondition(action_metadata.action_complete_condition());
 
         for (const auto& elem : action_metadata.stages()) {
             obj.stages.push_back(
