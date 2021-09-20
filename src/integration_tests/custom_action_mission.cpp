@@ -49,18 +49,17 @@ static std::vector<CustomAction::Result> _actions_result;
 static std::vector<CustomAction::ActionMetadata> _actions_metadata;
 static std::vector<std::thread> _progress_threads;
 
-static std::shared_ptr<CustomAction> _custom_action;
-
 static std::mutex cancel_mtx;
 static std::condition_variable cancel_signal;
 
 float _progress_current{0};
 float _progress_total{0};
 
-static void new_action_check();
+static void new_action_check(std::shared_ptr<CustomAction> custom_action);
 static void send_progress_status(
     std::shared_ptr<CustomAction> custom_action, CustomAction::ActionToExecute action_metadata);
-static void process_custom_action(CustomAction::ActionToExecute action);
+static void process_custom_action(
+    CustomAction::ActionToExecute action, std::shared_ptr<CustomAction> custom_action);
 static void execute_custom_action(
     CustomAction::ActionMetadata action_metadata, std::shared_ptr<CustomAction> custom_action);
 static void update_action_progress_from_stage(
@@ -141,8 +140,6 @@ TEST_F(SitlTest, CustomActionMission)
 
     // Custom actions are processed and executed in the mission computer
     auto custom_action = std::make_shared<CustomAction>(system_to_companion);
-
-    _custom_action = custom_action;
 
     test_mission(telemetry, mission_raw, action, custom_action);
 }
@@ -347,7 +344,7 @@ void test_mission(
         future_result.get();
     }
 
-    auto new_actions_check_th = std::thread(new_action_check);
+    auto new_actions_check_th = std::thread(new_action_check, custom_action);
 
     {
         // Get the custom action to process
@@ -457,25 +454,26 @@ void send_progress_status(
     };
 }
 
-void new_action_check()
+void new_action_check(std::shared_ptr<CustomAction> custom_action)
 {
     while (!_new_actions_check_int) {
         if (_new_action.load()) {
-            process_custom_action(_actions.back());
+            process_custom_action(_actions.back(), custom_action);
             _new_action.store(false, std::memory_order_relaxed);
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
 }
 
-void process_custom_action(CustomAction::ActionToExecute action)
+void process_custom_action(
+    CustomAction::ActionToExecute action, std::shared_ptr<CustomAction> custom_action)
 {
     LogInfo() << "Custom action #" << action.id << " being processed";
 
     // Get the custom action metadata
     std::promise<CustomAction::ActionMetadata> prom;
     std::future<CustomAction::ActionMetadata> fut = prom.get_future();
-    _custom_action->custom_action_metadata_async(
+    custom_action->custom_action_metadata_async(
         action,
         "src/integration_tests/test_data/custom_action.json",
         [&prom](CustomAction::Result result, CustomAction::ActionMetadata action_metadata) {
@@ -492,12 +490,12 @@ void process_custom_action(CustomAction::ActionToExecute action)
               << " current progress: " << _actions_progress.back() << "%";
 
     // Start the progress status report thread
-    _progress_threads.push_back(std::thread(send_progress_status, _custom_action, _actions.back()));
+    _progress_threads.push_back(std::thread(send_progress_status, custom_action, _actions.back()));
 
     // Start the custom action execution
     // For the purpose of the test, we are storing all the actions but only processing the last one.
     // This means that only one action at a time can be processed
-    execute_custom_action(_actions_metadata.back(), _custom_action);
+    execute_custom_action(_actions_metadata.back(), custom_action);
 
     EXPECT_DOUBLE_EQ(_actions_progress.back(), 100.0);
     EXPECT_EQ(_actions_result.back(), CustomAction::Result::Success);
