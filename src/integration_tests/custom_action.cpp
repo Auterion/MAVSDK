@@ -12,7 +12,6 @@ using namespace mavsdk;
 using namespace std::placeholders;
 using namespace std::chrono_literals;
 
-static std::atomic<bool> _received_custom_action{false};
 static std::atomic<double> _action_progress{0};
 static std::atomic<CustomAction::Result> _action_result;
 static std::atomic<bool> in_air{false};
@@ -178,17 +177,12 @@ TEST_F(SitlTest, CustomAction)
         std::promise<CustomAction::ActionToExecute> prom_act;
         std::future<CustomAction::ActionToExecute> fut_act = prom_act.get_future();
         custom_action_comp->subscribe_custom_action(
-            [&prom_act](CustomAction::ActionToExecute action_to_exec) {
-                if (!_received_custom_action) {
-                    prom_act.set_value(action_to_exec);
-                    _received_custom_action = true;
-                }
+            [&prom_act, &custom_action_comp](CustomAction::ActionToExecute action_to_exec) {
+                custom_action_comp->subscribe_custom_action(nullptr);
+                prom_act.set_value(action_to_exec);
             });
 
-        while (!_received_custom_action) {
-            std::this_thread::sleep_for(std::chrono::seconds(1));
-        }
-
+        fut_act.wait();
         LogInfo() << "Process custom action";
         CustomAction::ActionToExecute action_exec = fut_act.get();
 
