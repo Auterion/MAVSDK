@@ -36,7 +36,6 @@ static MissionRaw::MissionItem add_mission_raw_item(
     float param4,
     uint8_t mission_type);
 
-static std::atomic<bool> _received_custom_action{false};
 static std::atomic<bool> _mission_finished{false};
 static std::atomic<bool> _action_stopped{false};
 static std::atomic<bool> _new_action{false};
@@ -530,6 +529,7 @@ void execute_custom_action(
             CustomAction::Result stage_res = CustomAction::Result::Unknown;
 
             if (!_action_stopped.load()) {
+                LogInfo() << "Executing stage " << i << "of action #" << _actions_metadata.back().id;
                 stage_res = custom_action->execute_custom_action_stage(action_metadata.stages[i]);
                 EXPECT_EQ(stage_res, CustomAction::Result::Success);
             }
@@ -551,7 +551,7 @@ void execute_custom_action(
                 action_metadata.stages[i].state_transition_condition ==
                 CustomAction::Stage::StateTransitionCondition::OnLandingComplete) {
                 // Wait for the vehicle to be landed
-                while (!_action_stopped.load() && !_in_air) {
+                while (!_action_stopped.load() && _in_air) {
                     std::this_thread::sleep_for(std::chrono::seconds(1));
                 }
 
@@ -560,7 +560,7 @@ void execute_custom_action(
                 action_metadata.stages[i].state_transition_condition ==
                 CustomAction::Stage::StateTransitionCondition::OnTakeoffComplete) {
                 // Wait for the vehicle to be in-air
-                while (!_action_stopped.load() && _in_air) {
+                while (!_action_stopped.load() && !_in_air) {
                     std::this_thread::sleep_for(std::chrono::seconds(1));
                 }
 
