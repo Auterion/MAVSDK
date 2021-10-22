@@ -529,7 +529,8 @@ void execute_custom_action(
             CustomAction::Result stage_res = CustomAction::Result::Unknown;
 
             if (!_action_stopped.load()) {
-                LogInfo() << "Executing stage " << i << "of action #" << _actions_metadata.back().id;
+                LogInfo() << "Executing stage " << i << "of action #"
+                          << _actions_metadata.back().id;
                 stage_res = custom_action->execute_custom_action_stage(action_metadata.stages[i]);
                 EXPECT_EQ(stage_res, CustomAction::Result::Success);
             }
