@@ -54,6 +54,11 @@ void FtpImpl::_process_ack(PayloadHeader* payload)
 {
     std::lock_guard<std::mutex> lock(_curr_op_mutex);
 
+    if (payload->seq_number < _seq_number) {
+        // received an ack for a previous seq that we already considered done
+        return;
+    }
+
     if (_curr_op != payload->req_opcode) {
         LogWarn() << "Received ACK not matching our current operation";
         return;
