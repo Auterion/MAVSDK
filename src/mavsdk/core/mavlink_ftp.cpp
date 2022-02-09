@@ -22,6 +22,8 @@
 
 namespace mavsdk {
 
+using namespace std::placeholders; // for `_1`
+
 bool seq_lt(uint16_t a, uint16_t b)
 {
     // From https://en.wikipedia.org/wiki/Serial_number_arithmetic
