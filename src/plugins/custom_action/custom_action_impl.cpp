@@ -425,7 +425,7 @@ void CustomActionImpl::custom_action_metadata_async(
                     }
 
                     cmd.target_system_id = stage_id["cmd"]["target_system"].asInt();
-                    cmd.target_component_id = stage_id["cmd"]["target_system"].asInt();
+                    cmd.target_component_id = stage_id["cmd"]["target_component"].asInt();
                     cmd.frame = stage_id["cmd"]["frame"].asInt();
                     cmd.command = stage_id["cmd"]["command"].asInt();
                     cmd.param1 = stage_id["cmd"]["param1"].isNull() ?
