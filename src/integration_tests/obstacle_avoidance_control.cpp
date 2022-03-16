@@ -1,5 +1,4 @@
 #include "integration_test_helper.h"
-#include "global_include.h"
 #include "mavsdk.h"
 #include "plugins/obstacle_avoidance/obstacle_avoidance.h"
 #include "plugins/obstacle_avoidance_server/obstacle_avoidance_server.h"
