@@ -7,7 +7,7 @@
 
 using namespace mavsdk;
 
-TEST_F(SitlTest, MavlinkPassthrough)
+TEST_F(SitlTest, PX4MavlinkPassthrough)
 {
     Mavsdk mavsdk;
     ASSERT_EQ(mavsdk.add_udp_connection(), ConnectionResult::Success);
@@ -27,6 +27,7 @@ TEST_F(SitlTest, MavlinkPassthrough)
     }
 
     auto system = mavsdk.systems().at(0);
+    ASSERT_TRUE(system->has_autopilot());
     auto mavlink_passthrough = std::make_shared<MavlinkPassthrough>(system);
 
     {

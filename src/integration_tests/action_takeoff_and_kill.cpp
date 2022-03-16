@@ -6,7 +6,7 @@
 
 using namespace mavsdk;
 
-TEST_F(SitlTest, ActionTakeoffAndKill)
+TEST_F(SitlTest, PX4ActionTakeoffAndKill)
 {
     Mavsdk mavsdk;
     ASSERT_EQ(mavsdk.add_udp_connection(), ConnectionResult::Success);
@@ -27,6 +27,7 @@ TEST_F(SitlTest, ActionTakeoffAndKill)
     }
 
     auto system = mavsdk.systems().at(0);
+    ASSERT_TRUE(system->has_autopilot());
     auto telemetry = std::make_shared<Telemetry>(system);
     auto action = std::make_shared<Action>(system);
 

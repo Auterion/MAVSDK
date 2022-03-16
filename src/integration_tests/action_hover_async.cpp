@@ -1,5 +1,4 @@
 #include "integration_test_helper.h"
-#include "global_include.h"
 #include "mavsdk.h"
 #include "plugins/action/action.h"
 #include "plugins/telemetry/telemetry.h"
@@ -8,7 +7,7 @@
 
 using namespace mavsdk;
 
-TEST_F(SitlTest, ActionHoverAsync)
+TEST_F(SitlTest, PX4ActionHoverAsync)
 {
     Mavsdk mavsdk;
 
@@ -24,6 +23,7 @@ TEST_F(SitlTest, ActionHoverAsync)
         mavsdk.subscribe_on_new_system([&prom, &mavsdk, &system]() {
             if (mavsdk.systems().size() == 1) {
                 system = mavsdk.systems().at(0);
+                ASSERT_TRUE(system->has_autopilot());
                 prom.set_value();
             }
         });

@@ -4,20 +4,21 @@
 #include <functional>
 #include <future>
 #include <string>
+#include <thread>
 #include <gtest/gtest.h>
-#include "global_include.h"
 #include "log.h"
+#include "unused.h"
 
 // Autostarting SITL is not supported on Windows
 
 class SitlTest : public testing::Test {
 protected:
-    void StartPX4(const std::string& model)
+    void StartSitl(const std::string& model)
     {
 #ifndef WINDOWS
-        const int ret = system((std::string("./tools/start_px4_sitl.sh ") + model).c_str());
+        const int ret = system((std::string("./tools/start_sitl.sh ") + model).c_str());
         if (ret != 0) {
-            mavsdk::LogErr() << "./tools/start_px4_sitl.sh failed, giving up.";
+            mavsdk::LogErr() << "./tools/start_sitl.sh failed, giving up.";
             fflush(stdout);
             fflush(stderr);
             abort();
@@ -28,12 +29,12 @@ protected:
 #endif
     }
 
-    void StopPX4()
+    void StopSitl()
     {
 #ifndef WINDOWS
-        const int ret = system("./tools/stop_px4_sitl.sh");
+        const int ret = system("./tools/stop_sitl.sh");
         if (ret != 0) {
-            mavsdk::LogErr() << "./tools/stop_px4_sitl.sh failed, giving up.";
+            mavsdk::LogErr() << "./tools/stop_sitl.sh failed, giving up.";
             fflush(stdout);
             fflush(stderr);
             abort();
@@ -43,9 +44,9 @@ protected:
 #endif
     }
 
-    virtual void SetUp() override { StartPX4(determineModel()); }
+    virtual void SetUp() override { StartSitl(determineModel()); }
 
-    virtual void TearDown() override { StopPX4(); }
+    virtual void TearDown() override { StopSitl(); }
 
 private:
     static std::string determineModel()

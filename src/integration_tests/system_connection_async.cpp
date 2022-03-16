@@ -1,10 +1,8 @@
 #include <iostream>
 #include "integration_test_helper.h"
-#include "global_include.h"
 #include "mavsdk.h"
 
 using namespace mavsdk;
-using namespace std::placeholders; // for _1
 
 // For now we don't test the timing out because the starting and stopping of
 // PX4 SITL is not working as needed.

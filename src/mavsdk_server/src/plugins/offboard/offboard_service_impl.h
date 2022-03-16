@@ -184,6 +184,74 @@ public:
         return obj;
     }
 
+    static rpc::offboard::PositionGlobalYaw::AltitudeType translateToRpcAltitudeType(
+        const mavsdk::Offboard::PositionGlobalYaw::AltitudeType& altitude_type)
+    {
+        switch (altitude_type) {
+            default:
+                LogErr() << "Unknown altitude_type enum value: " << static_cast<int>(altitude_type);
+            // FALLTHROUGH
+            case mavsdk::Offboard::PositionGlobalYaw::AltitudeType::RelHome:
+                return rpc::offboard::PositionGlobalYaw_AltitudeType_ALTITUDE_TYPE_REL_HOME;
+            case mavsdk::Offboard::PositionGlobalYaw::AltitudeType::Amsl:
+                return rpc::offboard::PositionGlobalYaw_AltitudeType_ALTITUDE_TYPE_AMSL;
+            case mavsdk::Offboard::PositionGlobalYaw::AltitudeType::Agl:
+                return rpc::offboard::PositionGlobalYaw_AltitudeType_ALTITUDE_TYPE_AGL;
+        }
+    }
+
+    static mavsdk::Offboard::PositionGlobalYaw::AltitudeType
+    translateFromRpcAltitudeType(const rpc::offboard::PositionGlobalYaw::AltitudeType altitude_type)
+    {
+        switch (altitude_type) {
+            default:
+                LogErr() << "Unknown altitude_type enum value: " << static_cast<int>(altitude_type);
+            // FALLTHROUGH
+            case rpc::offboard::PositionGlobalYaw_AltitudeType_ALTITUDE_TYPE_REL_HOME:
+                return mavsdk::Offboard::PositionGlobalYaw::AltitudeType::RelHome;
+            case rpc::offboard::PositionGlobalYaw_AltitudeType_ALTITUDE_TYPE_AMSL:
+                return mavsdk::Offboard::PositionGlobalYaw::AltitudeType::Amsl;
+            case rpc::offboard::PositionGlobalYaw_AltitudeType_ALTITUDE_TYPE_AGL:
+                return mavsdk::Offboard::PositionGlobalYaw::AltitudeType::Agl;
+        }
+    }
+
+    static std::unique_ptr<rpc::offboard::PositionGlobalYaw>
+    translateToRpcPositionGlobalYaw(const mavsdk::Offboard::PositionGlobalYaw& position_global_yaw)
+    {
+        auto rpc_obj = std::make_unique<rpc::offboard::PositionGlobalYaw>();
+
+        rpc_obj->set_lat_deg(position_global_yaw.lat_deg);
+
+        rpc_obj->set_lon_deg(position_global_yaw.lon_deg);
+
+        rpc_obj->set_alt_m(position_global_yaw.alt_m);
+
+        rpc_obj->set_yaw_deg(position_global_yaw.yaw_deg);
+
+        rpc_obj->set_altitude_type(translateToRpcAltitudeType(position_global_yaw.altitude_type));
+
+        return rpc_obj;
+    }
+
+    static mavsdk::Offboard::PositionGlobalYaw
+    translateFromRpcPositionGlobalYaw(const rpc::offboard::PositionGlobalYaw& position_global_yaw)
+    {
+        mavsdk::Offboard::PositionGlobalYaw obj;
+
+        obj.lat_deg = position_global_yaw.lat_deg();
+
+        obj.lon_deg = position_global_yaw.lon_deg();
+
+        obj.alt_m = position_global_yaw.alt_m();
+
+        obj.yaw_deg = position_global_yaw.yaw_deg();
+
+        obj.altitude_type = translateFromRpcAltitudeType(position_global_yaw.altitude_type());
+
+        return obj;
+    }
+
     static std::unique_ptr<rpc::offboard::VelocityBodyYawspeed> translateToRpcVelocityBodyYawspeed(
         const mavsdk::Offboard::VelocityBodyYawspeed& velocity_body_yawspeed)
     {
@@ -500,6 +568,35 @@ public:
 
         auto result = _lazy_plugin.maybe_plugin()->set_position_ned(
             translateFromRpcPositionNedYaw(request->position_ned_yaw()));
+
+        if (response != nullptr) {
+            fillResponseWithResult(response, result);
+        }
+
+        return grpc::Status::OK;
+    }
+
+    grpc::Status SetPositionGlobal(
+        grpc::ServerContext* /* context */,
+        const rpc::offboard::SetPositionGlobalRequest* request,
+        rpc::offboard::SetPositionGlobalResponse* response) override
+    {
+        if (_lazy_plugin.maybe_plugin() == nullptr) {
+            if (response != nullptr) {
+                auto result = mavsdk::Offboard::Result::NoSystem;
+                fillResponseWithResult(response, result);
+            }
+
+            return grpc::Status::OK;
+        }
+
+        if (request == nullptr) {
+            LogWarn() << "SetPositionGlobal sent with a null request! Ignoring...";
+            return grpc::Status::OK;
+        }
+
+        auto result = _lazy_plugin.maybe_plugin()->set_position_global(
+            translateFromRpcPositionGlobalYaw(request->position_global_yaw()));
 
         if (response != nullptr) {
             fillResponseWithResult(response, result);

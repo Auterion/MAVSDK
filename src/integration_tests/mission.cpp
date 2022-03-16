@@ -11,7 +11,6 @@
 #include "plugins/mission/mission.h"
 
 using namespace mavsdk;
-using namespace std::placeholders; // for `_1`
 
 static void test_mission(
     std::shared_ptr<Telemetry> telemetry,
@@ -37,7 +36,7 @@ static constexpr int NUM_MISSION_ITEMS = 6;
 
 static std::atomic<bool> pause_already_done{false};
 
-TEST_F(SitlTest, MissionAddWaypointsAndFly)
+TEST_F(SitlTest, PX4MissionAddWaypointsAndFly)
 {
     Mavsdk mavsdk;
 
@@ -82,11 +81,13 @@ void test_mission(
     std::shared_ptr<Mission> mission,
     std::shared_ptr<Action> action)
 {
-    while (!telemetry->health_all_ok()) {
-        LogInfo() << "Waiting for system to be ready";
-        LogDebug() << "Health: " << telemetry->health();
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-    }
+    LogInfo() << "Waiting for system to be ready";
+    ASSERT_TRUE(poll_condition_with_timeout(
+        [telemetry]() {
+            LogInfo() << "Waiting for system to be ready";
+            return telemetry->health_all_ok();
+        },
+        std::chrono::seconds(10)));
 
     LogInfo() << "System ready";
     LogInfo() << "Creating and uploading mission";
@@ -173,6 +174,32 @@ void test_mission(
             0.0f,
             NAN,
             Mission::MissionItem::CameraAction::StopPhotoInterval,
+            0.5f,
+            NAN));
+
+        mission_plan.mission_items.push_back(add_mission_item(
+            47.393,
+            8.544,
+            10.0f,
+            5.0f,
+            false,
+            -45.0f,
+            -30.0f,
+            NAN,
+            Mission::MissionItem::CameraAction::StartPhotoDistance,
+            0.5f,
+            0.0f));
+
+        mission_plan.mission_items.push_back(add_mission_item(
+            47.395,
+            8.542,
+            10.0f,
+            5.0f,
+            false,
+            0.0f,
+            0.0f,
+            NAN,
+            Mission::MissionItem::CameraAction::StopPhotoDistance,
             0.5f,
             NAN));
     }
@@ -317,6 +344,10 @@ Mission::MissionItem add_mission_item(
     // In order to test setting the interval, add it here.
     if (camera_action == Mission::MissionItem::CameraAction::StartPhotoInterval) {
         new_item.camera_photo_interval_s = 1.5;
+    }
+    // In order to test setting the interval, add it here.
+    else if (camera_action == Mission::MissionItem::CameraAction::StartPhotoDistance) {
+        new_item.camera_photo_distance_m = 5.5;
     }
 
     return new_item;
