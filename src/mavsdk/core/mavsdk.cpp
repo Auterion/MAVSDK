@@ -177,14 +177,4 @@ void Mavsdk::Configuration::set_usage_type(Mavsdk::Configuration::UsageType usag
     _usage_type = usage_type;
 }
 
-std::optional<std::string const> Mavsdk::Configuration::get_component_description() const
-{
-    return _component_description;
-}
-
-void Mavsdk::Configuration::set_component_description(std::string const& component_description)
-{
-    _component_description = component_description;
-}
-
 } // namespace mavsdk
