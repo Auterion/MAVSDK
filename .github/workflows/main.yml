@@ -635,14 +635,14 @@ jobs:
       - name: look at core files
         if: failure()
         run: gdb /home/user/Firmware/build/px4_sitl_default/bin/px4 px4.core -ex "thread apply all bt" -ex "quit"
-  
+
   apm-sitl-newer:
     name: APM SITL ${{ matrix.apm_version }} (ubuntu-20.04)
     runs-on: ubuntu-20.04
-    container: 
+    container:
       image: mavsdk/mavsdk-ubuntu-20.04-apm-sitl-${{ matrix.apm_version }}
       options: --privileged
-      env: 
+      env:
         APM_HOME_LAT: 47.397742
         APM_HOME_LONG: 8.545594
         APM_HOME_ALT: 488.0
@@ -658,15 +658,16 @@ jobs:
         with:
           submodules: recursive
       - name: test
-<<<<<<< HEAD
-        run: PX4_VERSION=${{ matrix.px4_version }} tools/run-sitl-tests.sh /home/user/Firmware
+        run: APM_VERSION=${{ matrix.apm_version }} tools/run-sitl-tests.sh /home/user/ArduPilot
+        timeout-minutes: 45
 
   apx4-sitl:
     name: Auterion PX4 SITL ${{ matrix.px4_version }} (ubuntu-20.04)
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         px4_version: [v2.2, v2.1, develop]
+      fail-fast: false
     steps:
       - uses: actions/checkout@v2
         with:
@@ -749,7 +750,3 @@ jobs:
           file: output/skynode/*.deb
           tag: ${{ github.ref }}
           overwrite: true
-=======
-        run: APM_VERSION=${{ matrix.apm_version }} tools/run-sitl-tests.sh /home/user/ArduPilot
-        timeout-minutes: 45
->>>>>>> 2e89c9d9e8584b93d2ef3ea80b6ef4a6d4bffd9c
