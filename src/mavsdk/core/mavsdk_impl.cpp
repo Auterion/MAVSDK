@@ -221,6 +221,7 @@ void MavsdkImpl::receive_message(mavlink_message_t& message, Connection* connect
                    << " Comp ID: " << static_cast<int>(message.compid);
         _systems[0].first = message.sysid;
         _systems[0].second->system_impl()->set_system_id(message.sysid);
+        notify_on_discover();
     }
 
     bool found_system = false;
