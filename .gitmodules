@@ -6,4 +6,4 @@
 	url = https://github.com/google/googletest
 [submodule "mavsdk-proto"]
 	path = proto
-	url = git@github.com:Auterion/MAVSDK-Proto.git
+	url = https://github.com/Auterion/MAVSDK-Proto.git
