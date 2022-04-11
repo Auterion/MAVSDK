@@ -112,7 +112,8 @@ ManualControlImpl::set_manual_control_input(float x, float y, float z, float r)
         static_cast<int16_t>(y * 1000),
         static_cast<int16_t>(z * 1000),
         static_cast<int16_t>(r * 1000),
-        buttons);
+        buttons,
+        0, 0, 0, 0); // just to temporarily fix compatibility
     return _parent->send_message(message) ? ManualControl::Result::Success :
                                             ManualControl::Result::ConnectionError;
 }
