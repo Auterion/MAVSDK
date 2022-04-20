@@ -4,7 +4,6 @@
 #include <chrono>
 #include <array>
 #include "integration_test_helper.h"
-#include "global_include.h"
 #include "mavsdk.h"
 #include "plugins/telemetry/telemetry.h"
 #include "plugins/action/action.h"
@@ -13,7 +12,6 @@
 using namespace mavsdk;
 using namespace std::chrono;
 using namespace std::this_thread;
-using namespace std::placeholders;
 
 void print(const FollowMe::Config& config);
 void send_location_updates(
@@ -24,7 +22,7 @@ void send_location_updates(
 
 const size_t N_LOCATIONS = 100ul;
 
-TEST_F(SitlTest, FollowMeOneLocation)
+TEST_F(SitlTest, PX4FollowMeOneLocation)
 {
     Mavsdk mavsdk;
 
@@ -40,10 +38,13 @@ TEST_F(SitlTest, FollowMeOneLocation)
     auto follow_me = std::make_shared<FollowMe>(system);
     auto action = std::make_shared<Action>(system);
 
-    while (!telemetry->health_all_ok()) {
-        std::cout << "waiting for system to be ready" << '\n';
-        sleep_for(seconds(1));
-    }
+    LogInfo() << "Waiting for system to be ready";
+    ASSERT_TRUE(poll_condition_with_timeout(
+        [telemetry]() {
+            LogInfo() << "Waiting for system to be ready";
+            return telemetry->health_all_ok();
+        },
+        std::chrono::seconds(10)));
 
     // Get the home position so the Follow-Me locations are set with respect
     // to the home position instead of being hardcoded.
@@ -52,15 +53,13 @@ TEST_F(SitlTest, FollowMeOneLocation)
     Action::Result action_ret = action->arm();
     ASSERT_EQ(Action::Result::Success, action_ret);
 
-    telemetry->subscribe_flight_mode(std::bind(
-        [&](Telemetry::FlightMode flight_mode) {
-            const FollowMe::TargetLocation last_location = follow_me->get_last_location();
+    telemetry->subscribe_flight_mode([&follow_me](Telemetry::FlightMode flight_mode) {
+        const FollowMe::TargetLocation last_location = follow_me->get_last_location();
 
-            std::cout << "[FlightMode: " << flight_mode
-                      << "] Vehicle is at Lat: " << last_location.latitude_deg << " deg, "
-                      << "Lon: " << last_location.longitude_deg << " deg." << '\n';
-        },
-        std::placeholders::_1));
+        std::cout << "[FlightMode: " << flight_mode
+                  << "] Vehicle is at Lat: " << last_location.latitude_deg << " deg, "
+                  << "Lon: " << last_location.longitude_deg << " deg." << '\n';
+    });
 
     action_ret = action->takeoff();
     ASSERT_EQ(Action::Result::Success, action_ret);
@@ -106,7 +105,7 @@ TEST_F(SitlTest, FollowMeOneLocation)
     telemetry->subscribe_flight_mode(nullptr);
 }
 
-TEST_F(SitlTest, FollowMeMultiLocationWithConfig)
+TEST_F(SitlTest, PX4FollowMeMultiLocationWithConfig)
 {
     Mavsdk mavsdk;
 
@@ -133,10 +132,13 @@ TEST_F(SitlTest, FollowMeMultiLocationWithConfig)
     auto follow_me = std::make_shared<FollowMe>(system);
     auto action = std::make_shared<Action>(system);
 
-    while (!telemetry->health_all_ok()) {
-        std::cout << "Waiting for system to be ready" << '\n';
-        sleep_for(seconds(1));
-    }
+    LogInfo() << "Waiting for system to be ready";
+    ASSERT_TRUE(poll_condition_with_timeout(
+        [telemetry]() {
+            LogInfo() << "Waiting for system to be ready";
+            return telemetry->health_all_ok();
+        },
+        std::chrono::seconds(10)));
 
     // Get the home position so the Follow-Me locations are set with respect
     // to the home position instead of being hardcoded.
@@ -145,15 +147,13 @@ TEST_F(SitlTest, FollowMeMultiLocationWithConfig)
     Action::Result action_ret = action->arm();
     ASSERT_EQ(Action::Result::Success, action_ret);
 
-    telemetry->subscribe_flight_mode(std::bind(
-        [&](Telemetry::FlightMode flight_mode) {
-            const FollowMe::TargetLocation last_location = follow_me->get_last_location();
+    telemetry->subscribe_flight_mode([&follow_me](Telemetry::FlightMode flight_mode) {
+        const FollowMe::TargetLocation last_location = follow_me->get_last_location();
 
-            std::cout << "[FlightMode: " << flight_mode
-                      << "] Vehicle is at Lat: " << last_location.latitude_deg << " deg, "
-                      << "Lon: " << last_location.longitude_deg << " deg." << '\n';
-        },
-        std::placeholders::_1));
+        std::cout << "[FlightMode: " << flight_mode
+                  << "] Vehicle is at Lat: " << last_location.latitude_deg << " deg, "
+                  << "Lon: " << last_location.longitude_deg << " deg." << '\n';
+    });
 
     action_ret = action->takeoff();
     ASSERT_EQ(Action::Result::Success, action_ret);

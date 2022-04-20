@@ -6,12 +6,8 @@
 #include "plugins/camera/camera.h"
 
 using namespace mavsdk;
-using namespace std::placeholders; // for `_1`
 
-static void receive_camera_status(const Camera::Status& status);
 static void print_camera_status(const Camera::Status& status);
-
-static std::atomic<bool> _received_status{false};
 
 TEST(CameraTest, Status)
 {
@@ -24,17 +20,16 @@ TEST(CameraTest, Status)
     std::this_thread::sleep_for(std::chrono::seconds(2));
 
     auto system = mavsdk.systems().at(0);
+    ASSERT_TRUE(system->has_camera());
     auto camera = std::make_shared<Camera>(system);
 
-    camera->subscribe_status(std::bind(&receive_camera_status, _1));
+    bool received_status = false;
+    camera->subscribe_status([&received_status](Camera::Status status) {
+        received_status = true;
+        print_camera_status(status);
+    });
     std::this_thread::sleep_for(std::chrono::seconds(5));
-    EXPECT_TRUE(_received_status);
-}
-
-static void receive_camera_status(const Camera::Status& status)
-{
-    _received_status = true;
-    print_camera_status(status);
+    EXPECT_TRUE(received_status);
 }
 
 static void print_camera_status(const Camera::Status& status)

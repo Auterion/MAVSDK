@@ -8,6 +8,7 @@
 #include "plugins/telemetry/telemetry.h"
 #include "plugins/action/action.h"
 #include "plugins/mission/mission.h"
+#include "unused.h"
 
 using namespace mavsdk;
 
@@ -21,7 +22,7 @@ static Mission::MissionItem add_waypoint(
     float gimbal_yaw_deg,
     bool take_photo);
 
-TEST_F(SitlTest, MissionUploadCancellation)
+TEST_F(SitlTest, PX4MissionUploadCancellation)
 {
     Mavsdk mavsdk;
 
@@ -94,7 +95,7 @@ TEST_F(SitlTest, MissionUploadCancellation)
     std::this_thread::sleep_for(std::chrono::seconds(5));
 }
 
-TEST_F(SitlTest, MissionDownloadCancellation)
+TEST_F(SitlTest, PX4MissionDownloadCancellation)
 {
     Mavsdk mavsdk;
 

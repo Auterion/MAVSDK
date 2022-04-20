@@ -12,23 +12,22 @@
 #include "plugins/mission/mission.h"
 
 using namespace mavsdk;
-using namespace std::placeholders; // for `_1`
 
 // TODO: add checks that verify the return altitude
 
 void do_mission_with_rtl(float mission_altitude_m, float return_altitude_m);
 
-TEST_F(SitlTest, MissionWithRTLHigh)
+TEST_F(SitlTest, PX4MissionWithRTLHigh)
 {
     do_mission_with_rtl(20, 30);
 }
 
-TEST_F(SitlTest, MissionWithRTLLow)
+TEST_F(SitlTest, PX4MissionWithRTLLow)
 {
     do_mission_with_rtl(5, 10);
 }
 
-TEST_F(SitlTest, MissionWithRTLHigherAnyway)
+TEST_F(SitlTest, PX4MissionWithRTLHigherAnyway)
 {
     do_mission_with_rtl(10, 5);
 }
@@ -62,6 +61,7 @@ void do_mission_with_rtl(float mission_altitude_m, float return_altitude_m)
     }
 
     auto system = mavsdk.systems().at(0);
+    ASSERT_TRUE(system->has_autopilot());
     auto telemetry = std::make_shared<Telemetry>(system);
     auto mission = std::make_shared<Mission>(system);
     auto action = std::make_shared<Action>(system);
@@ -72,11 +72,13 @@ void do_mission_with_rtl(float mission_altitude_m, float return_altitude_m)
         pc.check_current_alitude(position.relative_altitude_m);
     });
 
-    while (!telemetry->health_all_ok()) {
-        LogInfo() << "Waiting for system to be ready";
-        LogDebug() << "Health: " << telemetry->health();
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-    }
+    LogInfo() << "Waiting for system to be ready";
+    ASSERT_TRUE(poll_condition_with_timeout(
+        [telemetry]() {
+            LogInfo() << "Waiting for system to be ready";
+            return telemetry->health_all_ok();
+        },
+        std::chrono::seconds(10)));
 
     // Get the home position so the waypoint mission items are set with respect
     // to the home position instead of being hardcoded.

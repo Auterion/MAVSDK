@@ -2,6 +2,7 @@
 #include <cmath>
 #include "integration_test_helper.h"
 #include "mavsdk.h"
+#include "mavsdk_math.h"
 #include "plugins/action/action.h"
 #include "plugins/telemetry/telemetry.h"
 #include "plugins/offboard/offboard.h"
@@ -9,7 +10,7 @@
 
 using namespace mavsdk;
 
-TEST_F(SitlTest, OffboardPositionNED)
+TEST_F(SitlTest, PX4OffboardPositionNED)
 {
     Mavsdk mavsdk;
 
@@ -27,10 +28,13 @@ TEST_F(SitlTest, OffboardPositionNED)
     auto offboard = std::make_shared<Offboard>(system);
     auto mission = std::make_shared<Mission>(system);
 
-    while (!telemetry->health_all_ok()) {
-        std::cout << "waiting for system to be ready" << '\n';
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-    }
+    LogInfo() << "Waiting for system to be ready";
+    ASSERT_TRUE(poll_condition_with_timeout(
+        [telemetry]() {
+            LogInfo() << "Waiting for system to be ready";
+            return telemetry->health_all_ok();
+        },
+        std::chrono::seconds(10)));
 
     Action::Result action_ret = action->arm();
     ASSERT_EQ(Action::Result::Success, action_ret);
@@ -59,7 +63,7 @@ TEST_F(SitlTest, OffboardPositionNED)
         const float radius = 10.0f;
         const float step = 0.01f;
         float angle = 0.0f;
-        while (angle <= 2.0f * M_PI_F) {
+        while (angle <= 2.0f * static_cast<float>(PI)) {
             float x = radius * cosf(angle);
             float y = radius * sinf(angle);
 
