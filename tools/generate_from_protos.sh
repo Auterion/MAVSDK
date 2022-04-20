@@ -2,16 +2,83 @@
 
 set -e
 
-script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+usage() {
+    cat << EOF
+    Usage: ./generate_from_protos.sh [options]
 
+    -h, --help                   Show help
+    -b, --build-dir BUILD_DIR    Chosen build directory (default: build/default)
+EOF
+}
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 proto_dir="${script_dir}/../proto/protos"
+build_dir="${script_dir}/../build/default"
+
+options=$(getopt -l "help,build-dir:" -o "hb:" -a -- "$@")
+
+eval set -- "$options"
+
+while true
+do
+    case $1 in
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        -b|--build-dir)
+            shift
+            build_dir=$1
+            ;;
+        --)
+            shift
+            break;;
+    esac
+shift
+done
+
+third_party_dir="${build_dir}/third_party"
 mavsdk_server_generated_dir="${script_dir}/../src/mavsdk_server/src/generated"
-third_party_dir="${script_dir}/../build/default/third_party"
 protoc_binary="${third_party_dir}/install/bin/protoc"
 protoc_grpc_binary="${third_party_dir}/install/bin/grpc_cpp_plugin"
 
-command -v ${protoc_binary} > /dev/null || protoc_binary="$(command -v protoc)"
-command -v ${protoc_grpc_binary} > /dev/null || protoc_grpc_binary="$(command -v grpc_cpp_plugin)"
+echo "Looking for ${protoc_binary}"
+if ! command -v ${protoc_binary} > /dev/null; then
+    echo "Falling back to looking for protoc in PATH"
+    if ! protoc_binary="$(command -v protoc)"; then
+        echo >&2 "No protoc binary found"
+        echo >&2 "'protoc' not found"
+        echo >&2 ""
+        echo >&2 "You may want to run the CMake configure step first:"
+        echo >&2 ""
+        echo >&2 "    cmake -DBUILD_MAVSDK_SERVER=ON -Bbuild/default -H."
+        echo >&2 ""
+        echo >&2 "or set the build directory used with -b"
+        echo >&2 ""
+        usage
+        exit 1
+    fi
+fi
+echo "Found protoc ($(${protoc_binary} --version)): ${protoc_binary}"
+
+echo "Looking for ${protoc_grpc_binary}"
+if ! command -v ${protoc_grpc_binary} > /dev/null; then
+echo "Falling back to looking for grpc_cpp_plugin in PATH"
+    if ! protoc_grpc_binary="$(command -v grpc_cpp_plugin)"; then
+        echo >&2 "No grpc_cpp_plugin binary found"
+        echo >&2 "'grpc_cpp_plugin' not found"
+        echo >&2 ""
+        echo >&2 "You may want to run the CMake configure step first:"
+        echo >&2 ""
+        echo >&2 "    cmake -DBUILD_MAVSDK_SERVER=ON -Bbuild/default -H."
+        echo >&2 ""
+        echo >&2 "or set the build directory used with -b"
+        echo >&2 ""
+        usage
+        exit 1
+    fi
+fi
+echo "Found grpc_cpp_plugin: ${protoc_grpc_binary}"
 
 function snake_case_to_camel_case {
     echo $1 | awk -v FS="_" -v OFS="" '{for (i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) substr($i,2)} 1'
@@ -21,14 +88,6 @@ command -v ${protoc_binary} > /dev/null && command -v ${protoc_grpc_binary} > /d
     echo "-------------------------------"
     echo " Error"
     echo "-------------------------------"
-    echo >&2 "'protoc' or 'grpc_cpp_plugin' not found"
-    echo >&2 ""
-    echo >&2 "Those are expected to be built for the host system in '${third_party_dir}'!"
-    echo >&2 ""
-    echo >&2 "You may want to run the CMake configure step first:"
-    echo >&2 ""
-    echo >&2 "    cmake -DBUILD_MAVSDK_SERVER=ON -Bbuild/default -H."
-    exit 1
 }
 
 command -v protoc-gen-mavsdk > /dev/null || {
@@ -43,9 +102,6 @@ command -v protoc-gen-mavsdk > /dev/null || {
     echo >&2 "    pip3 install --user protoc-gen-mavsdk"
     exit 1
 }
-
-echo "Found protoc ($(${protoc_binary} --version)): ${protoc_binary}"
-echo "Found grpc_cpp_plugin: ${protoc_grpc_binary}"
 
 plugin_list_and_core=$(cd ${script_dir}/../proto/protos && ls -d */ | sed 's:/*$::')
 
@@ -72,18 +128,18 @@ for plugin in ${plugin_list_and_core}; do
         continue
     fi
 
-    mkdir -p ${script_dir}/../src/plugins/${plugin}/include/plugins/${plugin}
+    mkdir -p ${script_dir}/../src/mavsdk/plugins/${plugin}/include/plugins/${plugin}
     ${protoc_binary} -I ${proto_dir} --custom_out=${tmp_output_dir} --plugin=protoc-gen-custom=${protoc_gen_mavsdk} --custom_opt="file_ext=h,template_path=${template_path_plugin_h}" ${proto_dir}/${plugin}/${plugin}.proto
-    mv ${tmp_output_dir}/${plugin}/$(snake_case_to_camel_case ${plugin}).h ${script_dir}/../src/plugins/${plugin}/include/plugins/${plugin}/${plugin}.h
+    mv ${tmp_output_dir}/${plugin}/$(snake_case_to_camel_case ${plugin}).h ${script_dir}/../src/mavsdk/plugins/${plugin}/include/plugins/${plugin}/${plugin}.h
 
     ${protoc_binary} -I ${proto_dir} --custom_out=${tmp_output_dir} --plugin=protoc-gen-custom=${protoc_gen_mavsdk} --custom_opt="file_ext=cpp,template_path=${template_path_plugin_cpp}" ${proto_dir}/${plugin}/${plugin}.proto
-    mv ${tmp_output_dir}/${plugin}/$(snake_case_to_camel_case ${plugin}).cpp ${script_dir}/../src/plugins/${plugin}/${plugin}.cpp
+    mv ${tmp_output_dir}/${plugin}/$(snake_case_to_camel_case ${plugin}).cpp ${script_dir}/../src/mavsdk/plugins/${plugin}/${plugin}.cpp
 
     ${protoc_binary} -I ${proto_dir} --custom_out=${tmp_output_dir} --plugin=protoc-gen-custom=${protoc_gen_mavsdk} --custom_opt="file_ext=h,template_path=${template_path_mavsdk_server}" ${proto_dir}/${plugin}/${plugin}.proto
     mkdir -p ${script_dir}/../src/mavsdk_server/src/plugins/${plugin}
     mv ${tmp_output_dir}/${plugin}/$(snake_case_to_camel_case ${plugin}).h ${script_dir}/../src/mavsdk_server/src/plugins/${plugin}/${plugin}_service_impl.h
 
-    file_impl_h="${script_dir}/../src/plugins/${plugin}/${plugin}_impl.h"
+    file_impl_h="${script_dir}/../src/mavsdk/plugins/${plugin}/${plugin}_impl.h"
     if [[ ! -f "${file_impl_h}" ]]; then
         ${protoc_binary} -I ${proto_dir} --custom_out=${tmp_output_dir} --plugin=protoc-gen-custom=${protoc_gen_mavsdk} --custom_opt="file_ext=h,template_path=${template_path_plugin_impl_h}" ${proto_dir}/${plugin}/${plugin}.proto
         mv ${tmp_output_dir}/${plugin}/$(snake_case_to_camel_case ${plugin}).h ${file_impl_h}
@@ -95,7 +151,7 @@ for plugin in ${plugin_list_and_core}; do
         fi
     fi
 
-    file_impl_cpp="${script_dir}/../src/plugins/${plugin}/${plugin}_impl.cpp"
+    file_impl_cpp="${script_dir}/../src/mavsdk/plugins/${plugin}/${plugin}_impl.cpp"
     if [[ ! -f $file_impl_cpp ]]; then
         ${protoc_binary} -I ${proto_dir} --custom_out=${tmp_output_dir} --plugin=protoc-gen-custom=${protoc_gen_mavsdk} --custom_opt="file_ext=cpp,template_path=${template_path_plugin_impl_cpp}" ${proto_dir}/${plugin}/${plugin}.proto
         mv ${tmp_output_dir}/${plugin}/$(snake_case_to_camel_case ${plugin}).cpp ${file_impl_cpp}
@@ -107,7 +163,7 @@ for plugin in ${plugin_list_and_core}; do
         fi
     fi
 
-    file_cmake="${script_dir}/../src/plugins/${plugin}/CMakeLists.txt"
+    file_cmake="${script_dir}/../src/mavsdk/plugins/${plugin}/CMakeLists.txt"
     if [[ ! -f $file_cmake ]]; then
         ${protoc_binary} -I ${proto_dir} --custom_out=${tmp_output_dir} --plugin=protoc-gen-custom=${protoc_gen_mavsdk} --custom_opt="file_ext=txt,template_path=${template_path_cmake}" ${proto_dir}/${plugin}/${plugin}.proto
         mv ${tmp_output_dir}/${plugin}/$(snake_case_to_camel_case ${plugin}).txt ${file_cmake}
@@ -119,13 +175,13 @@ for plugin in ${plugin_list_and_core}; do
         fi
     fi
 
-    plugins_cmake_file="${script_dir}/../src/plugins/CMakeLists.txt"
+    plugins_cmake_file="${script_dir}/../src/mavsdk/plugins/CMakeLists.txt"
     if [[ ! $(grep ${plugin} ${plugins_cmake_file}) ]]; then
         echo "-> Adding entry for '${plugin}' to ${plugins_cmake_file}"
 
         # We want to append the plugin to the list but before the passthrough plugin.
         # Therefore, we grep for the line numbers of add_subdirectory, cut to numbers only, and use the first of the two last.
-        last_line=$(grep -n 'add_subdirectory' 'src/plugins/CMakeLists.txt' | cut -f1 -d: | tail -2 | head -n 1)
+        last_line=$(grep -n 'add_subdirectory' 'src/mavsdk/plugins/CMakeLists.txt' | cut -f1 -d: | tail -2 | head -n 1)
         # We have to increment by one to write it below the last one.
         last_line=$(($last_line+1))
         sed -i "${last_line}iadd_subdirectory(${plugin})" ${plugins_cmake_file}

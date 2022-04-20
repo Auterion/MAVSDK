@@ -1,6 +1,32 @@
 cmake_minimum_required(VERSION 3.10.2)
 
-set(COMPONENTS_LIST action calibration camera core failure follow_me ftp geofence gimbal info log_files manual_control mission mission_raw mocap offboard param server_utility shell telemetry tracking_server tune transponder)
+set(COMPONENTS_LIST
+    action
+    action_server
+    calibration
+    camera
+    core
+    failure
+    follow_me
+    ftp
+    geofence
+    gimbal
+    info log_files
+    manual_control
+    mission
+    mission_raw
+    mission_raw_server
+    mocap offboard
+    param
+    param_server
+    server_utility
+    shell
+    telemetry
+    telemetry_server
+    tracking_server
+    tune
+    transponder
+)
 
 foreach(COMPONENT_NAME ${COMPONENTS_LIST})
     add_library(${COMPONENT_NAME}_proto_gens STATIC
@@ -44,28 +70,6 @@ endif()
 
 target_link_libraries(mavsdk_server
     PRIVATE
-    mavsdk_action
-    mavsdk_calibration
-    mavsdk_camera
-    mavsdk_failure
-    mavsdk_follow_me
-    mavsdk_ftp
-    mavsdk_geofence
-    mavsdk_gimbal
-    mavsdk_info
-    mavsdk_log_files
-    mavsdk_manual_control
-    mavsdk_mission
-    mavsdk_mission_raw
-    mavsdk_mocap
-    mavsdk_offboard
-    mavsdk_param
-    mavsdk_server_utility
-    mavsdk_shell
-    mavsdk_telemetry
-    mavsdk_tracking_server
-    mavsdk_tune
-    mavsdk_transponder
     mavsdk
     gRPC::grpc++
     ${COMPONENTS_PROTOGENS}
@@ -78,13 +82,15 @@ set_target_properties(mavsdk_server
     )
 
 if(BUILD_STATIC_MAVSDK_SERVER AND ("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU"))
+    target_link_libraries(mavsdk_server PRIVATE atomic.a)
+elseif(${CMAKE_HOST_SYSTEM_PROCESSOR} MATCHES "(armv6|armv7)")
     target_link_libraries(mavsdk_server PRIVATE atomic)
 endif()
 
 target_include_directories(mavsdk_server
     PRIVATE
-    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/core>
-    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/plugins>
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/mavsdk/core>
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/mavsdk/plugins>
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/mavsdk_server/src/plugins>
     PUBLIC
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/mavsdk_server/src/generated>

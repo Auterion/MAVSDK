@@ -1,18 +1,16 @@
 #include <iostream>
 #include <future>
 #include "integration_test_helper.h"
-#include "global_include.h"
 #include "mavsdk.h"
 #include "plugins/calibration/calibration.h"
 #include "plugins/param/param.h"
 #include "plugins/telemetry/telemetry.h"
 
 using namespace mavsdk;
-using namespace std::placeholders; // for `_1`
 
 static void receive_calibration_callback(
-    const Calibration::Result result,
-    const Calibration::ProgressData& progress_data,
+    Calibration::Result result,
+    Calibration::ProgressData progress_data,
     const std::string& calibration_type,
     std::promise<Calibration::Result>& prom);
 
@@ -34,7 +32,9 @@ TEST(HardwareTest, CalibrationGyro)
     std::future<Calibration::Result> fut = prom.get_future();
 
     calibration->calibrate_gyro_async(
-        std::bind(&receive_calibration_callback, _1, _2, "gyro", std::ref(prom)));
+        [&prom](Calibration::Result result, Calibration::ProgressData progress_data) {
+            receive_calibration_callback(result, progress_data, "gyro", prom);
+        });
 
     auto future_ret = fut.get();
     EXPECT_EQ(future_ret, Calibration::Result::Success);
@@ -60,8 +60,10 @@ TEST(HardwareTest, CalibrationAccelerometer)
     std::promise<Calibration::Result> prom{};
     std::future<Calibration::Result> fut = prom.get_future();
 
-    calibration->calibrate_accelerometer_async(
-        std::bind(&receive_calibration_callback, _1, _2, "accelerometer", std::ref(prom)));
+    calibration->calibrate_gyro_async(
+        [&prom](Calibration::Result result, Calibration::ProgressData progress_data) {
+            receive_calibration_callback(result, progress_data, "accelerometer", prom);
+        });
 
     auto future_ret = fut.get();
     EXPECT_EQ(future_ret, Calibration::Result::Success);
@@ -87,8 +89,10 @@ TEST(HardwareTest, CalibrationMagnetometer)
     std::promise<Calibration::Result> prom{};
     std::future<Calibration::Result> fut = prom.get_future();
 
-    calibration->calibrate_magnetometer_async(
-        std::bind(&receive_calibration_callback, _1, _2, "magnetometer", std::ref(prom)));
+    calibration->calibrate_gyro_async(
+        [&prom](Calibration::Result result, Calibration::ProgressData progress_data) {
+            receive_calibration_callback(result, progress_data, "magnetometer", prom);
+        });
 
     auto future_ret = fut.get();
     EXPECT_EQ(future_ret, Calibration::Result::Success);
@@ -114,8 +118,10 @@ TEST(HardwareTest, CalibrationLevelHorizon)
     std::promise<Calibration::Result> prom{};
     std::future<Calibration::Result> fut = prom.get_future();
 
-    calibration->calibrate_level_horizon_async(
-        std::bind(&receive_calibration_callback, _1, _2, "level horizon", std::ref(prom)));
+    calibration->calibrate_gyro_async(
+        [&prom](Calibration::Result result, Calibration::ProgressData progress_data) {
+            receive_calibration_callback(result, progress_data, "level horizon", prom);
+        });
 
     auto future_ret = fut.get();
     EXPECT_EQ(future_ret, Calibration::Result::Success);
@@ -141,8 +147,10 @@ TEST(HardwareTest, CalibrationGimbalAccelerometer)
     std::promise<Calibration::Result> prom{};
     std::future<Calibration::Result> fut = prom.get_future();
 
-    calibration->calibrate_gimbal_accelerometer_async(
-        std::bind(&receive_calibration_callback, _1, _2, "gimbal accelerometer", std::ref(prom)));
+    calibration->calibrate_gyro_async(
+        [&prom](Calibration::Result result, Calibration::ProgressData progress_data) {
+            receive_calibration_callback(result, progress_data, "gimbal accelerometer", prom);
+        });
 
     auto future_ret = fut.get();
     EXPECT_EQ(future_ret, Calibration::Result::Success);
@@ -179,7 +187,9 @@ TEST(HardwareTest, CalibrationGyroWithTelemetry)
     std::future<Calibration::Result> fut = prom.get_future();
 
     calibration->calibrate_gyro_async(
-        std::bind(&receive_calibration_callback, _1, _2, "gyro", std::ref(prom)));
+        [&prom](Calibration::Result result, Calibration::ProgressData progress_data) {
+            receive_calibration_callback(result, progress_data, "gimbal accelerometer", prom);
+        });
 
     auto future_ret = fut.get();
     EXPECT_EQ(future_ret, Calibration::Result::Success);
@@ -211,7 +221,9 @@ TEST(HardwareTest, CalibrationGyroCancelled)
     std::future<Calibration::Result> fut = prom.get_future();
 
     calibration->calibrate_gyro_async(
-        std::bind(&receive_calibration_callback, _1, _2, "gyro", std::ref(prom)));
+        [&prom](Calibration::Result result, Calibration::ProgressData progress_data) {
+            receive_calibration_callback(result, progress_data, "gyro", prom);
+        });
 
     auto status = fut.wait_for(std::chrono::seconds(2));
     EXPECT_EQ(status, std::future_status::timeout);
@@ -225,8 +237,8 @@ TEST(HardwareTest, CalibrationGyroCancelled)
 }
 
 void receive_calibration_callback(
-    const Calibration::Result result,
-    const Calibration::ProgressData& progress_data,
+    Calibration::Result result,
+    Calibration::ProgressData progress_data,
     const std::string& calibration_type,
     std::promise<Calibration::Result>& prom)
 {

@@ -7,7 +7,7 @@
 
 using namespace mavsdk;
 
-TEST_F(SitlTest, ActionGoto)
+TEST_F(SitlTest, PX4ActionGoto)
 {
     Mavsdk mavsdk;
 
@@ -29,6 +29,7 @@ TEST_F(SitlTest, ActionGoto)
         std::chrono::seconds(10)));
 
     auto system = mavsdk.systems().at(0);
+    ASSERT_TRUE(system->has_autopilot());
     auto telemetry = std::make_shared<Telemetry>(system);
 
     int iteration = 0;
