@@ -28,11 +28,11 @@ void ObstacleAvoidanceImpl::disable() {}
 
 void ObstacleAvoidanceImpl::start_async(const ObstacleAvoidance::ResultCallback callback)
 {
-    MavlinkCommandSender::CommandLong command{*_parent};
+    MavlinkCommandSender::CommandLong command{};
 
     command.command = MAV_CMD_COMPONENT_CONTROL;
-    command.params.param1 = MAV_COMP_ID_OBSTACLE_AVOIDANCE;
-    command.params.param2 = COMPONENT_CONTROL_START;
+    command.params.maybe_param1 = MAV_COMP_ID_OBSTACLE_AVOIDANCE;
+    command.params.maybe_param2 = COMPONENT_CONTROL_START;
     command.target_component_id = MAV_COMP_ID_ONBOARD_COMPUTER;
 
     _parent->send_command_async(
@@ -53,11 +53,11 @@ ObstacleAvoidance::Result ObstacleAvoidanceImpl::start()
 
 void ObstacleAvoidanceImpl::stop_async(const ObstacleAvoidance::ResultCallback callback)
 {
-    MavlinkCommandSender::CommandLong command{*_parent};
+    MavlinkCommandSender::CommandLong command{};
 
     command.command = MAV_CMD_COMPONENT_CONTROL;
-    command.params.param1 = MAV_COMP_ID_OBSTACLE_AVOIDANCE;
-    command.params.param2 = COMPONENT_CONTROL_STOP;
+    command.params.maybe_param1 = MAV_COMP_ID_OBSTACLE_AVOIDANCE;
+    command.params.maybe_param2 = COMPONENT_CONTROL_STOP;
     command.target_component_id = MAV_COMP_ID_ONBOARD_COMPUTER;
 
     _parent->send_command_async(
@@ -78,11 +78,11 @@ ObstacleAvoidance::Result ObstacleAvoidanceImpl::stop()
 
 void ObstacleAvoidanceImpl::restart_async(const ObstacleAvoidance::ResultCallback callback)
 {
-    MavlinkCommandSender::CommandLong command{*_parent};
+    MavlinkCommandSender::CommandLong command{};
 
     command.command = MAV_CMD_COMPONENT_CONTROL;
-    command.params.param1 = MAV_COMP_ID_OBSTACLE_AVOIDANCE;
-    command.params.param2 = COMPONENT_CONTROL_RESTART;
+    command.params.maybe_param1 = MAV_COMP_ID_OBSTACLE_AVOIDANCE;
+    command.params.maybe_param2 = COMPONENT_CONTROL_RESTART;
     command.target_component_id = MAV_COMP_ID_ONBOARD_COMPUTER;
 
     _parent->send_command_async(
@@ -103,11 +103,11 @@ ObstacleAvoidance::Result ObstacleAvoidanceImpl::restart()
 
 void ObstacleAvoidanceImpl::state_enable_async(const ObstacleAvoidance::ResultCallback callback)
 {
-    MavlinkCommandSender::CommandLong command{*_parent};
+    MavlinkCommandSender::CommandLong command{};
 
     command.command = MAV_CMD_COMPONENT_CONTROL;
-    command.params.param1 = MAV_COMP_ID_OBSTACLE_AVOIDANCE;
-    command.params.param2 = COMPONENT_CONTROL_ENABLE;
+    command.params.maybe_param1 = MAV_COMP_ID_OBSTACLE_AVOIDANCE;
+    command.params.maybe_param2 = COMPONENT_CONTROL_ENABLE;
     command.target_component_id = MAV_COMP_ID_ONBOARD_COMPUTER;
 
     _parent->send_command_async(
@@ -128,11 +128,11 @@ ObstacleAvoidance::Result ObstacleAvoidanceImpl::state_enable()
 
 void ObstacleAvoidanceImpl::state_disable_async(const ObstacleAvoidance::ResultCallback callback)
 {
-    MavlinkCommandSender::CommandLong command{*_parent};
+    MavlinkCommandSender::CommandLong command{};
 
     command.command = MAV_CMD_COMPONENT_CONTROL;
-    command.params.param1 = MAV_COMP_ID_OBSTACLE_AVOIDANCE;
-    command.params.param2 = COMPONENT_CONTROL_DISABLE;
+    command.params.maybe_param1 = MAV_COMP_ID_OBSTACLE_AVOIDANCE;
+    command.params.maybe_param2 = COMPONENT_CONTROL_DISABLE;
     command.target_component_id = MAV_COMP_ID_ONBOARD_COMPUTER;
 
     _parent->send_command_async(
