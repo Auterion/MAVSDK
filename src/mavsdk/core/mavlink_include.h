@@ -4,4 +4,5 @@
 #pragma GCC system_header
 #endif
 
+#include "mavlink/v2.0/auterion/mavlink.h"
 #include "mavlink/v2.0/common/mavlink.h"

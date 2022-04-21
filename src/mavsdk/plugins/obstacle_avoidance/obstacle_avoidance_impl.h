@@ -9,7 +9,7 @@ class ObstacleAvoidanceImpl : public PluginImplBase {
 public:
     explicit ObstacleAvoidanceImpl(System& system);
     explicit ObstacleAvoidanceImpl(std::shared_ptr<System> system);
-    ~ObstacleAvoidanceImpl();
+    ~ObstacleAvoidanceImpl() override;
 
     void init() override;
     void deinit() override;
@@ -17,19 +17,19 @@ public:
     void enable() override;
     void disable() override;
 
-    void start_async(const ObstacleAvoidance::ResultCallback callback);
+    void start_async(ObstacleAvoidance::ResultCallback callback);
     ObstacleAvoidance::Result start();
 
-    void stop_async(const ObstacleAvoidance::ResultCallback callback);
+    void stop_async(ObstacleAvoidance::ResultCallback callback);
     ObstacleAvoidance::Result stop();
 
-    void restart_async(const ObstacleAvoidance::ResultCallback callback);
+    void restart_async(ObstacleAvoidance::ResultCallback callback);
     ObstacleAvoidance::Result restart();
 
-    void state_enable_async(const ObstacleAvoidance::ResultCallback callback);
+    void state_enable_async(ObstacleAvoidance::ResultCallback callback);
     ObstacleAvoidance::Result state_enable();
 
-    void state_disable_async(const ObstacleAvoidance::ResultCallback callback);
+    void state_disable_async(ObstacleAvoidance::ResultCallback callback);
     ObstacleAvoidance::Result state_disable();
 
 private:

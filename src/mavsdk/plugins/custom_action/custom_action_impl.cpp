@@ -236,13 +236,13 @@ CustomActionImpl::set_custom_action(CustomAction::ActionToExecute& action) const
 void CustomActionImpl::set_custom_action_async(
     CustomAction::ActionToExecute& action, const CustomAction::ResultCallback& callback) const
 {
-    MavlinkCommandSender::CommandLong command{*_parent};
+    MavlinkCommandSender::CommandLong command{};
 
     command.command = MAV_CMD_WAYPOINT_USER_1; // TODO: use MAV_CMD_CUSTOM_ACTION when it is merged
                                                // in upstream MAVLink
-    command.params.param1 = static_cast<float>(action.id); // Action ID
-    command.params.param2 = 0; // Action execution control (N/A)
-    command.params.param3 = action.timeout; // Action timeout
+    command.params.maybe_param1 = static_cast<float>(action.id); // Action ID
+    command.params.maybe_param2 = 0; // Action execution control (N/A)
+    command.params.maybe_param3 = action.timeout; // Action timeout
     command.target_component_id = _parent->get_autopilot_id();
 
     _parent->send_command_async(
@@ -571,17 +571,17 @@ void CustomActionImpl::execute_custom_action_stage_async(
 
     } else { // Process command
         if (stage.command.type == CustomAction::Command::CommandType::Long) { // LONG
-            MavlinkCommandSender::CommandLong command{*_parent};
+            MavlinkCommandSender::CommandLong command{};
             command.target_system_id = stage.command.target_system_id;
             command.target_component_id = stage.command.target_component_id;
             command.command = stage.command.command;
-            command.params.param1 = stage.command.param1;
-            command.params.param2 = stage.command.param2;
-            command.params.param3 = stage.command.param3;
-            command.params.param4 = stage.command.param4;
-            command.params.param5 = stage.command.param5;
-            command.params.param6 = stage.command.param6;
-            command.params.param7 = stage.command.param7;
+            command.params.maybe_param1 = stage.command.param1;
+            command.params.maybe_param2 = stage.command.param2;
+            command.params.maybe_param3 = stage.command.param3;
+            command.params.maybe_param4 = stage.command.param4;
+            command.params.maybe_param5 = stage.command.param5;
+            command.params.maybe_param6 = stage.command.param6;
+            command.params.maybe_param7 = stage.command.param7;
 
             // Send command to the target system and component IDs
             _parent->send_command_async(
@@ -594,17 +594,17 @@ void CustomActionImpl::execute_custom_action_stage_async(
             command.target_component_id = stage.command.target_component_id;
             command.frame = static_cast<MAV_FRAME>(stage.command.frame);
             command.command = stage.command.command;
-            command.params.param1 = stage.command.param1;
-            command.params.param2 = stage.command.param2;
-            command.params.param3 = stage.command.param3;
-            command.params.param4 = stage.command.param4;
+            command.params.maybe_param1 = stage.command.param1;
+            command.params.maybe_param2 = stage.command.param2;
+            command.params.maybe_param3 = stage.command.param3;
+            command.params.maybe_param4 = stage.command.param4;
             command.params.x = stage.command.is_local ?
                                    static_cast<int32_t>(std::round(stage.command.param5 * 1e4)) :
                                    static_cast<int32_t>(std::round(stage.command.param5 * 1e7));
             command.params.y = stage.command.is_local ?
                                    static_cast<int32_t>(std::round(stage.command.param6 * 1e4)) :
                                    static_cast<int32_t>(std::round(stage.command.param6 * 1e7));
-            command.params.z = stage.command.param7;
+            command.params.maybe_z = stage.command.param7;
 
             // Send command to the target system and component IDs
             _parent->send_command_async(

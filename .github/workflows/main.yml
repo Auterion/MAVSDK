@@ -637,13 +637,16 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: git permission workaround
+        run: |
+          git config --global --add safe.directory /__w/MAVSDK/MAVSDK
       - name: test
         run: PX4_VERSION=${{ matrix.px4_version }} tools/run-sitl-tests.sh /home/user/Firmware
         timeout-minutes: 45
       - name: look at core files
         if: failure()
         run: gdb /home/user/Firmware/build/px4_sitl_default/bin/px4 px4.core -ex "thread apply all bt" -ex "quit"
-  
+
   apm-sitl-newer:
     name: APM SITL ${{ matrix.apm_version }} (ubuntu-20.04)
     runs-on: ubuntu-20.04
@@ -670,7 +673,7 @@ jobs:
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git config --global --add safe.directory /github/workspace
       - name: test
-        run: PX4_VERSION=${{ matrix.px4_version }} tools/run-sitl-tests.sh /home/user/Firmware
+        run: PX4_VERSION=${{ matrix.apm_version }} tools/run-sitl-tests.sh /home/user/Firmware
 
   apx4-sitl:
     name: Auterion PX4 SITL ${{ matrix.px4_version }} (ubuntu-20.04)
