@@ -111,6 +111,8 @@ public:
                 return rpc::action::ActionResult_Result_RESULT_NO_VTOL_TRANSITION_SUPPORT;
             case mavsdk::Action::Result::ParameterError:
                 return rpc::action::ActionResult_Result_RESULT_PARAMETER_ERROR;
+            case mavsdk::Action::Result::Unsupported:
+                return rpc::action::ActionResult_Result_RESULT_UNSUPPORTED;
         }
     }
 
@@ -145,6 +147,8 @@ public:
                 return mavsdk::Action::Result::NoVtolTransitionSupport;
             case rpc::action::ActionResult_Result_RESULT_PARAMETER_ERROR:
                 return mavsdk::Action::Result::ParameterError;
+            case rpc::action::ActionResult_Result_RESULT_UNSUPPORTED:
+                return mavsdk::Action::Result::Unsupported;
         }
     }
 
@@ -670,6 +674,34 @@ public:
 
         auto result = _lazy_plugin.maybe_plugin()->set_return_to_launch_altitude(
             request->relative_altitude_m());
+
+        if (response != nullptr) {
+            fillResponseWithResult(response, result);
+        }
+
+        return grpc::Status::OK;
+    }
+
+    grpc::Status SetCurrentSpeed(
+        grpc::ServerContext* /* context */,
+        const rpc::action::SetCurrentSpeedRequest* request,
+        rpc::action::SetCurrentSpeedResponse* response) override
+    {
+        if (_lazy_plugin.maybe_plugin() == nullptr) {
+            if (response != nullptr) {
+                auto result = mavsdk::Action::Result::NoSystem;
+                fillResponseWithResult(response, result);
+            }
+
+            return grpc::Status::OK;
+        }
+
+        if (request == nullptr) {
+            LogWarn() << "SetCurrentSpeed sent with a null request! Ignoring...";
+            return grpc::Status::OK;
+        }
+
+        auto result = _lazy_plugin.maybe_plugin()->set_current_speed(request->speed_m_s());
 
         if (response != nullptr) {
             fillResponseWithResult(response, result);

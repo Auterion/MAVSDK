@@ -9,17 +9,17 @@ using namespace mavsdk;
 
 static void takeoff_and_hover_at_altitude(float altitude_m);
 
-TEST_F(SitlTest, ActionHoverSyncDefault)
+TEST_F(SitlTest, PX4ActionHoverSyncDefault)
 {
     takeoff_and_hover_at_altitude(2.5);
 }
 
-TEST_F(SitlTest, ActionHoverSyncHigher)
+TEST_F(SitlTest, PX4ActionHoverSyncHigher)
 {
     takeoff_and_hover_at_altitude(5.0f);
 }
 
-TEST_F(SitlTest, ActionHoverSyncLower)
+TEST_F(SitlTest, PX4ActionHoverSyncLower)
 {
     // TODO: less than 1.0 is currently failing due to a Firmware bug.
     // https://github.com/PX4/Firmware/issues/12471
@@ -53,12 +53,17 @@ void takeoff_and_hover_at_altitude(float altitude_m)
     ASSERT_EQ(systems.size(), 1);
 
     auto system = systems.at(0);
+    ASSERT_TRUE(system->has_autopilot());
 
     auto telemetry = std::make_shared<Telemetry>(*system);
 
     LogInfo() << "Waiting for system to be ready";
     ASSERT_TRUE(poll_condition_with_timeout(
-        [telemetry]() { return telemetry->health_all_ok(); }, std::chrono::seconds(10)));
+        [telemetry]() {
+            LogInfo() << "Waiting for system to be ready";
+            return telemetry->health_all_ok();
+        },
+        std::chrono::seconds(10)));
 
     auto action = std::make_shared<Action>(*system);
 

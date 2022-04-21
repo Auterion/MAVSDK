@@ -7,7 +7,7 @@
 
 using namespace mavsdk;
 
-TEST_F(SitlTest, ActionGoto)
+TEST_F(SitlTest, PX4ActionGoto)
 {
     Mavsdk mavsdk;
 
@@ -29,6 +29,7 @@ TEST_F(SitlTest, ActionGoto)
         std::chrono::seconds(10)));
 
     auto system = mavsdk.systems().at(0);
+    ASSERT_TRUE(system->has_autopilot());
     auto telemetry = std::make_shared<Telemetry>(system);
 
     int iteration = 0;
@@ -50,12 +51,23 @@ TEST_F(SitlTest, ActionGoto)
 
     action_ret = action->takeoff();
     EXPECT_EQ(action_ret, Action::Result::Success);
-    std::this_thread::sleep_for(std::chrono::seconds(2));
+    std::this_thread::sleep_for(std::chrono::seconds(4));
 
     // Go somewhere
     action->goto_location(home.latitude_deg + 0.0002493, home.longitude_deg - 0.0000154, NAN, NAN);
     std::this_thread::sleep_for(std::chrono::seconds(10));
 
+    LogInfo() << "Go slow for a bit.";
+    // Go slow for a bit
+    EXPECT_EQ(Action::Result::Success, action->set_current_speed(1.0f));
+    std::this_thread::sleep_for(std::chrono::seconds(4));
+
+    LogInfo() << "Go fast again.";
+    // Then faster again
+    EXPECT_EQ(Action::Result::Success, action->set_current_speed(5.0f));
+    std::this_thread::sleep_for(std::chrono::seconds(4));
+
+    LogInfo() << "Go back.";
     // And back
     action->goto_location(home.latitude_deg, home.longitude_deg, NAN, NAN);
     std::this_thread::sleep_for(std::chrono::seconds(10));

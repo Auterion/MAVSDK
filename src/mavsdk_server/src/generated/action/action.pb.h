@@ -48,7 +48,7 @@ struct TableStruct_action_2faction_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[43]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[45]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -139,6 +139,12 @@ extern SetActuatorRequestDefaultTypeInternal _SetActuatorRequest_default_instanc
 class SetActuatorResponse;
 struct SetActuatorResponseDefaultTypeInternal;
 extern SetActuatorResponseDefaultTypeInternal _SetActuatorResponse_default_instance_;
+class SetCurrentSpeedRequest;
+struct SetCurrentSpeedRequestDefaultTypeInternal;
+extern SetCurrentSpeedRequestDefaultTypeInternal _SetCurrentSpeedRequest_default_instance_;
+class SetCurrentSpeedResponse;
+struct SetCurrentSpeedResponseDefaultTypeInternal;
+extern SetCurrentSpeedResponseDefaultTypeInternal _SetCurrentSpeedResponse_default_instance_;
 class SetMaximumSpeedRequest;
 struct SetMaximumSpeedRequestDefaultTypeInternal;
 extern SetMaximumSpeedRequestDefaultTypeInternal _SetMaximumSpeedRequest_default_instance_;
@@ -218,6 +224,8 @@ template<> ::mavsdk::rpc::action::ReturnToLaunchRequest* Arena::CreateMaybeMessa
 template<> ::mavsdk::rpc::action::ReturnToLaunchResponse* Arena::CreateMaybeMessage<::mavsdk::rpc::action::ReturnToLaunchResponse>(Arena*);
 template<> ::mavsdk::rpc::action::SetActuatorRequest* Arena::CreateMaybeMessage<::mavsdk::rpc::action::SetActuatorRequest>(Arena*);
 template<> ::mavsdk::rpc::action::SetActuatorResponse* Arena::CreateMaybeMessage<::mavsdk::rpc::action::SetActuatorResponse>(Arena*);
+template<> ::mavsdk::rpc::action::SetCurrentSpeedRequest* Arena::CreateMaybeMessage<::mavsdk::rpc::action::SetCurrentSpeedRequest>(Arena*);
+template<> ::mavsdk::rpc::action::SetCurrentSpeedResponse* Arena::CreateMaybeMessage<::mavsdk::rpc::action::SetCurrentSpeedResponse>(Arena*);
 template<> ::mavsdk::rpc::action::SetMaximumSpeedRequest* Arena::CreateMaybeMessage<::mavsdk::rpc::action::SetMaximumSpeedRequest>(Arena*);
 template<> ::mavsdk::rpc::action::SetMaximumSpeedResponse* Arena::CreateMaybeMessage<::mavsdk::rpc::action::SetMaximumSpeedResponse>(Arena*);
 template<> ::mavsdk::rpc::action::SetReturnToLaunchAltitudeRequest* Arena::CreateMaybeMessage<::mavsdk::rpc::action::SetReturnToLaunchAltitudeRequest>(Arena*);
@@ -252,12 +260,13 @@ enum ActionResult_Result : int {
   ActionResult_Result_RESULT_VTOL_TRANSITION_SUPPORT_UNKNOWN = 9,
   ActionResult_Result_RESULT_NO_VTOL_TRANSITION_SUPPORT = 10,
   ActionResult_Result_RESULT_PARAMETER_ERROR = 11,
+  ActionResult_Result_RESULT_UNSUPPORTED = 12,
   ActionResult_Result_ActionResult_Result_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
   ActionResult_Result_ActionResult_Result_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
 };
 bool ActionResult_Result_IsValid(int value);
 constexpr ActionResult_Result ActionResult_Result_Result_MIN = ActionResult_Result_RESULT_UNKNOWN;
-constexpr ActionResult_Result ActionResult_Result_Result_MAX = ActionResult_Result_RESULT_PARAMETER_ERROR;
+constexpr ActionResult_Result ActionResult_Result_Result_MAX = ActionResult_Result_RESULT_UNSUPPORTED;
 constexpr int ActionResult_Result_Result_ARRAYSIZE = ActionResult_Result_Result_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ActionResult_Result_descriptor();
@@ -6268,6 +6277,293 @@ class SetReturnToLaunchAltitudeResponse final :
 };
 // -------------------------------------------------------------------
 
+class SetCurrentSpeedRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:mavsdk.rpc.action.SetCurrentSpeedRequest) */ {
+ public:
+  inline SetCurrentSpeedRequest() : SetCurrentSpeedRequest(nullptr) {}
+  ~SetCurrentSpeedRequest() override;
+  explicit constexpr SetCurrentSpeedRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  SetCurrentSpeedRequest(const SetCurrentSpeedRequest& from);
+  SetCurrentSpeedRequest(SetCurrentSpeedRequest&& from) noexcept
+    : SetCurrentSpeedRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline SetCurrentSpeedRequest& operator=(const SetCurrentSpeedRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SetCurrentSpeedRequest& operator=(SetCurrentSpeedRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const SetCurrentSpeedRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const SetCurrentSpeedRequest* internal_default_instance() {
+    return reinterpret_cast<const SetCurrentSpeedRequest*>(
+               &_SetCurrentSpeedRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    42;
+
+  friend void swap(SetCurrentSpeedRequest& a, SetCurrentSpeedRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SetCurrentSpeedRequest* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(SetCurrentSpeedRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline SetCurrentSpeedRequest* New() const final {
+    return new SetCurrentSpeedRequest();
+  }
+
+  SetCurrentSpeedRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<SetCurrentSpeedRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const SetCurrentSpeedRequest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const SetCurrentSpeedRequest& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to, const ::PROTOBUF_NAMESPACE_ID::Message&from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SetCurrentSpeedRequest* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "mavsdk.rpc.action.SetCurrentSpeedRequest";
+  }
+  protected:
+  explicit SetCurrentSpeedRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kSpeedMSFieldNumber = 1,
+  };
+  // float speed_m_s = 1;
+  void clear_speed_m_s();
+  float speed_m_s() const;
+  void set_speed_m_s(float value);
+  private:
+  float _internal_speed_m_s() const;
+  void _internal_set_speed_m_s(float value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:mavsdk.rpc.action.SetCurrentSpeedRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  float speed_m_s_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_action_2faction_2eproto;
+};
+// -------------------------------------------------------------------
+
+class SetCurrentSpeedResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:mavsdk.rpc.action.SetCurrentSpeedResponse) */ {
+ public:
+  inline SetCurrentSpeedResponse() : SetCurrentSpeedResponse(nullptr) {}
+  ~SetCurrentSpeedResponse() override;
+  explicit constexpr SetCurrentSpeedResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  SetCurrentSpeedResponse(const SetCurrentSpeedResponse& from);
+  SetCurrentSpeedResponse(SetCurrentSpeedResponse&& from) noexcept
+    : SetCurrentSpeedResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline SetCurrentSpeedResponse& operator=(const SetCurrentSpeedResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SetCurrentSpeedResponse& operator=(SetCurrentSpeedResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const SetCurrentSpeedResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const SetCurrentSpeedResponse* internal_default_instance() {
+    return reinterpret_cast<const SetCurrentSpeedResponse*>(
+               &_SetCurrentSpeedResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    43;
+
+  friend void swap(SetCurrentSpeedResponse& a, SetCurrentSpeedResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SetCurrentSpeedResponse* other) {
+    if (other == this) return;
+    if (GetOwningArena() == other->GetOwningArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(SetCurrentSpeedResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline SetCurrentSpeedResponse* New() const final {
+    return new SetCurrentSpeedResponse();
+  }
+
+  SetCurrentSpeedResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<SetCurrentSpeedResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const SetCurrentSpeedResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const SetCurrentSpeedResponse& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message*to, const ::PROTOBUF_NAMESPACE_ID::Message&from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SetCurrentSpeedResponse* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "mavsdk.rpc.action.SetCurrentSpeedResponse";
+  }
+  protected:
+  explicit SetCurrentSpeedResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kActionResultFieldNumber = 1,
+  };
+  // .mavsdk.rpc.action.ActionResult action_result = 1;
+  bool has_action_result() const;
+  private:
+  bool _internal_has_action_result() const;
+  public:
+  void clear_action_result();
+  const ::mavsdk::rpc::action::ActionResult& action_result() const;
+  PROTOBUF_MUST_USE_RESULT ::mavsdk::rpc::action::ActionResult* release_action_result();
+  ::mavsdk::rpc::action::ActionResult* mutable_action_result();
+  void set_allocated_action_result(::mavsdk::rpc::action::ActionResult* action_result);
+  private:
+  const ::mavsdk::rpc::action::ActionResult& _internal_action_result() const;
+  ::mavsdk::rpc::action::ActionResult* _internal_mutable_action_result();
+  public:
+  void unsafe_arena_set_allocated_action_result(
+      ::mavsdk::rpc::action::ActionResult* action_result);
+  ::mavsdk::rpc::action::ActionResult* unsafe_arena_release_action_result();
+
+  // @@protoc_insertion_point(class_scope:mavsdk.rpc.action.SetCurrentSpeedResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::mavsdk::rpc::action::ActionResult* action_result_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_action_2faction_2eproto;
+};
+// -------------------------------------------------------------------
+
 class ActionResult final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:mavsdk.rpc.action.ActionResult) */ {
  public:
@@ -6312,7 +6608,7 @@ class ActionResult final :
                &_ActionResult_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    42;
+    44;
 
   friend void swap(ActionResult& a, ActionResult& b) {
     a.Swap(&b);
@@ -6405,6 +6701,8 @@ class ActionResult final :
     ActionResult_Result_RESULT_NO_VTOL_TRANSITION_SUPPORT;
   static constexpr Result RESULT_PARAMETER_ERROR =
     ActionResult_Result_RESULT_PARAMETER_ERROR;
+  static constexpr Result RESULT_UNSUPPORTED =
+    ActionResult_Result_RESULT_UNSUPPORTED;
   static inline bool Result_IsValid(int value) {
     return ActionResult_Result_IsValid(value);
   }
@@ -8898,6 +9196,124 @@ inline void SetReturnToLaunchAltitudeResponse::set_allocated_action_result(::mav
 
 // -------------------------------------------------------------------
 
+// SetCurrentSpeedRequest
+
+// float speed_m_s = 1;
+inline void SetCurrentSpeedRequest::clear_speed_m_s() {
+  speed_m_s_ = 0;
+}
+inline float SetCurrentSpeedRequest::_internal_speed_m_s() const {
+  return speed_m_s_;
+}
+inline float SetCurrentSpeedRequest::speed_m_s() const {
+  // @@protoc_insertion_point(field_get:mavsdk.rpc.action.SetCurrentSpeedRequest.speed_m_s)
+  return _internal_speed_m_s();
+}
+inline void SetCurrentSpeedRequest::_internal_set_speed_m_s(float value) {
+  
+  speed_m_s_ = value;
+}
+inline void SetCurrentSpeedRequest::set_speed_m_s(float value) {
+  _internal_set_speed_m_s(value);
+  // @@protoc_insertion_point(field_set:mavsdk.rpc.action.SetCurrentSpeedRequest.speed_m_s)
+}
+
+// -------------------------------------------------------------------
+
+// SetCurrentSpeedResponse
+
+// .mavsdk.rpc.action.ActionResult action_result = 1;
+inline bool SetCurrentSpeedResponse::_internal_has_action_result() const {
+  return this != internal_default_instance() && action_result_ != nullptr;
+}
+inline bool SetCurrentSpeedResponse::has_action_result() const {
+  return _internal_has_action_result();
+}
+inline void SetCurrentSpeedResponse::clear_action_result() {
+  if (GetArenaForAllocation() == nullptr && action_result_ != nullptr) {
+    delete action_result_;
+  }
+  action_result_ = nullptr;
+}
+inline const ::mavsdk::rpc::action::ActionResult& SetCurrentSpeedResponse::_internal_action_result() const {
+  const ::mavsdk::rpc::action::ActionResult* p = action_result_;
+  return p != nullptr ? *p : reinterpret_cast<const ::mavsdk::rpc::action::ActionResult&>(
+      ::mavsdk::rpc::action::_ActionResult_default_instance_);
+}
+inline const ::mavsdk::rpc::action::ActionResult& SetCurrentSpeedResponse::action_result() const {
+  // @@protoc_insertion_point(field_get:mavsdk.rpc.action.SetCurrentSpeedResponse.action_result)
+  return _internal_action_result();
+}
+inline void SetCurrentSpeedResponse::unsafe_arena_set_allocated_action_result(
+    ::mavsdk::rpc::action::ActionResult* action_result) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(action_result_);
+  }
+  action_result_ = action_result;
+  if (action_result) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:mavsdk.rpc.action.SetCurrentSpeedResponse.action_result)
+}
+inline ::mavsdk::rpc::action::ActionResult* SetCurrentSpeedResponse::release_action_result() {
+  
+  ::mavsdk::rpc::action::ActionResult* temp = action_result_;
+  action_result_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::mavsdk::rpc::action::ActionResult* SetCurrentSpeedResponse::unsafe_arena_release_action_result() {
+  // @@protoc_insertion_point(field_release:mavsdk.rpc.action.SetCurrentSpeedResponse.action_result)
+  
+  ::mavsdk::rpc::action::ActionResult* temp = action_result_;
+  action_result_ = nullptr;
+  return temp;
+}
+inline ::mavsdk::rpc::action::ActionResult* SetCurrentSpeedResponse::_internal_mutable_action_result() {
+  
+  if (action_result_ == nullptr) {
+    auto* p = CreateMaybeMessage<::mavsdk::rpc::action::ActionResult>(GetArenaForAllocation());
+    action_result_ = p;
+  }
+  return action_result_;
+}
+inline ::mavsdk::rpc::action::ActionResult* SetCurrentSpeedResponse::mutable_action_result() {
+  ::mavsdk::rpc::action::ActionResult* _msg = _internal_mutable_action_result();
+  // @@protoc_insertion_point(field_mutable:mavsdk.rpc.action.SetCurrentSpeedResponse.action_result)
+  return _msg;
+}
+inline void SetCurrentSpeedResponse::set_allocated_action_result(::mavsdk::rpc::action::ActionResult* action_result) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete action_result_;
+  }
+  if (action_result) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::mavsdk::rpc::action::ActionResult>::GetOwningArena(action_result);
+    if (message_arena != submessage_arena) {
+      action_result = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, action_result, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  action_result_ = action_result;
+  // @@protoc_insertion_point(field_set_allocated:mavsdk.rpc.action.SetCurrentSpeedResponse.action_result)
+}
+
+// -------------------------------------------------------------------
+
 // ActionResult
 
 // .mavsdk.rpc.action.ActionResult.Result result = 1;
@@ -8969,6 +9385,10 @@ inline void ActionResult::set_allocated_result_str(std::string* result_str) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

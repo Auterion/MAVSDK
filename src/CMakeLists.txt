@@ -29,11 +29,17 @@ option(CMAKE_POSITION_INDEPENDENT_CODE "Position independent code" ON)
 
 include(cmake/compiler_flags.cmake)
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules")
-
 find_package(Threads REQUIRED)
+
+if(NOT HUNTER_ENABLED)
+    list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules")
+endif()
+
+# This will noop if hunter is not enabled
+hunter_add_package(jsoncpp)
+hunter_add_package(CURL)
+
 find_package(CURL REQUIRED)
-find_package(tinyxml2 REQUIRED)
 
 if(BUILD_TESTS AND (IOS OR ANDROID))
     message(STATUS "Building for iOS or Android: forcing BUILD_TESTS to FALSE...")
@@ -48,17 +54,7 @@ else()
     set(lib_path "lib")
 endif()
 
-set(mavsdk_install_include_dir "include/mavsdk")
-set(mavsdk_install_lib_dir ${lib_path})
-
-add_subdirectory(core)
-add_subdirectory(plugins)
-
-if (DEFINED EXTERNAL_DIR AND NOT EXTERNAL_DIR STREQUAL "")
-    add_subdirectory(${EXTERNAL_DIR}/plugins
-        ${CMAKE_CURRENT_BINARY_DIR}/${EXTERNAL_DIR}/plugins)
-    include_directories(${EXTERNAL_DIR})
-endif()
+add_subdirectory(mavsdk)
 
 include(cmake/static_analyzers.cmake)
 
@@ -67,11 +63,6 @@ if(BUILD_TESTS)
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/third_party/gtest EXCLUDE_FROM_ALL)
 
     add_subdirectory(integration_tests)
-
-    if (DEFINED EXTERNAL_DIR AND NOT EXTERNAL_DIR STREQUAL "")
-        add_subdirectory(${EXTERNAL_DIR}/integration_tests
-            ${CMAKE_CURRENT_BINARY_DIR}/${EXTERNAL_DIR}/integration_tests)
-    endif()
 
     include(cmake/unit_tests.cmake)
 endif()
@@ -83,14 +74,27 @@ else()
     message(STATUS "BUILD_MAVSDK_SERVER not set: not building grpc mavsdk_server")
 endif()
 
-if (DROP_DEBUG EQUAL 1)
-    add_definitions(-DDROP_DEBUG=${DROP_DEBUG})
-
-    add_executable(drop_debug
-        debug_helpers/drop_debug_main.cpp
+install(EXPORT mavsdk-targets
+    FILE MAVSDKTargets.cmake
+    NAMESPACE MAVSDK::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/MAVSDK
     )
 
-    target_link_libraries(drop_debug
-        mavsdk
-    )
-endif()
+# For the build tree
+configure_file(MAVSDKConfig.cmake.in
+    "${PROJECT_BINARY_DIR}/MAVSDKConfig.cmake" @ONLY)
+# For the install tree
+configure_file(MAVSDKConfig.cmake.in
+    "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/MAVSDKConfig.cmake" @ONLY)
+
+include(CMakePackageConfigHelpers)
+# Supply version to config
+write_basic_package_version_file(
+    ${CMAKE_CURRENT_BINARY_DIR}/MAVSDKConfigVersion.cmake
+    VERSION ${MAVSDK_VERSION_MAJOR}.${MAVSDK_VERSION_MINOR}.${MAVSDK_VERSION_PATCH}
+    COMPATIBILITY SameMajorVersion )
+
+install(FILES
+    "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/MAVSDKConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/MAVSDKConfigVersion.cmake"
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/MAVSDK)

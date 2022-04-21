@@ -16,7 +16,7 @@ static bool should_keep_message(const mavlink_message_t& message);
 
 static std::atomic<size_t> _lossy_counter{0};
 
-TEST_F(SitlTest, MissionTransferLossy)
+TEST_F(SitlTest, PX4MissionTransferLossy)
 {
     Mavsdk mavsdk;
     ASSERT_EQ(mavsdk.add_udp_connection(), ConnectionResult::Success);
@@ -36,6 +36,7 @@ TEST_F(SitlTest, MissionTransferLossy)
     }
 
     auto system = mavsdk.systems().at(0);
+    ASSERT_TRUE(system->has_autopilot());
     auto mavlink_passthrough = std::make_shared<MavlinkPassthrough>(system);
     auto mission = std::make_shared<Mission>(system);
     auto telemetry = std::make_shared<Telemetry>(system);
