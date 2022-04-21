@@ -60,6 +60,10 @@ TEST_F(SitlTest, PX4MissionChangeSpeed)
     // to the home position instead of being hardcoded.
     auto home = telemetry->home();
 
+    // Get the home position so the waypoint mission items are set with respect
+    // to the home position instead of being hardcoded.
+    auto home = telemetry->home();
+
     LogInfo() << "System ready, let's start";
 
     Mission::MissionPlan mission_plan{};
