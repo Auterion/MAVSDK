@@ -84,10 +84,6 @@ void do_mission_with_rtl(float mission_altitude_m, float return_altitude_m)
     // to the home position instead of being hardcoded.
     auto home = telemetry->home();
 
-    // Get the home position so the waypoint mission items are set with respect
-    // to the home position instead of being hardcoded.
-    auto home = telemetry->home();
-
     LogInfo() << "Setting RTL return altitude to " << return_altitude_m;
     action->set_return_to_launch_altitude(return_altitude_m);
 

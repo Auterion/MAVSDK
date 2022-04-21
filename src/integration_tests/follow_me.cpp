@@ -50,10 +50,6 @@ TEST_F(SitlTest, PX4FollowMeOneLocation)
     // to the home position instead of being hardcoded.
     auto home = telemetry->home();
 
-    // Get the home position so the Follow-Me locations are set with respect
-    // to the home position instead of being hardcoded.
-    auto home = telemetry->home();
-
     Action::Result action_ret = action->arm();
     ASSERT_EQ(Action::Result::Success, action_ret);
 
@@ -143,10 +139,6 @@ TEST_F(SitlTest, PX4FollowMeMultiLocationWithConfig)
             return telemetry->health_all_ok();
         },
         std::chrono::seconds(10)));
-
-    // Get the home position so the Follow-Me locations are set with respect
-    // to the home position instead of being hardcoded.
-    auto home = telemetry->home();
 
     // Get the home position so the Follow-Me locations are set with respect
     // to the home position instead of being hardcoded.
