@@ -42,57 +42,56 @@ int main(int argc, char** argv)
     }
 
     std::cout << "Waiting to discover system...\n";
-    auto prom = std::promise<std::shared_ptr<System>>{};
-    auto fut = prom.get_future();
 
-    // We wait for new systems to be discovered, once we find one that has a
-    // camera, we decide to use it.
-    mavsdk.subscribe_on_new_system([&mavsdk, &prom]() {
-        auto system = mavsdk.systems().back();
+	std::shared_ptr<mavsdk::System> system;
+	bool found_camera_system = false;
+	while (!found_camera_system) {
+			//Iterate through detected systems
+			for (auto sys : mavsdk.systems()) {
+					std::cout << "Found system with MAVLink system ID: " << static_cast<int>(sys->get_system_id())
+										<< ", connected: " << (sys->is_connected() ? "yes" : "no")
+										<< ", has camera: " << (sys->has_camera() ? "yes" : "no") << '\n';
 
-        if (system->has_camera()) {
-            std::cout << "Discovered camera\n";
+					if (sys->has_camera()) {
+							system = sys;
+							found_camera_system = true;
+							break;
+					}
+			}
+			sleep_for(seconds(1));
+	}
 
-            // Unsubscribe again as we only want to find one system.
-            mavsdk.subscribe_on_new_system(nullptr);
-            prom.set_value(system);
-        }
-    });
+	auto camera = Camera{system};
 
-    // We usually receive heartbeats at 1Hz, therefore we should find a
-    // system after around 3 seconds max, surely.
-    if (fut.wait_for(seconds(3)) == std::future_status::timeout) {
-        std::cerr << "No camera found, exiting.\n";
-        return 1;
-    }
+	camera.subscribe_capture_info([](Camera::CaptureInfo capture_info) {
+		if (capture_info.is_success) {
+				std::cout << "Capture Info: " << capture_info.index << ": " << capture_info.file_url
+				<< " " << capture_info.time_utc_us << std::endl;
+		} else {
+				std::cout << "Failed capture info" << std::endl;
+		}
+	
+	});
 
-    // Get discovered system now.
-    auto system = fut.get();
+	while (true) {
+		auto key = getchar();
 
-    // Instantiate plugins.
-    auto telemetry = Telemetry{system};
-    auto camera = Camera{system};
-
-    // First, make sure camera is in photo mode.
-    const auto mode_result = camera.set_mode(Camera::Mode::Photo);
-    if (mode_result != Camera::Result::Success) {
-        std::cerr << "Could not switch to Photo mode: " << mode_result;
-        return 1;
-    }
-
-    // We want to subscribe to information about pictures that are taken.
-    camera.subscribe_capture_info([](Camera::CaptureInfo capture_info) {
-        std::cout << "Image captured, stored at: " << capture_info.file_url << '\n';
-    });
-
-    const auto photo_result = camera.take_photo();
-    if (photo_result != Camera::Result::Success) {
-        std::cerr << "Taking Photo failed: " << mode_result;
-        return 1;
-    }
-
-    // Wait a bit to make sure we see capture information.
-    sleep_for(seconds(2));
+		if (key == 'd') {
+			std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+			Camera::Result res = camera.format_storage();
+			std::cout << "Res:" << res << std::endl;
+			std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+		} else if (key == 'l') {
+			auto photos = camera.list_photos(Camera::PhotosRange::All);
+			if (photos.first == Camera::Result::Success) {
+				std::cout << "List photos All" << std::endl;
+				for (auto p : photos.second) {
+					std::cout << p.index << ": " << p.file_url << " " << p.time_utc_us << std::endl;
+				}
+				std::cout << std::endl;
+			}
+		}			
+	}
 
     return 0;
 }
