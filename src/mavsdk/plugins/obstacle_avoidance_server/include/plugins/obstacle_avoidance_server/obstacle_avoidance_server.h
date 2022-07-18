@@ -14,11 +14,13 @@
 #include <utility>
 #include <vector>
 
-#include "mavsdk/plugin_base.h"
+#include "server_plugin_base.h"
+
+#include "handle.h"
 
 namespace mavsdk {
 
-class System;
+class ServerComponent;
 class ObstacleAvoidanceServerImpl;
 
 /**
@@ -31,38 +33,25 @@ class ObstacleAvoidanceServerImpl;
  * Note also that application/service specific configurations should live in
  * the application layer, as they are not defined at the MAVLink level.
  */
-class ObstacleAvoidanceServer : public PluginBase {
+class ObstacleAvoidanceServer : public ServerPluginBase {
 public:
     /**
-     * @brief Constructor. Creates the plugin for a specific System.
+     * @brief Constructor. Creates the plugin for a ServerComponent instance.
      *
      * The plugin is typically created as shown below:
      *
      *     ```cpp
-     *     auto obstacle_avoidance_server = ObstacleAvoidanceServer(system);
+     *     auto obstacle_avoidance_server = ObstacleAvoidanceServer(server_component);
      *     ```
      *
-     * @param system The specific system associated with this plugin.
+     * @param server_component The ServerComponent instance associated with this server plugin.
      */
-    explicit ObstacleAvoidanceServer(System& system); // deprecated
-
-    /**
-     * @brief Constructor. Creates the plugin for a specific System.
-     *
-     * The plugin is typically created as shown below:
-     *
-     *     ```cpp
-     *     auto obstacle_avoidance_server = ObstacleAvoidanceServer(system);
-     *     ```
-     *
-     * @param system The specific system associated with this plugin.
-     */
-    explicit ObstacleAvoidanceServer(std::shared_ptr<System> system); // new
+    explicit ObstacleAvoidanceServer(std::shared_ptr<ServerComponent> server_component);
 
     /**
      * @brief Destructor (internal use only).
      */
-    ~ObstacleAvoidanceServer();
+    ~ObstacleAvoidanceServer() override;
 
     /**
      * @brief Control type.
@@ -114,13 +103,22 @@ public:
     /**
      * @brief Callback type for subscribe_control.
      */
-
     using ControlCallback = std::function<void(Control)>;
+
+    /**
+     * @brief Handle type for subscribe_control.
+     */
+    using ControlHandle = Handle<Control>;
 
     /**
      * @brief Receive and process obstacle avoidance service control commands.
      */
-    void subscribe_control(ControlCallback callback);
+    ControlHandle subscribe_control(const ControlCallback& callback);
+
+    /**
+     * @brief Unsubscribe from subscribe_control
+     */
+    void unsubscribe_control(ControlHandle handle);
 
     /**
      * @brief Poll for 'Control' (blocking).

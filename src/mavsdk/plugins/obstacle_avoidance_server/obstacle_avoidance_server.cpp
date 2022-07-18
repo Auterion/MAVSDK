@@ -12,21 +12,23 @@ namespace mavsdk {
 
 using Control = ObstacleAvoidanceServer::Control;
 
-ObstacleAvoidanceServer::ObstacleAvoidanceServer(System& system) :
-    PluginBase(),
-    _impl{std::make_unique<ObstacleAvoidanceServerImpl>(system)}
-{}
-
-ObstacleAvoidanceServer::ObstacleAvoidanceServer(std::shared_ptr<System> system) :
-    PluginBase(),
-    _impl{std::make_unique<ObstacleAvoidanceServerImpl>(system)}
+ObstacleAvoidanceServer::ObstacleAvoidanceServer(
+    std::shared_ptr<ServerComponent> server_component) :
+    ServerPluginBase(),
+    _impl{std::make_unique<ObstacleAvoidanceServerImpl>(server_component)}
 {}
 
 ObstacleAvoidanceServer::~ObstacleAvoidanceServer() {}
 
-void ObstacleAvoidanceServer::subscribe_control(ControlCallback callback)
+ObstacleAvoidanceServer::ControlHandle
+ObstacleAvoidanceServer::subscribe_control(const ControlCallback& callback)
 {
-    _impl->subscribe_control(callback);
+    return _impl->subscribe_control(callback);
+}
+
+void ObstacleAvoidanceServer::unsubscribe_control(ControlHandle handle)
+{
+    _impl->unsubscribe_control(handle);
 }
 
 ObstacleAvoidanceServer::Control ObstacleAvoidanceServer::control() const

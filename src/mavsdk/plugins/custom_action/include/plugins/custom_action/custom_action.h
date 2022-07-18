@@ -13,7 +13,9 @@
 #include <utility>
 #include <vector>
 
-#include "mavsdk/plugin_base.h"
+#include "plugin_base.h"
+
+#include "handle.h"
 
 namespace mavsdk {
 
@@ -55,7 +57,7 @@ public:
     /**
      * @brief Destructor (internal use only).
      */
-    ~CustomAction();
+    ~CustomAction() override;
 
     /**
      * @brief Used to identify action to be executed, its timeout / max execution time,
@@ -338,13 +340,22 @@ public:
     /**
      * @brief Callback type for subscribe_custom_action.
      */
-
     using CustomActionCallback = std::function<void(ActionToExecute)>;
+
+    /**
+     * @brief Handle type for subscribe_custom_action.
+     */
+    using CustomActionHandle = Handle<ActionToExecute>;
 
     /**
      * @brief Receive and process custom action command.
      */
-    void subscribe_custom_action(CustomActionCallback callback);
+    CustomActionHandle subscribe_custom_action(const CustomActionCallback& callback);
+
+    /**
+     * @brief Unsubscribe from subscribe_custom_action
+     */
+    void unsubscribe_custom_action(CustomActionHandle handle);
 
     /**
      * @brief Poll for 'ActionToExecute' (blocking).
@@ -356,13 +367,23 @@ public:
     /**
      * @brief Callback type for subscribe_custom_action_cancellation.
      */
-
     using CustomActionCancellationCallback = std::function<void(bool)>;
+
+    /**
+     * @brief Handle type for subscribe_custom_action_cancellation.
+     */
+    using CustomActionCancellationHandle = Handle<bool>;
 
     /**
      * @brief Receive and process custom action command cancellation.
      */
-    void subscribe_custom_action_cancellation(CustomActionCancellationCallback callback);
+    CustomActionCancellationHandle
+    subscribe_custom_action_cancellation(const CustomActionCancellationCallback& callback);
+
+    /**
+     * @brief Unsubscribe from subscribe_custom_action_cancellation
+     */
+    void unsubscribe_custom_action_cancellation(CustomActionCancellationHandle handle);
 
     /**
      * @brief Poll for 'bool' (blocking).

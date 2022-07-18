@@ -38,12 +38,16 @@ public:
 
     CustomAction::ActionToExecute custom_action() const;
 
-    void subscribe_custom_action(CustomAction::CustomActionCallback callback);
+    CustomAction::CustomActionHandle subscribe_custom_action(CustomAction::CustomActionCallback callback);
+
+    void unsubscribe_custom_action(CustomAction::CustomActionHandle handle);
 
     bool custom_action_cancellation() const;
 
-    void
+    CustomAction::CustomActionCancellationHandle
     subscribe_custom_action_cancellation(CustomAction::CustomActionCancellationCallback callback);
+
+    void unsubscribe_custom_action_cancellation(CustomAction::CustomActionCancellationHandle handle);
 
     std::pair<CustomAction::Result, CustomAction::ActionMetadata>
     custom_action_metadata(CustomAction::ActionToExecute& action, std::string& file) const;

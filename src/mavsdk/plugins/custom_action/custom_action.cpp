@@ -39,9 +39,15 @@ CustomAction::Result CustomAction::set_custom_action(ActionToExecute action_to_e
     return _impl->set_custom_action(action_to_execute);
 }
 
-void CustomAction::subscribe_custom_action(CustomActionCallback callback)
+CustomAction::CustomActionHandle
+CustomAction::subscribe_custom_action(const CustomActionCallback& callback)
 {
-    _impl->subscribe_custom_action(callback);
+    return _impl->subscribe_custom_action(callback);
+}
+
+void CustomAction::unsubscribe_custom_action(CustomActionHandle handle)
+{
+    _impl->unsubscribe_custom_action(handle);
 }
 
 CustomAction::ActionToExecute CustomAction::custom_action() const
@@ -49,9 +55,15 @@ CustomAction::ActionToExecute CustomAction::custom_action() const
     return _impl->custom_action();
 }
 
-void CustomAction::subscribe_custom_action_cancellation(CustomActionCancellationCallback callback)
+CustomAction::CustomActionCancellationHandle
+CustomAction::subscribe_custom_action_cancellation(const CustomActionCancellationCallback& callback)
 {
-    _impl->subscribe_custom_action_cancellation(callback);
+    return _impl->subscribe_custom_action_cancellation(callback);
+}
+
+void CustomAction::unsubscribe_custom_action_cancellation(CustomActionCancellationHandle handle)
+{
+    _impl->unsubscribe_custom_action_cancellation(handle);
 }
 
 bool CustomAction::custom_action_cancellation() const

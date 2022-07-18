@@ -7,7 +7,9 @@
 #include "plugins/custom_action/custom_action.h"
 
 #include "mavsdk.h"
+
 #include "lazy_plugin.h"
+
 #include "log.h"
 #include <atomic>
 #include <cmath>
@@ -21,6 +23,7 @@ namespace mavsdk {
 namespace mavsdk_server {
 
 template<typename CustomAction = CustomAction, typename LazyPlugin = LazyPlugin<CustomAction>>
+
 class CustomActionServiceImpl final : public rpc::custom_action::CustomActionService::Service {
 public:
     CustomActionServiceImpl(LazyPlugin& lazy_plugin) : _lazy_plugin(lazy_plugin) {}
@@ -528,23 +531,24 @@ public:
         auto is_finished = std::make_shared<bool>(false);
         auto subscribe_mutex = std::make_shared<std::mutex>();
 
-        _lazy_plugin.maybe_plugin()->subscribe_custom_action(
-            [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex](
-                const mavsdk::CustomAction::ActionToExecute custom_action) {
-                rpc::custom_action::CustomActionResponse rpc_response;
+        const mavsdk::CustomAction::CustomActionHandle handle =
+            _lazy_plugin.maybe_plugin()->subscribe_custom_action(
+                [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex, &handle](
+                    const mavsdk::CustomAction::ActionToExecute custom_action) {
+                    rpc::custom_action::CustomActionResponse rpc_response;
 
-                rpc_response.set_allocated_action_to_execute(
-                    translateToRpcActionToExecute(custom_action).release());
+                    rpc_response.set_allocated_action_to_execute(
+                        translateToRpcActionToExecute(custom_action).release());
 
-                std::unique_lock<std::mutex> lock(*subscribe_mutex);
-                if (!*is_finished && !writer->Write(rpc_response)) {
-                    _lazy_plugin.maybe_plugin()->subscribe_custom_action(nullptr);
+                    std::unique_lock<std::mutex> lock(*subscribe_mutex);
+                    if (!*is_finished && !writer->Write(rpc_response)) {
+                        _lazy_plugin.maybe_plugin()->unsubscribe_custom_action(handle);
 
-                    *is_finished = true;
-                    unregister_stream_stop_promise(stream_closed_promise);
-                    stream_closed_promise->set_value();
-                }
-            });
+                        *is_finished = true;
+                        unregister_stream_stop_promise(stream_closed_promise);
+                        stream_closed_promise->set_value();
+                    }
+                });
 
         stream_closed_future.wait();
         std::unique_lock<std::mutex> lock(*subscribe_mutex);
@@ -569,22 +573,23 @@ public:
         auto is_finished = std::make_shared<bool>(false);
         auto subscribe_mutex = std::make_shared<std::mutex>();
 
-        _lazy_plugin.maybe_plugin()->subscribe_custom_action_cancellation(
-            [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex](
-                const bool custom_action_cancellation) {
-                rpc::custom_action::CustomActionCancellationResponse rpc_response;
+        const mavsdk::CustomAction::CustomActionCancellationHandle handle =
+            _lazy_plugin.maybe_plugin()->subscribe_custom_action_cancellation(
+                [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex, &handle](
+                    const bool custom_action_cancellation) {
+                    rpc::custom_action::CustomActionCancellationResponse rpc_response;
 
-                rpc_response.set_cancel(custom_action_cancellation);
+                    rpc_response.set_cancel(custom_action_cancellation);
 
-                std::unique_lock<std::mutex> lock(*subscribe_mutex);
-                if (!*is_finished && !writer->Write(rpc_response)) {
-                    _lazy_plugin.maybe_plugin()->subscribe_custom_action_cancellation(nullptr);
+                    std::unique_lock<std::mutex> lock(*subscribe_mutex);
+                    if (!*is_finished && !writer->Write(rpc_response)) {
+                        _lazy_plugin.maybe_plugin()->unsubscribe_custom_action_cancellation(handle);
 
-                    *is_finished = true;
-                    unregister_stream_stop_promise(stream_closed_promise);
-                    stream_closed_promise->set_value();
-                }
-            });
+                        *is_finished = true;
+                        unregister_stream_stop_promise(stream_closed_promise);
+                        stream_closed_promise->set_value();
+                    }
+                });
 
         stream_closed_future.wait();
         std::unique_lock<std::mutex> lock(*subscribe_mutex);
@@ -749,6 +754,7 @@ private:
     }
 
     LazyPlugin& _lazy_plugin;
+
     std::atomic<bool> _stopped{false};
     std::vector<std::weak_ptr<std::promise<void>>> _stream_stop_promises{};
 };

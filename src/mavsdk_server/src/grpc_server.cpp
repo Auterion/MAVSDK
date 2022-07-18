@@ -50,6 +50,10 @@ int GrpcServer::run()
     builder.RegisterService(&_component_information_server_service);
 #endif
 
+#ifdef CUSTOM_ACTION_ENABLED
+    builder.RegisterService(&_custom_action_service);
+#endif
+
 #ifdef FAILURE_ENABLED
     builder.RegisterService(&_failure_service);
 #endif
@@ -96,6 +100,14 @@ int GrpcServer::run()
 
 #ifdef MOCAP_ENABLED
     builder.RegisterService(&_mocap_service);
+#endif
+
+#ifdef OBSTACLE_AVOIDANCE_ENABLED
+    builder.RegisterService(&_obstacle_avoidance_service);
+#endif
+
+#ifdef OBSTACLE_AVOIDANCE_SERVER_ENABLED
+    builder.RegisterService(&_obstacle_avoidance_server_service);
 #endif
 
 #ifdef OFFBOARD_ENABLED
@@ -201,6 +213,10 @@ void GrpcServer::stop()
         _component_information_server_service.stop();
 #endif
 
+#ifdef CUSTOM_ACTION_ENABLED
+        _custom_action_service.stop();
+#endif
+
 #ifdef FAILURE_ENABLED
         _failure_service.stop();
 #endif
@@ -247,6 +263,14 @@ void GrpcServer::stop()
 
 #ifdef MOCAP_ENABLED
         _mocap_service.stop();
+#endif
+
+#ifdef OBSTACLE_AVOIDANCE_ENABLED
+        _obstacle_avoidance_service.stop();
+#endif
+
+#ifdef OBSTACLE_AVOIDANCE_SERVER_ENABLED
+        _obstacle_avoidance_server_service.stop();
 #endif
 
 #ifdef OFFBOARD_ENABLED

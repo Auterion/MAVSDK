@@ -5,6 +5,7 @@ camera
 camera_server
 component_information
 component_information_server
+custom_action
 failure
 follow_me
 ftp
@@ -17,6 +18,8 @@ mission
 mission_raw
 mission_raw_server
 mocap
+obstacle_avoidance
+obstacle_avoidance_server
 offboard
 param
 param_server

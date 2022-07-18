@@ -202,7 +202,7 @@ CustomAction::ActionToExecute CustomActionImpl::custom_action() const
     return _custom_action;
 }
 
-void CustomActionImpl::subscribe_custom_action(CustomAction::CustomActionCallback callback)
+CustomAction::CustomActionHandle CustomActionImpl::subscribe_custom_action(CustomAction::CustomActionCallback callback)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
     _custom_action_command_subscription = callback;

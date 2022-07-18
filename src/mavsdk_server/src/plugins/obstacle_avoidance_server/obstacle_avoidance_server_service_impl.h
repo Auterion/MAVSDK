@@ -7,7 +7,9 @@
 #include "plugins/obstacle_avoidance_server/obstacle_avoidance_server.h"
 
 #include "mavsdk.h"
-#include "lazy_plugin.h"
+
+#include "lazy_server_plugin.h"
+
 #include "log.h"
 #include <atomic>
 #include <cmath>
@@ -22,11 +24,12 @@ namespace mavsdk_server {
 
 template<
     typename ObstacleAvoidanceServer = ObstacleAvoidanceServer,
-    typename LazyPlugin = LazyPlugin<ObstacleAvoidanceServer>>
+    typename LazyServerPlugin = LazyServerPlugin<ObstacleAvoidanceServer>>
+
 class ObstacleAvoidanceServerServiceImpl final
     : public rpc::obstacle_avoidance_server::ObstacleAvoidanceServerService::Service {
 public:
-    ObstacleAvoidanceServerServiceImpl(LazyPlugin& lazy_plugin) : _lazy_plugin(lazy_plugin) {}
+    ObstacleAvoidanceServerServiceImpl(LazyServerPlugin& lazy_plugin) : _lazy_plugin(lazy_plugin) {}
 
     static rpc::obstacle_avoidance_server::Control::ControlType translateToRpcControlType(
         const mavsdk::ObstacleAvoidanceServer::Control::ControlType& control_type)
@@ -108,22 +111,23 @@ public:
         auto is_finished = std::make_shared<bool>(false);
         auto subscribe_mutex = std::make_shared<std::mutex>();
 
-        _lazy_plugin.maybe_plugin()->subscribe_control(
-            [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex](
-                const mavsdk::ObstacleAvoidanceServer::Control control) {
-                rpc::obstacle_avoidance_server::ControlResponse rpc_response;
+        const mavsdk::ObstacleAvoidanceServer::ControlHandle handle =
+            _lazy_plugin.maybe_plugin()->subscribe_control(
+                [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex, &handle](
+                    const mavsdk::ObstacleAvoidanceServer::Control control) {
+                    rpc::obstacle_avoidance_server::ControlResponse rpc_response;
 
-                rpc_response.set_allocated_control(translateToRpcControl(control).release());
+                    rpc_response.set_allocated_control(translateToRpcControl(control).release());
 
-                std::unique_lock<std::mutex> lock(*subscribe_mutex);
-                if (!*is_finished && !writer->Write(rpc_response)) {
-                    _lazy_plugin.maybe_plugin()->subscribe_control(nullptr);
+                    std::unique_lock<std::mutex> lock(*subscribe_mutex);
+                    if (!*is_finished && !writer->Write(rpc_response)) {
+                        _lazy_plugin.maybe_plugin()->unsubscribe_control(handle);
 
-                    *is_finished = true;
-                    unregister_stream_stop_promise(stream_closed_promise);
-                    stream_closed_promise->set_value();
-                }
-            });
+                        *is_finished = true;
+                        unregister_stream_stop_promise(stream_closed_promise);
+                        stream_closed_promise->set_value();
+                    }
+                });
 
         stream_closed_future.wait();
         std::unique_lock<std::mutex> lock(*subscribe_mutex);
@@ -167,7 +171,8 @@ private:
         }
     }
 
-    LazyPlugin& _lazy_plugin;
+    LazyServerPlugin& _lazy_plugin;
+
     std::atomic<bool> _stopped{false};
     std::vector<std::weak_ptr<std::promise<void>>> _stream_stop_promises{};
 };

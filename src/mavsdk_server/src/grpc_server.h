@@ -49,6 +49,11 @@
 #include "component_information_server/component_information_server_service_impl.h"
 #endif
 
+#ifdef CUSTOM_ACTION_ENABLED
+#include "plugins/custom_action/custom_action.h"
+#include "custom_action/custom_action_service_impl.h"
+#endif
+
 #ifdef FAILURE_ENABLED
 #include "plugins/failure/failure.h"
 #include "failure/failure_service_impl.h"
@@ -107,6 +112,16 @@
 #ifdef MOCAP_ENABLED
 #include "plugins/mocap/mocap.h"
 #include "mocap/mocap_service_impl.h"
+#endif
+
+#ifdef OBSTACLE_AVOIDANCE_ENABLED
+#include "plugins/obstacle_avoidance/obstacle_avoidance.h"
+#include "obstacle_avoidance/obstacle_avoidance_service_impl.h"
+#endif
+
+#ifdef OBSTACLE_AVOIDANCE_SERVER_ENABLED
+#include "plugins/obstacle_avoidance_server/obstacle_avoidance_server.h"
+#include "obstacle_avoidance_server/obstacle_avoidance_server_service_impl.h"
 #endif
 
 #ifdef OFFBOARD_ENABLED
@@ -207,6 +222,11 @@ public:
         _component_information_server_service(_component_information_server_lazy_plugin),
 #endif
 
+#ifdef CUSTOM_ACTION_ENABLED
+        _custom_action_lazy_plugin(mavsdk),
+        _custom_action_service(_custom_action_lazy_plugin),
+#endif
+
 #ifdef FAILURE_ENABLED
         _failure_lazy_plugin(mavsdk),
         _failure_service(_failure_lazy_plugin),
@@ -265,6 +285,16 @@ public:
 #ifdef MOCAP_ENABLED
         _mocap_lazy_plugin(mavsdk),
         _mocap_service(_mocap_lazy_plugin),
+#endif
+
+#ifdef OBSTACLE_AVOIDANCE_ENABLED
+        _obstacle_avoidance_lazy_plugin(mavsdk),
+        _obstacle_avoidance_service(_obstacle_avoidance_lazy_plugin),
+#endif
+
+#ifdef OBSTACLE_AVOIDANCE_SERVER_ENABLED
+        _obstacle_avoidance_server_lazy_plugin(mavsdk),
+        _obstacle_avoidance_server_service(_obstacle_avoidance_server_lazy_plugin),
 #endif
 
 #ifdef OFFBOARD_ENABLED
@@ -383,6 +413,13 @@ private:
     ComponentInformationServerServiceImpl<> _component_information_server_service;
 #endif
 
+#ifdef CUSTOM_ACTION_ENABLED
+
+    LazyPlugin<CustomAction> _custom_action_lazy_plugin;
+
+    CustomActionServiceImpl<> _custom_action_service;
+#endif
+
 #ifdef FAILURE_ENABLED
 
     LazyPlugin<Failure> _failure_lazy_plugin;
@@ -465,6 +502,20 @@ private:
     LazyPlugin<Mocap> _mocap_lazy_plugin;
 
     MocapServiceImpl<> _mocap_service;
+#endif
+
+#ifdef OBSTACLE_AVOIDANCE_ENABLED
+
+    LazyPlugin<ObstacleAvoidance> _obstacle_avoidance_lazy_plugin;
+
+    ObstacleAvoidanceServiceImpl<> _obstacle_avoidance_service;
+#endif
+
+#ifdef OBSTACLE_AVOIDANCE_SERVER_ENABLED
+
+    LazyServerPlugin<ObstacleAvoidanceServer> _obstacle_avoidance_server_lazy_plugin;
+
+    ObstacleAvoidanceServerServiceImpl<> _obstacle_avoidance_server_service;
 #endif
 
 #ifdef OFFBOARD_ENABLED

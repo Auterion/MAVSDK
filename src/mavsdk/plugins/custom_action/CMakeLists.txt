@@ -1,5 +1,3 @@
-find_package(jsoncpp REQUIRED)
-
 target_sources(mavsdk
     PRIVATE
     custom_action.cpp
