@@ -14,48 +14,37 @@
 #include <utility>
 #include <vector>
 
-#include "mavsdk/plugin_base.h"
+#include "server_plugin_base.h"
+
+#include "handle.h"
 
 namespace mavsdk {
 
-class System;
+class ServerComponent;
 class TrackingServerImpl;
 
 /**
  * @brief API for an onboard image tracking software.
  */
-class TrackingServer : public PluginBase {
+class TrackingServer : public ServerPluginBase {
 public:
     /**
-     * @brief Constructor. Creates the plugin for a specific System.
+     * @brief Constructor. Creates the plugin for a ServerComponent instance.
      *
      * The plugin is typically created as shown below:
      *
      *     ```cpp
-     *     auto tracking_server = TrackingServer(system);
+     *     auto tracking_server = TrackingServer(server_component);
      *     ```
      *
-     * @param system The specific system associated with this plugin.
+     * @param server_component The ServerComponent instance associated with this server plugin.
      */
-    explicit TrackingServer(System& system); // deprecated
-
-    /**
-     * @brief Constructor. Creates the plugin for a specific System.
-     *
-     * The plugin is typically created as shown below:
-     *
-     *     ```cpp
-     *     auto tracking_server = TrackingServer(system);
-     *     ```
-     *
-     * @param system The specific system associated with this plugin.
-     */
-    explicit TrackingServer(std::shared_ptr<System> system); // new
+    explicit TrackingServer(std::shared_ptr<ServerComponent> server_component);
 
     /**
      * @brief Destructor (internal use only).
      */
-    ~TrackingServer();
+    ~TrackingServer() override;
 
     /**
      * @brief Answer to respond to an incoming command
@@ -186,35 +175,65 @@ public:
     /**
      * @brief Callback type for subscribe_tracking_point_command.
      */
-
     using TrackingPointCommandCallback = std::function<void(TrackPoint)>;
+
+    /**
+     * @brief Handle type for subscribe_tracking_point_command.
+     */
+    using TrackingPointCommandHandle = Handle<TrackPoint>;
 
     /**
      * @brief Subscribe to incoming tracking point command.
      */
-    void subscribe_tracking_point_command(TrackingPointCommandCallback callback);
+    TrackingPointCommandHandle
+    subscribe_tracking_point_command(const TrackingPointCommandCallback& callback);
+
+    /**
+     * @brief Unsubscribe from subscribe_tracking_point_command
+     */
+    void unsubscribe_tracking_point_command(TrackingPointCommandHandle handle);
 
     /**
      * @brief Callback type for subscribe_tracking_rectangle_command.
      */
-
     using TrackingRectangleCommandCallback = std::function<void(TrackRectangle)>;
+
+    /**
+     * @brief Handle type for subscribe_tracking_rectangle_command.
+     */
+    using TrackingRectangleCommandHandle = Handle<TrackRectangle>;
 
     /**
      * @brief Subscribe to incoming tracking rectangle command.
      */
-    void subscribe_tracking_rectangle_command(TrackingRectangleCommandCallback callback);
+    TrackingRectangleCommandHandle
+    subscribe_tracking_rectangle_command(const TrackingRectangleCommandCallback& callback);
+
+    /**
+     * @brief Unsubscribe from subscribe_tracking_rectangle_command
+     */
+    void unsubscribe_tracking_rectangle_command(TrackingRectangleCommandHandle handle);
 
     /**
      * @brief Callback type for subscribe_tracking_off_command.
      */
-
     using TrackingOffCommandCallback = std::function<void(int32_t)>;
+
+    /**
+     * @brief Handle type for subscribe_tracking_off_command.
+     */
+    using TrackingOffCommandHandle = Handle<int32_t>;
 
     /**
      * @brief Subscribe to incoming tracking off command.
      */
-    void subscribe_tracking_off_command(TrackingOffCommandCallback callback);
+    TrackingOffCommandHandle
+    subscribe_tracking_off_command(const TrackingOffCommandCallback& callback);
+
+    /**
+     * @brief Unsubscribe from subscribe_tracking_off_command
+     */
+    void unsubscribe_tracking_off_command(TrackingOffCommandHandle handle);
 
     /**
      * @brief Respond to an incoming tracking point command.

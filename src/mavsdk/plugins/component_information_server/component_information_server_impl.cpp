@@ -1,33 +1,33 @@
 #include "component_information_server_impl.h"
 #include "mavlink_request_message_handler.h"
+#include "callback_list.tpp"
+
 #include <algorithm>
 #include <string>
 #include <json/json.h>
 
 namespace mavsdk {
 
-ComponentInformationServerImpl::ComponentInformationServerImpl(System& system) :
-    PluginImplBase(system)
-{
-    _parent->register_plugin(this);
-}
+template class CallbackList<ComponentInformationServer::FloatParamUpdate>;
 
-ComponentInformationServerImpl::ComponentInformationServerImpl(std::shared_ptr<System> system) :
-    PluginImplBase(std::move(system))
+ComponentInformationServerImpl::ComponentInformationServerImpl(
+    std::shared_ptr<ServerComponent> server_component) :
+    ServerPluginImplBase(server_component)
 {
-    _parent->register_plugin(this);
+    // FIXME: allow other component IDs
+    _server_component_impl->register_plugin(this);
 }
 
 ComponentInformationServerImpl::~ComponentInformationServerImpl()
 {
-    _parent->unregister_plugin(this);
+    _server_component_impl->register_plugin(this);
 }
 
 void ComponentInformationServerImpl::init()
 {
-    _parent->register_mavlink_request_message_handler(
+    _server_component_impl->mavlink_request_message_handler().register_handler(
         MAVLINK_MSG_ID_COMPONENT_INFORMATION,
-        [this](MavlinkRequestMessageHandler::Params) {
+        [this](uint8_t, uint8_t, MavlinkRequestMessageHandler::Params) {
             return process_component_information_requested();
         },
         this);
@@ -35,12 +35,8 @@ void ComponentInformationServerImpl::init()
 
 void ComponentInformationServerImpl::deinit()
 {
-    _parent->unregister_all_mavlink_request_message_handlers(this);
+    _server_component_impl->mavlink_request_message_handler().unregister_all_handlers(this);
 }
-
-void ComponentInformationServerImpl::enable() {}
-
-void ComponentInformationServerImpl::disable() {}
 
 ComponentInformationServer::Result
 ComponentInformationServerImpl::provide_float_param(ComponentInformationServer::FloatParam param)
@@ -72,8 +68,9 @@ ComponentInformationServerImpl::provide_float_param(ComponentInformationServer::
 
     update_json_files_with_lock();
 
-    _parent->provide_server_param_float(param.name, param.start_value);
-    _parent->subscribe_param_float(
+    _server_component_impl->mavlink_parameters().provide_server_param_float(
+        param.name, param.start_value);
+    _server_component_impl->mavlink_parameters().subscribe_param_float_changed(
         param.name,
         [this, name = param.name](float new_value) { param_update(name, new_value); },
         this);
@@ -81,36 +78,42 @@ ComponentInformationServerImpl::provide_float_param(ComponentInformationServer::
     return ComponentInformationServer::Result::Success;
 }
 
-void ComponentInformationServerImpl::subscribe_float_param(
-    ComponentInformationServer::FloatParamCallback callback)
+ComponentInformationServer::FloatParamHandle ComponentInformationServerImpl::subscribe_float_param(
+    const ComponentInformationServer::FloatParamCallback& callback)
 {
     std::lock_guard<std::mutex> lock(_mutex);
-    _float_param_update_callback = callback;
+    return _float_param_update_callbacks.subscribe(callback);
+}
+
+void ComponentInformationServerImpl::unsubscribe_float_param(
+    ComponentInformationServer::FloatParamHandle handle)
+{
+    std::lock_guard<std::mutex> lock(_mutex);
+    _float_param_update_callbacks.unsubscribe(handle);
 }
 
 void ComponentInformationServerImpl::param_update(const std::string& name, float new_value)
 {
     std::lock_guard<std::mutex> lock(_mutex);
     ComponentInformationServer::FloatParamUpdate param_update{name, new_value};
-    if (_float_param_update_callback) {
-        _parent->call_user_callback(
-            [this, param_update]() { _float_param_update_callback(param_update); });
-    }
+    _float_param_update_callbacks.queue(param_update, [this](const auto& func) {
+        _server_component_impl->call_user_callback(func);
+    });
 }
 
 std::optional<MAV_RESULT> ComponentInformationServerImpl::process_component_information_requested()
 {
     mavlink_message_t message;
     mavlink_msg_component_information_pack(
-        _parent->get_own_system_id(),
-        _parent->get_own_component_id(),
+        _server_component_impl->get_own_system_id(),
+        _server_component_impl->get_own_component_id(),
         &message,
-        _parent->get_time().elapsed_ms(),
+        _server_component_impl->get_time().elapsed_ms(),
         0,
         "mftp://general.json",
         0,
         "");
-    _parent->send_message(message);
+    _server_component_impl->send_message(message);
 
     // FIXME: REMOVE again
     update_json_files_with_lock();
@@ -126,8 +129,11 @@ void ComponentInformationServerImpl::update_json_files_with_lock()
     // std::cout << "parameter: " << parameter_file << '\n';
     // std::cout << "meta: " << meta_file << '\n';
 
-    _parent->mavlink_ftp().write_tmp_file("general.json", meta_file);
-    _parent->mavlink_ftp().write_tmp_file("parameter.json", parameter_file);
+    // FIXME: needs refactoring
+    //_server_component_impl->mavlink_ftp().write_tmp_file("general.json",
+    // meta_file);
+    //_server_component_impl->mavlink_ftp().write_tmp_file("parameter.json",
+    // parameter_file);
 }
 
 std::string ComponentInformationServerImpl::generate_parameter_file()
@@ -143,9 +149,9 @@ std::string ComponentInformationServerImpl::generate_parameter_file()
         parameter["longDesc"] = param.long_description;
         parameter["units"] = param.unit;
         parameter["decimalPlaces"] = param.decimal_places;
-        parameter["min"] = param.min_value;
-        parameter["max"] = param.max_value;
-        parameter["default"] = param.default_value;
+        parameter["min"] = static_cast<double>(param.min_value);
+        parameter["max"] = static_cast<double>(param.max_value);
+        parameter["default"] = static_cast<double>(param.default_value);
         parameters.append(parameter);
     }
     root["parameters"] = parameters;

@@ -7,7 +7,9 @@
 #include "plugins/tracking_server/tracking_server.h"
 
 #include "mavsdk.h"
-#include "lazy_plugin.h"
+
+#include "lazy_server_plugin.h"
+
 #include "log.h"
 #include <atomic>
 #include <cmath>
@@ -20,11 +22,14 @@
 namespace mavsdk {
 namespace mavsdk_server {
 
-template<typename TrackingServer = TrackingServer, typename LazyPlugin = LazyPlugin<TrackingServer>>
+template<
+    typename TrackingServer = TrackingServer,
+    typename LazyServerPlugin = LazyServerPlugin<TrackingServer>>
+
 class TrackingServerServiceImpl final
     : public rpc::tracking_server::TrackingServerService::Service {
 public:
-    TrackingServerServiceImpl(LazyPlugin& lazy_plugin) : _lazy_plugin(lazy_plugin) {}
+    TrackingServerServiceImpl(LazyServerPlugin& lazy_plugin) : _lazy_plugin(lazy_plugin) {}
 
     template<typename ResponseType>
     void
@@ -249,23 +254,24 @@ public:
         auto is_finished = std::make_shared<bool>(false);
         auto subscribe_mutex = std::make_shared<std::mutex>();
 
-        _lazy_plugin.maybe_plugin()->subscribe_tracking_point_command(
-            [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex](
-                const mavsdk::TrackingServer::TrackPoint tracking_point_command) {
-                rpc::tracking_server::TrackingPointCommandResponse rpc_response;
+        const mavsdk::TrackingServer::TrackingPointCommandHandle handle =
+            _lazy_plugin.maybe_plugin()->subscribe_tracking_point_command(
+                [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex, &handle](
+                    const mavsdk::TrackingServer::TrackPoint tracking_point_command) {
+                    rpc::tracking_server::TrackingPointCommandResponse rpc_response;
 
-                rpc_response.set_allocated_track_point(
-                    translateToRpcTrackPoint(tracking_point_command).release());
+                    rpc_response.set_allocated_track_point(
+                        translateToRpcTrackPoint(tracking_point_command).release());
 
-                std::unique_lock<std::mutex> lock(*subscribe_mutex);
-                if (!*is_finished && !writer->Write(rpc_response)) {
-                    _lazy_plugin.maybe_plugin()->subscribe_tracking_point_command(nullptr);
+                    std::unique_lock<std::mutex> lock(*subscribe_mutex);
+                    if (!*is_finished && !writer->Write(rpc_response)) {
+                        _lazy_plugin.maybe_plugin()->unsubscribe_tracking_point_command(handle);
 
-                    *is_finished = true;
-                    unregister_stream_stop_promise(stream_closed_promise);
-                    stream_closed_promise->set_value();
-                }
-            });
+                        *is_finished = true;
+                        unregister_stream_stop_promise(stream_closed_promise);
+                        stream_closed_promise->set_value();
+                    }
+                });
 
         stream_closed_future.wait();
         std::unique_lock<std::mutex> lock(*subscribe_mutex);
@@ -290,23 +296,24 @@ public:
         auto is_finished = std::make_shared<bool>(false);
         auto subscribe_mutex = std::make_shared<std::mutex>();
 
-        _lazy_plugin.maybe_plugin()->subscribe_tracking_rectangle_command(
-            [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex](
-                const mavsdk::TrackingServer::TrackRectangle tracking_rectangle_command) {
-                rpc::tracking_server::TrackingRectangleCommandResponse rpc_response;
+        const mavsdk::TrackingServer::TrackingRectangleCommandHandle handle =
+            _lazy_plugin.maybe_plugin()->subscribe_tracking_rectangle_command(
+                [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex, &handle](
+                    const mavsdk::TrackingServer::TrackRectangle tracking_rectangle_command) {
+                    rpc::tracking_server::TrackingRectangleCommandResponse rpc_response;
 
-                rpc_response.set_allocated_track_rectangle(
-                    translateToRpcTrackRectangle(tracking_rectangle_command).release());
+                    rpc_response.set_allocated_track_rectangle(
+                        translateToRpcTrackRectangle(tracking_rectangle_command).release());
 
-                std::unique_lock<std::mutex> lock(*subscribe_mutex);
-                if (!*is_finished && !writer->Write(rpc_response)) {
-                    _lazy_plugin.maybe_plugin()->subscribe_tracking_rectangle_command(nullptr);
+                    std::unique_lock<std::mutex> lock(*subscribe_mutex);
+                    if (!*is_finished && !writer->Write(rpc_response)) {
+                        _lazy_plugin.maybe_plugin()->unsubscribe_tracking_rectangle_command(handle);
 
-                    *is_finished = true;
-                    unregister_stream_stop_promise(stream_closed_promise);
-                    stream_closed_promise->set_value();
-                }
-            });
+                        *is_finished = true;
+                        unregister_stream_stop_promise(stream_closed_promise);
+                        stream_closed_promise->set_value();
+                    }
+                });
 
         stream_closed_future.wait();
         std::unique_lock<std::mutex> lock(*subscribe_mutex);
@@ -331,22 +338,23 @@ public:
         auto is_finished = std::make_shared<bool>(false);
         auto subscribe_mutex = std::make_shared<std::mutex>();
 
-        _lazy_plugin.maybe_plugin()->subscribe_tracking_off_command(
-            [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex](
-                const int32_t tracking_off_command) {
-                rpc::tracking_server::TrackingOffCommandResponse rpc_response;
+        const mavsdk::TrackingServer::TrackingOffCommandHandle handle =
+            _lazy_plugin.maybe_plugin()->subscribe_tracking_off_command(
+                [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex, &handle](
+                    const int32_t tracking_off_command) {
+                    rpc::tracking_server::TrackingOffCommandResponse rpc_response;
 
-                rpc_response.set_dummy(tracking_off_command);
+                    rpc_response.set_dummy(tracking_off_command);
 
-                std::unique_lock<std::mutex> lock(*subscribe_mutex);
-                if (!*is_finished && !writer->Write(rpc_response)) {
-                    _lazy_plugin.maybe_plugin()->subscribe_tracking_off_command(nullptr);
+                    std::unique_lock<std::mutex> lock(*subscribe_mutex);
+                    if (!*is_finished && !writer->Write(rpc_response)) {
+                        _lazy_plugin.maybe_plugin()->unsubscribe_tracking_off_command(handle);
 
-                    *is_finished = true;
-                    unregister_stream_stop_promise(stream_closed_promise);
-                    stream_closed_promise->set_value();
-                }
-            });
+                        *is_finished = true;
+                        unregister_stream_stop_promise(stream_closed_promise);
+                        stream_closed_promise->set_value();
+                    }
+                });
 
         stream_closed_future.wait();
         std::unique_lock<std::mutex> lock(*subscribe_mutex);
@@ -362,7 +370,9 @@ public:
     {
         if (_lazy_plugin.maybe_plugin() == nullptr) {
             if (response != nullptr) {
-                auto result = mavsdk::TrackingServer::Result::NoSystem;
+                // For server plugins, this should never happen, they should always be
+                // constructible.
+                auto result = mavsdk::TrackingServer::Result::Unknown;
                 fillResponseWithResult(response, result);
             }
 
@@ -391,7 +401,9 @@ public:
     {
         if (_lazy_plugin.maybe_plugin() == nullptr) {
             if (response != nullptr) {
-                auto result = mavsdk::TrackingServer::Result::NoSystem;
+                // For server plugins, this should never happen, they should always be
+                // constructible.
+                auto result = mavsdk::TrackingServer::Result::Unknown;
                 fillResponseWithResult(response, result);
             }
 
@@ -420,7 +432,9 @@ public:
     {
         if (_lazy_plugin.maybe_plugin() == nullptr) {
             if (response != nullptr) {
-                auto result = mavsdk::TrackingServer::Result::NoSystem;
+                // For server plugins, this should never happen, they should always be
+                // constructible.
+                auto result = mavsdk::TrackingServer::Result::Unknown;
                 fillResponseWithResult(response, result);
             }
 
@@ -477,7 +491,8 @@ private:
         }
     }
 
-    LazyPlugin& _lazy_plugin;
+    LazyServerPlugin& _lazy_plugin;
+
     std::atomic<bool> _stopped{false};
     std::vector<std::weak_ptr<std::promise<void>>> _stream_stop_promises{};
 };

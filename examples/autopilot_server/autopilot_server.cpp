@@ -1,7 +1,7 @@
 #include <future>
-
 #include <iostream>
 #include <thread>
+
 #include <mavsdk/mavsdk.h>
 #include <mavsdk/plugins/mavlink_passthrough/mavlink_passthrough.h>
 #include <mavsdk/plugins/telemetry/telemetry.h>
@@ -68,36 +68,13 @@ int main(int argc, char** argv)
             std::cout << "Connected autopilot server side!" << std::endl;
         }
 
-        auto prom = std::promise<std::shared_ptr<mavsdk::System>>{};
-        auto fut = prom.get_future();
-        mavsdkTester.subscribe_on_new_system([&mavsdkTester, &prom]() {
-            std::cout << "Discovered MAVSDK GCS" << std::endl;
-            auto system = mavsdkTester.systems().back();
-            mavsdkTester.subscribe_on_new_system(nullptr);
-            prom.set_value(system);
-        });
-
-        std::cout << "Sleeping AP thread... " << std::endl;
-        for (auto i = 0; i < 3; i++) {
-            std::this_thread::sleep_for(std::chrono::seconds(5));
-            if (mavsdkTester.systems().size() == 0) {
-                std::cout << "No System Found from Autopilot, trying again in 5 secs..."
-                          << std::endl;
-                if (i == 2) {
-                    std::cout << "No System found after three retries. Aborting..." << std::endl;
-                    return;
-                }
-            } else {
-                std::cout << "Setting System" << std::endl;
-                break;
-            }
-        }
-        auto system = mavsdkTester.systems().back();
+        auto server_component =
+            mavsdkTester.server_component_by_type(Mavsdk::ServerComponentType::Autopilot);
 
         // Create server plugins
-        auto paramServer = mavsdk::ParamServer{system};
-        auto telemServer = mavsdk::TelemetryServer{system};
-        auto actionServer = mavsdk::ActionServer{system};
+        auto paramServer = mavsdk::ParamServer{server_component};
+        auto telemServer = mavsdk::TelemetryServer{server_component};
+        auto actionServer = mavsdk::ActionServer{server_component};
 
         // These are needed for MAVSDK at the moment
         paramServer.provide_param_int("CAL_ACC0_ID", 1);
@@ -115,19 +92,20 @@ int main(int argc, char** argv)
 
         // Create a mission raw server
         // This will allow us to receive missions from a GCS
-        auto missionRawServer = mavsdk::MissionRawServer{system};
+        auto missionRawServer = mavsdk::MissionRawServer{server_component};
         std::cout << "MissionRawServer created" << std::endl;
 
         auto mission_prom = std::promise<MissionRawServer::MissionPlan>{};
-        missionRawServer.subscribe_incoming_mission(
-            [&mission_prom,
-             &missionRawServer](MissionRawServer::Result res, MissionRawServer::MissionPlan plan) {
-                std::cout << "Received Uploaded Mission!" << std::endl;
-                std::cout << plan << std::endl;
-                // Unsubscribe so we only recieve one mission
-                missionRawServer.subscribe_incoming_mission(nullptr);
-                mission_prom.set_value(plan);
-            });
+        MissionRawServer::IncomingMissionHandle handle =
+            missionRawServer.subscribe_incoming_mission(
+                [&mission_prom, &missionRawServer, &handle](
+                    MissionRawServer::Result res, MissionRawServer::MissionPlan plan) {
+                    std::cout << "Received Uploaded Mission!" << std::endl;
+                    std::cout << plan << std::endl;
+                    // Unsubscribe so we only recieve one mission
+                    missionRawServer.unsubscribe_incoming_mission(handle);
+                    mission_prom.set_value(plan);
+                });
         missionRawServer.subscribe_current_item_changed([](MissionRawServer::MissionItem item) {
             std::cout << "Current Mission Item Changed!" << std::endl;
             std::cout << "Current Item: " << item << std::endl;
@@ -181,14 +159,14 @@ int main(int argc, char** argv)
 
     auto prom = std::promise<std::shared_ptr<mavsdk::System>>{};
     auto fut = prom.get_future();
-    mavsdk.subscribe_on_new_system([&mavsdk, &prom]() {
+    Mavsdk::NewSystemHandle handle = mavsdk.subscribe_on_new_system([&mavsdk, &prom, &handle]() {
         auto system = mavsdk.systems().back();
 
         if (system->has_autopilot()) {
             std::cout << "Discovered Autopilot from Client" << std::endl;
 
             // Unsubscribe again as we only want to find one system.
-            mavsdk.subscribe_on_new_system(nullptr);
+            mavsdk.unsubscribe_on_new_system(handle);
             prom.set_value(system);
         } else {
             std::cout << "No MAVSDK found" << std::endl;
@@ -214,9 +192,9 @@ int main(int argc, char** argv)
     std::this_thread::sleep_for(std::chrono::seconds(5));
 
     // Check for our custom param we have set in the server thread
-    auto res = param.get_param_int("my_param");
+    auto res = param.get_param_int("MY_PARAM");
     if (res.first == mavsdk::Param::Result::Success) {
-        std::cout << "Found Param my_param: " << res.second << std::endl;
+        std::cout << "Found Param MY_PARAM: " << res.second << std::endl;
     }
 
     // Create a mission to send to our mission server

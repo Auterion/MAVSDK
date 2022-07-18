@@ -7,7 +7,9 @@
 #include "plugins/component_information_server/component_information_server.h"
 
 #include "mavsdk.h"
-#include "lazy_plugin.h"
+
+#include "lazy_server_plugin.h"
+
 #include "log.h"
 #include <atomic>
 #include <cmath>
@@ -22,11 +24,13 @@ namespace mavsdk_server {
 
 template<
     typename ComponentInformationServer = ComponentInformationServer,
-    typename LazyPlugin = LazyPlugin<ComponentInformationServer>>
+    typename LazyServerPlugin = LazyServerPlugin<ComponentInformationServer>>
+
 class ComponentInformationServerServiceImpl final
     : public rpc::component_information_server::ComponentInformationServerService::Service {
 public:
-    ComponentInformationServerServiceImpl(LazyPlugin& lazy_plugin) : _lazy_plugin(lazy_plugin) {}
+    ComponentInformationServerServiceImpl(LazyServerPlugin& lazy_plugin) : _lazy_plugin(lazy_plugin)
+    {}
 
     template<typename ResponseType>
     void fillResponseWithResult(
@@ -191,7 +195,9 @@ public:
     {
         if (_lazy_plugin.maybe_plugin() == nullptr) {
             if (response != nullptr) {
-                auto result = mavsdk::ComponentInformationServer::Result::NoSystem;
+                // For server plugins, this should never happen, they should always be
+                // constructible.
+                auto result = mavsdk::ComponentInformationServer::Result::Unknown;
                 fillResponseWithResult(response, result);
             }
 
@@ -229,23 +235,24 @@ public:
         auto is_finished = std::make_shared<bool>(false);
         auto subscribe_mutex = std::make_shared<std::mutex>();
 
-        _lazy_plugin.maybe_plugin()->subscribe_float_param(
-            [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex](
-                const mavsdk::ComponentInformationServer::FloatParamUpdate float_param) {
-                rpc::component_information_server::FloatParamResponse rpc_response;
+        const mavsdk::ComponentInformationServer::FloatParamHandle handle =
+            _lazy_plugin.maybe_plugin()->subscribe_float_param(
+                [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex, &handle](
+                    const mavsdk::ComponentInformationServer::FloatParamUpdate float_param) {
+                    rpc::component_information_server::FloatParamResponse rpc_response;
 
-                rpc_response.set_allocated_param_update(
-                    translateToRpcFloatParamUpdate(float_param).release());
+                    rpc_response.set_allocated_param_update(
+                        translateToRpcFloatParamUpdate(float_param).release());
 
-                std::unique_lock<std::mutex> lock(*subscribe_mutex);
-                if (!*is_finished && !writer->Write(rpc_response)) {
-                    _lazy_plugin.maybe_plugin()->subscribe_float_param(nullptr);
+                    std::unique_lock<std::mutex> lock(*subscribe_mutex);
+                    if (!*is_finished && !writer->Write(rpc_response)) {
+                        _lazy_plugin.maybe_plugin()->unsubscribe_float_param(handle);
 
-                    *is_finished = true;
-                    unregister_stream_stop_promise(stream_closed_promise);
-                    stream_closed_promise->set_value();
-                }
-            });
+                        *is_finished = true;
+                        unregister_stream_stop_promise(stream_closed_promise);
+                        stream_closed_promise->set_value();
+                    }
+                });
 
         stream_closed_future.wait();
         std::unique_lock<std::mutex> lock(*subscribe_mutex);
@@ -289,7 +296,8 @@ private:
         }
     }
 
-    LazyPlugin& _lazy_plugin;
+    LazyServerPlugin& _lazy_plugin;
+
     std::atomic<bool> _stopped{false};
     std::vector<std::weak_ptr<std::promise<void>>> _stream_stop_promises{};
 };

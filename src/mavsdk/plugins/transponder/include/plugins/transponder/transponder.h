@@ -13,7 +13,9 @@
 #include <utility>
 #include <vector>
 
-#include "mavsdk/plugin_base.h"
+#include "plugin_base.h"
+
+#include "handle.h"
 
 namespace mavsdk {
 
@@ -55,7 +57,7 @@ public:
     /**
      * @brief Destructor (internal use only).
      */
-    ~Transponder();
+    ~Transponder() override;
 
     /**
      * @brief ADSB classification for the type of vehicle emitting the transponder signal.
@@ -92,6 +94,22 @@ public:
     operator<<(std::ostream& str, Transponder::AdsbEmitterType const& adsb_emitter_type);
 
     /**
+     * @brief Altitude type used in AdsbVehicle message
+     */
+    enum class AdsbAltitudeType {
+        PressureQnh, /**< @brief Altitude reported from a Baro source using QNH reference. */
+        Geometric, /**< @brief Altitude reported from a GNSS source. */
+    };
+
+    /**
+     * @brief Stream operator to print information about a `Transponder::AdsbAltitudeType`.
+     *
+     * @return A reference to the stream.
+     */
+    friend std::ostream&
+    operator<<(std::ostream& str, Transponder::AdsbAltitudeType const& adsb_altitude_type);
+
+    /**
      * @brief ADSB Vehicle type.
      */
     struct AdsbVehicle {
@@ -99,7 +117,8 @@ public:
                                     worldwide identifier */
         double latitude_deg{}; /**< @brief Latitude in degrees (range: -90 to +90) */
         double longitude_deg{}; /**< @brief Longitude in degrees (range: -180 to +180). */
-        float absolute_altitude_m{}; /**< @brief Altitude AMSL (above mean sea level) in metres */
+        AdsbAltitudeType altitude_type{}; /**< @brief ADSB altitude type. */
+        float absolute_altitude_m{}; /**< @brief Altitude in metres according to altitude_type */
         float heading_deg{}; /**< @brief Course over ground, in degrees */
         float horizontal_velocity_m_s{}; /**< @brief The horizontal velocity in metres/second */
         float vertical_velocity_m_s{}; /**< @brief The vertical velocity in metres/second. Positive
@@ -154,13 +173,22 @@ public:
     /**
      * @brief Callback type for subscribe_transponder.
      */
-
     using TransponderCallback = std::function<void(AdsbVehicle)>;
+
+    /**
+     * @brief Handle type for subscribe_transponder.
+     */
+    using TransponderHandle = Handle<AdsbVehicle>;
 
     /**
      * @brief Subscribe to 'transponder' updates.
      */
-    void subscribe_transponder(TransponderCallback callback);
+    TransponderHandle subscribe_transponder(const TransponderCallback& callback);
+
+    /**
+     * @brief Unsubscribe from subscribe_transponder
+     */
+    void unsubscribe_transponder(TransponderHandle handle);
 
     /**
      * @brief Poll for 'AdsbVehicle' (blocking).

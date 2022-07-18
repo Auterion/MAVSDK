@@ -1,35 +1,44 @@
 #pragma once
 
+#include <atomic>
+
 #include "plugins/action_server/action_server.h"
-#include "plugin_impl_base.h"
+#include "server_plugin_impl_base.h"
+#include "callback_list.h"
 
 namespace mavsdk {
 
-class ActionServerImpl : public PluginImplBase {
+class ActionServerImpl : public ServerPluginImplBase {
 public:
-    explicit ActionServerImpl(System& system);
-    explicit ActionServerImpl(std::shared_ptr<System> system);
+    explicit ActionServerImpl(std::shared_ptr<ServerComponent> server_component);
     ~ActionServerImpl() override;
 
     void init() override;
     void deinit() override;
 
-    void enable() override;
-    void disable() override;
+    ActionServer::ArmDisarmHandle
+    subscribe_arm_disarm(const ActionServer::ArmDisarmCallback& callback);
+    void unsubscribe_arm_disarm(ActionServer::ArmDisarmHandle handle);
 
-    void subscribe_arm_disarm(ActionServer::ArmDisarmCallback callback);
+    ActionServer::FlightModeChangeHandle
+    subscribe_flight_mode_change(const ActionServer::FlightModeChangeCallback& callback);
+    void unsubscribe_flight_mode_change(ActionServer::FlightModeChangeHandle handle);
 
-    void subscribe_flight_mode_change(ActionServer::FlightModeChangeCallback callback);
+    ActionServer::TakeoffHandle subscribe_takeoff(const ActionServer::TakeoffCallback& callback);
+    void unsubscribe_takeoff(ActionServer::TakeoffHandle handle);
 
-    void subscribe_takeoff(ActionServer::TakeoffCallback callback);
+    ActionServer::LandHandle subscribe_land(const ActionServer::LandCallback& callback);
+    void unsubscribe_land(ActionServer::LandHandle handle);
 
-    void subscribe_land(ActionServer::LandCallback callback);
+    ActionServer::RebootHandle subscribe_reboot(const ActionServer::RebootCallback& callback);
+    void unsubscribe_reboot(ActionServer::RebootHandle handle);
 
-    void subscribe_reboot(ActionServer::RebootCallback callback);
+    ActionServer::ShutdownHandle subscribe_shutdown(const ActionServer::ShutdownCallback& callback);
+    void unsubscribe_shutdown(ActionServer::ShutdownHandle handle);
 
-    void subscribe_shutdown(ActionServer::ShutdownCallback callback);
-
-    void subscribe_terminate(ActionServer::TerminateCallback callback);
+    ActionServer::TerminateHandle
+    subscribe_terminate(const ActionServer::TerminateCallback& callback);
+    void unsubscribe_terminate(ActionServer::TerminateHandle handle);
 
     ActionServer::Result set_allow_takeoff(bool allow_takeoff);
 
@@ -43,11 +52,22 @@ public:
     ActionServer::AllowableFlightModes get_allowable_flight_modes();
 
 private:
-    ActionServer::ArmDisarmCallback _arm_disarm_callback{nullptr};
-    ActionServer::FlightModeChangeCallback _flight_mode_change_callback{nullptr};
-    ActionServer::TakeoffCallback _takeoff_callback{nullptr};
+    void set_base_mode(uint8_t base_mode);
+    uint8_t get_base_mode() const;
+
+    void set_custom_mode(uint32_t custom_mode);
+    uint32_t get_custom_mode() const;
+
+    void set_server_armed(bool armed);
 
     std::mutex _callback_mutex;
+    CallbackList<ActionServer::Result, ActionServer::ArmDisarm> _arm_disarm_callbacks{};
+    CallbackList<ActionServer::Result, ActionServer::FlightMode> _flight_mode_change_callbacks{};
+    CallbackList<ActionServer::Result, bool> _takeoff_callbacks{};
+    CallbackList<ActionServer::Result, bool> _land_callbacks{};
+    CallbackList<ActionServer::Result, bool> _reboot_callbacks{};
+    CallbackList<ActionServer::Result, bool> _shutdown_callbacks{};
+    CallbackList<ActionServer::Result, bool> _terminate_callbacks{};
 
     std::atomic<bool> _armable = false;
     std::atomic<bool> _force_armable = false;
@@ -67,6 +87,9 @@ private:
 
     std::mutex _flight_mode_mutex;
     ActionServer::AllowableFlightModes _allowed_flight_modes{};
+    std::atomic<ActionServer::FlightMode> _flight_mode{ActionServer::FlightMode::Unknown};
+
+    void* _send_version_cookie{nullptr};
 };
 
 } // namespace mavsdk

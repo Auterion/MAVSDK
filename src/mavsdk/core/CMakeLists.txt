@@ -2,6 +2,7 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
 configure_file(version.h.in version.h)
+configure_file(include/mavsdk/mavlink_include.h.in include/mavsdk/mavlink_include.h)
 
 target_sources(mavsdk
     PRIVATE
@@ -12,6 +13,7 @@ target_sources(mavsdk
     crc32.cpp
     system.cpp
     system_impl.cpp
+    flight_mode.cpp
     fs.cpp
     mavsdk.cpp
     mavsdk_impl.cpp
@@ -29,6 +31,9 @@ target_sources(mavsdk
     ping.cpp
     plugin_impl_base.cpp
     serial_connection.cpp
+    server_component.cpp
+    server_component_impl.cpp
+    server_plugin_impl_base.cpp
     tcp_connection.cpp
     timeout_handler.cpp
     udp_connection.cpp
@@ -87,11 +92,11 @@ set_target_properties(mavsdk
 target_include_directories(mavsdk
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/mavsdk>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include/mavsdk>
     PRIVATE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+    ${MAVLINK_HEADERS}
     )
 
 install(TARGETS mavsdk
@@ -104,31 +109,42 @@ install(TARGETS mavsdk
 install(FILES
     include/mavsdk/connection_result.h
     include/mavsdk/deprecated.h
+    include/mavsdk/handle.h
     include/mavsdk/system.h
     include/mavsdk/mavsdk.h
     include/mavsdk/log_callback.h
     include/mavsdk/plugin_base.h
+    include/mavsdk/server_plugin_base.h
     include/mavsdk/geometry.h
+    include/mavsdk/server_component.h
+    ${CMAKE_CURRENT_BINARY_DIR}/include/mavsdk/mavlink_include.h
     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/mavsdk"
 )
 
+install(DIRECTORY
+    ${MAVLINK_HEADERS}/mavlink
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/mavsdk
+)
+
 list(APPEND UNIT_TEST_SOURCES
-    ${PROJECT_SOURCE_DIR}/mavsdk/core/mavsdk_time_test.cpp
-    ${PROJECT_SOURCE_DIR}/mavsdk/core/mavsdk_math_test.cpp
-    ${PROJECT_SOURCE_DIR}/mavsdk/core/mavlink_channels_test.cpp
-    ${PROJECT_SOURCE_DIR}/mavsdk/core/unittests_main.cpp
+    ${PROJECT_SOURCE_DIR}/mavsdk/core/callback_list_test.cpp
+    ${PROJECT_SOURCE_DIR}/mavsdk/core/call_every_handler_test.cpp
+    ${PROJECT_SOURCE_DIR}/mavsdk/core/cli_arg_test.cpp
+    ${PROJECT_SOURCE_DIR}/mavsdk/core/curl_test.cpp
+    ${PROJECT_SOURCE_DIR}/mavsdk/core/locked_queue_test.cpp
+    ${PROJECT_SOURCE_DIR}/mavsdk/core/fs_test.cpp
+    ${PROJECT_SOURCE_DIR}/mavsdk/core/geometry_test.cpp
     # TODO: add this again
     #${PROJECT_SOURCE_DIR}/mavsdk/core/http_loader_test.cpp
-    ${PROJECT_SOURCE_DIR}/mavsdk/core/timeout_handler_test.cpp
-    ${PROJECT_SOURCE_DIR}/mavsdk/core/call_every_handler_test.cpp
-    ${PROJECT_SOURCE_DIR}/mavsdk/core/curl_test.cpp
-    ${PROJECT_SOURCE_DIR}/mavsdk/core/cli_arg_test.cpp
-    ${PROJECT_SOURCE_DIR}/mavsdk/core/locked_queue_test.cpp
-    ${PROJECT_SOURCE_DIR}/mavsdk/core/safe_queue_test.cpp
+    ${PROJECT_SOURCE_DIR}/mavsdk/core/mavsdk_math_test.cpp
     ${PROJECT_SOURCE_DIR}/mavsdk/core/mavsdk_test.cpp
+    ${PROJECT_SOURCE_DIR}/mavsdk/core/mavsdk_time_test.cpp
+    ${PROJECT_SOURCE_DIR}/mavsdk/core/mavlink_channels_test.cpp
     ${PROJECT_SOURCE_DIR}/mavsdk/core/mavlink_mission_transfer_test.cpp
     ${PROJECT_SOURCE_DIR}/mavsdk/core/mavlink_statustext_handler_test.cpp
-    ${PROJECT_SOURCE_DIR}/mavsdk/core/geometry_test.cpp
     ${PROJECT_SOURCE_DIR}/mavsdk/core/ringbuffer_test.cpp
+    ${PROJECT_SOURCE_DIR}/mavsdk/core/safe_queue_test.cpp
+    ${PROJECT_SOURCE_DIR}/mavsdk/core/timeout_handler_test.cpp
+    ${PROJECT_SOURCE_DIR}/mavsdk/core/unittests_main.cpp
 )
 set(UNIT_TEST_SOURCES ${UNIT_TEST_SOURCES} PARENT_SCOPE)

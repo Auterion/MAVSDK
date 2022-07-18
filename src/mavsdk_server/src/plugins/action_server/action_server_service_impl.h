@@ -7,7 +7,9 @@
 #include "plugins/action_server/action_server.h"
 
 #include "mavsdk.h"
-#include "lazy_plugin.h"
+
+#include "lazy_server_plugin.h"
+
 #include "log.h"
 #include <atomic>
 #include <cmath>
@@ -20,10 +22,13 @@
 namespace mavsdk {
 namespace mavsdk_server {
 
-template<typename ActionServer = ActionServer, typename LazyPlugin = LazyPlugin<ActionServer>>
+template<
+    typename ActionServer = ActionServer,
+    typename LazyServerPlugin = LazyServerPlugin<ActionServer>>
+
 class ActionServerServiceImpl final : public rpc::action_server::ActionServerService::Service {
 public:
-    ActionServerServiceImpl(LazyPlugin& lazy_plugin) : _lazy_plugin(lazy_plugin) {}
+    ActionServerServiceImpl(LazyServerPlugin& lazy_plugin) : _lazy_plugin(lazy_plugin) {}
 
     template<typename ResponseType>
     void fillResponseWithResult(ResponseType* response, mavsdk::ActionServer::Result& result) const
@@ -253,7 +258,9 @@ public:
     {
         if (_lazy_plugin.maybe_plugin() == nullptr) {
             rpc::action_server::ArmDisarmResponse rpc_response;
-            auto result = mavsdk::ActionServer::Result::NoSystem;
+
+            // For server plugins, this should never happen, they should always be constructible.
+            auto result = mavsdk::ActionServer::Result::Unknown;
             fillResponseWithResult(&rpc_response, result);
             writer->Write(rpc_response);
 
@@ -267,31 +274,32 @@ public:
         auto is_finished = std::make_shared<bool>(false);
         auto subscribe_mutex = std::make_shared<std::mutex>();
 
-        _lazy_plugin.maybe_plugin()->subscribe_arm_disarm(
-            [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex](
-                mavsdk::ActionServer::Result result,
-                const mavsdk::ActionServer::ArmDisarm arm_disarm) {
-                rpc::action_server::ArmDisarmResponse rpc_response;
+        const mavsdk::ActionServer::ArmDisarmHandle handle =
+            _lazy_plugin.maybe_plugin()->subscribe_arm_disarm(
+                [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex, &handle](
+                    mavsdk::ActionServer::Result result,
+                    const mavsdk::ActionServer::ArmDisarm arm_disarm) {
+                    rpc::action_server::ArmDisarmResponse rpc_response;
 
-                rpc_response.set_allocated_arm(translateToRpcArmDisarm(arm_disarm).release());
+                    rpc_response.set_allocated_arm(translateToRpcArmDisarm(arm_disarm).release());
 
-                auto rpc_result = translateToRpcResult(result);
-                auto* rpc_action_server_result = new rpc::action_server::ActionServerResult();
-                rpc_action_server_result->set_result(rpc_result);
-                std::stringstream ss;
-                ss << result;
-                rpc_action_server_result->set_result_str(ss.str());
-                rpc_response.set_allocated_action_server_result(rpc_action_server_result);
+                    auto rpc_result = translateToRpcResult(result);
+                    auto* rpc_action_server_result = new rpc::action_server::ActionServerResult();
+                    rpc_action_server_result->set_result(rpc_result);
+                    std::stringstream ss;
+                    ss << result;
+                    rpc_action_server_result->set_result_str(ss.str());
+                    rpc_response.set_allocated_action_server_result(rpc_action_server_result);
 
-                std::unique_lock<std::mutex> lock(*subscribe_mutex);
-                if (!*is_finished && !writer->Write(rpc_response)) {
-                    _lazy_plugin.maybe_plugin()->subscribe_arm_disarm(nullptr);
+                    std::unique_lock<std::mutex> lock(*subscribe_mutex);
+                    if (!*is_finished && !writer->Write(rpc_response)) {
+                        _lazy_plugin.maybe_plugin()->unsubscribe_arm_disarm(handle);
 
-                    *is_finished = true;
-                    unregister_stream_stop_promise(stream_closed_promise);
-                    stream_closed_promise->set_value();
-                }
-            });
+                        *is_finished = true;
+                        unregister_stream_stop_promise(stream_closed_promise);
+                        stream_closed_promise->set_value();
+                    }
+                });
 
         stream_closed_future.wait();
         std::unique_lock<std::mutex> lock(*subscribe_mutex);
@@ -307,7 +315,9 @@ public:
     {
         if (_lazy_plugin.maybe_plugin() == nullptr) {
             rpc::action_server::FlightModeChangeResponse rpc_response;
-            auto result = mavsdk::ActionServer::Result::NoSystem;
+
+            // For server plugins, this should never happen, they should always be constructible.
+            auto result = mavsdk::ActionServer::Result::Unknown;
             fillResponseWithResult(&rpc_response, result);
             writer->Write(rpc_response);
 
@@ -321,31 +331,32 @@ public:
         auto is_finished = std::make_shared<bool>(false);
         auto subscribe_mutex = std::make_shared<std::mutex>();
 
-        _lazy_plugin.maybe_plugin()->subscribe_flight_mode_change(
-            [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex](
-                mavsdk::ActionServer::Result result,
-                const mavsdk::ActionServer::FlightMode flight_mode_change) {
-                rpc::action_server::FlightModeChangeResponse rpc_response;
+        const mavsdk::ActionServer::FlightModeChangeHandle handle =
+            _lazy_plugin.maybe_plugin()->subscribe_flight_mode_change(
+                [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex, &handle](
+                    mavsdk::ActionServer::Result result,
+                    const mavsdk::ActionServer::FlightMode flight_mode_change) {
+                    rpc::action_server::FlightModeChangeResponse rpc_response;
 
-                rpc_response.set_flight_mode(translateToRpcFlightMode(flight_mode_change));
+                    rpc_response.set_flight_mode(translateToRpcFlightMode(flight_mode_change));
 
-                auto rpc_result = translateToRpcResult(result);
-                auto* rpc_action_server_result = new rpc::action_server::ActionServerResult();
-                rpc_action_server_result->set_result(rpc_result);
-                std::stringstream ss;
-                ss << result;
-                rpc_action_server_result->set_result_str(ss.str());
-                rpc_response.set_allocated_action_server_result(rpc_action_server_result);
+                    auto rpc_result = translateToRpcResult(result);
+                    auto* rpc_action_server_result = new rpc::action_server::ActionServerResult();
+                    rpc_action_server_result->set_result(rpc_result);
+                    std::stringstream ss;
+                    ss << result;
+                    rpc_action_server_result->set_result_str(ss.str());
+                    rpc_response.set_allocated_action_server_result(rpc_action_server_result);
 
-                std::unique_lock<std::mutex> lock(*subscribe_mutex);
-                if (!*is_finished && !writer->Write(rpc_response)) {
-                    _lazy_plugin.maybe_plugin()->subscribe_flight_mode_change(nullptr);
+                    std::unique_lock<std::mutex> lock(*subscribe_mutex);
+                    if (!*is_finished && !writer->Write(rpc_response)) {
+                        _lazy_plugin.maybe_plugin()->unsubscribe_flight_mode_change(handle);
 
-                    *is_finished = true;
-                    unregister_stream_stop_promise(stream_closed_promise);
-                    stream_closed_promise->set_value();
-                }
-            });
+                        *is_finished = true;
+                        unregister_stream_stop_promise(stream_closed_promise);
+                        stream_closed_promise->set_value();
+                    }
+                });
 
         stream_closed_future.wait();
         std::unique_lock<std::mutex> lock(*subscribe_mutex);
@@ -361,7 +372,9 @@ public:
     {
         if (_lazy_plugin.maybe_plugin() == nullptr) {
             rpc::action_server::TakeoffResponse rpc_response;
-            auto result = mavsdk::ActionServer::Result::NoSystem;
+
+            // For server plugins, this should never happen, they should always be constructible.
+            auto result = mavsdk::ActionServer::Result::Unknown;
             fillResponseWithResult(&rpc_response, result);
             writer->Write(rpc_response);
 
@@ -375,30 +388,31 @@ public:
         auto is_finished = std::make_shared<bool>(false);
         auto subscribe_mutex = std::make_shared<std::mutex>();
 
-        _lazy_plugin.maybe_plugin()->subscribe_takeoff(
-            [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex](
-                mavsdk::ActionServer::Result result, const bool takeoff) {
-                rpc::action_server::TakeoffResponse rpc_response;
+        const mavsdk::ActionServer::TakeoffHandle handle =
+            _lazy_plugin.maybe_plugin()->subscribe_takeoff(
+                [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex, &handle](
+                    mavsdk::ActionServer::Result result, const bool takeoff) {
+                    rpc::action_server::TakeoffResponse rpc_response;
 
-                rpc_response.set_takeoff(takeoff);
+                    rpc_response.set_takeoff(takeoff);
 
-                auto rpc_result = translateToRpcResult(result);
-                auto* rpc_action_server_result = new rpc::action_server::ActionServerResult();
-                rpc_action_server_result->set_result(rpc_result);
-                std::stringstream ss;
-                ss << result;
-                rpc_action_server_result->set_result_str(ss.str());
-                rpc_response.set_allocated_action_server_result(rpc_action_server_result);
+                    auto rpc_result = translateToRpcResult(result);
+                    auto* rpc_action_server_result = new rpc::action_server::ActionServerResult();
+                    rpc_action_server_result->set_result(rpc_result);
+                    std::stringstream ss;
+                    ss << result;
+                    rpc_action_server_result->set_result_str(ss.str());
+                    rpc_response.set_allocated_action_server_result(rpc_action_server_result);
 
-                std::unique_lock<std::mutex> lock(*subscribe_mutex);
-                if (!*is_finished && !writer->Write(rpc_response)) {
-                    _lazy_plugin.maybe_plugin()->subscribe_takeoff(nullptr);
+                    std::unique_lock<std::mutex> lock(*subscribe_mutex);
+                    if (!*is_finished && !writer->Write(rpc_response)) {
+                        _lazy_plugin.maybe_plugin()->unsubscribe_takeoff(handle);
 
-                    *is_finished = true;
-                    unregister_stream_stop_promise(stream_closed_promise);
-                    stream_closed_promise->set_value();
-                }
-            });
+                        *is_finished = true;
+                        unregister_stream_stop_promise(stream_closed_promise);
+                        stream_closed_promise->set_value();
+                    }
+                });
 
         stream_closed_future.wait();
         std::unique_lock<std::mutex> lock(*subscribe_mutex);
@@ -414,7 +428,9 @@ public:
     {
         if (_lazy_plugin.maybe_plugin() == nullptr) {
             rpc::action_server::LandResponse rpc_response;
-            auto result = mavsdk::ActionServer::Result::NoSystem;
+
+            // For server plugins, this should never happen, they should always be constructible.
+            auto result = mavsdk::ActionServer::Result::Unknown;
             fillResponseWithResult(&rpc_response, result);
             writer->Write(rpc_response);
 
@@ -428,8 +444,8 @@ public:
         auto is_finished = std::make_shared<bool>(false);
         auto subscribe_mutex = std::make_shared<std::mutex>();
 
-        _lazy_plugin.maybe_plugin()->subscribe_land(
-            [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex](
+        const mavsdk::ActionServer::LandHandle handle = _lazy_plugin.maybe_plugin()->subscribe_land(
+            [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex, &handle](
                 mavsdk::ActionServer::Result result, const bool land) {
                 rpc::action_server::LandResponse rpc_response;
 
@@ -445,7 +461,7 @@ public:
 
                 std::unique_lock<std::mutex> lock(*subscribe_mutex);
                 if (!*is_finished && !writer->Write(rpc_response)) {
-                    _lazy_plugin.maybe_plugin()->subscribe_land(nullptr);
+                    _lazy_plugin.maybe_plugin()->unsubscribe_land(handle);
 
                     *is_finished = true;
                     unregister_stream_stop_promise(stream_closed_promise);
@@ -467,7 +483,9 @@ public:
     {
         if (_lazy_plugin.maybe_plugin() == nullptr) {
             rpc::action_server::RebootResponse rpc_response;
-            auto result = mavsdk::ActionServer::Result::NoSystem;
+
+            // For server plugins, this should never happen, they should always be constructible.
+            auto result = mavsdk::ActionServer::Result::Unknown;
             fillResponseWithResult(&rpc_response, result);
             writer->Write(rpc_response);
 
@@ -481,30 +499,31 @@ public:
         auto is_finished = std::make_shared<bool>(false);
         auto subscribe_mutex = std::make_shared<std::mutex>();
 
-        _lazy_plugin.maybe_plugin()->subscribe_reboot(
-            [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex](
-                mavsdk::ActionServer::Result result, const bool reboot) {
-                rpc::action_server::RebootResponse rpc_response;
+        const mavsdk::ActionServer::RebootHandle handle =
+            _lazy_plugin.maybe_plugin()->subscribe_reboot(
+                [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex, &handle](
+                    mavsdk::ActionServer::Result result, const bool reboot) {
+                    rpc::action_server::RebootResponse rpc_response;
 
-                rpc_response.set_reboot(reboot);
+                    rpc_response.set_reboot(reboot);
 
-                auto rpc_result = translateToRpcResult(result);
-                auto* rpc_action_server_result = new rpc::action_server::ActionServerResult();
-                rpc_action_server_result->set_result(rpc_result);
-                std::stringstream ss;
-                ss << result;
-                rpc_action_server_result->set_result_str(ss.str());
-                rpc_response.set_allocated_action_server_result(rpc_action_server_result);
+                    auto rpc_result = translateToRpcResult(result);
+                    auto* rpc_action_server_result = new rpc::action_server::ActionServerResult();
+                    rpc_action_server_result->set_result(rpc_result);
+                    std::stringstream ss;
+                    ss << result;
+                    rpc_action_server_result->set_result_str(ss.str());
+                    rpc_response.set_allocated_action_server_result(rpc_action_server_result);
 
-                std::unique_lock<std::mutex> lock(*subscribe_mutex);
-                if (!*is_finished && !writer->Write(rpc_response)) {
-                    _lazy_plugin.maybe_plugin()->subscribe_reboot(nullptr);
+                    std::unique_lock<std::mutex> lock(*subscribe_mutex);
+                    if (!*is_finished && !writer->Write(rpc_response)) {
+                        _lazy_plugin.maybe_plugin()->unsubscribe_reboot(handle);
 
-                    *is_finished = true;
-                    unregister_stream_stop_promise(stream_closed_promise);
-                    stream_closed_promise->set_value();
-                }
-            });
+                        *is_finished = true;
+                        unregister_stream_stop_promise(stream_closed_promise);
+                        stream_closed_promise->set_value();
+                    }
+                });
 
         stream_closed_future.wait();
         std::unique_lock<std::mutex> lock(*subscribe_mutex);
@@ -520,7 +539,9 @@ public:
     {
         if (_lazy_plugin.maybe_plugin() == nullptr) {
             rpc::action_server::ShutdownResponse rpc_response;
-            auto result = mavsdk::ActionServer::Result::NoSystem;
+
+            // For server plugins, this should never happen, they should always be constructible.
+            auto result = mavsdk::ActionServer::Result::Unknown;
             fillResponseWithResult(&rpc_response, result);
             writer->Write(rpc_response);
 
@@ -534,30 +555,31 @@ public:
         auto is_finished = std::make_shared<bool>(false);
         auto subscribe_mutex = std::make_shared<std::mutex>();
 
-        _lazy_plugin.maybe_plugin()->subscribe_shutdown(
-            [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex](
-                mavsdk::ActionServer::Result result, const bool shutdown) {
-                rpc::action_server::ShutdownResponse rpc_response;
+        const mavsdk::ActionServer::ShutdownHandle handle =
+            _lazy_plugin.maybe_plugin()->subscribe_shutdown(
+                [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex, &handle](
+                    mavsdk::ActionServer::Result result, const bool shutdown) {
+                    rpc::action_server::ShutdownResponse rpc_response;
 
-                rpc_response.set_shutdown(shutdown);
+                    rpc_response.set_shutdown(shutdown);
 
-                auto rpc_result = translateToRpcResult(result);
-                auto* rpc_action_server_result = new rpc::action_server::ActionServerResult();
-                rpc_action_server_result->set_result(rpc_result);
-                std::stringstream ss;
-                ss << result;
-                rpc_action_server_result->set_result_str(ss.str());
-                rpc_response.set_allocated_action_server_result(rpc_action_server_result);
+                    auto rpc_result = translateToRpcResult(result);
+                    auto* rpc_action_server_result = new rpc::action_server::ActionServerResult();
+                    rpc_action_server_result->set_result(rpc_result);
+                    std::stringstream ss;
+                    ss << result;
+                    rpc_action_server_result->set_result_str(ss.str());
+                    rpc_response.set_allocated_action_server_result(rpc_action_server_result);
 
-                std::unique_lock<std::mutex> lock(*subscribe_mutex);
-                if (!*is_finished && !writer->Write(rpc_response)) {
-                    _lazy_plugin.maybe_plugin()->subscribe_shutdown(nullptr);
+                    std::unique_lock<std::mutex> lock(*subscribe_mutex);
+                    if (!*is_finished && !writer->Write(rpc_response)) {
+                        _lazy_plugin.maybe_plugin()->unsubscribe_shutdown(handle);
 
-                    *is_finished = true;
-                    unregister_stream_stop_promise(stream_closed_promise);
-                    stream_closed_promise->set_value();
-                }
-            });
+                        *is_finished = true;
+                        unregister_stream_stop_promise(stream_closed_promise);
+                        stream_closed_promise->set_value();
+                    }
+                });
 
         stream_closed_future.wait();
         std::unique_lock<std::mutex> lock(*subscribe_mutex);
@@ -573,7 +595,9 @@ public:
     {
         if (_lazy_plugin.maybe_plugin() == nullptr) {
             rpc::action_server::TerminateResponse rpc_response;
-            auto result = mavsdk::ActionServer::Result::NoSystem;
+
+            // For server plugins, this should never happen, they should always be constructible.
+            auto result = mavsdk::ActionServer::Result::Unknown;
             fillResponseWithResult(&rpc_response, result);
             writer->Write(rpc_response);
 
@@ -587,30 +611,31 @@ public:
         auto is_finished = std::make_shared<bool>(false);
         auto subscribe_mutex = std::make_shared<std::mutex>();
 
-        _lazy_plugin.maybe_plugin()->subscribe_terminate(
-            [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex](
-                mavsdk::ActionServer::Result result, const bool terminate) {
-                rpc::action_server::TerminateResponse rpc_response;
+        const mavsdk::ActionServer::TerminateHandle handle =
+            _lazy_plugin.maybe_plugin()->subscribe_terminate(
+                [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex, &handle](
+                    mavsdk::ActionServer::Result result, const bool terminate) {
+                    rpc::action_server::TerminateResponse rpc_response;
 
-                rpc_response.set_terminate(terminate);
+                    rpc_response.set_terminate(terminate);
 
-                auto rpc_result = translateToRpcResult(result);
-                auto* rpc_action_server_result = new rpc::action_server::ActionServerResult();
-                rpc_action_server_result->set_result(rpc_result);
-                std::stringstream ss;
-                ss << result;
-                rpc_action_server_result->set_result_str(ss.str());
-                rpc_response.set_allocated_action_server_result(rpc_action_server_result);
+                    auto rpc_result = translateToRpcResult(result);
+                    auto* rpc_action_server_result = new rpc::action_server::ActionServerResult();
+                    rpc_action_server_result->set_result(rpc_result);
+                    std::stringstream ss;
+                    ss << result;
+                    rpc_action_server_result->set_result_str(ss.str());
+                    rpc_response.set_allocated_action_server_result(rpc_action_server_result);
 
-                std::unique_lock<std::mutex> lock(*subscribe_mutex);
-                if (!*is_finished && !writer->Write(rpc_response)) {
-                    _lazy_plugin.maybe_plugin()->subscribe_terminate(nullptr);
+                    std::unique_lock<std::mutex> lock(*subscribe_mutex);
+                    if (!*is_finished && !writer->Write(rpc_response)) {
+                        _lazy_plugin.maybe_plugin()->unsubscribe_terminate(handle);
 
-                    *is_finished = true;
-                    unregister_stream_stop_promise(stream_closed_promise);
-                    stream_closed_promise->set_value();
-                }
-            });
+                        *is_finished = true;
+                        unregister_stream_stop_promise(stream_closed_promise);
+                        stream_closed_promise->set_value();
+                    }
+                });
 
         stream_closed_future.wait();
         std::unique_lock<std::mutex> lock(*subscribe_mutex);
@@ -626,7 +651,9 @@ public:
     {
         if (_lazy_plugin.maybe_plugin() == nullptr) {
             if (response != nullptr) {
-                auto result = mavsdk::ActionServer::Result::NoSystem;
+                // For server plugins, this should never happen, they should always be
+                // constructible.
+                auto result = mavsdk::ActionServer::Result::Unknown;
                 fillResponseWithResult(response, result);
             }
 
@@ -654,7 +681,9 @@ public:
     {
         if (_lazy_plugin.maybe_plugin() == nullptr) {
             if (response != nullptr) {
-                auto result = mavsdk::ActionServer::Result::NoSystem;
+                // For server plugins, this should never happen, they should always be
+                // constructible.
+                auto result = mavsdk::ActionServer::Result::Unknown;
                 fillResponseWithResult(response, result);
             }
 
@@ -683,7 +712,9 @@ public:
     {
         if (_lazy_plugin.maybe_plugin() == nullptr) {
             if (response != nullptr) {
-                auto result = mavsdk::ActionServer::Result::NoSystem;
+                // For server plugins, this should never happen, they should always be
+                // constructible.
+                auto result = mavsdk::ActionServer::Result::Unknown;
                 fillResponseWithResult(response, result);
             }
 
@@ -712,7 +743,9 @@ public:
     {
         if (_lazy_plugin.maybe_plugin() == nullptr) {
             if (response != nullptr) {
-                auto result = mavsdk::ActionServer::Result::NoSystem;
+                // For server plugins, this should never happen, they should always be
+                // constructible.
+                auto result = mavsdk::ActionServer::Result::Unknown;
                 fillResponseWithResult(response, result);
             }
 
@@ -788,7 +821,8 @@ private:
         }
     }
 
-    LazyPlugin& _lazy_plugin;
+    LazyServerPlugin& _lazy_plugin;
+
     std::atomic<bool> _stopped{false};
     std::vector<std::weak_ptr<std::promise<void>>> _stream_stop_promises{};
 };

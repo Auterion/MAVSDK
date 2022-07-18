@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.13)
 option(HUNTER_ENABLED "Enable Hunter package manager support" OFF)
 option(SUPERBUILD "Build dependencies" ON)
 option(BUILD_MAVSDK_SERVER "Build mavsdk_server" OFF)
+option(BUILD_WITH_PROTO_REFLECTION "Build mavsdk_server with proto reflection" OFF)
 option(BUILD_SHARED_LIBS "Build core as shared libraries instead of static ones" ON)
 
 if(SUPERBUILD AND HUNTER_ENABLED)
@@ -14,7 +15,13 @@ execute_process(
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     OUTPUT_VARIABLE VERSION_STR
     OUTPUT_STRIP_TRAILING_WHITESPACE
+    RESULT_VARIABLE GITVER
 )
+
+if (NOT GITVER EQUAL "0")
+    message(STATUS "No git version found. Falling back to empty version no")
+    set(VERSION_STR "0.0.0")
+endif()
 
 message(STATUS "Version: ${VERSION_STR}")
 STRING(REGEX REPLACE v\([0-9]+\).[0-9]+.[0-9]+.*$ \\1 MAVSDK_VERSION_MAJOR "${VERSION_STR}")
@@ -46,8 +53,16 @@ set(DEPS_INSTALL_PATH "${DEPS_BUILD_PATH}/install" CACHE PATH "Install path for 
 
 include(GNUInstallDirs)
 
-if(SUPERBUILD)
-    add_subdirectory(third_party)
+if (NOT MAVLINK_DIALECT)
+    set(MAVLINK_DIALECT common)
 endif()
+
+if (MAVLINK_HEADERS)
+    get_filename_component(MAVLINK_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/${MAVLINK_HEADERS} REALPATH)
+    set(MAVLINK_HEADERS ${MAVLINK_HEADERS})
+    message(STATUS "MAVLink headers for dialect ${MAVLINK_DIALECT} manually provided in ${MAVLINK_HEADERS}")
+endif()
+
+add_subdirectory(third_party)
 
 add_subdirectory(src)

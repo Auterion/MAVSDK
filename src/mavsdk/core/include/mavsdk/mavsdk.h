@@ -8,9 +8,15 @@
 
 #include "connection_result.h"
 #include "deprecated.h"
+#include "handle.h"
 #include "system.h"
+#include "server_component.h"
+#include "connection_result.h"
+#include "mavlink_include.h"
 
 namespace mavsdk {
+
+class ServerPluginImplBase;
 
 /**
  * @brief ForwardingOption for Connection, used to set message forwarding option.
@@ -304,6 +310,11 @@ public:
     using NewSystemCallback = std::function<void()>;
 
     /**
+     * @brief Handle type to unsubscribe from subscribe_on_new_system.
+     */
+    using NewSystemHandle = Handle<>;
+
+    /**
      * @brief Get notification about a change in systems.
      *
      * This gets called whenever a system is added.
@@ -313,11 +324,83 @@ public:
      *
      * @param callback Callback to subscribe.
      */
-    void subscribe_on_new_system(const NewSystemCallback& callback);
+    NewSystemHandle subscribe_on_new_system(const NewSystemCallback& callback);
+
+    /**
+     * @brief unsubscribe from subscribe_on_new_system.
+     */
+    void unsubscribe_on_new_system(NewSystemHandle handle);
+
+    /**
+     * @brief High level type of a server component.
+     */
+    enum class ServerComponentType {
+        Autopilot, /**< @brief The component identifies as an autopilot. */
+        GroundStation, /**< @brief The component identifies as a ground station. */
+        CompanionComputer, /**< @brief The component identifies as a companion computer on board the
+                              system. */
+        Camera, /** < @brief The component identifies as a camera. */
+    };
+
+    /**
+     * @brief Get server component by a high level type.
+     *
+     * This represents a server component of the MAVSDK instance.
+     *
+     * @param server_component_type The high level type of the component.
+     * @param instance The instance of the component if there are multiple, starting at 0.
+     *
+     * @return A valid shared pointer to a server component if it was successful, an empty pointer
+     * otherwise.
+     */
+    std::shared_ptr<ServerComponent>
+    server_component_by_type(ServerComponentType server_component_type, unsigned instance = 0);
+
+    /**
+     * @brief Get server component by the low MAVLink component ID.
+     *
+     * This represents a server component of the MAVSDK instance.
+     *
+     * @param component_id MAVLink component ID to use
+     *
+     * @return A valid shared pointer to a server component if it was successful, an empty pointer
+     * otherwise.
+     */
+    std::shared_ptr<ServerComponent> server_component_by_id(uint8_t component_id);
+
+    /**
+     * @brief Intercept incoming messages.
+     *
+     * This is a hook which allows to change or drop MAVLink messages as they
+     * are received before they get forwarded any subscribers.
+     *
+     * @note This functionality is provided primarily for testing in order to
+     * simulate packet drops or actors not adhering to the MAVLink protocols.
+     *
+     * @param callback Callback to be called for each incoming message.
+     *        To drop a message, return 'false' from the callback.
+     */
+    void intercept_incoming_messages_async(std::function<bool(mavlink_message_t&)> callback);
+
+    /**
+     * @brief Intercept outgoing messages.
+     *
+     * This is a hook which allows to change or drop MAVLink messages before
+     * they are sent.
+     *
+     * @note This functionality is provided primarily for testing in order to
+     * simulate packet drops or actors not adhering to the MAVLink protocols.
+     *
+     * @param callback Callback to be called for each outgoing message.
+     *        To drop a message, return 'false' from the callback.
+     */
+    void intercept_outgoing_messages_async(std::function<bool(mavlink_message_t&)> callback);
 
 private:
     /* @private. */
     std::shared_ptr<MavsdkImpl> _impl{};
+
+    friend ServerPluginImplBase;
 
     // Non-copyable
     Mavsdk(const Mavsdk&) = delete;

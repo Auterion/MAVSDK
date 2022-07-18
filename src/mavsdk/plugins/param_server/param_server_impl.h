@@ -1,21 +1,18 @@
 #pragma once
 
 #include "plugins/param_server/param_server.h"
-#include "plugin_impl_base.h"
+#include "server_plugin_impl_base.h"
+#include "mavlink_parameters.h"
 
 namespace mavsdk {
 
-class ParamServerImpl : public PluginImplBase {
+class ParamServerImpl : public ServerPluginImplBase {
 public:
-    explicit ParamServerImpl(System& system);
-    explicit ParamServerImpl(std::shared_ptr<System> system);
+    explicit ParamServerImpl(std::shared_ptr<ServerComponent> server_component);
     ~ParamServerImpl() override;
 
     void init() override;
     void deinit() override;
-
-    void enable() override;
-    void disable() override;
 
     std::pair<ParamServer::Result, int32_t> retrieve_param_int(std::string name) const;
 
@@ -25,9 +22,14 @@ public:
 
     ParamServer::Result provide_param_float(std::string name, float value);
 
+    std::pair<ParamServer::Result, std::string> retrieve_param_custom(std::string name) const;
+
+    ParamServer::Result provide_param_custom(std::string name, const std::string& value);
+
     ParamServer::AllParams retrieve_all_params() const;
 
-    ParamServer::Result result_from_mavlink_parameters_result(MAVLinkParameters::Result result);
+    static ParamServer::Result
+    result_from_mavlink_parameters_result(MAVLinkParameters::Result result);
 
 private:
 };

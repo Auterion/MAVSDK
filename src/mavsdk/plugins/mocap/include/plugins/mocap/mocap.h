@@ -13,7 +13,9 @@
 #include <utility>
 #include <vector>
 
-#include "mavsdk/plugin_base.h"
+#include "plugin_base.h"
+
+#include "handle.h"
 
 namespace mavsdk {
 
@@ -57,7 +59,7 @@ public:
     /**
      * @brief Destructor (internal use only).
      */
-    ~Mocap();
+    ~Mocap() override;
 
     /**
      * @brief Body position type

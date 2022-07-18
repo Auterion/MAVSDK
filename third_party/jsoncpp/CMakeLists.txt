@@ -4,6 +4,7 @@ project(external-jsoncpp)
 include(ExternalProject)
 
 list(APPEND CMAKE_ARGS
+    "-DCMAKE_PREFIX_PATH:PATH=${CMAKE_PREFIX_PATH}"
     "-DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}"
     "-DCMAKE_TOOLCHAIN_FILE:PATH=${CMAKE_TOOLCHAIN_FILE}"
     "-DCMAKE_POSITION_INDEPENDENT_CODE=ON"
@@ -29,7 +30,7 @@ endforeach()
 ExternalProject_Add(
     jsoncpp
     GIT_REPOSITORY https://github.com/open-source-parsers/jsoncpp
-    GIT_TAG ed1ab7ac452b0fe51f3b0a8364770774175a060e
+    GIT_TAG 42e892d96e47b1f6e29844cc705e148ec4856448
     PREFIX jsoncpp
     CMAKE_ARGS "${CMAKE_ARGS}"
     )

@@ -41,7 +41,6 @@ add_executable(integration_tests_runner
     camera_take_photo_interval.cpp
     camera_format.cpp
     camera_test_helpers.cpp
-    component_information.cpp
     connection.cpp
     custom_action.cpp
     custom_action_mission.cpp
@@ -85,10 +84,10 @@ target_include_directories(integration_tests_runner
 
 # SYSTEM because we don't want warnings for gtest headers.
 target_include_directories(integration_tests_runner
-    PRIVATE
-    SYSTEM ${PROJECT_SOURCE_DIR}/third_party/gtest/googletest/include
-    SYSTEM ${PROJECT_SOURCE_DIR}/third_party/gtest/googlemock/include
-    SYSTEM ${PROJECT_SOURCE_DIR}/third_party/mavlink/include
+    SYSTEM
+    PRIVATE ${PROJECT_SOURCE_DIR}/third_party/gtest/googletest/include
+    PRIVATE ${PROJECT_SOURCE_DIR}/third_party/gtest/googlemock/include
+    PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/../third_party/include
 )
 
 if(MSVC)
@@ -117,6 +116,10 @@ target_link_libraries(integration_tests_runner
     gtest
     gtest_main
     gmock
+)
+
+target_include_directories(integration_tests_runner
+    SYSTEM PRIVATE ${MAVLINK_HEADERS}
 )
 
 add_test(integration_tests

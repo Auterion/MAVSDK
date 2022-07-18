@@ -4,6 +4,7 @@ project(external-absl)
 include(ExternalProject)
 
 list(APPEND CMAKE_ARGS
+    "-DCMAKE_PREFIX_PATH:PATH=${CMAKE_PREFIX_PATH}"
     "-DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}"
     "-DCMAKE_TOOLCHAIN_FILE:PATH=${CMAKE_TOOLCHAIN_FILE}"
     "-DCMAKE_POSITION_INDEPENDENT_CODE=ON"
@@ -27,7 +28,7 @@ endforeach()
 ExternalProject_add(
     absl
     GIT_REPOSITORY https://github.com/abseil/abseil-cpp.git
-    GIT_TAG 20210324.2
+    GIT_TAG 20211102.0
     PREFIX absl
     CMAKE_ARGS "${CMAKE_ARGS}"
     )

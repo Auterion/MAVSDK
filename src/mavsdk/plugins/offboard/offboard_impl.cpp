@@ -53,8 +53,7 @@ Offboard::Result OffboardImpl::start()
         _last_started = _time.steady_time();
     }
 
-    return offboard_result_from_command_result(
-        _parent->set_flight_mode(SystemImpl::FlightMode::Offboard));
+    return offboard_result_from_command_result(_parent->set_flight_mode(FlightMode::Offboard));
 }
 
 Offboard::Result OffboardImpl::stop()
@@ -66,8 +65,7 @@ Offboard::Result OffboardImpl::stop()
         }
     }
 
-    return offboard_result_from_command_result(
-        _parent->set_flight_mode(SystemImpl::FlightMode::Hold));
+    return offboard_result_from_command_result(_parent->set_flight_mode(FlightMode::Hold));
 }
 
 void OffboardImpl::start_async(Offboard::ResultCallback callback)
@@ -86,8 +84,7 @@ void OffboardImpl::start_async(Offboard::ResultCallback callback)
     }
 
     _parent->set_flight_mode_async(
-        SystemImpl::FlightMode::Offboard,
-        [callback, this](MavlinkCommandSender::Result result, float) {
+        FlightMode::Offboard, [callback, this](MavlinkCommandSender::Result result, float) {
             receive_command_result(result, callback);
         });
 }
@@ -102,7 +99,7 @@ void OffboardImpl::stop_async(Offboard::ResultCallback callback)
     }
 
     _parent->set_flight_mode_async(
-        SystemImpl::FlightMode::Hold, [callback, this](MavlinkCommandSender::Result result, float) {
+        FlightMode::Hold, [callback, this](MavlinkCommandSender::Result result, float) {
             receive_command_result(result, callback);
         });
 }
@@ -812,10 +809,14 @@ OffboardImpl::offboard_result_from_command_result(MavlinkCommandSender::Result r
             return Offboard::Result::ConnectionError;
         case MavlinkCommandSender::Result::Busy:
             return Offboard::Result::Busy;
-        case MavlinkCommandSender::Result::CommandDenied:
+        case MavlinkCommandSender::Result::Denied:
+            // FALLTHROUGH
+        case MavlinkCommandSender::Result::TemporarilyRejected:
             return Offboard::Result::CommandDenied;
         case MavlinkCommandSender::Result::Timeout:
             return Offboard::Result::Timeout;
+        case MavlinkCommandSender::Result::Failed:
+            return Offboard::Result::Failed;
         default:
             return Offboard::Result::Unknown;
     }

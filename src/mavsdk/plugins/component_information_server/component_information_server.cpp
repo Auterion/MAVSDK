@@ -13,14 +13,10 @@ namespace mavsdk {
 using FloatParam = ComponentInformationServer::FloatParam;
 using FloatParamUpdate = ComponentInformationServer::FloatParamUpdate;
 
-ComponentInformationServer::ComponentInformationServer(System& system) :
-    PluginBase(),
-    _impl{std::make_unique<ComponentInformationServerImpl>(system)}
-{}
-
-ComponentInformationServer::ComponentInformationServer(std::shared_ptr<System> system) :
-    PluginBase(),
-    _impl{std::make_unique<ComponentInformationServerImpl>(system)}
+ComponentInformationServer::ComponentInformationServer(
+    std::shared_ptr<ServerComponent> server_component) :
+    ServerPluginBase(),
+    _impl{std::make_unique<ComponentInformationServerImpl>(server_component)}
 {}
 
 ComponentInformationServer::~ComponentInformationServer() {}
@@ -31,9 +27,15 @@ ComponentInformationServer::provide_float_param(FloatParam param) const
     return _impl->provide_float_param(param);
 }
 
-void ComponentInformationServer::subscribe_float_param(FloatParamCallback callback)
+ComponentInformationServer::FloatParamHandle
+ComponentInformationServer::subscribe_float_param(const FloatParamCallback& callback)
 {
-    _impl->subscribe_float_param(callback);
+    return _impl->subscribe_float_param(callback);
+}
+
+void ComponentInformationServer::unsubscribe_float_param(FloatParamHandle handle)
+{
+    _impl->unsubscribe_float_param(handle);
 }
 
 bool operator==(

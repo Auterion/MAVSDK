@@ -6,7 +6,9 @@
 #include "plugins/gimbal/gimbal.h"
 
 #include "mavsdk.h"
+
 #include "lazy_plugin.h"
+
 #include "log.h"
 #include <atomic>
 #include <cmath>
@@ -20,6 +22,7 @@ namespace mavsdk {
 namespace mavsdk_server {
 
 template<typename Gimbal = Gimbal, typename LazyPlugin = LazyPlugin<Gimbal>>
+
 class GimbalServiceImpl final : public rpc::gimbal::GimbalService::Service {
 public:
     GimbalServiceImpl(LazyPlugin& lazy_plugin) : _lazy_plugin(lazy_plugin) {}
@@ -362,8 +365,8 @@ public:
         auto is_finished = std::make_shared<bool>(false);
         auto subscribe_mutex = std::make_shared<std::mutex>();
 
-        _lazy_plugin.maybe_plugin()->subscribe_control(
-            [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex](
+        const mavsdk::Gimbal::ControlHandle handle = _lazy_plugin.maybe_plugin()->subscribe_control(
+            [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex, &handle](
                 const mavsdk::Gimbal::ControlStatus control) {
                 rpc::gimbal::ControlResponse rpc_response;
 
@@ -372,7 +375,7 @@ public:
 
                 std::unique_lock<std::mutex> lock(*subscribe_mutex);
                 if (!*is_finished && !writer->Write(rpc_response)) {
-                    _lazy_plugin.maybe_plugin()->subscribe_control(nullptr);
+                    _lazy_plugin.maybe_plugin()->unsubscribe_control(handle);
 
                     *is_finished = true;
                     unregister_stream_stop_promise(stream_closed_promise);
@@ -423,6 +426,7 @@ private:
     }
 
     LazyPlugin& _lazy_plugin;
+
     std::atomic<bool> _stopped{false};
     std::vector<std::weak_ptr<std::promise<void>>> _stream_stop_promises{};
 };

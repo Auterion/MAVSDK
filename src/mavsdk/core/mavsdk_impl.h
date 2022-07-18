@@ -11,9 +11,13 @@
 #include "mavsdk.h"
 #include "mavlink_include.h"
 #include "mavlink_address.h"
+#include "mavlink_message_handler.h"
+#include "mavlink_command_receiver.h"
 #include "safe_queue.h"
+#include "server_component.h"
 #include "system.h"
 #include "timeout_handler.h"
+#include "callback_list.h"
 
 namespace mavsdk {
 
@@ -69,13 +73,21 @@ public:
     uint8_t get_own_component_id() const;
     uint8_t get_mav_type() const;
 
-    void subscribe_on_new_system(const Mavsdk::NewSystemCallback& callback);
+    Mavsdk::NewSystemHandle subscribe_on_new_system(const Mavsdk::NewSystemCallback& callback);
+    void unsubscribe_on_new_system(Mavsdk::NewSystemHandle handle);
 
     void notify_on_discover();
     void notify_on_timeout();
 
     void start_sending_heartbeats();
     void stop_sending_heartbeats();
+
+    void intercept_incoming_messages_async(std::function<bool(mavlink_message_t&)> callback);
+    void intercept_outgoing_messages_async(std::function<bool(mavlink_message_t&)> callback);
+
+    std::shared_ptr<ServerComponent> server_component_by_type(
+        Mavsdk::ServerComponentType server_component_type, unsigned instance = 0);
+    std::shared_ptr<ServerComponent> server_component_by_id(uint8_t component_id);
 
     TimeoutHandler timeout_handler;
     CallEveryHandler call_every_handler;
@@ -87,12 +99,8 @@ public:
 
     double timeout_s() const { return _timeout_s; };
 
-    void set_base_mode(uint8_t base_mode);
-    uint8_t get_base_mode() const;
-    void set_custom_mode(uint32_t custom_mode);
-    uint32_t get_custom_mode() const;
-    void set_system_status(uint8_t system_status);
-    uint8_t get_system_status();
+    MavlinkMessageHandler mavlink_message_handler{};
+    Time time{};
 
 private:
     void add_connection(const std::shared_ptr<Connection>&);
@@ -113,7 +121,12 @@ private:
 
     mutable std::recursive_mutex _systems_mutex{};
     std::vector<std::pair<uint8_t, std::shared_ptr<System>>> _systems{};
-    Mavsdk::NewSystemCallback _new_system_callback{nullptr};
+
+    mutable std::mutex _server_components_mutex{};
+    std::vector<std::pair<uint8_t, std::shared_ptr<ServerComponent>>> _server_components{};
+    std::shared_ptr<ServerComponent> _default_server_component{nullptr};
+
+    CallbackList<> _new_system_callbacks{};
 
     Time _time{};
 
@@ -140,16 +153,15 @@ private:
     bool _message_logging_on{false};
     bool _callback_debugging{false};
 
+    std::function<bool(mavlink_message_t&)> _intercept_incoming_messages_callback{nullptr};
+    std::function<bool(mavlink_message_t&)> _intercept_outgoing_messages_callback{nullptr};
+
     std::atomic<double> _timeout_s{Mavsdk::DEFAULT_TIMEOUT_S};
 
     static constexpr double HEARTBEAT_SEND_INTERVAL_S = 1.0;
     void* _heartbeat_send_cookie{nullptr};
 
     std::atomic<bool> _should_exit = {false};
-
-    std::atomic<uint8_t> _base_mode = 0;
-    std::atomic<uint32_t> _custom_mode = 0;
-    std::atomic<uint8_t> _system_status = 0;
 };
 
 } // namespace mavsdk

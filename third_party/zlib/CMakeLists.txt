@@ -4,6 +4,7 @@ project(external-zlib)
 include(ExternalProject)
 
 list(APPEND CMAKE_ARGS
+    "-DCMAKE_PREFIX_PATH:PATH=${CMAKE_PREFIX_PATH}"
     "-DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}"
     "-DCMAKE_TOOLCHAIN_FILE:PATH=${CMAKE_TOOLCHAIN_FILE}"
     "-DCMAKE_POSITION_INDEPENDENT_CODE=ON"
@@ -26,7 +27,7 @@ endforeach()
 ExternalProject_add(
     zlib
     GIT_REPOSITORY https://github.com/madler/zlib
-    GIT_TAG v1.2.11
+    GIT_TAG v1.2.12
     PREFIX zlib
     PATCH_COMMAND git checkout . && git apply ${PROJECT_SOURCE_DIR}/build_shared_libs.patch
     CMAKE_ARGS "${CMAKE_ARGS}"

@@ -38,14 +38,14 @@ std::shared_ptr<System> get_system(Mavsdk& mavsdk)
 
     // We wait for new systems to be discovered, once we find one that has an
     // autopilot, we decide to use it.
-    mavsdk.subscribe_on_new_system([&mavsdk, &prom]() {
+    Mavsdk::NewSystemHandle handle = mavsdk.subscribe_on_new_system([&mavsdk, &prom, &handle]() {
         auto system = mavsdk.systems().back();
 
         if (system->has_autopilot()) {
             std::cout << "Discovered autopilot\n";
 
             // Unsubscribe again as we only want to find one system.
-            mavsdk.subscribe_on_new_system(nullptr);
+            mavsdk.unsubscribe_on_new_system(handle);
             prom.set_value(system);
         }
     });
@@ -112,12 +112,13 @@ int main(int argc, char** argv)
     });
 
     // Subscribe to receive updates on flight mode. You can find out whether FollowMe is active.
-    telemetry.subscribe_flight_mode([&](Telemetry::FlightMode flight_mode) {
-        const FollowMe::TargetLocation last_location = follow_me.get_last_location();
-        std::cout << "[FlightMode: " << flight_mode
-                  << "] Target is at: " << last_location.latitude_deg << ", "
-                  << last_location.longitude_deg << " degrees.\n";
-    });
+    Telemetry::FlightModeHandle handle =
+        telemetry.subscribe_flight_mode([&](Telemetry::FlightMode flight_mode) {
+            const FollowMe::TargetLocation last_location = follow_me.get_last_location();
+            std::cout << "[FlightMode: " << flight_mode
+                      << "] Target is at: " << last_location.latitude_deg << ", "
+                      << last_location.longitude_deg << " degrees.\n";
+        });
 
     // Takeoff
     Action::Result takeoff_result = action.takeoff();
@@ -128,11 +129,11 @@ int main(int argc, char** argv)
     std::cout << "In Air...\n";
     sleep_for(seconds(5)); // Wait for drone to reach takeoff altitude
 
-    // Configure Min height of the drone to be "20 meters" above home & Follow direction as "Front
-    // right".
+    // Configure Follow height of the drone to be "20 meters"
+    // And Follow direction as "Behind" (180 degrees)
     FollowMe::Config config;
-    config.min_height_m = 10.0;
-    config.follow_direction = FollowMe::Config::FollowDirection::Behind;
+    config.follow_height_m = 10.0;
+    config.follow_angle_deg = 180.0f;
     FollowMe::Result follow_me_result = follow_me.set_config(config);
 
     if (follow_me_result != FollowMe::Result::Success) {
@@ -169,7 +170,7 @@ int main(int argc, char** argv)
     }
 
     // Stop flight mode updates.
-    telemetry.subscribe_flight_mode(nullptr);
+    telemetry.unsubscribe_flight_mode(handle);
 
     // Land
     const Action::Result land_result = action.land();

@@ -1,6 +1,9 @@
 #include "transponder_impl.h"
+#include "callback_list.tpp"
 
 namespace mavsdk {
+
+template class CallbackList<Transponder::AdsbVehicle>;
 
 TransponderImpl::TransponderImpl(System& system) : PluginImplBase(system)
 {
@@ -57,10 +60,17 @@ Transponder::AdsbVehicle TransponderImpl::transponder() const
     return _transponder;
 }
 
-void TransponderImpl::subscribe_transponder(Transponder::TransponderCallback callback)
+Transponder::TransponderHandle
+TransponderImpl::subscribe_transponder(const Transponder::TransponderCallback& callback)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _transponder_subscription = callback;
+    return _transponder_subscriptions.subscribe(callback);
+}
+
+void TransponderImpl::unsubscribe_transponder(Transponder::TransponderHandle handle)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    _transponder_subscriptions.unsubscribe(handle);
 }
 
 void TransponderImpl::set_transponder(Transponder::AdsbVehicle transponder)
@@ -86,15 +96,15 @@ void TransponderImpl::process_transponder(const mavlink_message_t& message)
     adsbVehicle.emitter_type = Transponder::AdsbEmitterType(local_adsb_vehicle.emitter_type);
     adsbVehicle.squawk = local_adsb_vehicle.squawk;
     adsbVehicle.tslc_s = local_adsb_vehicle.tslc;
+    adsbVehicle.altitude_type =
+        local_adsb_vehicle.altitude_type == ADSB_ALTITUDE_TYPE_PRESSURE_QNH ?
+            Transponder::AdsbAltitudeType::PressureQnh :
+            Transponder::AdsbAltitudeType::Geometric;
 
     set_transponder(adsbVehicle);
 
-    std::lock_guard<std::mutex> lock(_subscription_mutex);
-    if (_transponder_subscription) {
-        auto callback = _transponder_subscription;
-        auto arg = transponder();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _transponder_subscriptions.queue(
+        transponder(), [this](const auto& func) { _parent->call_user_callback(func); });
 }
 
 Transponder::Result
@@ -109,7 +119,9 @@ TransponderImpl::transponder_result_from_command_result(MavlinkCommandSender::Re
             return Transponder::Result::ConnectionError;
         case MavlinkCommandSender::Result::Busy:
             return Transponder::Result::Busy;
-        case MavlinkCommandSender::Result::CommandDenied:
+        case MavlinkCommandSender::Result::Denied:
+            // FALLTHROUGH
+        case MavlinkCommandSender::Result::TemporarilyRejected:
             return Transponder::Result::CommandDenied;
         case MavlinkCommandSender::Result::Timeout:
             return Transponder::Result::Timeout;

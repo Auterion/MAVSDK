@@ -2,6 +2,8 @@
 #include "system.h"
 #include "math_conversions.h"
 #include "mavsdk_math.h"
+#include "callback_list.tpp"
+
 #include <cmath>
 #include <functional>
 #include <string>
@@ -10,6 +12,33 @@
 #include <unused.h>
 
 namespace mavsdk {
+
+template class CallbackList<Telemetry::PositionVelocityNed>;
+template class CallbackList<Telemetry::Position>;
+template class CallbackList<bool>;
+template class CallbackList<Telemetry::StatusText>;
+template class CallbackList<Telemetry::Quaternion>;
+template class CallbackList<Telemetry::AngularVelocityBody>;
+template class CallbackList<Telemetry::GroundTruth>;
+template class CallbackList<Telemetry::FixedwingMetrics>;
+template class CallbackList<Telemetry::EulerAngle>;
+template class CallbackList<Telemetry::VelocityNed>;
+template class CallbackList<Telemetry::Imu>;
+template class CallbackList<Telemetry::GpsInfo>;
+template class CallbackList<Telemetry::RawGps>;
+template class CallbackList<Telemetry::Battery>;
+template class CallbackList<Telemetry::FlightMode>;
+template class CallbackList<Telemetry::Health>;
+template class CallbackList<Telemetry::VtolState>;
+template class CallbackList<Telemetry::LandedState>;
+template class CallbackList<Telemetry::RcStatus>;
+template class CallbackList<uint64_t>;
+template class CallbackList<Telemetry::ActuatorControlTarget>;
+template class CallbackList<Telemetry::ActuatorOutputStatus>;
+template class CallbackList<Telemetry::Odometry>;
+template class CallbackList<Telemetry::DistanceSensor>;
+template class CallbackList<Telemetry::ScaledPressure>;
+template class CallbackList<Telemetry::Heading>;
 
 TelemetryImpl::TelemetryImpl(System& system) : PluginImplBase(system)
 {
@@ -177,6 +206,8 @@ void TelemetryImpl::deinit()
         std::lock_guard<std::mutex> lock(_ap_calibration_mutex);
         _ap_calibration = {};
     }
+
+    _sys_status_used_for_position = SysStatusUsed::Unknown;
 }
 
 void TelemetryImpl::enable()
@@ -191,9 +222,29 @@ void TelemetryImpl::enable()
     //        For now, we just do the same as QGC does.
 
     _parent->add_call_every([this]() { check_calibration(); }, 5.0, &_calibration_cookie);
+
+    // We're going to retry until we have the Home Position.
+    _parent->add_call_every([this]() { request_home_position_again(); }, 2.0f, &_homepos_cookie);
 }
 
-void TelemetryImpl::disable() {}
+void TelemetryImpl::disable()
+{
+    _parent->remove_call_every(_calibration_cookie);
+    _parent->remove_call_every(_homepos_cookie);
+}
+
+void TelemetryImpl::request_home_position_again()
+{
+    {
+        std::lock_guard<std::mutex> lock(_request_home_position_mutex);
+        if (_health.is_home_position_ok) {
+            _parent->remove_call_every(_homepos_cookie);
+            return;
+        }
+    }
+    LogWarn() << "Requesting Home Position Again.";
+    request_home_position_async();
+}
 
 Telemetry::Result TelemetryImpl::set_rate_position_velocity_ned(double rate_hz)
 {
@@ -581,7 +632,9 @@ TelemetryImpl::telemetry_result_from_command_result(MavlinkCommandSender::Result
             return Telemetry::Result::ConnectionError;
         case MavlinkCommandSender::Result::Busy:
             return Telemetry::Result::Busy;
-        case MavlinkCommandSender::Result::CommandDenied:
+        case MavlinkCommandSender::Result::Denied:
+            // FALLTHROUGH
+        case MavlinkCommandSender::Result::TemporarilyRejected:
             return Telemetry::Result::CommandDenied;
         case MavlinkCommandSender::Result::Timeout:
             return Telemetry::Result::Timeout;
@@ -616,11 +669,8 @@ void TelemetryImpl::process_position_velocity_ned(const mavlink_message_t& messa
     set_position_velocity_ned(position_velocity);
 
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    if (_position_velocity_ned_subscription) {
-        auto callback = _position_velocity_ned_subscription;
-        auto arg = position_velocity_ned();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _position_velocity_ned_subscriptions.queue(
+        position_velocity_ned(), [this](const auto& func) { _parent->call_user_callback(func); });
 
     set_health_local_position(true);
 }
@@ -656,23 +706,14 @@ void TelemetryImpl::process_global_position_int(const mavlink_message_t& message
     }
 
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    if (_position_subscription) {
-        auto callback = _position_subscription;
-        auto arg = position();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _position_subscriptions.queue(
+        position(), [this](const auto& func) { _parent->call_user_callback(func); });
 
-    if (_velocity_ned_subscription) {
-        auto callback = _velocity_ned_subscription;
-        auto arg = velocity_ned();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _velocity_ned_subscriptions.queue(
+        velocity_ned(), [this](const auto& func) { _parent->call_user_callback(func); });
 
-    if (_heading_subscription) {
-        auto callback = _heading_subscription;
-        auto arg = heading();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _heading_subscriptions.queue(
+        heading(), [this](const auto& func) { _parent->call_user_callback(func); });
 }
 
 void TelemetryImpl::process_home_position(const mavlink_message_t& message)
@@ -690,11 +731,8 @@ void TelemetryImpl::process_home_position(const mavlink_message_t& message)
     set_health_home_position(true);
 
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    if (_home_position_subscription) {
-        auto callback = _home_position_subscription;
-        auto arg = home();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _home_position_subscriptions.queue(
+        home(), [this](const auto& func) { _parent->call_user_callback(func); });
 }
 
 void TelemetryImpl::process_attitude(const mavlink_message_t& message)
@@ -718,23 +756,15 @@ void TelemetryImpl::process_attitude(const mavlink_message_t& message)
     set_attitude_quaternion(quaternion);
 
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    if (_attitude_quaternion_angle_subscription) {
-        auto callback = _attitude_quaternion_angle_subscription;
-        auto arg = attitude_quaternion();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _attitude_quaternion_angle_subscriptions.queue(
+        attitude_quaternion(), [this](const auto& func) { _parent->call_user_callback(func); });
 
-    if (_attitude_euler_angle_subscription) {
-        auto callback = _attitude_euler_angle_subscription;
-        auto arg = attitude_euler();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _attitude_euler_angle_subscriptions.queue(
+        attitude_euler(), [this](const auto& func) { _parent->call_user_callback(func); });
 
-    if (_attitude_angular_velocity_body_subscription) {
-        auto callback = _attitude_angular_velocity_body_subscription;
-        auto arg = attitude_angular_velocity_body();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _attitude_angular_velocity_body_subscriptions.queue(
+        attitude_angular_velocity_body(),
+        [this](const auto& func) { _parent->call_user_callback(func); });
 }
 
 void TelemetryImpl::process_attitude_quaternion(const mavlink_message_t& message)
@@ -760,23 +790,15 @@ void TelemetryImpl::process_attitude_quaternion(const mavlink_message_t& message
     set_attitude_angular_velocity_body(angular_velocity_body);
 
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    if (_attitude_quaternion_angle_subscription) {
-        auto callback = _attitude_quaternion_angle_subscription;
-        auto arg = attitude_quaternion();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _attitude_quaternion_angle_subscriptions.queue(
+        attitude_quaternion(), [this](const auto& func) { _parent->call_user_callback(func); });
 
-    if (_attitude_euler_angle_subscription) {
-        auto callback = _attitude_euler_angle_subscription;
-        auto arg = attitude_euler();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _attitude_euler_angle_subscriptions.queue(
+        attitude_euler(), [this](const auto& func) { _parent->call_user_callback(func); });
 
-    if (_attitude_angular_velocity_body_subscription) {
-        auto callback = _attitude_angular_velocity_body_subscription;
-        auto arg = attitude_angular_velocity_body();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _attitude_angular_velocity_body_subscriptions.queue(
+        attitude_angular_velocity_body(),
+        [this](const auto& func) { _parent->call_user_callback(func); });
 }
 
 void TelemetryImpl::process_mount_orientation(const mavlink_message_t& message)
@@ -793,17 +815,12 @@ void TelemetryImpl::process_mount_orientation(const mavlink_message_t& message)
     set_camera_attitude_euler_angle(euler_angle);
 
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    if (_camera_attitude_quaternion_subscription) {
-        auto callback = _camera_attitude_quaternion_subscription;
-        auto arg = camera_attitude_quaternion();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _camera_attitude_quaternion_subscriptions.queue(
+        camera_attitude_quaternion(),
+        [this](const auto& func) { _parent->call_user_callback(func); });
 
-    if (_camera_attitude_euler_angle_subscription) {
-        auto callback = _camera_attitude_euler_angle_subscription;
-        auto arg = camera_attitude_euler();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _camera_attitude_euler_angle_subscriptions.queue(
+        camera_attitude_euler(), [this](const auto& func) { _parent->call_user_callback(func); });
 }
 
 void TelemetryImpl::process_gimbal_device_attitude_status(const mavlink_message_t& message)
@@ -825,17 +842,12 @@ void TelemetryImpl::process_gimbal_device_attitude_status(const mavlink_message_
     set_camera_attitude_euler_angle(euler_angle);
 
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    if (_camera_attitude_quaternion_subscription) {
-        auto callback = _camera_attitude_quaternion_subscription;
-        auto arg = camera_attitude_quaternion();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _camera_attitude_quaternion_subscriptions.queue(
+        camera_attitude_quaternion(),
+        [this](const auto& func) { _parent->call_user_callback(func); });
 
-    if (_camera_attitude_euler_angle_subscription) {
-        auto callback = _camera_attitude_euler_angle_subscription;
-        auto arg = camera_attitude_euler();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _camera_attitude_euler_angle_subscriptions.queue(
+        camera_attitude_euler(), [this](const auto& func) { _parent->call_user_callback(func); });
 }
 
 void TelemetryImpl::process_imu_reading_ned(const mavlink_message_t& message)
@@ -858,11 +870,8 @@ void TelemetryImpl::process_imu_reading_ned(const mavlink_message_t& message)
     set_imu_reading_ned(new_imu);
 
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    if (_imu_reading_ned_subscription) {
-        auto callback = _imu_reading_ned_subscription;
-        auto arg = imu();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _imu_reading_ned_subscriptions.queue(
+        imu(), [this](const auto& func) { _parent->call_user_callback(func); });
 }
 
 void TelemetryImpl::process_scaled_imu(const mavlink_message_t& message)
@@ -885,11 +894,8 @@ void TelemetryImpl::process_scaled_imu(const mavlink_message_t& message)
     set_scaled_imu(new_imu);
 
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    if (_scaled_imu_subscription) {
-        auto callback = _scaled_imu_subscription;
-        auto arg = scaled_imu();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _scaled_imu_subscriptions.queue(
+        scaled_imu(), [this](const auto& func) { _parent->call_user_callback(func); });
 }
 
 void TelemetryImpl::process_raw_imu(const mavlink_message_t& message)
@@ -912,11 +918,8 @@ void TelemetryImpl::process_raw_imu(const mavlink_message_t& message)
     set_raw_imu(new_imu);
 
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    if (_raw_imu_subscription) {
-        auto callback = _raw_imu_subscription;
-        auto arg = raw_imu();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _raw_imu_subscriptions.queue(
+        raw_imu(), [this](const auto& func) { _parent->call_user_callback(func); });
 }
 
 void TelemetryImpl::process_gps_raw_int(const mavlink_message_t& message)
@@ -976,25 +979,19 @@ void TelemetryImpl::process_gps_raw_int(const mavlink_message_t& message)
     raw_gps_info.yaw_deg = static_cast<float>(gps_raw_int.yaw) * 1e-2f;
     set_raw_gps(raw_gps_info);
 
-    // TODO: This is just an interim hack, we will have to look at
-    //       estimator flags in order to decide if the position
-    //       estimate is good enough.
-    const bool gps_ok = ((gps_raw_int.fix_type >= 3) && (gps_raw_int.satellites_visible >= 8));
+    if (_sys_status_used_for_position == SysStatusUsed::No) {
+        // This is just a fallback if sys_status does not contain the appropriate flags yet.
+        const bool gps_ok = ((gps_raw_int.fix_type >= 3) && (gps_raw_int.satellites_visible >= 8));
 
-    set_health_global_position(gps_ok);
+        set_health_global_position(gps_ok);
+    }
 
     {
         std::lock_guard<std::mutex> lock(_subscription_mutex);
-        if (_gps_info_subscription) {
-            auto callback = _gps_info_subscription;
-            auto arg = gps_info();
-            _parent->call_user_callback([callback, arg]() { callback(arg); });
-        }
-        if (_raw_gps_subscription) {
-            auto callback = _raw_gps_subscription;
-            auto arg = raw_gps();
-            _parent->call_user_callback([callback, arg]() { callback(arg); });
-        }
+        _gps_info_subscriptions.queue(
+            gps_info(), [this](const auto& func) { _parent->call_user_callback(func); });
+        _raw_gps_subscriptions.queue(
+            raw_gps(), [this](const auto& func) { _parent->call_user_callback(func); });
     }
 
     _parent->refresh_timeout_handler(_gps_raw_timeout_cookie);
@@ -1013,11 +1010,8 @@ void TelemetryImpl::process_ground_truth(const mavlink_message_t& message)
     set_ground_truth(new_ground_truth);
 
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    if (_ground_truth_subscription) {
-        auto callback = _ground_truth_subscription;
-        auto arg = ground_truth();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _ground_truth_subscriptions.queue(
+        ground_truth(), [this](const auto& func) { _parent->call_user_callback(func); });
 }
 
 void TelemetryImpl::process_extended_sys_state(const mavlink_message_t& message)
@@ -1034,17 +1028,11 @@ void TelemetryImpl::process_extended_sys_state(const mavlink_message_t& message)
     }
 
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    if (_landed_state_subscription) {
-        auto callback = _landed_state_subscription;
-        auto arg = landed_state();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _landed_state_subscriptions.queue(
+        landed_state(), [this](const auto& func) { _parent->call_user_callback(func); });
 
-    if (_votl_state_subscription) {
-        auto callback = _votl_state_subscription;
-        auto arg = vtol_state();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _vtol_state_subscriptions.queue(
+        vtol_state(), [this](const auto& func) { _parent->call_user_callback(func); });
 
     if (extended_sys_state.landed_state == MAV_LANDED_STATE_IN_AIR ||
         extended_sys_state.landed_state == MAV_LANDED_STATE_TAKEOFF ||
@@ -1055,11 +1043,8 @@ void TelemetryImpl::process_extended_sys_state(const mavlink_message_t& message)
     }
     // If landed_state is undefined, we use what we have received last.
 
-    if (_in_air_subscription) {
-        auto callback = _in_air_subscription;
-        auto arg = in_air();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _in_air_subscriptions.queue(
+        in_air(), [this](const auto& func) { _parent->call_user_callback(func); });
 }
 void TelemetryImpl::process_fixedwing_metrics(const mavlink_message_t& message)
 {
@@ -1074,11 +1059,8 @@ void TelemetryImpl::process_fixedwing_metrics(const mavlink_message_t& message)
     set_fixedwing_metrics(new_fixedwing_metrics);
 
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    if (_fixedwing_metrics_subscription) {
-        auto callback = _fixedwing_metrics_subscription;
-        auto arg = fixedwing_metrics();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _fixedwing_metrics_subscriptions.queue(
+        fixedwing_metrics(), [this](const auto& func) { _parent->call_user_callback(func); });
 }
 
 void TelemetryImpl::process_sys_status(const mavlink_message_t& message)
@@ -1096,11 +1078,8 @@ void TelemetryImpl::process_sys_status(const mavlink_message_t& message)
 
         {
             std::lock_guard<std::mutex> lock(_subscription_mutex);
-            if (_battery_subscription) {
-                auto callback = _battery_subscription;
-                auto arg = battery();
-                _parent->call_user_callback([callback, arg]() { callback(arg); });
-            }
+            _battery_subscriptions.queue(
+                battery(), [this](const auto& func) { _parent->call_user_callback(func); });
         }
     }
 
@@ -1130,22 +1109,49 @@ void TelemetryImpl::process_sys_status(const mavlink_message_t& message)
         // If the flag is not supported yet, we fall back to the param.
     }
 
-    {
-        std::lock_guard<std::mutex> lock(_subscription_mutex);
-        if (_rc_status_subscription) {
-            auto callback = _rc_status_subscription;
-            auto arg = rc_status();
-            _parent->call_user_callback([callback, arg]() { callback(arg); });
-        }
-    }
-    const bool armable = sys_status.onboard_control_sensors_health & MAV_SYS_STATUS_PREARM_CHECK;
+    const bool global_position_ok =
+        sys_status_present_enabled_health(sys_status, MAV_SYS_STATUS_SENSOR_GPS);
 
+    // FIXME: There is nothing really set in PX4 for local position from what I can tell,
+    //        so the best we can do for now is to set it based on GPS as a fallback.
+
+    const bool local_position_ok =
+        global_position_ok ||
+        sys_status_present_enabled_health(sys_status, MAV_SYS_STATUS_SENSOR_OPTICAL_FLOW) ||
+        sys_status_present_enabled_health(sys_status, MAV_SYS_STATUS_SENSOR_VISION_POSITION);
+
+    set_health_local_position(local_position_ok);
+    set_health_global_position(global_position_ok);
+
+    // If any of these sensors were marked present, we don't have to fall back to check for
+    // satellite count.
+    _sys_status_used_for_position =
+        ((sys_status.onboard_control_sensors_present & MAV_SYS_STATUS_SENSOR_GPS) != 0 ||
+         (sys_status.onboard_control_sensors_present & MAV_SYS_STATUS_SENSOR_OPTICAL_FLOW) != 0 ||
+         (sys_status.onboard_control_sensors_present & MAV_SYS_STATUS_SENSOR_VISION_POSITION) !=
+             0) ?
+            SysStatusUsed::Yes :
+            SysStatusUsed::No;
+
+    set_rc_status({rc_ok}, std::nullopt);
+
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    _rc_status_subscriptions.queue(
+        rc_status(), [this](const auto& func) { _parent->call_user_callback(func); });
+
+    const bool armable = sys_status.onboard_control_sensors_health & MAV_SYS_STATUS_PREARM_CHECK;
     set_health_armable(armable);
-    if (_health_all_ok_subscription) {
-        auto callback = _health_all_ok_subscription;
-        auto arg = health_all_ok();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _health_all_ok_subscriptions.queue(
+        health_all_ok(), [this](const auto& func) { _parent->call_user_callback(func); });
+}
+
+bool TelemetryImpl::sys_status_present_enabled_health(
+    const mavlink_sys_status_t& sys_status, MAV_SYS_STATUS_SENSOR flag)
+{
+    // FIXME: it doesn't look like PX4 sets enabled for GPS
+    return (sys_status.onboard_control_sensors_present & flag) != 0 &&
+           // (sys_status.onboard_control_sensors_enabled & flag) != 0 &&
+           (sys_status.onboard_control_sensors_health & flag) != 0;
 }
 
 void TelemetryImpl::process_battery_status(const mavlink_message_t& message)
@@ -1170,11 +1176,8 @@ void TelemetryImpl::process_battery_status(const mavlink_message_t& message)
 
     {
         std::lock_guard<std::mutex> lock(_subscription_mutex);
-        if (_battery_subscription) {
-            auto callback = _battery_subscription;
-            auto arg = battery();
-            _parent->call_user_callback([callback, arg]() { callback(arg); });
-        }
+        _battery_subscriptions.queue(
+            battery(), [this](const auto& func) { _parent->call_user_callback(func); });
     }
 }
 
@@ -1190,31 +1193,18 @@ void TelemetryImpl::process_heartbeat(const mavlink_message_t& message)
     set_armed(((heartbeat.base_mode & MAV_MODE_FLAG_SAFETY_ARMED) ? true : false));
 
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    if (_armed_subscription) {
-        auto callback = _armed_subscription;
-        auto arg = armed();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _armed_subscriptions.queue(
+        armed(), [this](const auto& func) { _parent->call_user_callback(func); });
 
-    if (_flight_mode_subscription) {
-        auto callback = _flight_mode_subscription;
-        // The flight mode is already parsed in SystemImpl, so we can take it
-        // from there.  This assumes that SystemImpl gets called first because
-        // it's earlier in the callback list.
-        auto arg = telemetry_flight_mode_from_flight_mode(_parent->get_flight_mode());
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _flight_mode_subscriptions.queue(
+        telemetry_flight_mode_from_flight_mode(_parent->get_flight_mode()),
+        [this](const auto& func) { _parent->call_user_callback(func); });
 
-    if (_health_subscription) {
-        auto callback = _health_subscription;
-        auto arg = health();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
-    if (_health_all_ok_subscription) {
-        auto callback = _health_all_ok_subscription;
-        auto arg = health_all_ok();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _health_subscriptions.queue(
+        health(), [this](const auto& func) { _parent->call_user_callback(func); });
+
+    _health_all_ok_subscriptions.queue(
+        health_all_ok(), [this](const auto& func) { _parent->call_user_callback(func); });
 }
 
 void TelemetryImpl::receive_statustext(const MavlinkStatustextHandler::Statustext& statustext)
@@ -1257,11 +1247,8 @@ void TelemetryImpl::receive_statustext(const MavlinkStatustextHandler::Statustex
     set_status_text(new_status_text);
 
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    if (_status_text_subscription) {
-        auto callback = _status_text_subscription;
-        auto arg = status_text();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _status_text_subscriptions.queue(
+        status_text(), [this](const auto& func) { _parent->call_user_callback(func); });
 }
 
 void TelemetryImpl::process_rc_channels(const mavlink_message_t& message)
@@ -1271,21 +1258,11 @@ void TelemetryImpl::process_rc_channels(const mavlink_message_t& message)
 
     if (rc_channels.rssi != std::numeric_limits<uint8_t>::max()) {
         set_rc_status(std::nullopt, {rc_channels.rssi});
-
-        std::lock_guard<std::mutex> lock(_subscription_mutex);
-        if (_rc_status_subscription) {
-            auto callback = _rc_status_subscription;
-            auto arg = rc_status();
-            _parent->call_user_callback([callback, arg]() { callback(arg); });
-        }
     }
 
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    if (_rc_status_subscription) {
-        auto callback = _rc_status_subscription;
-        auto arg = rc_status();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _rc_status_subscriptions.queue(
+        rc_status(), [this](const auto& func) { _parent->call_user_callback(func); });
 
     _parent->refresh_timeout_handler(_rc_channels_timeout_cookie);
 }
@@ -1298,11 +1275,8 @@ void TelemetryImpl::process_unix_epoch_time(const mavlink_message_t& message)
     set_unix_epoch_time_us(utm_global_position.time);
 
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    if (_unix_epoch_time_subscription) {
-        auto callback = _unix_epoch_time_subscription;
-        auto arg = unix_epoch_time();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _unix_epoch_time_subscriptions.queue(
+        unix_epoch_time(), [this](const auto& func) { _parent->call_user_callback(func); });
 
     _parent->refresh_timeout_handler(_unix_epoch_timeout_cookie);
 }
@@ -1324,11 +1298,8 @@ void TelemetryImpl::process_actuator_control_target(const mavlink_message_t& mes
     set_actuator_control_target(group, controls);
 
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    if (_actuator_control_target_subscription) {
-        auto callback = _actuator_control_target_subscription;
-        auto arg = actuator_control_target();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _actuator_control_target_subscriptions.queue(
+        actuator_control_target(), [this](const auto& func) { _parent->call_user_callback(func); });
 }
 
 void TelemetryImpl::process_actuator_output_status(const mavlink_message_t& message)
@@ -1348,11 +1319,8 @@ void TelemetryImpl::process_actuator_output_status(const mavlink_message_t& mess
     set_actuator_output_status(active, actuators);
 
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    if (_actuator_output_status_subscription) {
-        auto callback = _actuator_output_status_subscription;
-        auto arg = actuator_output_status();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _actuator_output_status_subscriptions.queue(
+        actuator_output_status(), [this](const auto& func) { _parent->call_user_callback(func); });
 }
 
 void TelemetryImpl::process_odometry(const mavlink_message_t& message)
@@ -1401,11 +1369,8 @@ void TelemetryImpl::process_odometry(const mavlink_message_t& message)
     set_odometry(odometry_struct);
 
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    if (_odometry_subscription) {
-        auto callback = _odometry_subscription;
-        auto arg = odometry();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _odometry_subscriptions.queue(
+        odometry(), [this](const auto& func) { _parent->call_user_callback(func); });
 }
 
 void TelemetryImpl::process_distance_sensor(const mavlink_message_t& message)
@@ -1422,11 +1387,8 @@ void TelemetryImpl::process_distance_sensor(const mavlink_message_t& message)
     set_distance_sensor(distance_sensor_struct);
 
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    if (_distance_sensor_subscription) {
-        auto callback = _distance_sensor_subscription;
-        auto arg = distance_sensor();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _distance_sensor_subscriptions.queue(
+        distance_sensor(), [this](const auto& func) { _parent->call_user_callback(func); });
 }
 
 void TelemetryImpl::process_scaled_pressure(const mavlink_message_t& message)
@@ -1448,11 +1410,8 @@ void TelemetryImpl::process_scaled_pressure(const mavlink_message_t& message)
     set_scaled_pressure(scaled_pressure_struct);
 
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    if (_scaled_pressure_subscription) {
-        auto callback = _scaled_pressure_subscription;
-        auto arg = scaled_pressure();
-        _parent->call_user_callback([callback, arg]() { callback(arg); });
-    }
+    _scaled_pressure_subscriptions.queue(
+        scaled_pressure(), [this](const auto& func) { _parent->call_user_callback(func); });
 }
 
 Telemetry::LandedState
@@ -1488,37 +1447,36 @@ Telemetry::VtolState TelemetryImpl::to_vtol_state(mavlink_extended_sys_state_t e
     }
 }
 
-Telemetry::FlightMode
-TelemetryImpl::telemetry_flight_mode_from_flight_mode(SystemImpl::FlightMode flight_mode)
+Telemetry::FlightMode TelemetryImpl::telemetry_flight_mode_from_flight_mode(FlightMode flight_mode)
 {
     switch (flight_mode) {
-        case SystemImpl::FlightMode::Ready:
+        case FlightMode::Ready:
             return Telemetry::FlightMode::Ready;
-        case SystemImpl::FlightMode::Takeoff:
+        case FlightMode::Takeoff:
             return Telemetry::FlightMode::Takeoff;
-        case SystemImpl::FlightMode::Hold:
+        case FlightMode::Hold:
             return Telemetry::FlightMode::Hold;
-        case SystemImpl::FlightMode::Mission:
+        case FlightMode::Mission:
             return Telemetry::FlightMode::Mission;
-        case SystemImpl::FlightMode::ReturnToLaunch:
+        case FlightMode::ReturnToLaunch:
             return Telemetry::FlightMode::ReturnToLaunch;
-        case SystemImpl::FlightMode::Land:
+        case FlightMode::Land:
             return Telemetry::FlightMode::Land;
-        case SystemImpl::FlightMode::Offboard:
+        case FlightMode::Offboard:
             return Telemetry::FlightMode::Offboard;
-        case SystemImpl::FlightMode::FollowMe:
+        case FlightMode::FollowMe:
             return Telemetry::FlightMode::FollowMe;
-        case SystemImpl::FlightMode::Manual:
+        case FlightMode::Manual:
             return Telemetry::FlightMode::Manual;
-        case SystemImpl::FlightMode::Posctl:
+        case FlightMode::Posctl:
             return Telemetry::FlightMode::Posctl;
-        case SystemImpl::FlightMode::Altctl:
+        case FlightMode::Altctl:
             return Telemetry::FlightMode::Altctl;
-        case SystemImpl::FlightMode::Rattitude:
+        case FlightMode::Rattitude:
             return Telemetry::FlightMode::Rattitude;
-        case SystemImpl::FlightMode::Acro:
+        case FlightMode::Acro:
             return Telemetry::FlightMode::Acro;
-        case SystemImpl::FlightMode::Stabilized:
+        case FlightMode::Stabilized:
             return Telemetry::FlightMode::Stabilized;
         default:
             return Telemetry::FlightMode::Unknown;
@@ -1704,9 +1662,11 @@ void TelemetryImpl::receive_param_hitl(MAVLinkParameters::Result result, int val
 
 void TelemetryImpl::receive_gps_raw_timeout()
 {
-    const bool position_ok = false;
-    set_health_local_position(position_ok);
-    set_health_global_position(position_ok);
+    if (_sys_status_used_for_position == SysStatusUsed::No) {
+        const bool position_ok = false;
+        set_health_local_position(position_ok);
+        set_health_global_position(position_ok);
+    }
 }
 
 void TelemetryImpl::receive_unix_epoch_timeout()
@@ -1976,6 +1936,7 @@ bool TelemetryImpl::health_all_ok() const
         _health.is_global_position_ok && _health.is_home_position_ok) {
         return true;
     } else {
+        LogWarn() << "System status is usually fixed at 1 Hz";
         return false;
     }
 }
@@ -2149,207 +2110,430 @@ void TelemetryImpl::set_scaled_pressure(Telemetry::ScaledPressure& scaled_pressu
     _scaled_pressure = scaled_pressure;
 }
 
-void TelemetryImpl::subscribe_position_velocity_ned(
-    Telemetry::PositionVelocityNedCallback& callback)
+Telemetry::PositionVelocityNedHandle TelemetryImpl::subscribe_position_velocity_ned(
+    const Telemetry::PositionVelocityNedCallback& callback)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _position_velocity_ned_subscription = callback;
+    return _position_velocity_ned_subscriptions.subscribe(callback);
 }
 
-void TelemetryImpl::subscribe_position(Telemetry::PositionCallback& callback)
+void TelemetryImpl::unsubscribe_position_velocity_ned(Telemetry::PositionVelocityNedHandle handle)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _position_subscription = callback;
+    _position_velocity_ned_subscriptions.unsubscribe(handle);
 }
 
-void TelemetryImpl::subscribe_home(Telemetry::PositionCallback& callback)
+Telemetry::PositionHandle
+TelemetryImpl::subscribe_position(const Telemetry::PositionCallback& callback)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _home_position_subscription = callback;
+    return _position_subscriptions.subscribe(callback);
 }
 
-void TelemetryImpl::subscribe_in_air(Telemetry::InAirCallback& callback)
+void TelemetryImpl::unsubscribe_position(Telemetry::PositionHandle handle)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _in_air_subscription = callback;
+    _position_subscriptions.unsubscribe(handle);
 }
 
-void TelemetryImpl::subscribe_status_text(Telemetry::StatusTextCallback& callback)
+Telemetry::HomeHandle TelemetryImpl::subscribe_home(const Telemetry::PositionCallback& callback)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _status_text_subscription = callback;
+    return _home_position_subscriptions.subscribe(callback);
 }
 
-void TelemetryImpl::subscribe_armed(Telemetry::ArmedCallback& callback)
+void TelemetryImpl::unsubscribe_home(Telemetry::HomeHandle handle)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _armed_subscription = callback;
+    _home_position_subscriptions.unsubscribe(handle);
 }
 
-void TelemetryImpl::subscribe_attitude_quaternion(Telemetry::AttitudeQuaternionCallback& callback)
+Telemetry::InAirHandle TelemetryImpl::subscribe_in_air(const Telemetry::InAirCallback& callback)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _attitude_quaternion_angle_subscription = callback;
+    return _in_air_subscriptions.subscribe(callback);
 }
 
-void TelemetryImpl::subscribe_attitude_euler(Telemetry::AttitudeEulerCallback& callback)
+void TelemetryImpl::unsubscribe_in_air(Telemetry::InAirHandle handle)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _attitude_euler_angle_subscription = callback;
+    return _in_air_subscriptions.unsubscribe(handle);
 }
 
-void TelemetryImpl::subscribe_attitude_angular_velocity_body(
-    Telemetry::AttitudeAngularVelocityBodyCallback& callback)
+Telemetry::StatusTextHandle
+TelemetryImpl::subscribe_status_text(const Telemetry::StatusTextCallback& callback)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _attitude_angular_velocity_body_subscription = callback;
+    return _status_text_subscriptions.subscribe(callback);
 }
 
-void TelemetryImpl::subscribe_fixedwing_metrics(Telemetry::FixedwingMetricsCallback& callback)
+void TelemetryImpl::unsubscribe_status_text(Handle<Telemetry::StatusText> handle)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _fixedwing_metrics_subscription = callback;
+    _status_text_subscriptions.unsubscribe(handle);
 }
 
-void TelemetryImpl::subscribe_ground_truth(Telemetry::GroundTruthCallback& callback)
+Telemetry::ArmedHandle TelemetryImpl::subscribe_armed(const Telemetry::ArmedCallback& callback)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _ground_truth_subscription = callback;
+    return _armed_subscriptions.subscribe(callback);
 }
 
-void TelemetryImpl::subscribe_camera_attitude_quaternion(
-    Telemetry::AttitudeQuaternionCallback& callback)
+void TelemetryImpl::unsubscribe_armed(Telemetry::ArmedHandle handle)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _camera_attitude_quaternion_subscription = callback;
+    _armed_subscriptions.unsubscribe(handle);
 }
 
-void TelemetryImpl::subscribe_camera_attitude_euler(Telemetry::AttitudeEulerCallback& callback)
+Telemetry::AttitudeQuaternionHandle
+TelemetryImpl::subscribe_attitude_quaternion(const Telemetry::AttitudeQuaternionCallback& callback)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _camera_attitude_euler_angle_subscription = callback;
+    return _attitude_quaternion_angle_subscriptions.subscribe(callback);
 }
 
-void TelemetryImpl::subscribe_velocity_ned(Telemetry::VelocityNedCallback& callback)
+void TelemetryImpl::unsubscribe_attitude_quaternion(Telemetry::AttitudeQuaternionHandle handle)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _velocity_ned_subscription = callback;
+    _attitude_quaternion_angle_subscriptions.unsubscribe(handle);
 }
 
-void TelemetryImpl::subscribe_imu(Telemetry::ImuCallback& callback)
+Telemetry::AttitudeEulerHandle
+TelemetryImpl::subscribe_attitude_euler(const Telemetry::AttitudeEulerCallback& callback)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _imu_reading_ned_subscription = callback;
+    return _attitude_euler_angle_subscriptions.subscribe(callback);
 }
 
-void TelemetryImpl::subscribe_scaled_imu(Telemetry::ScaledImuCallback& callback)
+void TelemetryImpl::unsubscribe_attitude_euler(Telemetry::AttitudeEulerHandle handle)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _scaled_imu_subscription = callback;
+    _attitude_euler_angle_subscriptions.unsubscribe(handle);
 }
 
-void TelemetryImpl::subscribe_raw_imu(Telemetry::RawImuCallback& callback)
+Telemetry::AttitudeAngularVelocityBodyHandle
+TelemetryImpl::subscribe_attitude_angular_velocity_body(
+    const Telemetry::AttitudeAngularVelocityBodyCallback& callback)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _raw_imu_subscription = callback;
+    return _attitude_angular_velocity_body_subscriptions.subscribe(callback);
 }
 
-void TelemetryImpl::subscribe_gps_info(Telemetry::GpsInfoCallback& callback)
+void TelemetryImpl::unsubscribe_attitude_angular_velocity_body(
+    Telemetry::AttitudeAngularVelocityBodyHandle handle)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _gps_info_subscription = callback;
+    _attitude_angular_velocity_body_subscriptions.unsubscribe(handle);
 }
 
-void TelemetryImpl::subscribe_raw_gps(Telemetry::RawGpsCallback& callback)
+Telemetry::FixedwingMetricsHandle
+TelemetryImpl::subscribe_fixedwing_metrics(const Telemetry::FixedwingMetricsCallback& callback)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _raw_gps_subscription = callback;
+    return _fixedwing_metrics_subscriptions.subscribe(callback);
 }
 
-void TelemetryImpl::subscribe_battery(Telemetry::BatteryCallback& callback)
+void TelemetryImpl::unsubscribe_fixedwing_metrics(Telemetry::FixedwingMetricsHandle handle)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _battery_subscription = callback;
+    _fixedwing_metrics_subscriptions.unsubscribe(handle);
 }
 
-void TelemetryImpl::subscribe_flight_mode(Telemetry::FlightModeCallback& callback)
+Telemetry::GroundTruthHandle
+TelemetryImpl::subscribe_ground_truth(const Telemetry::GroundTruthCallback& callback)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _flight_mode_subscription = callback;
+    return _ground_truth_subscriptions.subscribe(callback);
 }
 
-void TelemetryImpl::subscribe_health(Telemetry::HealthCallback& callback)
+void TelemetryImpl::unsubscribe_ground_truth(Telemetry::GroundTruthHandle handle)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _health_subscription = callback;
+    _ground_truth_subscriptions.unsubscribe(handle);
 }
 
-void TelemetryImpl::subscribe_health_all_ok(Telemetry::HealthAllOkCallback& callback)
+Telemetry::AttitudeQuaternionHandle TelemetryImpl::subscribe_camera_attitude_quaternion(
+    const Telemetry::AttitudeQuaternionCallback& callback)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _health_all_ok_subscription = callback;
+    return _camera_attitude_quaternion_subscriptions.subscribe(callback);
 }
 
-void TelemetryImpl::subscribe_vtol_state(Telemetry::VtolStateCallback& callback)
+void TelemetryImpl::unsubscribe_camera_attitude_quaternion(
+    Telemetry::AttitudeQuaternionHandle handle)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _votl_state_subscription = callback;
+    _camera_attitude_quaternion_subscriptions.unsubscribe(handle);
 }
 
-void TelemetryImpl::subscribe_landed_state(Telemetry::LandedStateCallback& callback)
+Telemetry::AttitudeEulerHandle
+TelemetryImpl::subscribe_camera_attitude_euler(const Telemetry::AttitudeEulerCallback& callback)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _landed_state_subscription = callback;
+    return _camera_attitude_euler_angle_subscriptions.subscribe(callback);
 }
 
-void TelemetryImpl::subscribe_rc_status(Telemetry::RcStatusCallback& callback)
+void TelemetryImpl::unsubscribe_camera_attitude_euler(Telemetry::AttitudeEulerHandle handle)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _rc_status_subscription = callback;
+    _camera_attitude_euler_angle_subscriptions.unsubscribe(handle);
 }
 
-void TelemetryImpl::subscribe_unix_epoch_time(Telemetry::UnixEpochTimeCallback& callback)
+Telemetry::VelocityNedHandle
+TelemetryImpl::subscribe_velocity_ned(const Telemetry::VelocityNedCallback& callback)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _unix_epoch_time_subscription = callback;
+    return _velocity_ned_subscriptions.subscribe(callback);
 }
 
-void TelemetryImpl::subscribe_actuator_control_target(
-    Telemetry::ActuatorControlTargetCallback& callback)
+void TelemetryImpl::unsubscribe_velocity_ned(Telemetry::VelocityNedHandle handle)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _actuator_control_target_subscription = callback;
+    _velocity_ned_subscriptions.unsubscribe(handle);
 }
 
-void TelemetryImpl::subscribe_actuator_output_status(
-    Telemetry::ActuatorOutputStatusCallback& callback)
+Telemetry::ImuHandle TelemetryImpl::subscribe_imu(const Telemetry::ImuCallback& callback)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _actuator_output_status_subscription = callback;
+    return _imu_reading_ned_subscriptions.subscribe(callback);
 }
 
-void TelemetryImpl::subscribe_odometry(Telemetry::OdometryCallback& callback)
+void TelemetryImpl::unsubscribe_imu(Telemetry::ImuHandle handle)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _odometry_subscription = callback;
+    return _imu_reading_ned_subscriptions.unsubscribe(handle);
 }
 
-void TelemetryImpl::subscribe_distance_sensor(Telemetry::DistanceSensorCallback& callback)
+Telemetry::ScaledImuHandle
+TelemetryImpl::subscribe_scaled_imu(const Telemetry::ScaledImuCallback& callback)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _distance_sensor_subscription = callback;
+    return _scaled_imu_subscriptions.subscribe(callback);
 }
 
-void TelemetryImpl::subscribe_scaled_pressure(Telemetry::ScaledPressureCallback& callback)
+void TelemetryImpl::unsubscribe_scaled_imu(Telemetry::ScaledImuHandle handle)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _scaled_pressure_subscription = callback;
+    _scaled_imu_subscriptions.unsubscribe(handle);
 }
 
-void TelemetryImpl::subscribe_heading(Telemetry::HeadingCallback& callback)
+Telemetry::RawImuHandle TelemetryImpl::subscribe_raw_imu(const Telemetry::RawImuCallback& callback)
 {
     std::lock_guard<std::mutex> lock(_subscription_mutex);
-    _heading_subscription = callback;
+    return _raw_imu_subscriptions.subscribe(callback);
+}
+
+void TelemetryImpl::unsubscribe_raw_imu(Telemetry::RawImuHandle handle)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    _raw_imu_subscriptions.unsubscribe(handle);
+}
+
+Telemetry::GpsInfoHandle
+TelemetryImpl::subscribe_gps_info(const Telemetry::GpsInfoCallback& callback)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    return _gps_info_subscriptions.subscribe(callback);
+}
+
+void TelemetryImpl::unsubscribe_gps_info(Telemetry::GpsInfoHandle handle)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    _gps_info_subscriptions.unsubscribe(handle);
+}
+
+Telemetry::RawGpsHandle TelemetryImpl::subscribe_raw_gps(const Telemetry::RawGpsCallback& callback)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    return _raw_gps_subscriptions.subscribe(callback);
+}
+
+void TelemetryImpl::unsubscribe_raw_gps(Telemetry::RawGpsHandle handle)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    _raw_gps_subscriptions.unsubscribe(handle);
+}
+
+Telemetry::BatteryHandle
+TelemetryImpl::subscribe_battery(const Telemetry::BatteryCallback& callback)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    return _battery_subscriptions.subscribe(callback);
+}
+
+void TelemetryImpl::unsubscribe_battery(Telemetry::BatteryHandle handle)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    _battery_subscriptions.unsubscribe(handle);
+}
+
+Telemetry::FlightModeHandle
+TelemetryImpl::subscribe_flight_mode(const Telemetry::FlightModeCallback& callback)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    return _flight_mode_subscriptions.subscribe(callback);
+}
+
+void TelemetryImpl::unsubscribe_flight_mode(Telemetry::FlightModeHandle handle)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    _flight_mode_subscriptions.unsubscribe(handle);
+}
+
+Telemetry::HealthHandle TelemetryImpl::subscribe_health(const Telemetry::HealthCallback& callback)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    return _health_subscriptions.subscribe(callback);
+}
+
+void TelemetryImpl::unsubscribe_health(Telemetry::HealthHandle handle)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    _health_subscriptions.unsubscribe(handle);
+}
+
+Telemetry::HealthAllOkHandle
+TelemetryImpl::subscribe_health_all_ok(const Telemetry::HealthAllOkCallback& callback)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    return _health_all_ok_subscriptions.subscribe(callback);
+}
+
+void TelemetryImpl::unsubscribe_health_all_ok(Telemetry::HealthAllOkHandle handle)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    _health_all_ok_subscriptions.unsubscribe(handle);
+}
+
+Telemetry::VtolStateHandle
+TelemetryImpl::subscribe_vtol_state(const Telemetry::VtolStateCallback& callback)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    return _vtol_state_subscriptions.subscribe(callback);
+}
+
+void TelemetryImpl::unsubscribe_vtol_state(Telemetry::VtolStateHandle handle)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    _vtol_state_subscriptions.unsubscribe(handle);
+}
+
+Telemetry::LandedStateHandle
+TelemetryImpl::subscribe_landed_state(const Telemetry::LandedStateCallback& callback)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    return _landed_state_subscriptions.subscribe(callback);
+}
+
+void TelemetryImpl::unsubscribe_landed_state(Telemetry::LandedStateHandle handle)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    _landed_state_subscriptions.unsubscribe(handle);
+}
+
+Telemetry::RcStatusHandle
+TelemetryImpl::subscribe_rc_status(const Telemetry::RcStatusCallback& callback)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    return _rc_status_subscriptions.subscribe(callback);
+}
+
+void TelemetryImpl::unsubscribe_rc_status(Telemetry::RcStatusHandle handle)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    _rc_status_subscriptions.unsubscribe(handle);
+}
+
+Telemetry::UnixEpochTimeHandle
+TelemetryImpl::subscribe_unix_epoch_time(const Telemetry::UnixEpochTimeCallback& callback)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    return _unix_epoch_time_subscriptions.subscribe(callback);
+}
+
+void TelemetryImpl::unsubscribe_unix_epoch_time(Telemetry::UnixEpochTimeHandle handle)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    _unix_epoch_time_subscriptions.unsubscribe(handle);
+}
+
+Telemetry::ActuatorControlTargetHandle TelemetryImpl::subscribe_actuator_control_target(
+    const Telemetry::ActuatorControlTargetCallback& callback)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    return _actuator_control_target_subscriptions.subscribe(callback);
+}
+
+void TelemetryImpl::unsubscribe_actuator_control_target(
+    Telemetry::ActuatorControlTargetHandle handle)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    _actuator_control_target_subscriptions.unsubscribe(handle);
+}
+
+Telemetry::ActuatorOutputStatusHandle TelemetryImpl::subscribe_actuator_output_status(
+    const Telemetry::ActuatorOutputStatusCallback& callback)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    return _actuator_output_status_subscriptions.subscribe(callback);
+}
+
+void TelemetryImpl::unsubscribe_actuator_output_status(Telemetry::ActuatorOutputStatusHandle handle)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    _actuator_output_status_subscriptions.unsubscribe(handle);
+}
+
+Telemetry::OdometryHandle
+TelemetryImpl::subscribe_odometry(const Telemetry::OdometryCallback& callback)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    return _odometry_subscriptions.subscribe(callback);
+}
+
+void TelemetryImpl::unsubscribe_odometry(Telemetry::OdometryHandle handle)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    _odometry_subscriptions.unsubscribe(handle);
+}
+
+Telemetry::DistanceSensorHandle
+TelemetryImpl::subscribe_distance_sensor(const Telemetry::DistanceSensorCallback& callback)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    return _distance_sensor_subscriptions.subscribe(callback);
+}
+
+void TelemetryImpl::unsubscribe_distance_sensor(Telemetry::DistanceSensorHandle handle)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    _distance_sensor_subscriptions.unsubscribe(handle);
+}
+
+Telemetry::ScaledPressureHandle
+TelemetryImpl::subscribe_scaled_pressure(const Telemetry::ScaledPressureCallback& callback)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    return _scaled_pressure_subscriptions.subscribe(callback);
+}
+
+void TelemetryImpl::unsubscribe_scaled_pressure(Telemetry::ScaledPressureHandle handle)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    _scaled_pressure_subscriptions.unsubscribe(handle);
+}
+
+Telemetry::HeadingHandle
+TelemetryImpl::subscribe_heading(const Telemetry::HeadingCallback& callback)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    return _heading_subscriptions.subscribe(callback);
+}
+
+void TelemetryImpl::unsubscribe_heading(Telemetry::HeadingHandle handle)
+{
+    std::lock_guard<std::mutex> lock(_subscription_mutex);
+    _heading_subscriptions.unsubscribe(handle);
 }
 
 void TelemetryImpl::request_home_position_async()

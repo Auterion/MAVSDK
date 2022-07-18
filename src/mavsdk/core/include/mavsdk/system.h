@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "deprecated.h"
+#include "handle.h"
 
 namespace mavsdk {
 
@@ -23,31 +24,6 @@ class PluginImplBase;
  */
 class System {
 public:
-    /**
-     * @brief This struct represents Autopilot version information. This is only used when
-     * MAVSDK is configured as an autopilot
-     *
-     * Other MAVLink systems can use this to identify and match software and capabilities.
-     */
-    struct AutopilotVersion {
-        /** @brief MAVLink autopilot_version capabilities. */
-        uint64_t capabilities{};
-        /** @brief MAVLink autopilot_version flight_sw_version */
-        uint32_t flight_sw_version{0};
-        /** @brief MAVLink autopilot_version middleware_sw_version */
-        uint32_t middleware_sw_version{0};
-        /** @brief MAVLink autopilot_version os_sw_version */
-        uint32_t os_sw_version{0};
-        /** @brief MAVLink autopilot_version board_version */
-        uint32_t board_version{0};
-        /** @brief MAVLink autopilot_version vendor_id */
-        uint16_t vendor_id{0};
-        /** @brief MAVLink autopilot_version product_id */
-        uint16_t product_id{0};
-        /** @brief MAVLink autopilot_version uid2 */
-        std::array<uint8_t, 18> uid2{0};
-    };
-
     /** @private Constructor, used internally
      *
      * This constructor is not (and should not be) directly called by application code.
@@ -133,11 +109,21 @@ public:
     using IsConnectedCallback = std::function<void(bool)>;
 
     /**
+     * @brief handle type to unsubscribe from subscribe_is_connected.
+     */
+    using IsConnectedHandle = Handle<bool>;
+
+    /**
      * @brief Subscribe to callback to be called when system connection state changes.
      *
      * @param callback Callback which will be called.
      */
-    void subscribe_is_connected(IsConnectedCallback callback);
+    IsConnectedHandle subscribe_is_connected(const IsConnectedCallback& callback);
+
+    /**
+     * @brief Unsubscribe from subscribe_is_connected.
+     */
+    void unsubscribe_is_connected(IsConnectedHandle handle);
 
     /**
      * @brief Component Types
@@ -147,28 +133,50 @@ public:
     /**
      * @brief type for component discovery callback
      */
-    using DiscoverCallback = std::function<void(ComponentType)>;
+    using ComponentDiscoveredCallback = std::function<void(ComponentType)>;
 
     /**
-     * @brief type for component discovery callback
+     * @brief type for component discovery callback handle
      */
-    using DiscoverIdCallback = std::function<void(ComponentType, uint8_t)>;
+    using ComponentDiscoveredHandle = Handle<ComponentType>;
 
     /**
-     * @brief Register a callback to be called when a component is discovered.
+     * @brief type for component discovery callback with component ID
+     */
+    using ComponentDiscoveredIdCallback = std::function<void(ComponentType, uint8_t)>;
+
+    /**
+     * @brief type for component discovery callback handle with component ID
+     */
+    using ComponentDiscoveredIdHandle = Handle<ComponentType, uint8_t>;
+
+    /**
+     * @brief Subscribe to be called when a component is discovered.
      *
-     * @param callback a function of type void(ComponentType) which will be called with the
-     * component type of the new component.
+     * @param callback a function of type void(ComponentType) which will be
+     * called with the component type of the new component.
      */
-    void register_component_discovered_callback(DiscoverCallback callback) const;
+    ComponentDiscoveredHandle
+    subscribe_component_discovered(const ComponentDiscoveredCallback& callback);
 
     /**
-     * @brief Register a callback to be called when a component is discovered.
-     *
-     * @param callback a function of type void(ComponentType) which will be called with the
-     * component type and the component id of the new component.
+     * @brief Unsubscribe from subscribe_component_discovered
      */
-    void register_component_discovered_id_callback(DiscoverIdCallback callback) const;
+    void unsubscribe_component_discovered(ComponentDiscoveredHandle handle);
+
+    /**
+     * @brief Subscribe to be called when a component is discovered.
+     *
+     * @param callback a function of type void(ComponentType) which will be
+     * called with the component type and the component id of the new component.
+     */
+    ComponentDiscoveredIdHandle
+    subscribe_component_discovered_id(const ComponentDiscoveredIdCallback& callback);
+
+    /**
+     * @brief Unsubscribe from subscribe_component_discovered_id
+     */
+    void unsubscribe_component_discovered_id(ComponentDiscoveredIdHandle handle);
 
     /**
      * @brief Enable time synchronization using the TIMESYNC messages.
@@ -184,72 +192,6 @@ public:
      * @brief Equality operator (object is not copyable).
      */
     const System& operator=(const System&) = delete;
-
-    /**
-     * @brief Register capabilities to the system (only used if MAVSDK is autopilot)
-     *
-     * @note Plugins should register additional capabilities they provide using this.
-     *
-     * @param capabilities MAVLink capability flag to bitwise OR
-     */
-    void add_capabilities(uint64_t capabilities);
-
-    /**
-     * @brief Set flight sw version (only used if MAVSDK is autopilot)
-     *
-     * @param flight_sw_version version number of flight control software
-     */
-    void set_flight_sw_version(uint32_t flight_sw_version);
-
-    /**
-     * @brief Set middleware sw version (only used if MAVSDK is autopilot)
-     *
-     * @param middleware_sw_version version number of middleware software
-     */
-    void set_middleware_sw_version(uint32_t middleware_sw_version);
-
-    /**
-     * @brief Set OS sw version (only used if MAVSDK is autopilot)
-     *
-     * @param os_sw_version version number of operating system
-     */
-    void set_os_sw_version(uint32_t os_sw_version);
-
-    /**
-     * @brief Set hardware board version (only used if MAVSDK is autopilot)
-     *
-     * @param board_version version number of hardware board
-     */
-    void set_board_version(uint32_t board_version);
-
-    /**
-     * @brief Set vendor id (only used if MAVSDK is autopilot)
-     *
-     * @param vendor_id number of vendor id
-     */
-    void set_vendor_id(uint16_t vendor_id);
-
-    /**
-     * @brief Set product id (only used if MAVSDK is autopilot)
-     *
-     * @param product_id number of product id
-     */
-    void set_product_id(uint16_t product_id);
-
-    /**
-     * @brief Set uid2, 18 chars max (only used if MAVSDK is autopilot)
-     *
-     * @param uid2 unique hardware id
-     * @return true if valid size, false if too large,
-     */
-    bool set_uid2(std::string uid2);
-
-    /**
-     * @brief Get autopilot version data
-     *
-     * @return AutopilotVersion struct containing autopilot version ids
-     */
-    AutopilotVersion get_autopilot_version_data();
 
 private:
     std::shared_ptr<SystemImpl> system_impl() { return _system_impl; };

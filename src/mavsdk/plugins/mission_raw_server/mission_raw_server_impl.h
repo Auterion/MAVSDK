@@ -1,25 +1,35 @@
 #pragma once
 
 #include "plugins/mission_raw_server/mission_raw_server.h"
-#include "plugin_impl_base.h"
+#include "server_plugin_impl_base.h"
+#include "callback_list.h"
+
+#include <thread>
+#include <condition_variable>
 
 namespace mavsdk {
 
-class MissionRawServerImpl : public PluginImplBase {
+class MissionRawServerImpl : public ServerPluginImplBase {
 public:
-    explicit MissionRawServerImpl(System& system);
-    explicit MissionRawServerImpl(std::shared_ptr<System> system);
+    explicit MissionRawServerImpl(std::shared_ptr<ServerComponent> server_component);
+
     ~MissionRawServerImpl() override;
 
     void init() override;
     void deinit() override;
 
-    void enable() override;
-    void disable() override;
+    MissionRawServer::IncomingMissionHandle
+    subscribe_incoming_mission(const MissionRawServer::IncomingMissionCallback& callback);
+    void unsubscribe_incoming_mission(MissionRawServer::IncomingMissionHandle handle);
 
-    void subscribe_incoming_mission(MissionRawServer::IncomingMissionCallback callback);
-    void subscribe_current_item_changed(MissionRawServer::CurrentItemChangedCallback callback);
-    void subscribe_clear_all(MissionRawServer::ClearAllCallback callback);
+    MissionRawServer::CurrentItemChangedHandle
+    subscribe_current_item_changed(const MissionRawServer::CurrentItemChangedCallback& callback);
+    void unsubscribe_current_item_changed(MissionRawServer::CurrentItemChangedHandle handle);
+
+    MissionRawServer::ClearAllHandle
+    subscribe_clear_all(const MissionRawServer::ClearAllCallback& callback);
+    void unsubscribe_clear_all(MissionRawServer::ClearAllHandle handle);
+
     void set_current_item_complete();
 
     MissionRawServer::MissionPlan incoming_mission() const;
@@ -27,9 +37,10 @@ public:
     uint32_t clear_all() const;
 
 private:
-    MissionRawServer::IncomingMissionCallback _incoming_mission_callback{nullptr};
-    MissionRawServer::CurrentItemChangedCallback _current_item_changed_callback{nullptr};
-    MissionRawServer::ClearAllCallback _clear_all_callback{nullptr};
+    CallbackList<MissionRawServer::Result, MissionRawServer::MissionPlan>
+        _incoming_mission_callbacks{};
+    CallbackList<MissionRawServer::MissionItem> _current_item_changed_callbacks{};
+    CallbackList<uint32_t> _clear_all_callbacks{};
     std::thread _thread_mission;
     std::atomic<int> _target_component;
     std::atomic<int> _mission_count;
@@ -40,10 +51,10 @@ private:
     std::mutex _work_mutex;
     std::atomic<bool> _stop_work_thread = false;
 
-    std::vector<MAVLinkMissionTransfer::ItemInt> _current_mission;
+    std::vector<MavlinkMissionTransfer::ItemInt> _current_mission;
     std::size_t _current_seq;
 
-    std::weak_ptr<MAVLinkMissionTransfer::WorkItem> _last_download{};
+    std::weak_ptr<MavlinkMissionTransfer::WorkItem> _last_download{};
 
     void set_current_seq(std::size_t seq);
 

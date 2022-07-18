@@ -55,69 +55,41 @@ std::vector<uint8_t> System::component_ids() const
     return _system_impl->component_ids();
 }
 
-void System::subscribe_is_connected(IsConnectedCallback callback)
+System::IsConnectedHandle System::subscribe_is_connected(const IsConnectedCallback& callback)
 {
-    return _system_impl->subscribe_is_connected(std::move(callback));
+    return _system_impl->subscribe_is_connected(callback);
 }
 
-void System::register_component_discovered_callback(DiscoverCallback callback) const
+void System::unsubscribe_is_connected(IsConnectedHandle handle)
 {
-    return _system_impl->register_component_discovered_callback(std::move(callback));
+    _system_impl->unsubscribe_is_connected(handle);
 }
 
-void System::register_component_discovered_id_callback(DiscoverIdCallback callback) const
+System::ComponentDiscoveredHandle
+System::subscribe_component_discovered(const ComponentDiscoveredCallback& callback)
 {
-    return _system_impl->register_component_discovered_id_callback(std::move(callback));
+    return _system_impl->subscribe_component_discovered(callback);
+}
+
+void System::unsubscribe_component_discovered(System::ComponentDiscoveredHandle handle)
+{
+    _system_impl->unsubscribe_component_discovered(handle);
+}
+
+System::ComponentDiscoveredIdHandle
+System::subscribe_component_discovered_id(const ComponentDiscoveredIdCallback& callback)
+{
+    return _system_impl->subscribe_component_discovered_id(callback);
+}
+
+void System::unsubscribe_component_discovered_id(System::ComponentDiscoveredIdHandle handle)
+{
+    _system_impl->unsubscribe_component_discovered_id(handle);
 }
 
 void System::enable_timesync()
 {
     _system_impl->enable_timesync();
-}
-
-void System::add_capabilities(uint64_t add_capabilities)
-{
-    _system_impl->add_capabilities(add_capabilities);
-}
-
-void System::set_flight_sw_version(uint32_t flight_sw_version)
-{
-    _system_impl->set_flight_sw_version(flight_sw_version);
-}
-
-void System::set_middleware_sw_version(uint32_t middleware_sw_version)
-{
-    _system_impl->set_middleware_sw_version(middleware_sw_version);
-}
-
-void System::set_os_sw_version(uint32_t os_sw_version)
-{
-    _system_impl->set_os_sw_version(os_sw_version);
-}
-
-void System::set_board_version(uint32_t board_version)
-{
-    _system_impl->set_board_version(board_version);
-}
-
-void System::set_vendor_id(uint16_t vendor_id)
-{
-    _system_impl->set_vendor_id(vendor_id);
-}
-
-void System::set_product_id(uint16_t product_id)
-{
-    _system_impl->set_product_id(product_id);
-}
-
-bool System::set_uid2(std::string uid2)
-{
-    return _system_impl->set_uid2(std::move(uid2));
-}
-
-System::AutopilotVersion System::get_autopilot_version_data()
-{
-    return _system_impl->get_autopilot_version_data();
 }
 
 } // namespace mavsdk

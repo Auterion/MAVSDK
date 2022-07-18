@@ -7,7 +7,7 @@
 
 using namespace mavsdk;
 
-TEST_F(SitlTest, PX4ActionHoverAsync)
+TEST_F(SitlTest, ActionHoverAsync)
 {
     Mavsdk mavsdk;
 
@@ -24,6 +24,9 @@ TEST_F(SitlTest, PX4ActionHoverAsync)
             if (mavsdk.systems().size() == 1) {
                 system = mavsdk.systems().at(0);
                 ASSERT_TRUE(system->has_autopilot());
+
+                // Unregister to prevent fulfilling promise twice.
+                mavsdk.subscribe_on_new_system(nullptr);
                 prom.set_value();
             }
         });
@@ -40,13 +43,14 @@ TEST_F(SitlTest, PX4ActionHoverAsync)
         LogDebug() << "Waiting to be ready...";
         std::promise<void> prom;
         std::future<void> fut = prom.get_future();
-        telemetry->subscribe_health_all_ok([&telemetry, &prom](bool all_ok) {
-            if (all_ok) {
-                // Unregister to prevent fulfilling promise twice.
-                telemetry->subscribe_health_all_ok(nullptr);
-                prom.set_value();
-            }
-        });
+        Telemetry::HealthAllOkHandle handle =
+            telemetry->subscribe_health_all_ok([&telemetry, &prom, &handle](bool all_ok) {
+                if (all_ok) {
+                    // Unregister to prevent fulfilling promise twice.
+                    telemetry->unsubscribe_health_all_ok(handle);
+                    prom.set_value();
+                }
+            });
         ASSERT_EQ(fut.wait_for(std::chrono::seconds(10)), std::future_status::ready);
     }
 
@@ -93,13 +97,14 @@ TEST_F(SitlTest, PX4ActionHoverAsync)
         LogInfo() << "Waiting to be landed...";
         std::promise<void> prom;
         std::future<void> fut = prom.get_future();
-        telemetry->subscribe_in_air([&telemetry, &prom](bool in_air) {
-            if (!in_air) {
-                // Unregister to prevent fulfilling promise twice.
-                telemetry->subscribe_in_air(nullptr);
-                prom.set_value();
-            }
-        });
+        Telemetry::InAirHandle handle =
+            telemetry->subscribe_in_air([&telemetry, &prom, &handle](bool in_air) {
+                if (!in_air) {
+                    // Unregister to prevent fulfilling promise twice.
+                    telemetry->unsubscribe_in_air(handle);
+                    prom.set_value();
+                }
+            });
         EXPECT_EQ(fut.wait_for(std::chrono::seconds(20)), std::future_status::ready);
     }
 

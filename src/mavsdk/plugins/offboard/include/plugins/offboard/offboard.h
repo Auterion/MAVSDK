@@ -13,7 +13,9 @@
 #include <utility>
 #include <vector>
 
-#include "mavsdk/plugin_base.h"
+#include "plugin_base.h"
+
+#include "handle.h"
 
 namespace mavsdk {
 
@@ -62,7 +64,7 @@ public:
     /**
      * @brief Destructor (internal use only).
      */
-    ~Offboard();
+    ~Offboard() override;
 
     /**
      * @brief Type for attitude body angles in NED reference frame (roll, pitch, yaw and thrust)
@@ -341,6 +343,7 @@ public:
         CommandDenied, /**< @brief Command denied. */
         Timeout, /**< @brief Request timed out. */
         NoSetpointSet, /**< @brief Cannot start without setpoint set. */
+        Failed, /**< @brief Request failed. */
     };
 
     /**

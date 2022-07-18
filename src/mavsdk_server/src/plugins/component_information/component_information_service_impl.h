@@ -7,7 +7,9 @@
 #include "plugins/component_information/component_information.h"
 
 #include "mavsdk.h"
+
 #include "lazy_plugin.h"
+
 #include "log.h"
 #include <atomic>
 #include <cmath>
@@ -23,6 +25,7 @@ namespace mavsdk_server {
 template<
     typename ComponentInformation = ComponentInformation,
     typename LazyPlugin = LazyPlugin<ComponentInformation>>
+
 class ComponentInformationServiceImpl final
     : public rpc::component_information::ComponentInformationService::Service {
 public:
@@ -198,23 +201,24 @@ public:
         auto is_finished = std::make_shared<bool>(false);
         auto subscribe_mutex = std::make_shared<std::mutex>();
 
-        _lazy_plugin.maybe_plugin()->subscribe_float_param(
-            [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex](
-                const mavsdk::ComponentInformation::FloatParamUpdate float_param) {
-                rpc::component_information::FloatParamResponse rpc_response;
+        const mavsdk::ComponentInformation::FloatParamHandle handle =
+            _lazy_plugin.maybe_plugin()->subscribe_float_param(
+                [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex, &handle](
+                    const mavsdk::ComponentInformation::FloatParamUpdate float_param) {
+                    rpc::component_information::FloatParamResponse rpc_response;
 
-                rpc_response.set_allocated_param_update(
-                    translateToRpcFloatParamUpdate(float_param).release());
+                    rpc_response.set_allocated_param_update(
+                        translateToRpcFloatParamUpdate(float_param).release());
 
-                std::unique_lock<std::mutex> lock(*subscribe_mutex);
-                if (!*is_finished && !writer->Write(rpc_response)) {
-                    _lazy_plugin.maybe_plugin()->subscribe_float_param(nullptr);
+                    std::unique_lock<std::mutex> lock(*subscribe_mutex);
+                    if (!*is_finished && !writer->Write(rpc_response)) {
+                        _lazy_plugin.maybe_plugin()->unsubscribe_float_param(handle);
 
-                    *is_finished = true;
-                    unregister_stream_stop_promise(stream_closed_promise);
-                    stream_closed_promise->set_value();
-                }
-            });
+                        *is_finished = true;
+                        unregister_stream_stop_promise(stream_closed_promise);
+                        stream_closed_promise->set_value();
+                    }
+                });
 
         stream_closed_future.wait();
         std::unique_lock<std::mutex> lock(*subscribe_mutex);
@@ -259,6 +263,7 @@ private:
     }
 
     LazyPlugin& _lazy_plugin;
+
     std::atomic<bool> _stopped{false};
     std::vector<std::weak_ptr<std::promise<void>>> _stream_stop_promises{};
 };

@@ -3,17 +3,26 @@
 #include <thread>
 #include <chrono>
 #include <array>
+
 #include "integration_test_helper.h"
+
 #include "mavsdk.h"
 #include "plugins/telemetry/telemetry.h"
 #include "plugins/action/action.h"
 #include "plugins/follow_me/follow_me.h"
+#include "plugins/info/info.h"
+#include "plugins/param/param.h"
 
 using namespace mavsdk;
 using namespace std::chrono;
 using namespace std::this_thread;
 
+/* Check if the autopilot supports improved follow me */
+bool autopilot_has_improved_followme(const std::shared_ptr<Param> param);
+
+/* Auxilary Functions */
 void print(const FollowMe::Config& config);
+
 void send_location_updates(
     std::shared_ptr<FollowMe> follow_me,
     const Telemetry::Position& home,
@@ -22,6 +31,7 @@ void send_location_updates(
 
 const size_t N_LOCATIONS = 100ul;
 
+/* Test FollowMe with a stationary target at one location */
 TEST_F(SitlTest, PX4FollowMeOneLocation)
 {
     Mavsdk mavsdk;
@@ -37,6 +47,12 @@ TEST_F(SitlTest, PX4FollowMeOneLocation)
     auto telemetry = std::make_shared<Telemetry>(system);
     auto follow_me = std::make_shared<FollowMe>(system);
     auto action = std::make_shared<Action>(system);
+    auto param = std::make_shared<Param>(system);
+
+    // Skip the test if the Autopilot doesn't support the improved Follow Me (in MAVSDK v2)
+    if (!autopilot_has_improved_followme(param)) {
+        GTEST_SKIP();
+    }
 
     LogInfo() << "Waiting for system to be ready";
     ASSERT_TRUE(poll_condition_with_timeout(
@@ -100,11 +116,9 @@ TEST_F(SitlTest, PX4FollowMeOneLocation)
         std::cout << "waiting for system to disarm" << '\n';
         sleep_for(seconds(1));
     }
-
-    // Unsubscribe to avoid races on destruction.
-    telemetry->subscribe_flight_mode(nullptr);
 }
 
+/* Test FollowMe with a dynamically moving target */
 TEST_F(SitlTest, PX4FollowMeMultiLocationWithConfig)
 {
     Mavsdk mavsdk;
@@ -131,6 +145,12 @@ TEST_F(SitlTest, PX4FollowMeMultiLocationWithConfig)
     auto telemetry = std::make_shared<Telemetry>(system);
     auto follow_me = std::make_shared<FollowMe>(system);
     auto action = std::make_shared<Action>(system);
+    auto param = std::make_shared<Param>(system);
+
+    // Skip the test if the Autopilot doesn't support the improved Follow Me (in MAVSDK v2)
+    if (!autopilot_has_improved_followme(param)) {
+        GTEST_SKIP();
+    }
 
     LogInfo() << "Waiting for system to be ready";
     ASSERT_TRUE(poll_condition_with_timeout(
@@ -162,11 +182,10 @@ TEST_F(SitlTest, PX4FollowMeMultiLocationWithConfig)
 
     // configure follow me behaviour
     FollowMe::Config config;
-    config.min_height_m = 12.f; // increase min height
+    config.follow_height_m = 12.f; // increase min height
     config.follow_distance_m = 20.f; // set distance b/w system and target during FollowMe mode
-    config.responsiveness = 0.2f; // set to higher responsiveness
-    config.follow_direction =
-        FollowMe::Config::FollowDirection::Front; // System follows target from FRONT side
+    config.responsiveness = 0.2f; // Make it less responsive (higher value for the setting)
+    config.follow_angle_deg = 0.0; // System follows target from FRONT side
 
     // Apply configuration
     FollowMe::Result config_result = follow_me->set_config(config);
@@ -192,19 +211,16 @@ TEST_F(SitlTest, PX4FollowMeMultiLocationWithConfig)
         std::cout << "waiting for system to disarm" << '\n';
         sleep_for(seconds(1));
     }
-
-    // Unsubscribe to avoid races on destruction.
-    telemetry->subscribe_flight_mode(nullptr);
 }
 
 void print(const FollowMe::Config& config)
 {
     std::cout << "Current FollowMe configuration of the system" << '\n';
     std::cout << "---------------------------" << '\n';
-    std::cout << "Min Height: " << config.min_height_m << "m" << '\n';
+    std::cout << "Height: " << config.follow_height_m << "m" << '\n';
     std::cout << "Distance: " << config.follow_distance_m << "m" << '\n';
+    std::cout << "Following angle: " << config.follow_angle_deg << "[deg]" << '\n';
     std::cout << "Responsiveness: " << config.responsiveness << '\n';
-    std::cout << "Following from: " << config.follow_direction << '\n';
     std::cout << "---------------------------" << '\n';
 }
 
@@ -220,8 +236,20 @@ FollowMe::TargetLocation create_target_location(double latitude_deg, double long
     return location;
 }
 
-void send_location_updates(
-    std::shared_ptr<FollowMe> follow_me, const Telemetry::Position& home, size_t count, float rate)
+bool autopilot_has_improved_followme(const std::shared_ptr<Param> param)
+{
+    // Check if the newly added parameter in the improved follow-me exists
+    // Improved Follow-Me PR: https://github.com/PX4/PX4-Autopilot/pull/18026
+    const std::pair<Param::Result, float> get_result = param->get_param_float("FLW_TGT_MAX_VEL");
+
+    if (get_result.first == Param::Result::Success) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+void send_location_updates(std::shared_ptr<FollowMe> follow_me, size_t count, float rate)
 {
     // TODO: Generate these co-ordinates from an algorithm
     // Altitude here is ignored by PX4, as we've set min altitude in configuration.

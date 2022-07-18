@@ -58,14 +58,15 @@ TEST_F(SitlTest, PX4ActionTransitionSync_standard_vtol)
     auto prom = std::promise<void>{};
     auto fut = prom.get_future();
     // Wait until hovering.
-    telemetry->subscribe_flight_mode([&telemetry, &prom](Telemetry::FlightMode mode) {
-        if (mode == Telemetry::FlightMode::Hold) {
-            telemetry->subscribe_flight_mode(nullptr);
-            prom.set_value();
-        }
-    });
+    Telemetry::FlightModeHandle handle =
+        telemetry->subscribe_flight_mode([&telemetry, &prom, &handle](Telemetry::FlightMode mode) {
+            if (mode == Telemetry::FlightMode::Hold) {
+                telemetry->unsubscribe_flight_mode(handle);
+                prom.set_value();
+            }
+        });
 
-    EXPECT_EQ(fut.wait_for(std::chrono::seconds(20)), std::future_status::ready);
+    ASSERT_EQ(fut.wait_for(std::chrono::seconds(20)), std::future_status::ready);
 
     LogInfo() << "Transitioning to fixedwing";
     Action::Result transition_result = action->transition_to_fixedwing();

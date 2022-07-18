@@ -13,48 +13,37 @@
 #include <utility>
 #include <vector>
 
-#include "mavsdk/plugin_base.h"
+#include "server_plugin_base.h"
+
+#include "handle.h"
 
 namespace mavsdk {
 
-class System;
+class ServerComponent;
 class ParamServerImpl;
 
 /**
  * @brief Provide raw access to retrieve and provide server parameters.
  */
-class ParamServer : public PluginBase {
+class ParamServer : public ServerPluginBase {
 public:
     /**
-     * @brief Constructor. Creates the plugin for a specific System.
+     * @brief Constructor. Creates the plugin for a ServerComponent instance.
      *
      * The plugin is typically created as shown below:
      *
      *     ```cpp
-     *     auto param_server = ParamServer(system);
+     *     auto param_server = ParamServer(server_component);
      *     ```
      *
-     * @param system The specific system associated with this plugin.
+     * @param server_component The ServerComponent instance associated with this server plugin.
      */
-    explicit ParamServer(System& system); // deprecated
-
-    /**
-     * @brief Constructor. Creates the plugin for a specific System.
-     *
-     * The plugin is typically created as shown below:
-     *
-     *     ```cpp
-     *     auto param_server = ParamServer(system);
-     *     ```
-     *
-     * @param system The specific system associated with this plugin.
-     */
-    explicit ParamServer(std::shared_ptr<System> system); // new
+    explicit ParamServer(std::shared_ptr<ServerComponent> server_component);
 
     /**
      * @brief Destructor (internal use only).
      */
-    ~ParamServer();
+    ~ParamServer() override;
 
     /**
      * @brief Type for integer parameters.
@@ -101,13 +90,39 @@ public:
     friend std::ostream& operator<<(std::ostream& str, ParamServer::FloatParam const& float_param);
 
     /**
-     * @brief Type collecting all integer and float parameters.
+     * @brief Type for float parameters.
+     */
+    struct CustomParam {
+        std::string name{}; /**< @brief Name of the parameter */
+        std::string value{}; /**< @brief Value of the parameter */
+    };
+
+    /**
+     * @brief Equal operator to compare two `ParamServer::CustomParam` objects.
+     *
+     * @return `true` if items are equal.
+     */
+    friend bool
+    operator==(const ParamServer::CustomParam& lhs, const ParamServer::CustomParam& rhs);
+
+    /**
+     * @brief Stream operator to print information about a `ParamServer::CustomParam`.
+     *
+     * @return A reference to the stream.
+     */
+    friend std::ostream&
+    operator<<(std::ostream& str, ParamServer::CustomParam const& custom_param);
+
+    /**
+     * @brief Type collecting all integer, float, and custom parameters.
      */
     struct AllParams {
         std::vector<IntParam>
             int_params{}; /**< @brief Collection of all parameter names and values of type int */
         std::vector<FloatParam> float_params{}; /**< @brief Collection of all parameter names and
                                                    values of type float */
+        std::vector<CustomParam> custom_params{}; /**< @brief Collection of all parameter names and
+                                                     values of type custom */
     };
 
     /**
@@ -134,6 +149,7 @@ public:
         WrongType, /**< @brief Wrong type. */
         ParamNameTooLong, /**< @brief Parameter name too long (> 16). */
         NoSystem, /**< @brief No system available. */
+        ParamValueTooLong, /**< @brief Parameter name too long (> 128). */
     };
 
     /**
@@ -191,6 +207,28 @@ public:
      * @return Result of request.
      */
     Result provide_param_float(std::string name, float value) const;
+
+    /**
+     * @brief Retrieve a custom parameter.
+     *
+     * If the type is wrong, the result will be `WRONG_TYPE`.
+     *
+     * This function is blocking.
+     *
+     * @return Result of request.
+     */
+    std::pair<Result, std::string> retrieve_param_custom(std::string name) const;
+
+    /**
+     * @brief Provide a custom parameter.
+     *
+     * If the type is wrong, the result will be `WRONG_TYPE`.
+     *
+     * This function is blocking.
+     *
+     * @return Result of request.
+     */
+    Result provide_param_custom(std::string name, std::string value) const;
 
     /**
      * @brief Retrieve all parameters.

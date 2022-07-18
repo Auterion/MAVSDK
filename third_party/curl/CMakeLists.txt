@@ -4,6 +4,7 @@ project(external-curl)
 include(ExternalProject)
 
 list(APPEND CMAKE_ARGS
+    "-DCMAKE_PREFIX_PATH:PATH=${CMAKE_PREFIX_PATH}"
     "-DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}"
     "-DCMAKE_TOOLCHAIN_FILE:PATH=${CMAKE_TOOLCHAIN_FILE}"
     "-DCMAKE_POSITION_INDEPENDENT_CODE=ON"
@@ -39,9 +40,8 @@ endforeach()
 ExternalProject_add(
     curl
     GIT_REPOSITORY https://github.com/curl/curl.git
-    GIT_TAG curl-7_78_0
+    GIT_TAG curl-7_83_1
     GIT_SHALLOW ON
     PREFIX curl
-    PATCH_COMMAND git checkout . && git apply ${PROJECT_SOURCE_DIR}/curl.patch
     CMAKE_ARGS "${CMAKE_ARGS}"
     )

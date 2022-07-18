@@ -13,7 +13,9 @@
 #include <utility>
 #include <vector>
 
-#include "mavsdk/plugin_base.h"
+#include "plugin_base.h"
+
+#include "handle.h"
 
 namespace mavsdk {
 
@@ -54,7 +56,7 @@ public:
     /**
      * @brief Destructor (internal use only).
      */
-    ~Action();
+    ~Action() override;
 
     /**
      * @brief Yaw behaviour during orbit flight.
@@ -94,6 +96,7 @@ public:
         NoVtolTransitionSupport, /**< @brief Vehicle does not support hybrid/VTOL transitions. */
         ParameterError, /**< @brief Error getting or setting parameter. */
         Unsupported, /**< @brief Action not supported. */
+        Failed, /**< @brief Action failed. */
     };
 
     /**

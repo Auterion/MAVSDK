@@ -4,6 +4,7 @@ project(external-tinyxml2)
 include(ExternalProject)
 
 list(APPEND CMAKE_ARGS
+    "-DCMAKE_PREFIX_PATH:PATH=${CMAKE_PREFIX_PATH}"
     "-DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}"
     "-DCMAKE_TOOLCHAIN_FILE:PATH=${CMAKE_TOOLCHAIN_FILE}"
     "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}"
@@ -28,7 +29,7 @@ endforeach()
 ExternalProject_add(
     tinyxml2
     GIT_REPOSITORY https://github.com/leethomason/tinyxml2
-    GIT_TAG 55716da04f2de307e01d84ed695bed86114f9136
+    GIT_TAG 9.0.0
     PREFIX tinyxml2
     PATCH_COMMAND git checkout . && git apply ${PROJECT_SOURCE_DIR}/cmake-3.10.2.patch
     CMAKE_ARGS "${CMAKE_ARGS}"

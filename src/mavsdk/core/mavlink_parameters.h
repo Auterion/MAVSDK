@@ -2,7 +2,9 @@
 
 #include "log.h"
 #include "mavlink_include.h"
+#include "timeout_s_callback.h"
 #include "locked_queue.h"
+#include <array>
 #include <cstddef>
 #include <cstdint>
 #include <string>
@@ -15,12 +17,30 @@
 
 namespace mavsdk {
 
-class SystemImpl;
+class Sender;
+class MavlinkMessageHandler;
+class TimeoutHandler;
+
+// std::to_string doesn't work for std::string, so we need this workaround.
+template<typename T> std::string to_string(T&& value)
+{
+    return std::to_string(std::forward<T>(value));
+}
+
+inline std::string& to_string(std::string& value)
+{
+    return value;
+}
 
 class MAVLinkParameters {
 public:
     MAVLinkParameters() = delete;
-    explicit MAVLinkParameters(SystemImpl& parent);
+    explicit MAVLinkParameters(
+        Sender& parent,
+        MavlinkMessageHandler& message_handler,
+        TimeoutHandler& timeout_handler,
+        TimeoutSCallback timeout_s_callback,
+        bool is_server);
     ~MAVLinkParameters();
 
     class ParamValue {
@@ -43,11 +63,13 @@ public:
 
         [[nodiscard]] std::optional<int> get_int() const;
         [[nodiscard]] std::optional<float> get_float() const;
+        [[nodiscard]] std::optional<std::string> get_custom() const;
 
         bool set_int(int new_value);
         void set_float(float new_value);
+        void set_custom(const std::string& new_value);
 
-        void get_128_bytes(char* bytes) const;
+        std::array<char, 128> get_128_bytes() const;
 
         [[nodiscard]] std::string get_string() const;
 
@@ -106,7 +128,8 @@ public:
             uint64_t,
             int64_t,
             float,
-            double>
+            double,
+            std::string>
             _value{};
     };
 
@@ -119,6 +142,7 @@ public:
         NotFound,
         ValueUnsupported,
         Failed,
+        ParamValueTooLong,
         UnknownError
     };
 
@@ -166,11 +190,25 @@ public:
         std::optional<uint8_t> maybe_component_id,
         bool extended = false);
 
-    void provide_server_param(const std::string& name, const ParamValue& value);
+    Result set_param_custom(const std::string& name, const std::string& value);
+
+    void set_param_custom_async(
+        const std::string& name,
+        const std::string& value,
+        const SetParamCallback& callback,
+        const void* cookie = nullptr);
+
+    // Result provide_server_param(const std::string& name, const ParamValue& value);
+    Result provide_server_param_float(const std::string& name, float value);
+    Result provide_server_param_int(const std::string& name, int value);
+    Result provide_server_param_custom(const std::string& name, const std::string& value);
     std::map<std::string, MAVLinkParameters::ParamValue> retrieve_all_server_params();
 
     std::pair<Result, ParamValue>
     retrieve_server_param(const std::string& name, ParamValue value_type);
+    std::pair<Result, float> retrieve_server_param_float(const std::string& name);
+    std::pair<Result, int> retrieve_server_param_int(const std::string& name);
+    std::pair<Result, std::string> retrieve_server_param_custom(const std::string& name);
 
     using GetParamAnyCallback = std::function<void(Result, ParamValue)>;
 
@@ -209,20 +247,29 @@ public:
         std::optional<uint8_t> maybe_component_id,
         bool extended);
 
+    std::pair<Result, std::string> get_param_custom(const std::string& name);
+
+    using GetParamCustomCallback = std::function<void(Result, const std::string& value)>;
+
+    void get_param_custom_async(
+        const std::string& name, const GetParamCustomCallback& callback, const void* cookie);
+
     std::map<std::string, MAVLinkParameters::ParamValue> get_all_params();
     using GetAllParamsCallback =
         std::function<void(std::map<std::string, MAVLinkParameters::ParamValue>)>;
     void get_all_params_async(const GetAllParamsCallback& callback);
 
-    using ParamChangedCallback = std::function<void(ParamValue value)>;
-    void subscribe_param_changed(
-        const std::string& name, const ParamChangedCallback& callback, const void* cookie);
+    using ParamFloatChangedCallback = std::function<void(float value)>;
+    void subscribe_param_float_changed(
+        const std::string& name, const ParamFloatChangedCallback& callback, const void* cookie);
 
-    void subscribe_param_changed(
-        const std::string& name,
-        ParamValue value_type,
-        const ParamChangedCallback& callback,
-        const void* cookie);
+    using ParamIntChangedCallback = std::function<void(int value)>;
+    void subscribe_param_int_changed(
+        const std::string& name, const ParamIntChangedCallback& callback, const void* cookie);
+
+    using ParamCustomChangedCallback = std::function<void(std::string)>;
+    void subscribe_param_custom_changed(
+        const std::string& name, const ParamCustomChangedCallback& callback, const void* cookie);
 
     void cancel_all_param(const void* cookie);
 
@@ -237,6 +284,9 @@ public:
     const MAVLinkParameters& operator=(const MAVLinkParameters&) = delete;
 
 private:
+    using ParamChangedCallbacks = std::
+        variant<ParamFloatChangedCallback, ParamIntChangedCallback, ParamCustomChangedCallback>;
+
     void process_param_value(const mavlink_message_t& message);
     void process_param_set(const mavlink_message_t& message);
     void process_param_ext_set(const mavlink_message_t& message);
@@ -248,7 +298,13 @@ private:
 
     static std::string extract_safe_param_id(const char param_id[]);
 
-    SystemImpl& _parent;
+    static void
+    call_param_changed_callback(const ParamChangedCallbacks& callback, const ParamValue& value);
+
+    Sender& _sender;
+    MavlinkMessageHandler& _message_handler;
+    TimeoutHandler& _timeout_handler;
+    TimeoutSCallback _timeout_s_callback;
 
     // Params can be up to 16 chars without 0-termination.
     static constexpr size_t PARAM_ID_LEN = 16;
@@ -258,6 +314,7 @@ private:
         std::variant<
             GetParamFloatCallback,
             GetParamIntCallback,
+            GetParamCustomCallback,
             GetParamAnyCallback,
             SetParamCallback>
             callback{};
@@ -282,7 +339,7 @@ private:
 
     struct ParamChangedSubscription {
         std::string param_name{};
-        ParamChangedCallback callback{};
+        ParamChangedCallbacks callback{};
         ParamValue value_type{};
         bool any_type{false};
         const void* cookie{nullptr};
@@ -296,9 +353,13 @@ private:
     void* _all_params_timeout_cookie{nullptr};
     std::map<std::string, ParamValue> _all_params{};
 
+    bool _is_server;
+
     void process_param_request_read(const mavlink_message_t& message);
     void process_param_ext_request_read(const mavlink_message_t& message);
     void process_param_request_list(const mavlink_message_t& message);
+
+    bool _parameter_debugging{false};
 };
 
 } // namespace mavsdk

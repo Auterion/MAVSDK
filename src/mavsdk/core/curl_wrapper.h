@@ -14,29 +14,33 @@ namespace mavsdk {
 
 class ICurlWrapper {
 public:
+    ICurlWrapper() = default;
+    virtual ~ICurlWrapper() = default;
     virtual bool download_text(const std::string& url, std::string& content) = 0;
     virtual bool download_file_to_path(
         const std::string& url,
         const std::string& path,
-        const progress_callback_t& progress_callback) = 0;
+        const ProgressCallback& progress_callback) = 0;
     virtual bool upload_file(
         const std::string& url,
         const std::string& path,
-        const progress_callback_t& progress_callback) = 0;
+        const ProgressCallback& progress_callback) = 0;
 };
 
 class CurlWrapper : public ICurlWrapper {
 public:
     // ICurlWrapper
+    CurlWrapper() = default;
+    virtual ~CurlWrapper() = default;
     bool download_text(const std::string& url, std::string& content) override;
     bool download_file_to_path(
         const std::string& url,
         const std::string& path,
-        const progress_callback_t& progress_callback) override;
+        const ProgressCallback& progress_callback) override;
     bool upload_file(
         const std::string& url,
         const std::string& path,
-        const progress_callback_t& progress_callback) override;
+        const ProgressCallback& progress_callback) override;
 };
 
 #ifdef TESTING
@@ -48,13 +52,13 @@ public:
         bool(
             const std::string& url,
             const std::string& path,
-            const progress_callback_t& progress_callback));
+            const ProgressCallback& progress_callback));
     MOCK_METHOD3(
         upload_file,
         bool(
             const std::string& url,
             const std::string& path,
-            const progress_callback_t& progress_callback));
+            const ProgressCallback& progress_callback));
 };
 #endif // TESTING
 

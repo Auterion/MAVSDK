@@ -23,9 +23,15 @@ Transponder::Transponder(std::shared_ptr<System> system) :
 
 Transponder::~Transponder() {}
 
-void Transponder::subscribe_transponder(TransponderCallback callback)
+Transponder::TransponderHandle
+Transponder::subscribe_transponder(const TransponderCallback& callback)
 {
-    _impl->subscribe_transponder(callback);
+    return _impl->subscribe_transponder(callback);
+}
+
+void Transponder::unsubscribe_transponder(TransponderHandle handle)
+{
+    _impl->unsubscribe_transponder(handle);
 }
 
 Transponder::AdsbVehicle Transponder::transponder() const
@@ -50,6 +56,7 @@ bool operator==(const Transponder::AdsbVehicle& lhs, const Transponder::AdsbVehi
             rhs.latitude_deg == lhs.latitude_deg) &&
            ((std::isnan(rhs.longitude_deg) && std::isnan(lhs.longitude_deg)) ||
             rhs.longitude_deg == lhs.longitude_deg) &&
+           (rhs.altitude_type == lhs.altitude_type) &&
            ((std::isnan(rhs.absolute_altitude_m) && std::isnan(lhs.absolute_altitude_m)) ||
             rhs.absolute_altitude_m == lhs.absolute_altitude_m) &&
            ((std::isnan(rhs.heading_deg) && std::isnan(lhs.heading_deg)) ||
@@ -69,6 +76,7 @@ std::ostream& operator<<(std::ostream& str, Transponder::AdsbVehicle const& adsb
     str << "    icao_address: " << adsb_vehicle.icao_address << '\n';
     str << "    latitude_deg: " << adsb_vehicle.latitude_deg << '\n';
     str << "    longitude_deg: " << adsb_vehicle.longitude_deg << '\n';
+    str << "    altitude_type: " << adsb_vehicle.altitude_type << '\n';
     str << "    absolute_altitude_m: " << adsb_vehicle.absolute_altitude_m << '\n';
     str << "    heading_deg: " << adsb_vehicle.heading_deg << '\n';
     str << "    horizontal_velocity_m_s: " << adsb_vehicle.horizontal_velocity_m_s << '\n';
@@ -146,6 +154,18 @@ std::ostream& operator<<(std::ostream& str, Transponder::AdsbEmitterType const& 
             return str << "Service Surface";
         case Transponder::AdsbEmitterType::PointObstacle:
             return str << "Point Obstacle";
+        default:
+            return str << "Unknown";
+    }
+}
+
+std::ostream& operator<<(std::ostream& str, Transponder::AdsbAltitudeType const& adsb_altitude_type)
+{
+    switch (adsb_altitude_type) {
+        case Transponder::AdsbAltitudeType::PressureQnh:
+            return str << "Pressure Qnh";
+        case Transponder::AdsbAltitudeType::Geometric:
+            return str << "Geometric";
         default:
             return str << "Unknown";
     }

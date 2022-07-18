@@ -14,7 +14,9 @@
 #include <utility>
 #include <vector>
 
-#include "mavsdk/plugin_base.h"
+#include "plugin_base.h"
+
+#include "handle.h"
 
 namespace mavsdk {
 
@@ -55,7 +57,7 @@ public:
     /**
      * @brief Destructor (internal use only).
      */
-    ~ManualControl();
+    ~ManualControl() override;
 
     /**
      * @brief Possible results returned for manual control requests.

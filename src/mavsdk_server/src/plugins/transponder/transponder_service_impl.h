@@ -6,7 +6,9 @@
 #include "plugins/transponder/transponder.h"
 
 #include "mavsdk.h"
+
 #include "lazy_plugin.h"
+
 #include "log.h"
 #include <atomic>
 #include <cmath>
@@ -20,6 +22,7 @@ namespace mavsdk {
 namespace mavsdk_server {
 
 template<typename Transponder = Transponder, typename LazyPlugin = LazyPlugin<Transponder>>
+
 class TransponderServiceImpl final : public rpc::transponder::TransponderService::Service {
 public:
     TransponderServiceImpl(LazyPlugin& lazy_plugin) : _lazy_plugin(lazy_plugin) {}
@@ -140,6 +143,36 @@ public:
         }
     }
 
+    static rpc::transponder::AdsbAltitudeType
+    translateToRpcAdsbAltitudeType(const mavsdk::Transponder::AdsbAltitudeType& adsb_altitude_type)
+    {
+        switch (adsb_altitude_type) {
+            default:
+                LogErr() << "Unknown adsb_altitude_type enum value: "
+                         << static_cast<int>(adsb_altitude_type);
+            // FALLTHROUGH
+            case mavsdk::Transponder::AdsbAltitudeType::PressureQnh:
+                return rpc::transponder::ADSB_ALTITUDE_TYPE_PRESSURE_QNH;
+            case mavsdk::Transponder::AdsbAltitudeType::Geometric:
+                return rpc::transponder::ADSB_ALTITUDE_TYPE_GEOMETRIC;
+        }
+    }
+
+    static mavsdk::Transponder::AdsbAltitudeType
+    translateFromRpcAdsbAltitudeType(const rpc::transponder::AdsbAltitudeType adsb_altitude_type)
+    {
+        switch (adsb_altitude_type) {
+            default:
+                LogErr() << "Unknown adsb_altitude_type enum value: "
+                         << static_cast<int>(adsb_altitude_type);
+            // FALLTHROUGH
+            case rpc::transponder::ADSB_ALTITUDE_TYPE_PRESSURE_QNH:
+                return mavsdk::Transponder::AdsbAltitudeType::PressureQnh;
+            case rpc::transponder::ADSB_ALTITUDE_TYPE_GEOMETRIC:
+                return mavsdk::Transponder::AdsbAltitudeType::Geometric;
+        }
+    }
+
     static std::unique_ptr<rpc::transponder::AdsbVehicle>
     translateToRpcAdsbVehicle(const mavsdk::Transponder::AdsbVehicle& adsb_vehicle)
     {
@@ -150,6 +183,8 @@ public:
         rpc_obj->set_latitude_deg(adsb_vehicle.latitude_deg);
 
         rpc_obj->set_longitude_deg(adsb_vehicle.longitude_deg);
+
+        rpc_obj->set_altitude_type(translateToRpcAdsbAltitudeType(adsb_vehicle.altitude_type));
 
         rpc_obj->set_absolute_altitude_m(adsb_vehicle.absolute_altitude_m);
 
@@ -180,6 +215,8 @@ public:
         obj.latitude_deg = adsb_vehicle.latitude_deg();
 
         obj.longitude_deg = adsb_vehicle.longitude_deg();
+
+        obj.altitude_type = translateFromRpcAdsbAltitudeType(adsb_vehicle.altitude_type());
 
         obj.absolute_altitude_m = adsb_vehicle.absolute_altitude_m();
 
@@ -264,23 +301,24 @@ public:
         auto is_finished = std::make_shared<bool>(false);
         auto subscribe_mutex = std::make_shared<std::mutex>();
 
-        _lazy_plugin.maybe_plugin()->subscribe_transponder(
-            [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex](
-                const mavsdk::Transponder::AdsbVehicle transponder) {
-                rpc::transponder::TransponderResponse rpc_response;
+        const mavsdk::Transponder::TransponderHandle handle =
+            _lazy_plugin.maybe_plugin()->subscribe_transponder(
+                [this, &writer, &stream_closed_promise, is_finished, subscribe_mutex, &handle](
+                    const mavsdk::Transponder::AdsbVehicle transponder) {
+                    rpc::transponder::TransponderResponse rpc_response;
 
-                rpc_response.set_allocated_transponder(
-                    translateToRpcAdsbVehicle(transponder).release());
+                    rpc_response.set_allocated_transponder(
+                        translateToRpcAdsbVehicle(transponder).release());
 
-                std::unique_lock<std::mutex> lock(*subscribe_mutex);
-                if (!*is_finished && !writer->Write(rpc_response)) {
-                    _lazy_plugin.maybe_plugin()->subscribe_transponder(nullptr);
+                    std::unique_lock<std::mutex> lock(*subscribe_mutex);
+                    if (!*is_finished && !writer->Write(rpc_response)) {
+                        _lazy_plugin.maybe_plugin()->unsubscribe_transponder(handle);
 
-                    *is_finished = true;
-                    unregister_stream_stop_promise(stream_closed_promise);
-                    stream_closed_promise->set_value();
-                }
-            });
+                        *is_finished = true;
+                        unregister_stream_stop_promise(stream_closed_promise);
+                        stream_closed_promise->set_value();
+                    }
+                });
 
         stream_closed_future.wait();
         std::unique_lock<std::mutex> lock(*subscribe_mutex);
@@ -353,6 +391,7 @@ private:
     }
 
     LazyPlugin& _lazy_plugin;
+
     std::atomic<bool> _stopped{false};
     std::vector<std::weak_ptr<std::promise<void>>> _stream_stop_promises{};
 };
