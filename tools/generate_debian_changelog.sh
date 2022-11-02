@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 # Date according to RFC 5322
 DATE=$(date -R)
 AUTHOR="Auterion CI"
@@ -40,7 +42,6 @@ function usage_and_exit() {
     usage
     exit $1
 }
-
 
 for i in "$@"
 do
