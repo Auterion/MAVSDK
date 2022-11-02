@@ -615,7 +615,7 @@ jobs:
         if: startsWith(github.ref, 'refs/pull/')
         run: |
           git fetch --all --tags
-          echo "TAG_VERSION=$(git describe --always --tags $(git rev-list --tags --max-count=1) | sed 's/v\([0-9]*\.[0-9]*\.[0-9]*\).*$/\1/')" >> $GITHUB_ENV
+          echo "TAG_VERSION=$(git tag --points-at $GITHUB_SHA | sed 's/v\([0-9]*\.[0-9]*\.[0-9]*\).*$/\1/')" >> $GITHUB_ENV
           docker run -t \
             -v $(pwd):/buildroot \
             --workdir "/buildroot" \
@@ -638,7 +638,7 @@ jobs:
       - name: Build and package MAVSDK (Release)
         if: startsWith(github.ref, 'refs/tags/v')
         run: |
-          echo "TAG_VERSION=$(${GITHUB_REF} | sed 's/v\([0-9]*\.[0-9]*\.[0-9]*\).*$/\1/')" >> $GITHUB_ENV
+          echo "TAG_VERSION=$(0v${GITHUB_REF} | sed 's/v\([0-9]*\.[0-9]*\.[0-9]*\).*$/\1/')" >> $GITHUB_ENV
           docker run -t \
             -v $(pwd):/buildroot \
             --workdir "/buildroot" \
