@@ -614,7 +614,7 @@ jobs:
       - name: Build and package MAVSDK (Pull Request)
         if: startsWith(github.ref, 'refs/pull/')
         run: |
-          echo "TAG_VERSION=$(0v${GITHUB_SHA} | sed 's/v\([0-9]*\.[0-9]*\.[0-9]*\).*$/\1/')" >> $GITHUB_ENV
+          echo "TAG_VERSION=0v$(git rev-parse --short HEAD)" >> $GITHUB_ENV
           docker run -t \
             -v $(pwd):/buildroot \
             --workdir "/buildroot" \
