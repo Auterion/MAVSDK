@@ -610,15 +610,17 @@ jobs:
         run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
         if: matrix.config.architecture != 'amd64'
       - name: Pull multibuild-env
-        run:  docker pull auterion/multi-buildenv:${{ matrix.config.architecture }}-v1.1.11
+        run:  docker pull auterion/multi-buildenv:${{ matrix.config.architecture }}-v1.1.0
       - name: Build and package MAVSDK (Pull Request)
         if: startsWith(github.ref, 'refs/pull/')
         run: |
+          git fetch --all --tags
+          echo "TAG_VERSION=$(git describe --always --tags $(git rev-list --tags --max-count=1) | sed 's/v\([0-9]*\.[0-9]*\.[0-9]*\).*$/\1/')" >> $GITHUB_ENV
           docker run -t \
             -v $(pwd):/buildroot \
             --workdir "/buildroot" \
-            auterion/multi-buildenv:${{ matrix.config.architecture }}-v1.1.11 \
-            /bin/bash -c "./tools/generate_debian_changelog.sh > debian/changelog; dpkg-buildpackage -us -uc -nc -b --host-arch ${{ matrix.config.architecture }}; mkdir -p output/skynode; cd ..; for i in libmavsdk*.deb; do mv "\$i" "buildroot/output/skynode/\${i/${{ env.TAG_VERSION }}-${{ env.PKG_VERSION }}/${{ env.TAG_VERSION }}-${{ env.PKG_VERSION }}_multi-buildenv}"; done"
+            auterion/multi-buildenv:${{ matrix.config.architecture }}-v1.1.0 \
+            /bin/bash -c "./tools/generate_debian_changelog.sh --pre=${{ env.PKG_VERSION }} --version=${{ env.TAG_VERSION }} > debian/changelog; dpkg-buildpackage -us -uc -nc -b --host-arch ${{ matrix.config.architecture }}; mkdir -p output/skynode; cd ..; for i in libmavsdk*.deb; do mv "\$i" "buildroot/output/skynode/\${i/${{ env.TAG_VERSION }}-${{ env.PKG_VERSION }}/${{ env.TAG_VERSION }}-${{ env.PKG_VERSION }}_multi-buildenv}"; done"
       - name: Upload libmavsdk0_${{ env.TAG_VERSION }}-${{ env.PKG_VERSION }}_multi-buildenv artefact
         uses: actions/upload-artifact@v2
         if: startsWith(github.ref, 'refs/pull/')
@@ -636,11 +638,12 @@ jobs:
       - name: Build and package MAVSDK (Release)
         if: startsWith(github.ref, 'refs/tags/v')
         run: |
+          echo "TAG_VERSION=$(${GITHUB_REF} | sed 's/v\([0-9]*\.[0-9]*\.[0-9]*\).*$/\1/')" >> $GITHUB_ENV
           docker run -t \
             -v $(pwd):/buildroot \
             --workdir "/buildroot" \
-            auterion/multi-buildenv:${{ matrix.config.architecture }}-v1.1.11 \
-            /bin/bash -c "./tools/generate_debian_changelog.sh > debian/changelog; dpkg-buildpackage -us -uc -nc -b --host-arch ${{ matrix.config.architecture }}; mkdir -p output/skynode; cd ..; for i in libmavsdk*.deb; do mv "\$i" "buildroot/output/skynode/\${i/${{ env.TAG_VERSION }}-${{ env.PKG_VERSION }}/${{ env.TAG_VERSION }}-${{ env.PKG_VERSION }}_multi-buildenv}"; done"
+            auterion/multi-buildenv:${{ matrix.config.architecture }}-v1.1.0 \
+            /bin/bash -c "./tools/generate_debian_changelog.sh --pre=$${{ env.PKG_VERSION }} --version=$${{ env.TAG_VERSION }} > debian/changelog; dpkg-buildpackage -us -uc -nc -b --host-arch ${{ matrix.config.architecture }}; mkdir -p output/skynode; cd ..; for i in libmavsdk*.deb; do mv "\$i" "buildroot/output/skynode/\${i/${{ env.TAG_VERSION }}-${{ env.PKG_VERSION }}/${{ env.TAG_VERSION }}-${{ env.PKG_VERSION }}_multi-buildenv}"; done"
       - name: Publish artefacts
         if: startsWith(github.ref, 'refs/tags/v')
         uses: svenstaro/upload-release-action@v1-release
