@@ -8,9 +8,6 @@ AUTHOR="Auterion CI"
 EMAIL="auterionci@auterion.com"
 PRE_RELEASE=1
 
-# Fetch tags from upstream in case they're not synced
-git fetch --tags
-
 # Get the tag which points to the current commit hash; if the current commit is not tagged, the version core defaults to the current hash
 CURRENT_REF="$(git rev-parse --short HEAD)"
 CURRENT_TAG=$(git tag --points-at "$CURRENT_REF" | sed 's/v\([0-9]*\.[0-9]*\.[0-9]*\).*$/\1/')
