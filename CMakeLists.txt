@@ -54,7 +54,7 @@ set(DEPS_INSTALL_PATH "${DEPS_BUILD_PATH}/install" CACHE PATH "Install path for 
 include(GNUInstallDirs)
 
 if (NOT MAVLINK_DIALECT)
-    set(MAVLINK_DIALECT common)
+    set(MAVLINK_DIALECT ras_a)
 endif()
 
 if (MAVLINK_HEADERS)

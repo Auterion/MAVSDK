@@ -8,13 +8,13 @@ set(Python3_FIND_REGISTRY "NEVER")
 find_package(Python3 COMPONENTS Interpreter REQUIRED)
 
 if (NOT MAVLINK_DIALECT)
-    set(MAVLINK_DIALECT common)
+    set(MAVLINK_DIALECT ras_a)
 endif()
 
 ExternalProject_add(
     mavlink
-    GIT_REPOSITORY https://github.com/mavlink/mavlink
-    GIT_TAG 0b5b5dabf9c6ae22f2f93f0db9a4e19dcf6f19ac
+    GIT_REPOSITORY https://github.com/Dronecode/air-iop-definitions
+    GIT_TAG 2716d9448e37ba9621d0cf4ea9745837319fca6c
     PREFIX mavlink
     CONFIGURE_COMMAND Python3::Interpreter
         -m pymavlink.tools.mavgen
