@@ -5,7 +5,7 @@ set -e
 # Match hash from configure step
 REPO=$(grep GIT_REPOSITORY third_party/mavlink/CMakeLists.txt | awk '{print $2}')
 TAG=$(grep GIT_TAG third_party/mavlink/CMakeLists.txt | awk '{print $2}')
-MAVLINK_DIALECT=common
+MAVLINK_DIALECT=ras_a
 
 MAVLINK_PATH=mavlink
 MAVLINK_HEADERS_PATH=mavlink-headers
