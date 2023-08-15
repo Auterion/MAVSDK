@@ -14,7 +14,7 @@ endif()
 ExternalProject_add(
     mavlink
     GIT_REPOSITORY https://github.com/Dronecode/air-iop-definitions
-    GIT_TAG 1a755ab85813215f8c002858ff3fe2f5ba652f99 # RAS-A IOP v1.1
+    GIT_TAG 67e4ebc74144246f292b8229798d7e4f7360ecd8 # RAS-A IOP v1.2
     PREFIX mavlink
     CONFIGURE_COMMAND Python3::Interpreter
         -m pymavlink.tools.mavgen
